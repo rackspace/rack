@@ -24,3 +24,13 @@ You should then be able to run commands:
 ```sh
 rackcli compute servers list
 ```
+
+## Bash Completion
+Add the following line to your `.bashrc` file:
+```sh
+PROG=rackcli source $GOPATH/src/github.com/codegangsta/cli/autocomplete/bash_autocomplete
+```
+and source it:
+```sh
+source ~/.bashrc
+```
