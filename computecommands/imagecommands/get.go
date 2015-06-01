@@ -27,11 +27,11 @@ func flagsGet() []cli.Flag {
 
 func commandGet(c *cli.Context) {
 	util.CheckArgNum(c, 1)
-	flavorID := c.Args()[0]
+	imageID := c.Args()[0]
 	client := auth.NewClient("compute")
-	o, err := images.Get(client, flavorID).Extract()
+	o, err := images.Get(client, imageID).Extract()
 	if err != nil {
-		fmt.Printf("Error retreiving image [%s]: %s\n", flavorID, err)
+		fmt.Printf("Error retreiving image [%s]: %s\n", imageID, err)
 		os.Exit(1)
 	}
 	output.Print(c, o, tableGet)
