@@ -40,9 +40,11 @@ func commandGet(c *cli.Context) {
 func tableGet(c *cli.Context, i interface{}) {
 	m := structs.Map(i)
 	t := tablewriter.NewWriter(c.App.Writer)
+	t.SetAlignment(tablewriter.ALIGN_LEFT)
 	t.SetHeader([]string{"property", "value"})
-	for k, v := range m {
-		t.Append([]string{k, fmt.Sprint(v)})
+	keys := []string{"ID", "Name", "Disk", "RAM", "RxTxFactor", "Swap", "VCPUs"}
+	for _, key := range keys {
+		t.Append([]string{key, fmt.Sprint(m[key])})
 	}
 	t.Render()
 }
