@@ -6,7 +6,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
-	"github.com/jrperritt/rackcli/clients"
+	"github.com/jrperritt/rackcli/auth"
 	"github.com/jrperritt/rackcli/output"
 	"github.com/jrperritt/rackcli/util"
 	"github.com/olekukonko/tablewriter"
@@ -28,7 +28,7 @@ func flagsGet() []cli.Flag {
 func commandGet(c *cli.Context) {
 	util.CheckArgNum(c, 1)
 	serverID := c.Args()[0]
-	client := clients.Create("compute")
+	client := auth.NewClient("compute")
 	o, err := servers.Get(client, serverID).Extract()
 	if err != nil {
 		fmt.Printf("Error retrieving server (%s): %s\n", serverID, err)

@@ -6,7 +6,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
-	"github.com/jrperritt/rackcli/clients"
+	"github.com/jrperritt/rackcli/auth"
 	"github.com/jrperritt/rackcli/output"
 	"github.com/jrperritt/rackcli/util"
 	"github.com/olekukonko/tablewriter"
@@ -47,7 +47,7 @@ func commandUpdate(c *cli.Context) {
 		AccessIPv4: c.String("accessIPv4"),
 		AccessIPv6: c.String("accessIPv6"),
 	}
-	client := clients.Create("compute")
+	client := auth.NewClient("compute")
 	o, err := servers.Update(client, serverID, opts).Extract()
 	if err != nil {
 		fmt.Printf("Error updating server: %s\n", err)

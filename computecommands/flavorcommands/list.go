@@ -6,7 +6,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
-	"github.com/jrperritt/rackcli/clients"
+	"github.com/jrperritt/rackcli/auth"
 	"github.com/jrperritt/rackcli/output"
 	"github.com/jrperritt/rackcli/util"
 	"github.com/olekukonko/tablewriter"
@@ -47,7 +47,7 @@ func flagsList() []cli.Flag {
 
 func commandList(c *cli.Context) {
 	util.CheckArgNum(c, 0)
-	client := clients.Create("compute")
+	client := auth.NewClient("compute")
 	opts := flavors.ListOpts{
 		MinDisk: c.Int("minDisk"),
 		MinRAM:  c.Int("minRam"),

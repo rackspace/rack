@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/jrperritt/rackcli/clients"
+	"github.com/jrperritt/rackcli/auth"
 	"github.com/jrperritt/rackcli/util"
 	"github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 )
@@ -26,7 +26,7 @@ func flagsDelete() []cli.Flag {
 func commandDelete(c *cli.Context) {
 	util.CheckArgNum(c, 1)
 	serverID := c.Args()[0]
-	client := clients.Create("compute")
+	client := auth.NewClient("compute")
 	err := servers.Delete(client, serverID).ExtractErr()
 	if err != nil {
 		fmt.Printf("Error deleting server (%s): %s\n", serverID, err)

@@ -8,7 +8,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
-	"github.com/jrperritt/rackcli/clients"
+	"github.com/jrperritt/rackcli/auth"
 	"github.com/jrperritt/rackcli/output"
 	"github.com/jrperritt/rackcli/util"
 	"github.com/olekukonko/tablewriter"
@@ -119,7 +119,7 @@ func commandCreate(c *cli.Context) {
 		opts.Metadata = metadata
 	}
 
-	client := clients.Create("compute")
+	client := auth.NewClient("compute")
 	o, err := servers.Create(client, opts).Extract()
 	if err != nil {
 		fmt.Printf("Error creating server: %s\n", err)
