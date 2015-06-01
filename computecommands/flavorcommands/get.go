@@ -15,7 +15,7 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       fmt.Sprintf("%s %s get [flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s get <flavorID> [flags]", util.Name, commandPrefix),
 	Description: "Retreives a flavor",
 	Action:      commandGet,
 	Flags:       flagsGet(),
