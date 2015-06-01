@@ -15,7 +15,7 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       fmt.Sprintf("%s %s get [flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s get <imageID> [flags]", util.Name, commandPrefix),
 	Description: "Retreives an image",
 	Action:      commandGet,
 	Flags:       flagsGet(),
@@ -40,9 +40,11 @@ func commandGet(c *cli.Context) {
 func tableGet(c *cli.Context, i interface{}) {
 	m := structs.Map(i)
 	t := tablewriter.NewWriter(c.App.Writer)
+	t.SetAlignment(tablewriter.ALIGN_LEFT)
 	t.SetHeader([]string{"property", "value"})
-	for k, v := range m {
-		t.Append([]string{k, fmt.Sprint(v)})
+	keys := []string{"ID", "Name", "Status", "Progress", "MinDisk", "MinRAM", "Created", "Updated"}
+	for _, key := range keys {
+		t.Append([]string{key, fmt.Sprint(m[key])})
 	}
 	t.Render()
 }
