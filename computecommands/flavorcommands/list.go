@@ -16,7 +16,6 @@ import (
 
 var list = cli.Command{
 	Name:        "list",
-	Aliases:     []string{"ls"},
 	Usage:       fmt.Sprintf("%s %s list [flags]", util.Name, commandPrefix),
 	Description: "Lists flavors",
 	Action:      commandList,

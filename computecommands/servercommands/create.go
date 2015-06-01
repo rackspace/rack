@@ -18,7 +18,6 @@ import (
 
 var create = cli.Command{
 	Name:        "create",
-	Aliases:     []string{"mk"},
 	Usage:       fmt.Sprintf("%s %s create [flags]", util.Name, commandPrefix),
 	Description: "Creates a new server",
 	Action:      commandCreate,
