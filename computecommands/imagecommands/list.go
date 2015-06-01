@@ -73,12 +73,17 @@ func tableList(c *cli.Context, i interface{}) {
 		os.Exit(1)
 	}
 	t := tablewriter.NewWriter(c.App.Writer)
-	t.SetHeader([]string{"property", "value"})
+	t.SetAlignment(tablewriter.ALIGN_LEFT)
+	t.SetColWidth(100)
+	keys := []string{"ID", "Name", "Status", "MinDisk", "MinRAM"}
+	t.SetHeader(keys)
 	for _, image := range images {
 		m := structs.Map(image)
-		for k, v := range m {
-			t.Append([]string{k, fmt.Sprint(v)})
+		f := []string{}
+		for _, key := range keys {
+			f = append(f, fmt.Sprint(m[key]))
 		}
+		t.Append(f)
 	}
 	t.Render()
 }
