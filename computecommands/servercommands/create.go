@@ -18,7 +18,7 @@ import (
 
 var create = cli.Command{
 	Name:        "create",
-	Usage:       fmt.Sprintf("%s %s create [flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s [global flags] create [command flags]", util.Name, commandPrefix),
 	Description: "Creates a new server",
 	Action:      commandCreate,
 	Flags:       flagsCreate(),
@@ -130,9 +130,11 @@ func commandCreate(c *cli.Context) {
 func tableCreate(c *cli.Context, i interface{}) {
 	m := structs.Map(i)
 	t := tablewriter.NewWriter(c.App.Writer)
+	t.SetAlignment(tablewriter.ALIGN_LEFT)
 	t.SetHeader([]string{"property", "value"})
-	for k, v := range m {
-		t.Append([]string{k, fmt.Sprint(v)})
+	keys := []string{"ID", "AdminPass"}
+	for _, key := range keys {
+		t.Append([]string{key, fmt.Sprint(m[key])})
 	}
 	t.Render()
 }
