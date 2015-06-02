@@ -87,12 +87,32 @@ func tableList(c *cli.Context, i interface{}) {
 		os.Exit(1)
 	}
 	t := tablewriter.NewWriter(c.App.Writer)
-	t.SetHeader([]string{"property", "value"})
+	t.SetAlignment(tablewriter.ALIGN_LEFT)
+	keys := []string{"ID", "Name", "Status", "Public IPv4", "Private IPv4", "Image", "Flavor"}
+	t.SetHeader(keys)
 	for _, server := range servers {
 		m := structs.Map(server)
-		for k, v := range m {
-			t.Append([]string{k, fmt.Sprint(v)})
+		f := []string{}
+		for _, key := range keys {
+			tmp := ""
+			switch key {
+			case "Public IPv4":
+				tmp = fmt.Sprint(m["AccessIPv4"])
+			case "Private IPv4":
+				tmp = fmt.Sprint(m["Addresses"].(map[string]interface{})["private"].([]interface{})[0].(map[string]interface{})["addr"])
+			case "Image":
+				tmp = fmt.Sprint(m["Image"].(map[string]interface{})["id"])
+			case "Flavor":
+				tmp = fmt.Sprint(m["Flavor"].(map[string]interface{})["id"])
+			default:
+				tmp = fmt.Sprint(m[key])
+			}
+			if tmp == "<nil>" {
+				tmp = ""
+			}
+			f = append(f, tmp)
 		}
+		t.Append(f)
 	}
 	t.Render()
 }
