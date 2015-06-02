@@ -99,11 +99,36 @@ func tableList(c *cli.Context, i interface{}) {
 			case "Public IPv4":
 				tmp = fmt.Sprint(m["AccessIPv4"])
 			case "Private IPv4":
-				tmp = fmt.Sprint(m["Addresses"].(map[string]interface{})["private"].([]interface{})[0].(map[string]interface{})["addr"])
+				i, ok := m["Addresses"].(map[string]interface{})
+				if !ok {
+					tmp = ""
+					break
+				}
+				j, ok := i["private"].([]interface{})
+				if !ok || len(j) == 0 {
+					tmp = ""
+					break
+				}
+				i, ok = j[0].(map[string]interface{})
+				if !ok {
+					tmp = ""
+					break
+				}
+				tmp = fmt.Sprint(i["addr"])
 			case "Image":
-				tmp = fmt.Sprint(m["Image"].(map[string]interface{})["id"])
+				i, ok := m["Image"].(map[string]interface{})
+				if !ok {
+					tmp = ""
+					break
+				}
+				tmp = fmt.Sprint(i["id"])
 			case "Flavor":
-				tmp = fmt.Sprint(m["Flavor"].(map[string]interface{})["id"])
+				i, ok := m["Flavor"].(map[string]interface{})
+				if !ok {
+					tmp = ""
+					break
+				}
+				tmp = fmt.Sprint(i["id"])
 			default:
 				tmp = fmt.Sprint(m[key])
 			}
