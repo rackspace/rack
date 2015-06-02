@@ -16,7 +16,7 @@ import (
 
 var update = cli.Command{
 	Name:        "update",
-	Usage:       fmt.Sprintf("%s %s update [flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s update <serverID> [flags]", util.Name, commandPrefix),
 	Description: "Updates an existing server",
 	Action:      commandUpdate,
 	Flags:       flagsUpdate(),
@@ -59,9 +59,23 @@ func commandUpdate(c *cli.Context) {
 func tableUpdate(c *cli.Context, i interface{}) {
 	m := structs.Map(i)
 	t := tablewriter.NewWriter(c.App.Writer)
+	t.SetAlignment(tablewriter.ALIGN_LEFT)
 	t.SetHeader([]string{"property", "value"})
-	for k, v := range m {
-		t.Append([]string{k, fmt.Sprint(v)})
+	keys := []string{"ID", "Name", "Public IPv4", "Public IPv6"}
+	for _, key := range keys {
+		tmp := ""
+		switch key {
+		case "Public IPv4":
+			tmp = fmt.Sprint(m["AccessIPv4"])
+		case "Public IPv6":
+			tmp = fmt.Sprint(m["AccessIPv6"])
+		default:
+			tmp = fmt.Sprint(m[key])
+		}
+		if tmp == "<nil>" {
+			tmp = ""
+		}
+		t.Append([]string{key, tmp})
 	}
 	t.Render()
 }
