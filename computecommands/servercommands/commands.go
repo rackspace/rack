@@ -14,5 +14,6 @@ func Get() []cli.Command {
 		remove,
 		reboot,
 		rebuild,
+		resize,
 	}
 }
