@@ -64,7 +64,7 @@ func flagsCreate() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "keypair",
-			Usage: "[optional] the name of the SSH KeyPair to be injected into this server.",
+			Usage: "[optional] The name of the already-existing SSH KeyPair to be injected into this server.",
 		},
 	}
 }
