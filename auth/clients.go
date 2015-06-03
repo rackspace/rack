@@ -11,7 +11,7 @@ import (
 // NewClient creates and returns a Rackspace client for the given service.
 func NewClient(t string) *gophercloud.ServiceClient {
 	var err error
-	ao, err := authMethod()
+	ao, region, err := authMethod()
 	if err != nil {
 		fmt.Printf("Error building AuthOptions: %s\n", err)
 		os.Exit(1)
@@ -25,17 +25,17 @@ func NewClient(t string) *gophercloud.ServiceClient {
 	switch t {
 	case "compute":
 		sc, err = rackspace.NewComputeV2(pc, gophercloud.EndpointOpts{
-			Region: os.Getenv("RS_REGION_NAME"),
+			Region: region,
 		})
 		break
 	case "blockstorage":
 		sc, err = rackspace.NewBlockStorageV1(pc, gophercloud.EndpointOpts{
-			Region: os.Getenv("RS_REGION_NAME"),
+			Region: region,
 		})
 		break
 	case "networking":
 		sc, err = rackspace.NewNetworkV2(pc, gophercloud.EndpointOpts{
-			Region: os.Getenv("RS_REGION_NAME"),
+			Region: region,
 		})
 		break
 	}
@@ -48,6 +48,7 @@ func NewClient(t string) *gophercloud.ServiceClient {
 }
 
 // authMethod determines the appropriate authentication method for the user.
-func authMethod() (gophercloud.AuthOptions, error) {
+// It returns a gophercloud.AuthOptions object, the region, and the error.
+func authMethod() (gophercloud.AuthOptions, string, error) {
 	return envvars()
 }
