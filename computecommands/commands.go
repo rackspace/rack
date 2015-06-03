@@ -4,6 +4,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rackcli/computecommands/flavorcommands"
 	"github.com/jrperritt/rackcli/computecommands/imagecommands"
+	"github.com/jrperritt/rackcli/computecommands/keypaircommands"
 	"github.com/jrperritt/rackcli/computecommands/servercommands"
 )
 
@@ -24,6 +25,11 @@ func Get() []cli.Command {
 			Name:        "flavors",
 			Usage:       "Used for Compute Flavor operations",
 			Subcommands: flavorcommands.Get(),
+		},
+		{
+			Name:        "keypairs",
+			Usage:       "Used for Compute Keypair operations",
+			Subcommands: keypaircommands.Get(),
 		},
 	}
 }
