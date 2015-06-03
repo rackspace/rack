@@ -26,20 +26,20 @@ func flagsList() []cli.Flag {
 	return []cli.Flag{
 		cli.IntFlag{
 			Name:  "minDisk",
-			Usage: "Only list flavors that have at least this much disk storage (in GB).",
+			Usage: "[optional] Only list flavors that have at least this much disk storage (in GB).",
 		},
 		cli.IntFlag{
 			Name:  "minRam",
-			Usage: "Only list flavors that have at least this much RAM (in GB).",
+			Usage: "[optional] Only list flavors that have at least this much RAM (in GB).",
 		},
 
 		cli.StringFlag{
 			Name:  "marker",
-			Usage: "Start listing flavors at this flavor ID.",
+			Usage: "[optional] Start listing flavors at this flavor ID.",
 		},
 		cli.IntFlag{
 			Name:  "limit",
-			Usage: "Only return this many flavors at most.",
+			Usage: "[optional] Only return this many flavors at most.",
 		},
 	}
 }
