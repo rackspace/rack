@@ -23,7 +23,7 @@ func flagsReboot() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name: "method",
-			Usage: `The method to use for rebooting the server. Options are "hard" and "soft":
+			Usage: `[required] The method to use for rebooting the server. Options are "hard" and "soft":
                 "hard" will physically cut power to the machine and then restore it after a brief while;
                 "soft" will ask the OS to restart under its own procedures.`,
 		},
