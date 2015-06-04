@@ -15,12 +15,10 @@ func JSON(i interface{}) {
 
 // Print prints the results of the CLI command.
 func Print(c *cli.Context, i interface{}, table func(*cli.Context, interface{})) {
-	switch c.String("format") {
-	case "json":
+	if c.IsSet("json") {
 		JSON(i)
 		return
-	default:
-		table(c, i)
-		return
 	}
+	table(c, i)
+	return
 }
