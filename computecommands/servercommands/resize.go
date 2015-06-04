@@ -13,7 +13,7 @@ import (
 
 var resize = cli.Command{
 	Name:        "resize",
-	Usage:       fmt.Sprintf("%s %s resize <serverID> [flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s resize [--id <serverID> | --name <serverName>] [--flavorID <flavorID>] [optional flags]", util.Name, commandPrefix),
 	Description: "Rebuilds an existing server",
 	Action:      commandResize,
 	Flags:       util.CommandFlags(flagsResize),
@@ -32,19 +32,16 @@ func flagsResize() []cli.Flag {
 }
 
 func commandResize(c *cli.Context) {
-	util.CheckArgNum(c, 1)
-	serverID := c.Args()[0]
-
+	util.CheckArgNum(c, 0)
 	if !c.IsSet("flavorID") {
 		fmt.Printf("Required flag [flavorID] for resize not set.\n")
 		os.Exit(1)
 	}
-
+	client := auth.NewClient("compute")
+	serverID := idOrName(c, client)
 	opts := osServers.ResizeOpts{
 		FlavorRef: c.String("flavorID"),
 	}
-
-	client := auth.NewClient("compute")
 	err := servers.Resize(client, serverID, opts).ExtractErr()
 	if err != nil {
 		fmt.Printf("Error resizing server (%s): %s\n", serverID, err)

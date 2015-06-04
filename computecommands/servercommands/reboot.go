@@ -13,7 +13,7 @@ import (
 
 var reboot = cli.Command{
 	Name:        "reboot",
-	Usage:       fmt.Sprintf("%s %s reboot <serverID> [flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s reboot [--id <serverID> | --name <serverName>] [--soft | --hard] [optional flags]", util.Name, commandPrefix),
 	Description: "Reboots an existing server",
 	Action:      commandReboot,
 	Flags:       util.CommandFlags(flagsReboot),
@@ -24,37 +24,35 @@ var reboot = cli.Command{
 
 func flagsReboot() []cli.Flag {
 	return []cli.Flag{
-		cli.StringFlag{
-			Name: "method",
-			Usage: `[required] The method to use for rebooting the server. Options are "hard" and "soft":
-                "hard" will physically cut power to the machine and then restore it after a brief while;
-                "soft" will ask the OS to restart under its own procedures.`,
+		cli.BoolFlag{
+			Name:  "soft",
+			Usage: "[optional; required if 'hard' is not provided] Ask the OS to restart under its own procedures.",
+		},
+		cli.BoolFlag{
+			Name:  "hard",
+			Usage: "[optional; required if 'soft' is not provided] Physically cut power to the machine and then restore it after a brief while.",
 		},
 	}
 }
 
 func commandReboot(c *cli.Context) {
-	util.CheckArgNum(c, 1)
-	serverID := c.Args()[0]
+	util.CheckArgNum(c, 0)
 
 	var how osServers.RebootMethod
-	if !c.IsSet("method") {
-		fmt.Printf("Required flag [method] for reboot not set.\n")
-		os.Exit(1)
+	if c.IsSet("soft") {
+		how = osServers.OSReboot
+	}
+	if c.IsSet("hard") {
+		how = osServers.PowerCycle
 	}
 
-	s := c.String("method")
-	switch s {
-	case "hard":
-		how = osServers.PowerCycle
-	case "soft":
-		how = osServers.OSReboot
-	default:
-		fmt.Printf("Invalid option for reboot flag [method]: %s\n", s)
+	if how == "" {
+		fmt.Printf("Missing flag: One of either --soft or --hard must be provided.")
 		os.Exit(1)
 	}
 
 	client := auth.NewClient("compute")
+	serverID := idOrName(c, client)
 	err := servers.Reboot(client, serverID, how).ExtractErr()
 	if err != nil {
 		fmt.Printf("Error rebooting server (%s): %s\n", serverID, err)

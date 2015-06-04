@@ -15,7 +15,7 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       fmt.Sprintf("%s %s get <serverID> [flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s get [--id <serverID> | --name <serverName>] [optional flags]", util.Name, commandPrefix),
 	Description: "Retrieves an existing server",
 	Action:      commandGet,
 	Flags:       util.CommandFlags(flagsGet),
@@ -29,9 +29,9 @@ func flagsGet() []cli.Flag {
 }
 
 func commandGet(c *cli.Context) {
-	util.CheckArgNum(c, 1)
-	serverID := c.Args()[0]
+	util.CheckArgNum(c, 0)
 	client := auth.NewClient("compute")
+	serverID := idOrName(c, client)
 	o, err := servers.Get(client, serverID).Extract()
 	if err != nil {
 		fmt.Printf("Error retrieving server (%s): %s\n", serverID, err)

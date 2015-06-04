@@ -16,7 +16,7 @@ import (
 
 var update = cli.Command{
 	Name:        "update",
-	Usage:       fmt.Sprintf("%s %s update <serverID> [flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s update [--id <serverID> | --name <serverName>] [optional flags]", util.Name, commandPrefix),
 	Description: "Updates an existing server",
 	Action:      commandUpdate,
 	Flags:       util.CommandFlags(flagsUpdate),
@@ -28,29 +28,37 @@ var update = cli.Command{
 func flagsUpdate() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
+			Name:  "id",
+			Usage: "[optional; required if 'name' is not provided] The ID of the server to update",
+		},
+		cli.StringFlag{
 			Name:  "name",
-			Usage: "Update the server's name",
+			Usage: "[optional; required if 'id' is not provided] The name of the server to update",
 		},
 		cli.StringFlag{
-			Name:  "accessIPv4",
-			Usage: "Update the server's IPv4 address",
+			Name:  "newName",
+			Usage: "[optional] Update the server's name",
 		},
 		cli.StringFlag{
-			Name:  "accessIPv6",
-			Usage: "Update the server's IPv6 address",
+			Name:  "newIPv4",
+			Usage: "[optional] Update the server's IPv4 address",
+		},
+		cli.StringFlag{
+			Name:  "newIPv6",
+			Usage: "[optional] Update the server's IPv6 address",
 		},
 	}
 }
 
 func commandUpdate(c *cli.Context) {
-	util.CheckArgNum(c, 1)
-	serverID := c.Args()[0]
-	opts := &osServers.UpdateOpts{
-		Name:       c.String("name"),
-		AccessIPv4: c.String("accessIPv4"),
-		AccessIPv6: c.String("accessIPv6"),
-	}
+	util.CheckArgNum(c, 0)
 	client := auth.NewClient("compute")
+	serverID := idOrName(c, client)
+	opts := &osServers.UpdateOpts{
+		Name:       c.String("newName"),
+		AccessIPv4: c.String("newIPv4"),
+		AccessIPv6: c.String("newIPv6"),
+	}
 	o, err := servers.Update(client, serverID, opts).Extract()
 	if err != nil {
 		fmt.Printf("Error updating server: %s\n", err)

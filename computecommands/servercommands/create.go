@@ -18,7 +18,7 @@ import (
 
 var create = cli.Command{
 	Name:        "create",
-	Usage:       fmt.Sprintf("%s %s create [command flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s create [--name <serverName>] [optional flags]", util.Name, commandPrefix),
 	Description: "Creates a new server",
 	Action:      commandCreate,
 	Flags:       util.CommandFlags(flagsCreate),
@@ -29,6 +29,10 @@ var create = cli.Command{
 
 func flagsCreate() []cli.Flag {
 	return []cli.Flag{
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "[required] The name that the server should have.",
+		},
 		cli.StringFlag{
 			Name:  "imageRef",
 			Usage: "[optional; required if imageName and bootFromVolume flags are not provided] The image ID from which to create the server.",
@@ -73,10 +77,15 @@ func flagsCreate() []cli.Flag {
 }
 
 func commandCreate(c *cli.Context) {
-	util.CheckArgNum(c, 1)
-	serverName := c.Args()[0]
+	util.CheckArgNum(c, 0)
+
+	if !c.IsSet("name") {
+		fmt.Printf("Missing flag: --name is required.")
+		os.Exit(1)
+	}
+
 	opts := &servers.CreateOpts{
-		Name:           serverName,
+		Name:           c.String("name"),
 		ImageRef:       c.String("imageRef"),
 		ImageName:      c.String("imageName"),
 		FlavorRef:      c.String("flavorRef"),

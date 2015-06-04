@@ -15,7 +15,7 @@ import (
 
 var rebuild = cli.Command{
 	Name:        "rebuild",
-	Usage:       fmt.Sprintf("%s %s rebuild <serverID> [flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s rebuild [--id <serverID> | --name <serverName>] [--imageID <imageID>] [--adminPass <adminPass>] [optional flags]", util.Name, commandPrefix),
 	Description: "Rebuilds an existing server",
 	Action:      commandRebuild,
 	Flags:       util.CommandFlags(flagsRebuild),
@@ -54,8 +54,7 @@ func flagsRebuild() []cli.Flag {
 }
 
 func commandRebuild(c *cli.Context) {
-	util.CheckArgNum(c, 1)
-	serverID := c.Args()[0]
+	util.CheckArgNum(c, 0)
 
 	if !c.IsSet("imageID") {
 		fmt.Printf("Required flag [imageID] for rebuild not set.\n")
@@ -90,6 +89,7 @@ func commandRebuild(c *cli.Context) {
 	}
 
 	client := auth.NewClient("compute")
+	serverID := idOrName(c, client)
 	o, err := servers.Rebuild(client, serverID, opts).Extract()
 	if err != nil {
 		fmt.Printf("Error rebuilding server (%s): %s\n", serverID, err)
