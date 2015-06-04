@@ -20,6 +20,9 @@ var update = cli.Command{
 	Description: "Updates an existing server",
 	Action:      commandUpdate,
 	Flags:       util.CommandFlags(flagsUpdate),
+	BashComplete: func(c *cli.Context) {
+		util.CompleteFlags(util.CommandFlags(flagsUpdate))
+	},
 }
 
 func flagsUpdate() []cli.Flag {

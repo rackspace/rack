@@ -19,6 +19,9 @@ var rebuild = cli.Command{
 	Description: "Rebuilds an existing server",
 	Action:      commandRebuild,
 	Flags:       util.CommandFlags(flagsRebuild),
+	BashComplete: func(c *cli.Context) {
+		util.CompleteFlags(util.CommandFlags(flagsRebuild))
+	},
 }
 
 func flagsRebuild() []cli.Flag {

@@ -17,6 +17,9 @@ var remove = cli.Command{
 	Description: "Deletes an existing server",
 	Action:      commandDelete,
 	Flags:       util.CommandFlags(flagsDelete),
+	BashComplete: func(c *cli.Context) {
+		util.CompleteFlags(util.CommandFlags(flagsDelete))
+	},
 }
 
 func flagsDelete() []cli.Flag {

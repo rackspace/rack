@@ -19,6 +19,9 @@ var get = cli.Command{
 	Description: "Retreives a flavor",
 	Action:      commandGet,
 	Flags:       util.CommandFlags(flagsGet),
+	BashComplete: func(c *cli.Context) {
+		util.CompleteFlags(util.CommandFlags(flagsGet))
+	},
 }
 
 func flagsGet() []cli.Flag {

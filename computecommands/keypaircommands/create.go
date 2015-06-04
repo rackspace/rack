@@ -22,6 +22,9 @@ var create = cli.Command{
 	Description: "Creates a keypair",
 	Action:      commandCreate,
 	Flags:       util.CommandFlags(flagsCreate),
+	BashComplete: func(c *cli.Context) {
+		util.CompleteFlags(util.CommandFlags(flagsCreate))
+	},
 }
 
 func flagsCreate() []cli.Flag {

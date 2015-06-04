@@ -17,6 +17,9 @@ var resize = cli.Command{
 	Description: "Rebuilds an existing server",
 	Action:      commandResize,
 	Flags:       util.CommandFlags(flagsResize),
+	BashComplete: func(c *cli.Context) {
+		util.CompleteFlags(util.CommandFlags(flagsResize))
+	},
 }
 
 func flagsResize() []cli.Flag {

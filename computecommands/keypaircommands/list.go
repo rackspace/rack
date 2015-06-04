@@ -20,6 +20,9 @@ var list = cli.Command{
 	Description: "Lists keypairs",
 	Action:      commandList,
 	Flags:       util.CommandFlags(flagsList),
+	BashComplete: func(c *cli.Context) {
+		util.CompleteFlags(util.CommandFlags(flagsList))
+	},
 }
 
 func flagsList() []cli.Flag {

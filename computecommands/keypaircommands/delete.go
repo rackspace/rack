@@ -16,6 +16,9 @@ var remove = cli.Command{
 	Description: "Deletes a keypair",
 	Action:      commandDelete,
 	Flags:       util.CommandFlags(flagsDelete),
+	BashComplete: func(c *cli.Context) {
+		util.CompleteFlags(util.CommandFlags(flagsDelete))
+	},
 }
 
 func flagsDelete() []cli.Flag {

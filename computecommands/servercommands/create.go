@@ -18,10 +18,13 @@ import (
 
 var create = cli.Command{
 	Name:        "create",
-	Usage:       fmt.Sprintf("%s %s [global flags] create [command flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s create [command flags]", util.Name, commandPrefix),
 	Description: "Creates a new server",
 	Action:      commandCreate,
 	Flags:       util.CommandFlags(flagsCreate),
+	BashComplete: func(c *cli.Context) {
+		util.CompleteFlags(util.CommandFlags(flagsCreate))
+	},
 }
 
 func flagsCreate() []cli.Flag {

@@ -17,6 +17,9 @@ var reboot = cli.Command{
 	Description: "Reboots an existing server",
 	Action:      commandReboot,
 	Flags:       util.CommandFlags(flagsReboot),
+	BashComplete: func(c *cli.Context) {
+		util.CompleteFlags(util.CommandFlags(flagsReboot))
+	},
 }
 
 func flagsReboot() []cli.Flag {
