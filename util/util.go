@@ -32,3 +32,22 @@ func CheckArgNum(c *cli.Context, expected int) {
 		os.Exit(1)
 	}
 }
+
+// CompleteFlags returns the possible flags for bash completion.
+func CompleteFlags(f func() []cli.Flag) {
+	flags := f()
+	for _, flag := range flags {
+		flagName := ""
+		switch flag.(type) {
+		case cli.StringFlag:
+			flagName = flag.(cli.StringFlag).Name
+		case cli.IntFlag:
+			flagName = flag.(cli.IntFlag).Name
+		case cli.BoolFlag:
+			flagName = flag.(cli.BoolFlag).Name
+		default:
+			continue
+		}
+		fmt.Println("--" + flagName)
+	}
+}
