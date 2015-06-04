@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rackcli/util"
 )
 
 // Name is the name of the CLI
@@ -21,6 +22,27 @@ func Contains(s []string, e string) bool {
 		}
 	}
 	return false
+}
+
+// CommonFlags are flags that all commands can use. There exists the possiblity
+// of setting app-level (global) flags, but that requires a user to properly
+// position them. Including these with the other command-level flags will allow
+// users to include them anywhere after the last subcommand (or argument, if applicable).
+func CommonFlags() []cli.Flag {
+	return []cli.Flag{
+		cli.StringFlag{
+			Name:  "format",
+			Usage: "The format for the output. Options are json and table. Default is table.",
+		},
+	}
+}
+
+// CommandFlags returns the flags for a given command. It takes as a parameter
+// a function for returning flags specific to that command, and then appends those
+// flags with flags that are valid for all commands.
+func CommandFlags(f func() []cli.Flag) {
+	cf := util.CommonFlags()
+	return append(cf, f()...)
 }
 
 // CheckArgNum checks that the provided number of arguments has the same

@@ -19,7 +19,7 @@ var get = cli.Command{
 	Usage:       fmt.Sprintf("%s %s get <keypairName> [flags]", util.Name, commandPrefix),
 	Description: "Retreives a keypair",
 	Action:      commandGet,
-	Flags:       flagsGet(),
+	Flags:       util.CommandFlags(flagsGet),
 }
 
 func flagsGet() []cli.Flag {

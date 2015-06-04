@@ -18,7 +18,7 @@ var rebuild = cli.Command{
 	Usage:       fmt.Sprintf("%s %s rebuild <serverID> [flags]", util.Name, commandPrefix),
 	Description: "Rebuilds an existing server",
 	Action:      commandRebuild,
-	Flags:       flagsRebuild(),
+	Flags:       util.CommandFlags(flagsRebuild),
 }
 
 func flagsRebuild() []cli.Flag {

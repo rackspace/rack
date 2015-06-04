@@ -19,7 +19,7 @@ var list = cli.Command{
 	Usage:       fmt.Sprintf("%s %s list [flags]", util.Name, commandPrefix),
 	Description: "Lists keypairs",
 	Action:      commandList,
-	Flags:       flagsList(),
+	Flags:       util.CommandFlags(flagsList),
 }
 
 func flagsList() []cli.Flag {

@@ -19,7 +19,7 @@ var update = cli.Command{
 	Usage:       fmt.Sprintf("%s %s update <serverID> [flags]", util.Name, commandPrefix),
 	Description: "Updates an existing server",
 	Action:      commandUpdate,
-	Flags:       flagsUpdate(),
+	Flags:       util.CommandFlags(flagsUpdate),
 }
 
 func flagsUpdate() []cli.Flag {

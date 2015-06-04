@@ -20,11 +20,5 @@ func main() {
 			Subcommands: computecommands.Get(),
 		},
 	}
-	app.Flags = []cli.Flag{
-		cli.StringFlag{
-			Name:  "format",
-			Usage: "The format for the output. Options are json and table. Default is table.",
-		},
-	}
 	app.Run(os.Args)
 }

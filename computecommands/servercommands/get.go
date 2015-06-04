@@ -18,7 +18,7 @@ var get = cli.Command{
 	Usage:       fmt.Sprintf("%s %s get <serverID> [flags]", util.Name, commandPrefix),
 	Description: "Retrieves an existing server",
 	Action:      commandGet,
-	Flags:       flagsGet(),
+	Flags:       util.CommandFlags(flagsGet),
 }
 
 func flagsGet() []cli.Flag {

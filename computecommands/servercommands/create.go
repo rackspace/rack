@@ -21,7 +21,7 @@ var create = cli.Command{
 	Usage:       fmt.Sprintf("%s %s [global flags] create [command flags]", util.Name, commandPrefix),
 	Description: "Creates a new server",
 	Action:      commandCreate,
-	Flags:       flagsCreate(),
+	Flags:       util.CommandFlags(flagsCreate),
 }
 
 func flagsCreate() []cli.Flag {

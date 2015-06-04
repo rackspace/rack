@@ -15,7 +15,7 @@ var remove = cli.Command{
 	Usage:       fmt.Sprintf("%s %s delete <keypairName> [flags]", util.Name, commandPrefix),
 	Description: "Deletes a keypair",
 	Action:      commandDelete,
-	Flags:       flagsDelete(),
+	Flags:       util.CommandFlags(flagsDelete),
 }
 
 func flagsDelete() []cli.Flag {

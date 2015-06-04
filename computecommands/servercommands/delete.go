@@ -16,7 +16,7 @@ var remove = cli.Command{
 	Usage:       fmt.Sprintf("%s %s delete <serverID> [flags]", util.Name, commandPrefix),
 	Description: "Deletes an existing server",
 	Action:      commandDelete,
-	Flags:       flagsDelete(),
+	Flags:       util.CommandFlags(flagsDelete),
 }
 
 func flagsDelete() []cli.Flag {

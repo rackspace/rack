@@ -18,7 +18,7 @@ var get = cli.Command{
 	Usage:       fmt.Sprintf("%s %s get <imageID> [flags]", util.Name, commandPrefix),
 	Description: "Retreives an image",
 	Action:      commandGet,
-	Flags:       flagsGet(),
+	Flags:       util.CommandFlags(flagsGet),
 }
 
 func flagsGet() []cli.Flag {

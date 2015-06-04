@@ -19,7 +19,7 @@ var list = cli.Command{
 	Usage:       fmt.Sprintf("%s %s list [flags]", util.Name, commandPrefix),
 	Description: "Lists existing servers",
 	Action:      commandList,
-	Flags:       flagsList(),
+	Flags:       util.CommandFlags(flagsList),
 	BashComplete: func(c *cli.Context) {
 		util.CompleteFlags(flagsList)
 	},

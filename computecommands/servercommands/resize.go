@@ -16,7 +16,7 @@ var resize = cli.Command{
 	Usage:       fmt.Sprintf("%s %s resize <serverID> [flags]", util.Name, commandPrefix),
 	Description: "Rebuilds an existing server",
 	Action:      commandResize,
-	Flags:       flagsResize(),
+	Flags:       util.CommandFlags(flagsResize),
 }
 
 func flagsResize() []cli.Flag {

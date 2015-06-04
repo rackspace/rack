@@ -18,7 +18,7 @@ var get = cli.Command{
 	Usage:       fmt.Sprintf("%s %s get <flavorID> [flags]", util.Name, commandPrefix),
 	Description: "Retreives a flavor",
 	Action:      commandGet,
-	Flags:       flagsGet(),
+	Flags:       util.CommandFlags(flagsGet),
 }
 
 func flagsGet() []cli.Flag {

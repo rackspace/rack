@@ -21,7 +21,7 @@ var create = cli.Command{
 	Usage:       fmt.Sprintf("%s %s create <keypairName> [flags]", util.Name, commandPrefix),
 	Description: "Creates a keypair",
 	Action:      commandCreate,
-	Flags:       flagsCreate(),
+	Flags:       util.CommandFlags(flagsCreate),
 }
 
 func flagsCreate() []cli.Flag {

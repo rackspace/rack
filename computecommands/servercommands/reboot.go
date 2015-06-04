@@ -16,7 +16,7 @@ var reboot = cli.Command{
 	Usage:       fmt.Sprintf("%s %s reboot <serverID> [flags]", util.Name, commandPrefix),
 	Description: "Reboots an existing server",
 	Action:      commandReboot,
-	Flags:       flagsReboot(),
+	Flags:       util.CommandFlags(flagsReboot),
 }
 
 func flagsReboot() []cli.Flag {
