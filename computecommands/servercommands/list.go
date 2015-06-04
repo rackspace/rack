@@ -20,6 +20,9 @@ var list = cli.Command{
 	Description: "Lists existing servers",
 	Action:      commandList,
 	Flags:       flagsList(),
+	BashComplete: func(c *cli.Context) {
+		util.CompleteFlags(flagsList)
+	},
 }
 
 func flagsList() []cli.Flag {
