@@ -59,8 +59,7 @@ func CheckArgNum(c *cli.Context, expected int) {
 }
 
 // CompleteFlags returns the possible flags for bash completion.
-func CompleteFlags(f func() []cli.Flag) {
-	flags := f()
+func CompleteFlags(flags []cli.Flag) {
 	for _, flag := range flags {
 		flagName := ""
 		switch flag.(type) {

@@ -21,7 +21,7 @@ var list = cli.Command{
 	Action:      commandList,
 	Flags:       util.CommandFlags(flagsList),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(flagsList)
+		util.CompleteFlags(util.CommandFlags(flagsList))
 	},
 }
 
