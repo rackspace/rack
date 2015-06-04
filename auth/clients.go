@@ -13,7 +13,7 @@ func NewClient(t string) *gophercloud.ServiceClient {
 	var err error
 	ao, region, err := authMethod()
 	if err != nil {
-		fmt.Printf("Error building AuthOptions: %s\n", err)
+		fmt.Printf("Error determining AuthOptions and/or region: %s\n", err)
 		os.Exit(1)
 	}
 	pc, err := rackspace.AuthenticatedClient(ao)
@@ -49,6 +49,7 @@ func NewClient(t string) *gophercloud.ServiceClient {
 
 // authMethod determines the appropriate authentication method for the user.
 // It returns a gophercloud.AuthOptions object, the region, and the error.
+//
 func authMethod() (gophercloud.AuthOptions, string, error) {
 	return envvars()
 }

@@ -11,7 +11,6 @@ import (
 func JSON(i interface{}) {
 	j, _ := json.Marshal(i)
 	fmt.Println(string(j))
-	return
 }
 
 // Print prints the results of the CLI command.
