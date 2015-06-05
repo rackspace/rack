@@ -18,14 +18,20 @@ func PrintError(c *cli.Context, err error) {
 	os.Exit(1)
 }
 
+// ErrMissingFlagPrefix is the prefix for when a required flag is missing.
+var ErrMissingFlagPrefix = "Missing flag:"
+
 // ErrMissingFlag is used when a user doesn't provide a required flag.
 type ErrMissingFlag struct {
 	Msg string
 }
 
 func (e ErrMissingFlag) Error() string {
-	return fmt.Sprintf("Missing flag: %s\n", e.Msg)
+	return fmt.Sprintf("%s %s\n", ErrMissingFlagPrefix, e.Msg)
 }
+
+// ErrFlagFormatting is the prefix for when a flag's format is invalid.
+var ErrFlagFormattingPrefix = "Invalid flag formatting:"
 
 // ErrFlagFormatting is used when a flag's format is invalid.
 type ErrFlagFormatting struct {
@@ -33,5 +39,5 @@ type ErrFlagFormatting struct {
 }
 
 func (e ErrFlagFormatting) Error() string {
-	return fmt.Sprintf("Invalid flag formatting: %s\n", e.Msg)
+	return fmt.Sprintf("%s %s\n", ErrFlagFormattingPrefix, e.Msg)
 }
