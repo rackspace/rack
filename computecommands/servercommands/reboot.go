@@ -23,7 +23,7 @@ var reboot = cli.Command{
 }
 
 func flagsReboot() []cli.Flag {
-	return []cli.Flag{
+	cf := []cli.Flag{
 		cli.BoolFlag{
 			Name:  "soft",
 			Usage: "[optional; required if 'hard' is not provided] Ask the OS to restart under its own procedures.",
@@ -33,6 +33,7 @@ func flagsReboot() []cli.Flag {
 			Usage: "[optional; required if 'soft' is not provided] Physically cut power to the machine and then restore it after a brief while.",
 		},
 	}
+	return append(cf, idAndNameFlags...)
 }
 
 func commandReboot(c *cli.Context) {
