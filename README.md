@@ -15,10 +15,10 @@ go build -o $GOPATH/bin/rack
 ```
 
 Export the following environment variables:  
-RS_REGION_NAME  (DFW, IAD, ORD, LON, SYD, HKG)
-RS_USERNAME  (Your Rackspace username)
-RS_AUTH_URL  (https://identity.api.rackspacecloud.com/v2.0)
-RS_API_KEY  (Your Rackspace API key)
+RS_REGION_NAME (DFW, IAD, ORD, LON, SYD, HKG)  
+RS_USERNAME (Your Rackspace username)  
+RS_AUTH_URL (https://identity.api.rackspacecloud.com/v2.0)  
+RS_API_KEY (Your Rackspace API key)  
 
 You should then be able to run commands:
 ```sh
