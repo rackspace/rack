@@ -3,7 +3,6 @@ package servercommands
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rackcli/auth"
@@ -78,18 +77,7 @@ func commandRebuild(c *cli.Context) {
 	}
 
 	if c.IsSet("metadata") {
-		metadata := make(map[string]string)
-		metaStrings := strings.Split(c.String("metadata"), ",")
-		for _, metaString := range metaStrings {
-			temp := strings.Split(metaString, "=")
-			if len(temp) != 2 {
-				util.PrintError(c, util.ErrFlagFormatting{
-					Msg: fmt.Sprintf("Expected key=value format but got %s for --metadata.\n", metaString),
-				})
-			}
-			metadata[temp[0]] = temp[1]
-		}
-		opts.Metadata = metadata
+		opts.Metadata = util.CheckKVFlag(c, "metadata")
 	}
 
 	client := auth.NewClient("compute")
