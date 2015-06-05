@@ -10,7 +10,7 @@ import (
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "rackcli"
+	app.Name = "rack"
 	app.Usage = "An opinionated CLI for the Rackspace cloud"
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
