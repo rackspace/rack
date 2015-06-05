@@ -13,7 +13,7 @@ import (
 
 var resize = cli.Command{
 	Name:        "resize",
-	Usage:       fmt.Sprintf("%s %s resize [--id <serverID> | --name <serverName>] [--flavorID <flavorID>] [optional flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s resize %s [--flavorID <flavorID>] [optional flags]", util.Name, commandPrefix, idOrNameUsage),
 	Description: "Rebuilds an existing server",
 	Action:      commandResize,
 	Flags:       util.CommandFlags(flagsResize),
@@ -23,19 +23,21 @@ var resize = cli.Command{
 }
 
 func flagsResize() []cli.Flag {
-	return []cli.Flag{
+	cf := []cli.Flag{
 		cli.StringFlag{
 			Name:  "flavorID",
 			Usage: "[required] The ID of the flavor that the resized server should have.",
 		},
 	}
+	return append(cf, idAndNameFlags...)
 }
 
 func commandResize(c *cli.Context) {
 	util.CheckArgNum(c, 0)
 	if !c.IsSet("flavorID") {
-		fmt.Printf("Required flag [flavorID] for resize not set.\n")
-		os.Exit(1)
+		util.PrintError(c, util.ErrMissingFlag{
+			Msg: "--flavorID is required.",
+		})
 	}
 	client := auth.NewClient("compute")
 	serverID := idOrName(c, client)

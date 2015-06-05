@@ -16,7 +16,7 @@ import (
 
 var update = cli.Command{
 	Name:        "update",
-	Usage:       fmt.Sprintf("%s %s update [--id <serverID> | --name <serverName>] [optional flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s update %s [optional flags]", util.Name, commandPrefix, idOrNameUsage),
 	Description: "Updates an existing server",
 	Action:      commandUpdate,
 	Flags:       util.CommandFlags(flagsUpdate),
@@ -26,15 +26,7 @@ var update = cli.Command{
 }
 
 func flagsUpdate() []cli.Flag {
-	return []cli.Flag{
-		cli.StringFlag{
-			Name:  "id",
-			Usage: "[optional; required if 'name' is not provided] The ID of the server to update",
-		},
-		cli.StringFlag{
-			Name:  "name",
-			Usage: "[optional; required if 'id' is not provided] The name of the server to update",
-		},
+	cf := []cli.Flag{
 		cli.StringFlag{
 			Name:  "newName",
 			Usage: "[optional] Update the server's name",
@@ -48,6 +40,7 @@ func flagsUpdate() []cli.Flag {
 			Usage: "[optional] Update the server's IPv6 address",
 		},
 	}
+	return append(cf, idAndNameFlags...)
 }
 
 func commandUpdate(c *cli.Context) {

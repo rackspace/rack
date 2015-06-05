@@ -13,7 +13,7 @@ import (
 
 var reboot = cli.Command{
 	Name:        "reboot",
-	Usage:       fmt.Sprintf("%s %s reboot [--id <serverID> | --name <serverName>] [--soft | --hard] [optional flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s reboot %s [--soft | --hard] [optional flags]", util.Name, commandPrefix, idOrNameUsage),
 	Description: "Reboots an existing server",
 	Action:      commandReboot,
 	Flags:       util.CommandFlags(flagsReboot),
@@ -47,8 +47,9 @@ func commandReboot(c *cli.Context) {
 	}
 
 	if how == "" {
-		fmt.Printf("Missing flag: One of either --soft or --hard must be provided.")
-		os.Exit(1)
+		util.PrintError(c, util.ErrMissingFlag{
+			Msg: "One of either --soft or --hard must be provided.",
+		})
 	}
 
 	client := auth.NewClient("compute")

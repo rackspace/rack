@@ -16,7 +16,7 @@ import (
 
 var list = cli.Command{
 	Name:        "list",
-	Usage:       fmt.Sprintf("%s %s list [flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s list [optional flags]", util.Name, commandPrefix),
 	Description: "Lists existing servers",
 	Action:      commandList,
 	Flags:       util.CommandFlags(flagsList),

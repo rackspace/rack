@@ -80,8 +80,9 @@ func commandCreate(c *cli.Context) {
 	util.CheckArgNum(c, 0)
 
 	if !c.IsSet("name") {
-		fmt.Printf("Missing flag: --name is required.")
-		os.Exit(1)
+		util.PrintError(c, util.ErrMissingFlag{
+			Msg: "--name is required.",
+		})
 	}
 
 	opts := &servers.CreateOpts{
@@ -122,8 +123,9 @@ func commandCreate(c *cli.Context) {
 		for _, metaString := range metaStrings {
 			temp := strings.Split(metaString, "=")
 			if len(temp) != 2 {
-				fmt.Printf("Error parsing metadata: Expected key=value format but got %s\n", metaString)
-				os.Exit(1)
+				util.PrintError(c, util.ErrFlagFormatting{
+					Msg: fmt.Sprintf("Expected key=value format but got %s for --metadata.\n", metaString),
+				})
 			}
 			metadata[temp[0]] = temp[1]
 		}

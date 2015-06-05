@@ -13,7 +13,7 @@ import (
 // delete is a reserved word in Go.
 var remove = cli.Command{
 	Name:        "delete",
-	Usage:       fmt.Sprintf("%s %s delete [--id <serverID> | --name <serverName>] [optional flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s delete %s [optional flags]", util.Name, commandPrefix, idOrNameUsage),
 	Description: "Deletes an existing server",
 	Action:      commandDelete,
 	Flags:       util.CommandFlags(flagsDelete),
@@ -23,7 +23,7 @@ var remove = cli.Command{
 }
 
 func flagsDelete() []cli.Flag {
-	return []cli.Flag{}
+	return idAndNameFlags
 }
 
 func commandDelete(c *cli.Context) {

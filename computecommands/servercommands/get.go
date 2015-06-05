@@ -15,7 +15,7 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       fmt.Sprintf("%s %s get [--id <serverID> | --name <serverName>] [optional flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s get %s [optional flags]", util.Name, commandPrefix, idOrNameUsage),
 	Description: "Retrieves an existing server",
 	Action:      commandGet,
 	Flags:       util.CommandFlags(flagsGet),
@@ -25,7 +25,7 @@ var get = cli.Command{
 }
 
 func flagsGet() []cli.Flag {
-	return []cli.Flag{}
+	return idAndNameFlags
 }
 
 func commandGet(c *cli.Context) {

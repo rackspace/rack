@@ -15,7 +15,7 @@ import (
 
 var rebuild = cli.Command{
 	Name:        "rebuild",
-	Usage:       fmt.Sprintf("%s %s rebuild [--id <serverID> | --name <serverName>] [--imageID <imageID>] [--adminPass <adminPass>] [optional flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s rebuild %s [--imageID <imageID>] [--adminPass <adminPass>] [optional flags]", util.Name, commandPrefix, idOrNameUsage),
 	Description: "Rebuilds an existing server",
 	Action:      commandRebuild,
 	Flags:       util.CommandFlags(flagsRebuild),
@@ -25,7 +25,7 @@ var rebuild = cli.Command{
 }
 
 func flagsRebuild() []cli.Flag {
-	return []cli.Flag{
+	cf := []cli.Flag{
 		cli.StringFlag{
 			Name:  "imageID",
 			Usage: "[required] The ID of the image on which the server will be provisioned.",
@@ -51,19 +51,22 @@ func flagsRebuild() []cli.Flag {
 			Usage: "[optional] A comma-separated string a key=value pairs.",
 		},
 	}
+	return append(cf, idAndNameFlags...)
 }
 
 func commandRebuild(c *cli.Context) {
 	util.CheckArgNum(c, 0)
 
 	if !c.IsSet("imageID") {
-		fmt.Printf("Required flag [imageID] for rebuild not set.\n")
-		os.Exit(1)
+		util.PrintError(c, util.ErrMissingFlag{
+			Msg: "--imageID is required.",
+		})
 	}
 
 	if !c.IsSet("adminPass") {
-		fmt.Printf("Required flag [adminPass] for rebuild not set.\n")
-		os.Exit(1)
+		util.PrintError(c, util.ErrMissingFlag{
+			Msg: "--adminPass is required.",
+		})
 	}
 
 	opts := osServers.RebuildOpts{
@@ -80,8 +83,9 @@ func commandRebuild(c *cli.Context) {
 		for _, metaString := range metaStrings {
 			temp := strings.Split(metaString, "=")
 			if len(temp) != 2 {
-				fmt.Printf("Error parsing metadata: Expected key=value format but got %s\n", metaString)
-				os.Exit(1)
+				util.PrintError(c, util.ErrFlagFormatting{
+					Msg: fmt.Sprintf("Expected key=value format but got %s for --metadata.\n", metaString),
+				})
 			}
 			metadata[temp[0]] = temp[1]
 		}
