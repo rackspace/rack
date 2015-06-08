@@ -12,23 +12,23 @@ import (
 func Get() []cli.Command {
 	return []cli.Command{
 		{
-			Name:        "servers",
-			Usage:       "Used for Compute Server operations",
+			Name:        "instance",
+			Usage:       "Used for Server Instance operations",
 			Subcommands: servercommands.Get(),
 		},
 		{
-			Name:        "images",
-			Usage:       "Used for Compute Image operations",
+			Name:        "image",
+			Usage:       "Used for Server Image operations",
 			Subcommands: imagecommands.Get(),
 		},
 		{
-			Name:        "flavors",
-			Usage:       "Used for Compute Flavor operations",
+			Name:        "flavor",
+			Usage:       "Used for Server Flavor operations",
 			Subcommands: flavorcommands.Get(),
 		},
 		{
-			Name:        "keypairs",
-			Usage:       "Used for Compute Keypair operations",
+			Name:        "keypair",
+			Usage:       "Used for Server Keypair operations",
 			Subcommands: keypaircommands.Get(),
 		},
 	}
