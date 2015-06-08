@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/jrperritt/rack/computecommands"
+	"github.com/jrperritt/rack/serverscommands"
 
 	"github.com/codegangsta/cli"
 )
@@ -15,9 +15,9 @@ func main() {
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
 		{
-			Name:        "compute",
-			Usage:       "Used for the Compute service",
-			Subcommands: computecommands.Get(),
+			Name:        "servers",
+			Usage:       "Used for the Servers service",
+			Subcommands: serverscommands.Get(),
 		},
 	}
 	app.Run(os.Args)

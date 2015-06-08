@@ -1,11 +1,11 @@
-package computecommands
+package serverscommands
 
 import (
 	"github.com/codegangsta/cli"
-	"github.com/jrperritt/rack/computecommands/flavorcommands"
-	"github.com/jrperritt/rack/computecommands/imagecommands"
-	"github.com/jrperritt/rack/computecommands/keypaircommands"
-	"github.com/jrperritt/rack/computecommands/servercommands"
+	"github.com/jrperritt/rack/serverscommands/flavorcommands"
+	"github.com/jrperritt/rack/serverscommands/imagecommands"
+	"github.com/jrperritt/rack/serverscommands/instancecommands"
+	"github.com/jrperritt/rack/serverscommands/keypaircommands"
 )
 
 // Get returns all the commands allowed for a `compute` request.
@@ -14,7 +14,7 @@ func Get() []cli.Command {
 		{
 			Name:        "instance",
 			Usage:       "Used for Server Instance operations",
-			Subcommands: servercommands.Get(),
+			Subcommands: instancecommands.Get(),
 		},
 		{
 			Name:        "image",

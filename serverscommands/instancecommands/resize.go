@@ -1,4 +1,4 @@
-package servercommands
+package instancecommands
 
 import (
 	"fmt"
