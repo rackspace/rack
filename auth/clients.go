@@ -47,7 +47,7 @@ func NewClient(t string) *gophercloud.ServiceClient {
 		fmt.Printf("Error creating ServiceClient (%s): %s\n", err, t)
 		os.Exit(1)
 	}
-	// sc.UserAgent.Prepend("rackcli/" + util.Version)
+	// sc.UserAgent.Prepend("rack/" + util.Version)
 	return sc
 }
 

@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/jrperritt/rackcli/util"
+	"github.com/jrperritt/rack/util"
 	"github.com/rackspace/gophercloud"
 	osServers "github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 )

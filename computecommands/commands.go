@@ -2,10 +2,10 @@ package computecommands
 
 import (
 	"github.com/codegangsta/cli"
-	"github.com/jrperritt/rackcli/computecommands/flavorcommands"
-	"github.com/jrperritt/rackcli/computecommands/imagecommands"
-	"github.com/jrperritt/rackcli/computecommands/keypaircommands"
-	"github.com/jrperritt/rackcli/computecommands/servercommands"
+	"github.com/jrperritt/rack/computecommands/flavorcommands"
+	"github.com/jrperritt/rack/computecommands/imagecommands"
+	"github.com/jrperritt/rack/computecommands/keypaircommands"
+	"github.com/jrperritt/rack/computecommands/servercommands"
 )
 
 // Get returns all the commands allowed for a `compute` request.

@@ -6,8 +6,8 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/gophercloud/rackspace/compute/v2/keypairs"
-	"github.com/jrperritt/rackcli/auth"
-	"github.com/jrperritt/rackcli/util"
+	"github.com/jrperritt/rack/auth"
+	"github.com/jrperritt/rack/util"
 )
 
 var remove = cli.Command{

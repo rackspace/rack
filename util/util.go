@@ -9,7 +9,7 @@ import (
 )
 
 // Name is the name of the CLI
-var Name = "rackcli"
+var Name = "rack"
 
 // Version is the current CLI version
 var Version = "0.1"

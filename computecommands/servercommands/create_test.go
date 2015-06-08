@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/jrperritt/rackcli/util"
+	"github.com/jrperritt/rack/util"
 )
 
 var baseCmd = fmt.Sprintf("rack %s create", commandPrefix)

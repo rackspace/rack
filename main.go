@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/jrperritt/rackcli/computecommands"
+	"github.com/jrperritt/rack/computecommands"
 
 	"github.com/codegangsta/cli"
 )

@@ -8,9 +8,9 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
 	"github.com/jrperritt/gophercloud/rackspace/compute/v2/keypairs"
-	"github.com/jrperritt/rackcli/auth"
-	"github.com/jrperritt/rackcli/output"
-	"github.com/jrperritt/rackcli/util"
+	"github.com/jrperritt/rack/auth"
+	"github.com/jrperritt/rack/output"
+	"github.com/jrperritt/rack/util"
 	"github.com/olekukonko/tablewriter"
 )
 

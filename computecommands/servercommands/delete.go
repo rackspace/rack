@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/jrperritt/rackcli/auth"
-	"github.com/jrperritt/rackcli/util"
+	"github.com/jrperritt/rack/auth"
+	"github.com/jrperritt/rack/util"
 	"github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 )
 
