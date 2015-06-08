@@ -2,7 +2,7 @@ package servercommands
 
 import "github.com/codegangsta/cli"
 
-var commandPrefix = "compute servers"
+var commandPrefix = "servers instance"
 
 // Get returns all the commands allowed for a `compute servers` request.
 func Get() []cli.Command {
