@@ -162,7 +162,7 @@ func plainList(c *cli.Context, i interface{}) {
 	keys := []string{"ID", "Name", "Status", "Public IPv4", "Private IPv4", "Image", "Flavor"}
 
 	w := new(tabwriter.Writer)
-	w.Init(c.App.Writer, 20, 1, 3, ' ', 0)
+	w.Init(c.App.Writer, 0, 8, 0, '\t', 0)
 
 	// Write the header
 	fmt.Fprintln(w, strings.Join(keys, "\t"))
