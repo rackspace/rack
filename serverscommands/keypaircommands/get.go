@@ -5,10 +5,8 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/gophercloud/rackspace/compute/v2/keypairs"
 	"github.com/jrperritt/rack/auth"
-	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
 )
 
@@ -36,10 +34,6 @@ func commandGet(c *cli.Context) {
 		fmt.Printf("Error retreiving image [%s]: %s\n", flavorID, err)
 		os.Exit(1)
 	}
-	output.Print(c, o, keyGet)
-}
 
-func keyGet(c *cli.Context, i interface{}) {
-	m := structs.Map(i)
-	fmt.Fprintf(c.App.Writer, "%s", m["PublicKey"])
+	fmt.Fprintf(c.App.Writer, "%s", o.PublicKey)
 }
