@@ -3,6 +3,7 @@ package instancecommands
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
@@ -55,6 +56,10 @@ func flagsList() []cli.Flag {
 			Name:  "limit",
 			Usage: "Only return this many servers at most.",
 		},
+		cli.StringFlag{
+			Name:  "fields",
+			Usage: "Only return these comma-separated fields for each item in the list.",
+		},
 	}
 }
 
@@ -92,11 +97,28 @@ func tableList(c *cli.Context, i interface{}) {
 	t := tablewriter.NewWriter(c.App.Writer)
 	t.SetAlignment(tablewriter.ALIGN_LEFT)
 	keys := []string{"ID", "Name", "Status", "Public IPv4", "Private IPv4", "Image", "Flavor"}
-	t.SetHeader(keys)
+	if c.IsSet("noborder") {
+		t.SetBorder(false)
+		t.SetCenterSeparator("")
+		t.SetRowSeparator("")
+		t.SetColumnSeparator("")
+	}
+
+	fields := []string{}
+	for _, key := range keys {
+		fields = append(fields, strings.Join(strings.Split(strings.ToLower(key), " "), ""))
+	}
+	if c.IsSet("fields") {
+		fields = strings.Split(strings.ToLower(c.String("fields")), ",")
+	}
+	t.SetHeader(fields)
 	for _, server := range servers {
 		m := structs.Map(server)
 		f := []string{}
 		for _, key := range keys {
+			if !util.Contains(fields, strings.Join(strings.Split(strings.ToLower(key), " "), "")) {
+				continue
+			}
 			tmp := ""
 			switch key {
 			case "Public IPv4":

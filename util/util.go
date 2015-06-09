@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strings"
 
@@ -37,6 +38,10 @@ func commonFlags() []cli.Flag {
 		cli.BoolFlag{
 			Name:  "table",
 			Usage: "Return output in tabular format. This is the default output format.",
+		},
+		cli.BoolFlag{
+			Name:  "noborder",
+			Usage: "Don't print a border when output format is tabular or csv",
 		},
 	}
 }
@@ -91,4 +96,17 @@ func CheckKVFlag(c *cli.Context, flagName string) map[string]string {
 		kv[temp[0]] = temp[1]
 	}
 	return kv
+}
+
+// ReadStdin will read from stdin and return the data as a slice of bytes if
+// it exists.
+func ReadStdin(c *cli.Context) []byte {
+	fileInfo, _ := os.Stdin.Stat()
+	if (fileInfo.Mode() & os.ModeCharDevice) == 0 {
+		// from pipe
+		bytes, _ := ioutil.ReadAll(os.Stdin)
+		return bytes
+	}
+	// from terminal
+	return nil
 }
