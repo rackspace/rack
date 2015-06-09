@@ -170,22 +170,9 @@ func plainList(c *cli.Context, i interface{}) {
 		m := structs.Map(server)
 
 		// Extract the Image ID
-		image := ""
-		i, ok := m["Image"].(map[string]interface{})
-		if !ok {
-			image = ""
-		} else {
-			image = fmt.Sprint(i["id"])
-		}
-
+		image, _ := GetNestedID(m["Image"])
 		// Extract the Flavor ID
-		flavor := ""
-		f, ok := m["Flavor"].(map[string]interface{})
-		if !ok {
-			flavor = "" // This is already assumed, I could skip this
-		} else {
-			flavor = fmt.Sprint(f["id"])
-		}
+		flavor, _ := GetNestedID(m["Flavor"])
 
 		// Extract the very first private address
 		// TODO: How do we handle multiples here?
@@ -206,4 +193,13 @@ func plainList(c *cli.Context, i interface{}) {
 
 	}
 	w.Flush()
+}
+
+// GetNestedID extracts the nested id from, e.g. the flavor from a server
+func GetNestedID(i interface{}) (string, bool) {
+	f, ok := i.(map[string]interface{})
+	if !ok {
+		return "", ok
+	}
+	return fmt.Sprint(f["id"]), ok
 }
