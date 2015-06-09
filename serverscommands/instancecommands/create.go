@@ -7,11 +7,9 @@ import (
 	"strings"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
-	"github.com/olekukonko/tablewriter"
 	osServers "github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
 )
@@ -131,13 +129,5 @@ func commandCreate(c *cli.Context) {
 }
 
 func tableCreate(c *cli.Context, i interface{}) {
-	m := structs.Map(i)
-	t := tablewriter.NewWriter(c.App.Writer)
-	t.SetAlignment(tablewriter.ALIGN_LEFT)
-	t.SetHeader([]string{"property", "value"})
-	keys := []string{"ID", "AdminPass"}
-	for _, key := range keys {
-		t.Append([]string{key, fmt.Sprint(m[key])})
-	}
-	t.Render()
+	util.MetaDataPrint(c, i, []string{"ID", "AdminPass"})
 }

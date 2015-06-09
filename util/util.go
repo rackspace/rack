@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"text/tabwriter"
 
 	"github.com/codegangsta/cli"
+	"github.com/fatih/structs"
 )
 
 // Name is the name of the CLI
@@ -91,4 +93,19 @@ func CheckKVFlag(c *cli.Context, flagName string) map[string]string {
 		kv[temp[0]] = temp[1]
 	}
 	return kv
+}
+
+// MetaDataPrint writes standardized metadata out
+func MetaDataPrint(c *cli.Context, i interface{}, keys []string) {
+	m := structs.Map(i)
+	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 0, '\t', 0)
+
+	fmt.Fprintln(w, "PROPERTY\tVALUE")
+
+	for _, key := range keys {
+		val := fmt.Sprintf("%s", m[key])
+		fmt.Fprintf(w, "%s\t%s\n", key, strings.Replace(val, "\n", "\n\t", -1))
+	}
+	w.Flush()
+
 }

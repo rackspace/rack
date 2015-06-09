@@ -4,11 +4,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"strings"
-	"text/tabwriter"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -65,16 +62,5 @@ func commandCreate(c *cli.Context) {
 }
 
 func tableCreate(c *cli.Context, i interface{}) {
-	m := structs.Map(i)
-	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 0, '\t', 0)
-
-	fmt.Fprintln(w, "PROPERTY\tVALUE")
-
-	keys := []string{"Name", "Fingerprint", "PublicKey", "PrivateKey"}
-	for _, key := range keys {
-		val := fmt.Sprintf("%s", m[key])
-		fmt.Fprintf(w, "%s\t%s\n", key, strings.Replace(val, "\n", "\n\t", -1))
-	}
-	w.Flush()
-
+	util.MetaDataPrint(c, i, []string{"Name", "Fingerprint", "PublicKey", "PrivateKey"})
 }
