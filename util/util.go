@@ -103,7 +103,7 @@ func MetaDataPrint(c *cli.Context, i interface{}, keys []string) {
 	fmt.Fprintln(w, "PROPERTY\tVALUE")
 
 	for _, key := range keys {
-		val := fmt.Sprintf("%s", m[key])
+		val := fmt.Sprint(m[key])
 		fmt.Fprintf(w, "%s\t%s\n", key, strings.Replace(val, "\n", "\n\t", -1))
 	}
 	w.Flush()
