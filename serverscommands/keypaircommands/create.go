@@ -5,13 +5,13 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+	"text/tabwriter"
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
-	"github.com/olekukonko/tablewriter"
 	osKeypairs "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs"
 )
@@ -66,29 +66,15 @@ func commandCreate(c *cli.Context) {
 
 func tableCreate(c *cli.Context, i interface{}) {
 	m := structs.Map(i)
-	t := tablewriter.NewWriter(c.App.Writer)
-	colWidth := 100
-	t.SetColWidth(colWidth)
-	t.SetAlignment(tablewriter.ALIGN_LEFT)
-	t.SetHeader([]string{"property", "value"})
+	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 0, '\t', 0)
+
+	fmt.Fprintln(w, "PROPERTY\tVALUE")
+
 	keys := []string{"Name", "Fingerprint", "PublicKey", "PrivateKey"}
 	for _, key := range keys {
-		switch key {
-		case "PublicKey", "PrivateKey":
-			keyWidth := tablewriter.DisplayWidth(m[key].(string))
-			numPieces := keyWidth / colWidth
-			remainder := keyWidth % colWidth
-			pieces := make([]string, numPieces)
-			j := 0
-			for j = 0; j < numPieces; {
-				pieces = append(pieces, m[key].(string)[colWidth*j:colWidth*j+colWidth])
-				j++
-			}
-			pieces = append(pieces, m[key].(string)[colWidth*j:colWidth*j+remainder])
-			t.Append([]string{key, strings.Join(pieces, "\n")})
-		default:
-			t.Append([]string{key, fmt.Sprint(m[key])})
-		}
+		val := fmt.Sprintf("%s", m[key])
+		fmt.Fprintf(w, "%s\t%s\n", key, strings.Replace(val, "\n", "\n\t", -1))
 	}
-	t.Render()
+	w.Flush()
+
 }
