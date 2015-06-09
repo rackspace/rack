@@ -5,11 +5,9 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
-	"github.com/olekukonko/tablewriter"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/flavors"
 )
 
@@ -41,13 +39,5 @@ func commandGet(c *cli.Context) {
 }
 
 func tableGet(c *cli.Context, i interface{}) {
-	m := structs.Map(i)
-	t := tablewriter.NewWriter(c.App.Writer)
-	t.SetAlignment(tablewriter.ALIGN_LEFT)
-	t.SetHeader([]string{"property", "value"})
-	keys := []string{"ID", "Name", "Disk", "RAM", "RxTxFactor", "Swap", "VCPUs"}
-	for _, key := range keys {
-		t.Append([]string{key, fmt.Sprint(m[key])})
-	}
-	t.Render()
+	util.MetaDataPrint(c, i, []string{"ID", "Name", "Disk", "RAM", "RxTxFactor", "Swap", "VCPUs"})
 }
