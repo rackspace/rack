@@ -3,7 +3,6 @@ package keypaircommands
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
@@ -11,7 +10,6 @@ import (
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
-	"github.com/olekukonko/tablewriter"
 )
 
 var get = cli.Command{
@@ -38,31 +36,10 @@ func commandGet(c *cli.Context) {
 		fmt.Printf("Error retreiving image [%s]: %s\n", flavorID, err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableGet)
+	output.Print(c, o, keyGet)
 }
 
-func tableGet(c *cli.Context, i interface{}) {
+func keyGet(c *cli.Context, i interface{}) {
 	m := structs.Map(i)
-	t := tablewriter.NewWriter(c.App.Writer)
-	colWidth := 100
-	t.SetColWidth(colWidth)
-	t.SetAlignment(tablewriter.ALIGN_LEFT)
-	t.SetHeader([]string{"property", "value"})
-	keys := []string{"Name", "Fingerprint"}
-	for _, key := range keys {
-		t.Append([]string{key, fmt.Sprint(m[key])})
-	}
-	t.Render()
-	keyWidth := tablewriter.DisplayWidth(m["PublicKey"].(string))
-	numPieces := keyWidth / colWidth
-	remainder := keyWidth % colWidth
-	pieces := make([]string, numPieces)
-	j := 0
-	for j = 0; j < numPieces; {
-		pieces = append(pieces, m["PublicKey"].(string)[colWidth*j:colWidth*j+colWidth])
-		j++
-	}
-	pieces = append(pieces, m["PublicKey"].(string)[colWidth*j:colWidth*j+remainder])
-	pk := strings.TrimLeft(strings.Join(pieces, "\n"), "\n")
-	fmt.Printf("PublicKey: %s\n", pk)
+	fmt.Fprintf(c.App.Writer, "%s", m["PublicKey"])
 }
