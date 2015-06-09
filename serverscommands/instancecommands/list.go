@@ -169,9 +169,10 @@ func plainList(c *cli.Context, i interface{}) {
 	for _, server := range servers {
 		m := structs.Map(server)
 
-		// Extract the Image ID
+		// Extract the Image ID - if !ok, image is ""
 		image, _ := GetNestedID(m["Image"])
-		// Extract the Flavor ID
+
+		// Extract the Flavor ID - if !ok, flavor is ""
 		flavor, _ := GetNestedID(m["Flavor"])
 
 		// Extract the very first private address
