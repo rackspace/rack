@@ -7,7 +7,6 @@ import (
 	"text/tabwriter"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -61,8 +60,7 @@ func tableList(c *cli.Context, i interface{}) {
 	fmt.Fprintln(w, strings.Join(keys, "\t"))
 
 	for _, kp := range kps {
-		m := structs.Map(kp)
-		fmt.Fprintf(w, "%s\t%s\n", m["Name"], m["Fingerprint"])
+		fmt.Fprintf(w, "%s\t%s\n", kp.Name, kp.Fingerprint)
 	}
 	w.Flush()
 }
