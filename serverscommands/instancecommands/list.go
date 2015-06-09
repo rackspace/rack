@@ -3,6 +3,8 @@ package instancecommands
 import (
 	"fmt"
 	"os"
+	"strings"
+	"text/tabwriter"
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
@@ -80,7 +82,9 @@ func commandList(c *cli.Context) {
 		fmt.Printf("Error listing servers: %s\n", err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableList)
+	//output.Print(c, o, tableList)
+
+	output.Print(c, o, plainList)
 }
 
 func tableList(c *cli.Context, i interface{}) {
@@ -89,9 +93,12 @@ func tableList(c *cli.Context, i interface{}) {
 		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osServers.Server\n", i)
 		os.Exit(1)
 	}
+
+	keys := []string{"ID", "Name", "Status", "Public IPv4", "Private IPv4", "Image", "Flavor"}
+
 	t := tablewriter.NewWriter(c.App.Writer)
 	t.SetAlignment(tablewriter.ALIGN_LEFT)
-	keys := []string{"ID", "Name", "Status", "Public IPv4", "Private IPv4", "Image", "Flavor"}
+
 	t.SetHeader(keys)
 	for _, server := range servers {
 		m := structs.Map(server)
@@ -143,4 +150,60 @@ func tableList(c *cli.Context, i interface{}) {
 		t.Append(f)
 	}
 	t.Render()
+}
+
+func plainList(c *cli.Context, i interface{}) {
+	servers, ok := i.([]osServers.Server)
+	if !ok {
+		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osServers.Server\n", i)
+		os.Exit(1)
+	}
+
+	keys := []string{"ID", "Name", "Status", "Public IPv4", "Private IPv4", "Image", "Flavor"}
+
+	w := new(tabwriter.Writer)
+	w.Init(c.App.Writer, 20, 1, 3, ' ', 0)
+
+	// Write the header
+	fmt.Fprintln(w, strings.Join(keys, "\t"))
+	for _, server := range servers {
+		m := structs.Map(server)
+
+		// Extract the Image ID
+		image := ""
+		i, ok := m["Image"].(map[string]interface{})
+		if !ok {
+			image = ""
+		} else {
+			image = fmt.Sprint(i["id"])
+		}
+
+		// Extract the Flavor ID
+		flavor := ""
+		f, ok := m["Flavor"].(map[string]interface{})
+		if !ok {
+			flavor = "" // This is already assumed, I could skip this
+		} else {
+			flavor = fmt.Sprint(f["id"])
+		}
+
+		// Extract the very first private address
+		// TODO: How do we handle multiples here?
+		privAddr := ""
+		a, ok := m["Addresses"].(map[string]interface{})
+		if ok {
+			a, ok := a["private"].([]interface{})
+			if ok && len(a) > 0 {
+				first, ok := a[0].(map[string]interface{})
+				if ok {
+					privAddr = fmt.Sprint(first["addr"])
+				}
+
+			}
+		}
+
+		fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", m["ID"], m["Name"], m["Status"], m["AccessIPv4"], privAddr, image, flavor)
+
+	}
+	w.Flush()
 }
