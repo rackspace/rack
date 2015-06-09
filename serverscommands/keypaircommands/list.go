@@ -3,13 +3,14 @@ package keypaircommands
 import (
 	"fmt"
 	"os"
+	"strings"
+	"text/tabwriter"
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
-	"github.com/olekukonko/tablewriter"
 	osKeypairs "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs"
 )
@@ -51,16 +52,17 @@ func tableList(c *cli.Context, i interface{}) {
 		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osKeypairs.KeyPair\n", i)
 		os.Exit(1)
 	}
-	t := tablewriter.NewWriter(c.App.Writer)
+
 	keys := []string{"Name", "Fingerprint"}
-	t.SetHeader(keys)
+
+	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 0, '\t', 0)
+
+	// Write the header
+	fmt.Fprintln(w, strings.Join(keys, "\t"))
+
 	for _, kp := range kps {
 		m := structs.Map(kp)
-		f := []string{}
-		for _, key := range keys {
-			f = append(f, fmt.Sprint(m[key]))
-		}
-		t.Append(f)
+		fmt.Fprintf(w, "%s\t%s\n", m["Name"], m["Fingerprint"])
 	}
-	t.Render()
+	w.Flush()
 }
