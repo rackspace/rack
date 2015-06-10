@@ -5,7 +5,9 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
+	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
+	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs"
 )
@@ -35,6 +37,12 @@ func commandGet(c *cli.Context) {
 		os.Exit(1)
 	}
 
+	output.Print(c, o, plainGet)
+
+}
+
+func plainGet(c *cli.Context, i interface{}) {
+	m := structs.Map(i)
 	// Assume they want the key directly
-	fmt.Fprintf(c.App.Writer, "%s", o.PublicKey)
+	fmt.Fprintf(c.App.Writer, "%s", m["PublicKey"])
 }
