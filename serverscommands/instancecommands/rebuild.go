@@ -88,9 +88,7 @@ func commandRebuild(c *cli.Context) {
 
 	if c.IsSet("rename") {
 		opts.Name = c.String("rename")
-	} else if c.IsSet("name") { // If name specified, assume
-		opts.Name = c.String("name")
-	} else {
+	} else if c.IsSet("id") { // Must get the name from compute by ID
 		getResult := osServers.Get(client, serverID)
 		serverResult, err := getResult.Extract()
 		if err != nil {
@@ -98,6 +96,9 @@ func commandRebuild(c *cli.Context) {
 			os.Exit(1)
 		}
 		opts.Name = serverResult.Name
+	} else if c.IsSet("name") {
+		// Did not set rename, did not set id, can assume name
+		opts.Name = c.String("name")
 	}
 
 	o, err := servers.Rebuild(client, serverID, opts).Extract()
