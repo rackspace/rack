@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
+	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -52,9 +53,11 @@ func tableList(c *cli.Context, i interface{}) {
 
 	keys := []string{"Name", "Fingerprint"}
 
-	is := make([]interface{}, len(kps))
-	for i, d := range kps {
-		is[i] = d
+	var maps []map[string]interface{}
+	for _, kp := range kps {
+		maps = append(maps, structs.Map(kp))
 	}
-	util.SimpleListing(c, is, keys)
+
+	util.SimpleMapsTable(c, maps, keys)
+
 }

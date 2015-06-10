@@ -95,51 +95,6 @@ func CheckKVFlag(c *cli.Context, flagName string) map[string]string {
 	return kv
 }
 
-// MetaDataPrint writes standardized metadata out
-func MetaDataPrint(c *cli.Context, i interface{}, keys []string) {
-	m := structs.Map(i)
-	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 0, '\t', 0)
-
-	fmt.Fprintln(w, "PROPERTY\tVALUE")
-
-	for _, key := range keys {
-		val := fmt.Sprint(m[key])
-		fmt.Fprintf(w, "%s\t%s\n", key, strings.Replace(val, "\n", "\n\t", -1))
-	}
-	w.Flush()
-}
-
-// SimpleListing writes a simple table out
-// Example creation of the interface slice for your type:
-//
-//   	kps, ok := i.([]osKeypairs.KeyPair)
-//    // Make sure to check "ok"
-//
-//    is := make([]interface{}, len(kps))
-//    for i, d := range kps {
-//   	  is[i] = d
-//    }
-//
-// The reason you have to do this initial setup is that []interface{} has a
-// specific memory layout known at compile time.
-//
-// See https://github.com/golang/go/wiki/InterfaceSlice
-func SimpleListing(c *cli.Context, many []interface{}, keys []string) {
-	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 1, '\t', 0)
-	// Write the header
-	fmt.Fprintln(w, strings.Join(keys, "\t"))
-
-	for _, i := range many {
-		m := structs.Map(i)
-		f := []string{}
-		for _, key := range keys {
-			f = append(f, fmt.Sprint(m[key]))
-		}
-		fmt.Fprintln(w, strings.Join(f, "\t"))
-	}
-	w.Flush()
-}
-
 // SimpleMapsTable writes a table listing from an array of map[string]interface{}
 func SimpleMapsTable(c *cli.Context, many []map[string]interface{}, keys []string) {
 	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 1, '\t', 0)
@@ -147,18 +102,16 @@ func SimpleMapsTable(c *cli.Context, many []map[string]interface{}, keys []strin
 	fmt.Fprintln(w, strings.Join(keys, "\t"))
 
 	for _, m := range many {
-		WriteMapEntry(w, m, keys)
+		writeMapEntry(w, m, keys)
 	}
 	w.Flush()
 }
 
-// WriteMapEntry writes a table entry from a map
-func WriteMapEntry(w *tabwriter.Writer, m map[string]interface{}, keys []string) {
-	f := []string{}
-	for _, key := range keys {
-		f = append(f, fmt.Sprint(m[key]))
-	}
-	fmt.Fprintln(w, strings.Join(f, "\t"))
+// MetaDataPrint writes standardized metadata out
+func MetaDataPrint(c *cli.Context, i interface{}, keys []string) {
+	m := structs.Map(i)
+
+	MetaDataMapPrint(c, m, keys)
 }
 
 // MetaDataMapPrint writes standardized metadata out
@@ -172,4 +125,13 @@ func MetaDataMapPrint(c *cli.Context, m map[string]interface{}, keys []string) {
 		fmt.Fprintf(w, "%s\t%s\n", key, strings.Replace(val, "\n", "\n\t", -1))
 	}
 	w.Flush()
+}
+
+// writeMapEntry writes a table entry from a map
+func writeMapEntry(w *tabwriter.Writer, m map[string]interface{}, keys []string) {
+	f := []string{}
+	for _, key := range keys {
+		f = append(f, fmt.Sprint(m[key]))
+	}
+	fmt.Fprintln(w, strings.Join(f, "\t"))
 }
