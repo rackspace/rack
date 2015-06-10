@@ -2,12 +2,12 @@ package instancecommands
 
 import (
 	"fmt"
-	"os"
+	"strings"
 
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/util"
-	"github.com/rackspace/gophercloud/openstack/compute/v2/servers"
+	"github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
 )
 
 // delete is a reserved word in Go.
@@ -29,10 +29,23 @@ func flagsDelete() []cli.Flag {
 func commandDelete(c *cli.Context) {
 	util.CheckArgNum(c, 0)
 	client := auth.NewClient("compute")
-	serverID := idOrName(c, client)
-	err := servers.Delete(client, serverID).ExtractErr()
-	if err != nil {
-		fmt.Printf("Error deleting server (%s): %s\n", serverID, err)
-		os.Exit(1)
+	tmp := ""
+	if b := util.ReadStdin(c); b != nil {
+		tmp = string(b)
+	} else {
+		tmp = idOrName(c, client)
+	}
+
+	serverIDs := strings.Split(tmp, c.String("sep"))
+	for _, serverID := range serverIDs {
+		serverID := strings.TrimSpace(serverID)
+		if serverID == "" {
+			continue
+		}
+		fmt.Fprintf(c.App.Writer, "Deleting server: %s\n", serverID)
+		err := servers.Delete(client, serverID).ExtractErr()
+		if err != nil {
+			fmt.Fprintf(c.App.Writer, "Error deleting server (%s): %s\n", serverID, err)
+		}
 	}
 }

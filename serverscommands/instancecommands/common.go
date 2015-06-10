@@ -33,11 +33,16 @@ func idOrName(c *cli.Context, client *gophercloud.ServiceClient) string {
 var idAndNameFlags = []cli.Flag{
 	cli.StringFlag{
 		Name:  "id",
-		Usage: "[optional; required if 'name' is not provided] The ID of the server to update",
+		Usage: "[optional; required if 'name' is not provided] The ID of the server to update.",
 	},
 	cli.StringFlag{
 		Name:  "name",
-		Usage: "[optional; required if 'id' is not provided] The name of the server to update",
+		Usage: "[optional; required if 'id' is not provided] The name of the server to updat.e",
+	},
+	cli.StringFlag{
+		Name:  "sep",
+		Usage: "[optional] The separator to use for splitting multiple IDs or names.",
+		Value: ",",
 	},
 }
 
