@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -76,19 +75,12 @@ func tableList(c *cli.Context, i interface{}) {
 	}
 	keys := []string{"ID", "Name", "RAM", "Disk", "Swap", "VCPUs", "RxTxFactor"}
 
-	// Prebuild the maps
-	maps := make([]map[string]interface{}, len(flavors))
-	for _, flavor := range flavors {
-		m := structs.Map(flavor)
-		maps = append(maps, m)
-	}
-
+	// Allocate a generic []interface{} of the right size
 	is := make([]interface{}, len(flavors))
 	for i, d := range flavors {
 		is[i] = d
 	}
 
-	maps = util.BuildMaps(is)
-	util.SimpleTable(c, keys, maps)
+	util.SimpleTable(c, keys, is)
 
 }
