@@ -11,7 +11,7 @@ if [ -z "$TRAVIS_BRANCH" ]; then
   BRANCH=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
   SUFFIX="-${BRANCH}"
 else
-  if [ -z "$TRAVIS_PULL_REQUEST" ]; then
+  if [ -z "$TRAVIS_PULL_REQUEST" ] || [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     SUFFIX="-$TRAVIS_BRANCH"
 
     # No branch name for master
