@@ -1,6 +1,17 @@
 language: go
-
 go:
-  - 1.4
-
+- 1.4
 sudo: false
+before_deploy:
+- "./script/prep-travis-release.sh"
+- cd build
+deploy:
+  provider: cloudfiles
+  username: rackcli.trythingsout
+  region: IAD
+  api-key:
+    secure: bLpEkASmMSF/Z5q8JELqh+yFR2Xe+1EcqfTrszUqo51neh/HKDbcosTPYGwGME+asZve5YnnmWCWAlHG337jY0WRphpppx4ZlWeZAgGBa6C1IdxZ7QxiuPcglEtbYMePXbXXtwDfdW4yPcw6JrMBkk9rQswQIfUHYTex1NOUzQMVjnHLbyH3eAqS3Y3aCkdnCbemKkDFdV95Z+VHTvUHfXS7ehAnBFPTu8toK14qtLZS5YI0o53laOqlJ0OEE6Ir/KSbLiI/fMKo+l5ygCjG5tWm5sBclDQy4cALFs5BFDDZDKBMADo6NfWnVboDalPg88PEA/BkKc00g7Vhcisxrk3PSZJDYK/a4dCFZG5xVy5V5kqxESoYN2XTvdGnR5td2QOanSv3+hr52vBAQag6Np/O3hZ8HKx3u998EwzAT4wG3aPGJbXVIRnqXTtJ6ZsjW9JzTf72vmOi0LDNGWT9nBRa5cGEFwI8eccJoul7C0SfLaEqh3eq1zLmqtnvj0WOIalzfzP6toJv6OLpf+lsk05kbzeQQZ8AGqnfbQZctWXpbFPM250AzaaiQ5gWamKvw1oIzzBN8tevKJIvBJSE227Wo+M63BPSe9Va7Yk+U1Oryw6SWJPO3/feFxxqDo3iA0Pke6lbYq5vyLMObUbC831VX6nheyuvuskMLWxrwnw=
+  container: rackclibuilds
+  skip_cleanup: true
+  on:
+    all_branches: true
