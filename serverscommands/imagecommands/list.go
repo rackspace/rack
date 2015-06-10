@@ -5,11 +5,9 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
-	"github.com/olekukonko/tablewriter"
 	osImages "github.com/rackspace/gophercloud/openstack/compute/v2/images"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/images"
 )
@@ -74,18 +72,14 @@ func tableList(c *cli.Context, i interface{}) {
 		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osImages.Image\n", i)
 		os.Exit(1)
 	}
-	t := tablewriter.NewWriter(c.App.Writer)
-	t.SetAlignment(tablewriter.ALIGN_LEFT)
-	t.SetColWidth(100)
+
 	keys := []string{"ID", "Name", "Status", "MinDisk", "MinRAM"}
-	t.SetHeader(keys)
-	for _, image := range images {
-		m := structs.Map(image)
-		f := []string{}
-		for _, key := range keys {
-			f = append(f, fmt.Sprint(m[key]))
-		}
-		t.Append(f)
+
+	many := make([]interface{}, len(images))
+	for i, d := range images {
+		many[i] = d
 	}
-	t.Render()
+
+	util.SimpleListing(c, many, keys)
+
 }
