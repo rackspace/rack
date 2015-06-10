@@ -58,6 +58,6 @@ func tableList(c *cli.Context, i interface{}) {
 		maps = append(maps, structs.Map(kp))
 	}
 
-	util.Table(c, maps, keys)
+	util.ListTable(c, maps, keys)
 
 }

@@ -95,8 +95,8 @@ func CheckKVFlag(c *cli.Context, flagName string) map[string]string {
 	return kv
 }
 
-// Table writes a table listing from an array of map[string]interface{}
-func Table(c *cli.Context, many []map[string]interface{}, keys []string) {
+// ListTable writes a table listing from an array of map[string]interface{}
+func ListTable(c *cli.Context, many []map[string]interface{}, keys []string) {
 	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 1, '\t', 0)
 	// Write the header
 	fmt.Fprintln(w, strings.Join(keys, "\t"))
