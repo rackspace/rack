@@ -75,10 +75,6 @@ func commandRebuild(c *cli.Context) {
 		AccessIPv6: c.String("accessIPv6"),
 	}
 
-	if c.IsSet("rename") {
-		opts.Name = c.String("rename")
-	}
-
 	if c.IsSet("metadata") {
 		opts.Metadata = util.CheckKVFlag(c, "metadata")
 	}
