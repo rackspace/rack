@@ -83,6 +83,12 @@ func tableList(c *cli.Context, i interface{}) {
 		maps = append(maps, m)
 	}
 
+	is := make([]interface{}, len(flavors))
+	for i, d := range flavors {
+		is[i] = d
+	}
+
+	maps = util.BuildMaps(is)
 	util.SimpleTable(c, keys, maps)
 
 }

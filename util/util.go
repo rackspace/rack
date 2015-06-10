@@ -109,6 +109,17 @@ func MetaDataPrint(c *cli.Context, i interface{}, keys []string) {
 	w.Flush()
 }
 
+// BuildMaps is terrible golang
+func BuildMaps(i []interface{}) []map[string]interface{} {
+	maps := make([]map[string]interface{}, len(i))
+	for _, element := range i {
+		m := structs.Map(element)
+		maps = append(maps, m)
+	}
+
+	return maps
+}
+
 // SimpleTable writes a simple table out
 func SimpleTable(c *cli.Context, keys []string, many []map[string]interface{}) {
 	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 0, '\t', 0)
