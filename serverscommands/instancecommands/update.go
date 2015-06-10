@@ -9,7 +9,6 @@ import (
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
-	"github.com/olekukonko/tablewriter"
 	osServers "github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
 )
@@ -62,24 +61,7 @@ func commandUpdate(c *cli.Context) {
 
 func tableUpdate(c *cli.Context, i interface{}) {
 	m := structs.Map(i)
-	t := tablewriter.NewWriter(c.App.Writer)
-	t.SetAlignment(tablewriter.ALIGN_LEFT)
-	t.SetHeader([]string{"property", "value"})
 	keys := []string{"ID", "Name", "Public IPv4", "Public IPv6"}
-	for _, key := range keys {
-		tmp := ""
-		switch key {
-		case "Public IPv4":
-			tmp = fmt.Sprint(m["AccessIPv4"])
-		case "Public IPv6":
-			tmp = fmt.Sprint(m["AccessIPv6"])
-		default:
-			tmp = fmt.Sprint(m[key])
-		}
-		if tmp == "<nil>" {
-			tmp = ""
-		}
-		t.Append([]string{key, tmp})
-	}
-	t.Render()
+	mungeServerMap(m)
+	util.MetaDataMapTable(c, m, keys)
 }

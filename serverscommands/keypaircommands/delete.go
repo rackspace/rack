@@ -5,9 +5,9 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/jrperritt/gophercloud/rackspace/compute/v2/keypairs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/util"
+	"github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs"
 )
 
 var remove = cli.Command{

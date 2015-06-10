@@ -9,7 +9,6 @@ import (
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
-	"github.com/olekukonko/tablewriter"
 	osKeypairs "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs"
 )
@@ -51,16 +50,14 @@ func tableList(c *cli.Context, i interface{}) {
 		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osKeypairs.KeyPair\n", i)
 		os.Exit(1)
 	}
-	t := tablewriter.NewWriter(c.App.Writer)
+
 	keys := []string{"Name", "Fingerprint"}
-	t.SetHeader(keys)
+
+	var maps []map[string]interface{}
 	for _, kp := range kps {
-		m := structs.Map(kp)
-		f := []string{}
-		for _, key := range keys {
-			f = append(f, fmt.Sprint(m[key]))
-		}
-		t.Append(f)
+		maps = append(maps, structs.Map(kp))
 	}
-	t.Render()
+
+	util.ListTable(c, maps, keys)
+
 }
