@@ -3,13 +3,14 @@ package flavorcommands
 import (
 	"fmt"
 	"os"
+	"strings"
+	"text/tabwriter"
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
-	"github.com/olekukonko/tablewriter"
 	osFlavors "github.com/rackspace/gophercloud/openstack/compute/v2/flavors"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/flavors"
 )
@@ -75,17 +76,19 @@ func tableList(c *cli.Context, i interface{}) {
 		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osFlavors.Flavor\n", i)
 		os.Exit(1)
 	}
-	t := tablewriter.NewWriter(c.App.Writer)
-	t.SetAlignment(tablewriter.ALIGN_LEFT)
 	keys := []string{"ID", "Name", "RAM", "Disk", "Swap", "VCPUs", "RxTxFactor"}
-	t.SetHeader(keys)
+
+	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 0, '\t', 0)
+	// Write the header
+	fmt.Fprintln(w, strings.Join(keys, "\t"))
+
 	for _, flavor := range flavors {
 		m := structs.Map(flavor)
 		f := []string{}
 		for _, key := range keys {
 			f = append(f, fmt.Sprint(m[key]))
 		}
-		t.Append(f)
+		fmt.Fprintln(w, strings.Join(f, "\t"))
 	}
-	t.Render()
+	w.Flush()
 }
