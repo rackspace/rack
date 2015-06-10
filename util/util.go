@@ -107,5 +107,20 @@ func MetaDataPrint(c *cli.Context, i interface{}, keys []string) {
 		fmt.Fprintf(w, "%s\t%s\n", key, strings.Replace(val, "\n", "\n\t", -1))
 	}
 	w.Flush()
+}
 
+// SimpleTable writes a simple table out
+func SimpleTable(c *cli.Context, keys []string, many []map[string]interface{}) {
+	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 0, '\t', 0)
+	// Write the header
+	fmt.Fprintln(w, strings.Join(keys, "\t"))
+
+	for _, m := range many {
+		f := []string{}
+		for _, key := range keys {
+			f = append(f, fmt.Sprint(m[key]))
+		}
+		fmt.Fprintln(w, strings.Join(f, "\t"))
+	}
+	w.Flush()
 }

@@ -3,8 +3,6 @@ package flavorcommands
 import (
 	"fmt"
 	"os"
-	"strings"
-	"text/tabwriter"
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
@@ -78,17 +76,13 @@ func tableList(c *cli.Context, i interface{}) {
 	}
 	keys := []string{"ID", "Name", "RAM", "Disk", "Swap", "VCPUs", "RxTxFactor"}
 
-	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 0, '\t', 0)
-	// Write the header
-	fmt.Fprintln(w, strings.Join(keys, "\t"))
-
+	// Prebuild the maps
+	maps := make([]map[string]interface{}, len(flavors))
 	for _, flavor := range flavors {
 		m := structs.Map(flavor)
-		f := []string{}
-		for _, key := range keys {
-			f = append(f, fmt.Sprint(m[key]))
-		}
-		fmt.Fprintln(w, strings.Join(f, "\t"))
+		maps = append(maps, m)
 	}
-	w.Flush()
+
+	util.SimpleTable(c, keys, maps)
+
 }
