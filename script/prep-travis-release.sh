@@ -1,17 +1,30 @@
 #!/usr/bin/env bash
 
-set -euo
-BRANCH=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
+set -eo
 
 mkdir -p build
 
 BASENAME="rack"
-BINARY=$BASENAME
+SUFFIX=""
 
-# Only append the branch name on non-master branches
-if [ $BRANCH != "master" ]; then
-  BINARY=${BASENAME}-${BRANCH}
+if [ -z "$TRAVIS_BRANCH" ]; then
+  BRANCH=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
+  SUFFIX="-${BRANCH}"
+else
+  if [ -z "$TRAVIS_PULL_REQUEST" ]; then
+    SUFFIX="-$TRAVIS_BRANCH"
+
+    # No branch name for master
+    if [ "master" == "$TRAVIS_BRANCH" ]; then
+      SUFFIX=""
+    fi
+
+  else
+    SUFFIX="-${TRAVIS_PULL_REQUEST}"
+  fi
 fi
+
+BINARY="${BASENAME}${SUFFIX}"
 
 # Build a version for this branch
 go build -o build/$BINARY
