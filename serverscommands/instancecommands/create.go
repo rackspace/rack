@@ -129,5 +129,6 @@ func commandCreate(c *cli.Context) {
 }
 
 func tableCreate(c *cli.Context, i interface{}) {
-	util.MetaDataPrint(c, i, []string{"ID", "AdminPass"})
+	keys := []string{"ID", "AdminPass"}
+	util.MetaDataPrint(c, i, keys)
 }
