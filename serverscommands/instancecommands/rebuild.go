@@ -34,10 +34,6 @@ func flagsRebuild() []cli.Flag {
 			Usage: "[required] The server's administrative password.",
 		},
 		cli.StringFlag{
-			Name:  "name",
-			Usage: "[optional] The name for the rebuilt server.",
-		},
-		cli.StringFlag{
 			Name:  "accessIPv4",
 			Usage: "[optional] The IPv4 address for the rebuilt server.",
 		},
