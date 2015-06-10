@@ -34,6 +34,10 @@ func flagsRebuild() []cli.Flag {
 			Usage: "[required] The server's administrative password.",
 		},
 		cli.StringFlag{
+			Name:  "rename",
+			Usage: "[optional] The name for the rebuilt server.",
+		},
+		cli.StringFlag{
 			Name:  "accessIPv4",
 			Usage: "[optional] The IPv4 address for the rebuilt server.",
 		},
@@ -67,7 +71,6 @@ func commandRebuild(c *cli.Context) {
 	opts := osServers.RebuildOpts{
 		ImageID:    c.String("imageID"),
 		AdminPass:  c.String("adminPass"),
-		Name:       c.String("name"),
 		AccessIPv4: c.String("accessIPv4"),
 		AccessIPv6: c.String("accessIPv6"),
 	}
@@ -78,6 +81,21 @@ func commandRebuild(c *cli.Context) {
 
 	client := auth.NewClient("compute")
 	serverID := idOrName(c, client)
+
+	if c.IsSet("rename") {
+		opts.Name = c.String("rename")
+	} else if c.IsSet("id") { // Must get the name from compute by ID
+		serverResult, err := servers.Get(client, serverID).Extract()
+		if err != nil {
+			fmt.Printf("Error retrieving server (%s) for rebuild: %s\n", serverID, err)
+			os.Exit(1)
+		}
+		opts.Name = serverResult.Name
+	} else if c.IsSet("name") {
+		// Did not set rename, did not set id, can assume name
+		opts.Name = c.String("name")
+	}
+
 	o, err := servers.Rebuild(client, serverID, opts).Extract()
 	if err != nil {
 		fmt.Printf("Error rebuilding server (%s): %s\n", serverID, err)
