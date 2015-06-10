@@ -95,8 +95,8 @@ func CheckKVFlag(c *cli.Context, flagName string) map[string]string {
 	return kv
 }
 
-// SimpleMapsTable writes a table listing from an array of map[string]interface{}
-func SimpleMapsTable(c *cli.Context, many []map[string]interface{}, keys []string) {
+// Table writes a table listing from an array of map[string]interface{}
+func Table(c *cli.Context, many []map[string]interface{}, keys []string) {
 	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 1, '\t', 0)
 	// Write the header
 	fmt.Fprintln(w, strings.Join(keys, "\t"))
@@ -107,15 +107,15 @@ func SimpleMapsTable(c *cli.Context, many []map[string]interface{}, keys []strin
 	w.Flush()
 }
 
-// MetaDataPrint writes standardized metadata out
-func MetaDataPrint(c *cli.Context, i interface{}, keys []string) {
+// MetaDataTable writes standardized metadata out
+// Solely a utility method that invokes MetaDataMapTable with structs.Map(i)
+func MetaDataTable(c *cli.Context, i interface{}, keys []string) {
 	m := structs.Map(i)
-
-	MetaDataMapPrint(c, m, keys)
+	MetaDataMapTable(c, m, keys)
 }
 
-// MetaDataMapPrint writes standardized metadata out
-func MetaDataMapPrint(c *cli.Context, m map[string]interface{}, keys []string) {
+// MetaDataMapTable writes standardized metadata out
+func MetaDataMapTable(c *cli.Context, m map[string]interface{}, keys []string) {
 	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 0, '\t', 0)
 
 	fmt.Fprintln(w, "PROPERTY\tVALUE")

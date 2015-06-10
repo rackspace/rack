@@ -81,6 +81,6 @@ func tableList(c *cli.Context, i interface{}) {
 		maps = append(maps, structs.Map(flavor))
 	}
 
-	util.SimpleMapsTable(c, maps, keys)
+	util.Table(c, maps, keys)
 
 }

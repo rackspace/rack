@@ -44,5 +44,5 @@ func tableGet(c *cli.Context, i interface{}) {
 	keys := []string{"ID", "Name", "Status", "Created", "Updated", "Image", "Flavor", "Public IPv4", "Public IPv6", "Private IPv4", "KeyName"}
 
 	mungeServerMap(m)
-	util.MetaDataMapPrint(c, m, keys)
+	util.MetaDataMapTable(c, m, keys)
 }
