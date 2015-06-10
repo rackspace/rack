@@ -110,7 +110,21 @@ func MetaDataPrint(c *cli.Context, i interface{}, keys []string) {
 }
 
 // SimpleListing writes a simple table out
-func SimpleListing(c *cli.Context, keys []string, many []interface{}) {
+// Example creation of the interface slice for your type:
+//
+//   	kps, ok := i.([]osKeypairs.KeyPair)
+//    // Make sure to check "ok"
+//
+//    is := make([]interface{}, len(kps))
+//    for i, d := range kps {
+//   	  is[i] = d
+//    }
+//
+// The reason you have to do this initial setup is that []interface{} has a
+// specific memory layout known at compile time.
+//
+// See https://github.com/golang/go/wiki/InterfaceSlice
+func SimpleListing(c *cli.Context, many []interface{}, keys []string) {
 	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 1, '\t', 0)
 	// Write the header
 	fmt.Fprintln(w, strings.Join(keys, "\t"))

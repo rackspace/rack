@@ -56,5 +56,5 @@ func tableList(c *cli.Context, i interface{}) {
 	for i, d := range kps {
 		is[i] = d
 	}
-	util.SimpleListing(c, keys, is)
+	util.SimpleListing(c, is, keys)
 }
