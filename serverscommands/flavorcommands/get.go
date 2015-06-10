@@ -40,5 +40,5 @@ func commandGet(c *cli.Context) {
 
 func tableGet(c *cli.Context, i interface{}) {
 	keys := []string{"ID", "Name", "Disk", "RAM", "RxTxFactor", "Swap", "VCPUs"}
-	util.MetaDataTable(c, i, keys)
+	output.MetaDataTable(c, i, keys)
 }

@@ -63,5 +63,5 @@ func commandCreate(c *cli.Context) {
 
 func tableCreate(c *cli.Context, i interface{}) {
 	keys := []string{"Name", "Fingerprint", "PublicKey", "PrivateKey"}
-	util.MetaDataTable(c, i, keys)
+	output.MetaDataTable(c, i, keys)
 }
