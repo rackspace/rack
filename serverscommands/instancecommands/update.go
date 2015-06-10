@@ -63,5 +63,5 @@ func tableUpdate(c *cli.Context, i interface{}) {
 	m := structs.Map(i)
 	keys := []string{"ID", "Name", "Public IPv4", "Public IPv6"}
 	mungeServerMap(m)
-	util.MetaDataMapTable(c, m, keys)
+	output.MetaDataMapTable(c, m, keys)
 }
