@@ -101,38 +101,7 @@ func tableList(c *cli.Context, i interface{}) {
 	fmt.Fprintln(w, strings.Join(keys, "\t"))
 	for _, server := range servers {
 		m := structs.Map(server)
-
-		m["Public IPv4"] = m["AccessIPv4"]
-		m["Public IPv6"] = m["AccessIPv6"]
-
-		// Private IPv4 case
-		// Nested m["Addresses"]["private"][0]
-		addrs, ok := m["Addresses"].(map[string]interface{})
-		if ok {
-			ips, ok := addrs["private"].([]interface{})
-			if ok || len(ips) > 0 {
-				priv, ok := ips[0].(map[string]interface{})
-				if ok {
-					m["Private IPv4"] = priv["addr"]
-				}
-			}
-		}
-		if !ok { // if any were not ok, set the field to blank
-			m["Private IPv4"] = ""
-		}
-
-		flavor, ok := m["Flavor"].(map[string]interface{})
-		if ok {
-			m["Flavor"] = flavor["id"]
-		} else {
-			m["Flavor"] = ""
-		}
-		image, ok := m["Image"].(map[string]interface{})
-		if ok {
-			m["Image"] = image["id"]
-		} else {
-			m["Image"] = ""
-		}
+		mungeServerMap(m)
 
 		fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", m["ID"], m["Name"], m["Status"], m["AccessIPv4"], m["Private IPv4"], m["Image"], m["Flavor"])
 
