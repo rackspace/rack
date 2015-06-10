@@ -102,28 +102,39 @@ func tableList(c *cli.Context, i interface{}) {
 	for _, server := range servers {
 		m := structs.Map(server)
 
-		// Extract the Image ID - if !ok, image is ""
-		image, _ := GetNestedID(m["Image"])
+		m["Public IPv4"] = m["AccessIPv4"]
+		m["Public IPv6"] = m["AccessIPv6"]
 
-		// Extract the Flavor ID - if !ok, flavor is ""
-		flavor, _ := GetNestedID(m["Flavor"])
-
-		// Extract the very first private address
-		// TODO: How do we handle multiples here?
-		privAddr := ""
-		a, ok := m["Addresses"].(map[string]interface{})
+		// Private IPv4 case
+		// Nested m["Addresses"]["private"][0]
+		addrs, ok := m["Addresses"].(map[string]interface{})
 		if ok {
-			a, ok := a["private"].([]interface{})
-			if ok && len(a) > 0 {
-				first, ok := a[0].(map[string]interface{})
+			ips, ok := addrs["private"].([]interface{})
+			if ok || len(ips) > 0 {
+				priv, ok := ips[0].(map[string]interface{})
 				if ok {
-					privAddr = fmt.Sprint(first["addr"])
+					m["Private IPv4"] = priv["addr"]
 				}
-
 			}
 		}
+		if !ok { // if any were not ok, set the field to blank
+			m["Private IPv4"] = ""
+		}
 
-		fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", m["ID"], m["Name"], m["Status"], m["AccessIPv4"], privAddr, image, flavor)
+		flavor, ok := m["Flavor"].(map[string]interface{})
+		if ok {
+			m["Flavor"] = flavor["id"]
+		} else {
+			m["Flavor"] = ""
+		}
+		image, ok := m["Image"].(map[string]interface{})
+		if ok {
+			m["Image"] = image["id"]
+		} else {
+			m["Image"] = ""
+		}
+
+		fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", m["ID"], m["Name"], m["Status"], m["AccessIPv4"], m["Private IPv4"], m["Image"], m["Flavor"])
 
 	}
 	w.Flush()
