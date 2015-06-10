@@ -3,16 +3,15 @@ go:
 - 1.4
 sudo: false
 before_deploy:
-  - ./script/prep-travis-release.sh
-  - cd build
+- "./script/prep-travis-release.sh"
+- cd build
 deploy:
   provider: cloudfiles
   username: rackcli.trythingsout
   region: IAD
   api-key:
-    secure: shAeFUOyz9WQV9CuiOq2EDNS5lpWDIEkMrF4SoJO9Urc0Ufxw2X4bg5y7oACAC8oehvdmG+lfjWre0IqXDOZCpKFS5mY5VqoDQXy/5zjx3bluQxzXBaAOTD3QWJHUKdLI/OMJei49WQjwsOfUMvvrvDQnn2A2Kjk/WWvwQfYcxrAt4Sk1CoFfEQz8Y1PExHayPbLbUa8Ei98M70Z/XtoFllqjtRxkdGL+58IvPR3cyYjR5Yi0s+sfY+QAcP2MbpRUVWlEq94/zzZbw9y6idgI3KDLSaPCfMTqVfttg/YBYmDESTegi9vNVyQf6wn/ql7m+P4bHseVZqMm/aHesQcphXwMX94l70ktQww9iaf2Txin9zT7jLytx1uXZVNTtem8G8EhGMZHVERHz1RxXud0Ofk3jxTT0fJ0vdnu/5LFXaVE3MC6y5cf7xzCSxtMN9/yFY+ygSRd3MCF4t45Ae4jbIShPK5hkt0V/3yCcocekQiWS41+0dQqUjP3eKRiKYPcdrxlZti+52PQGQq7PZPoMwi+jVFDbffTdShqPJMKxGXWEK6FtTsQykNiAZMhNmp8MOQAsHD3nva1o3dAL2JTxhDwf0FveBInmFVCXXvCX/M4ZdO0nvJbEx61f+ddDmv66NIYo6o6OBWjgcs9QXVhmwTeNLzUBoNE3CUbks1dHI=
+    secure: bLpEkASmMSF/Z5q8JELqh+yFR2Xe+1EcqfTrszUqo51neh/HKDbcosTPYGwGME+asZve5YnnmWCWAlHG337jY0WRphpppx4ZlWeZAgGBa6C1IdxZ7QxiuPcglEtbYMePXbXXtwDfdW4yPcw6JrMBkk9rQswQIfUHYTex1NOUzQMVjnHLbyH3eAqS3Y3aCkdnCbemKkDFdV95Z+VHTvUHfXS7ehAnBFPTu8toK14qtLZS5YI0o53laOqlJ0OEE6Ir/KSbLiI/fMKo+l5ygCjG5tWm5sBclDQy4cALFs5BFDDZDKBMADo6NfWnVboDalPg88PEA/BkKc00g7Vhcisxrk3PSZJDYK/a4dCFZG5xVy5V5kqxESoYN2XTvdGnR5td2QOanSv3+hr52vBAQag6Np/O3hZ8HKx3u998EwzAT4wG3aPGJbXVIRnqXTtJ6ZsjW9JzTf72vmOi0LDNGWT9nBRa5cGEFwI8eccJoul7C0SfLaEqh3eq1zLmqtnvj0WOIalzfzP6toJv6OLpf+lsk05kbzeQQZ8AGqnfbQZctWXpbFPM250AzaaiQ5gWamKvw1oIzzBN8tevKJIvBJSE227Wo+M63BPSe9Va7Yk+U1Oryw6SWJPO3/feFxxqDo3iA0Pke6lbYq5vyLMObUbC831VX6nheyuvuskMLWxrwnw=
   container: rackclibuilds
   skip_cleanup: true
   on:
     all_branches: true
-
