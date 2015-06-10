@@ -109,9 +109,9 @@ func MetaDataPrint(c *cli.Context, i interface{}, keys []string) {
 	w.Flush()
 }
 
-// SimpleTable writes a simple table out
-func SimpleTable(c *cli.Context, keys []string, many []interface{}) {
-	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 0, '\t', 0)
+// SimpleListing writes a simple table out
+func SimpleListing(c *cli.Context, keys []string, many []interface{}) {
+	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 1, '\t', 0)
 	// Write the header
 	fmt.Fprintln(w, strings.Join(keys, "\t"))
 

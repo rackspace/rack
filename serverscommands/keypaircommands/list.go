@@ -3,8 +3,6 @@ package keypaircommands
 import (
 	"fmt"
 	"os"
-	"strings"
-	"text/tabwriter"
 
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/auth"
@@ -54,13 +52,9 @@ func tableList(c *cli.Context, i interface{}) {
 
 	keys := []string{"Name", "Fingerprint"}
 
-	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 0, '\t', 0)
-
-	// Write the header
-	fmt.Fprintln(w, strings.Join(keys, "\t"))
-
-	for _, kp := range kps {
-		fmt.Fprintf(w, "%s\t%s\n", kp.Name, kp.Fingerprint)
+	is := make([]interface{}, len(kps))
+	for i, d := range kps {
+		is[i] = d
 	}
-	w.Flush()
+	util.SimpleListing(c, keys, is)
 }

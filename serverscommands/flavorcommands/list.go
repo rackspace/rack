@@ -81,6 +81,6 @@ func tableList(c *cli.Context, i interface{}) {
 		is[i] = d
 	}
 
-	util.SimpleTable(c, keys, is)
+	util.SimpleListing(c, keys, is)
 
 }
