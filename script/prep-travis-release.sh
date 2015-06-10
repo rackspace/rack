@@ -7,10 +7,13 @@ mkdir -p build
 BASENAME="rack"
 SUFFIX=""
 
+# See http://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
+# for details about default Travis Environment Variables and their values
 if [ -z "$TRAVIS_BRANCH" ]; then
   BRANCH=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
   SUFFIX="-${BRANCH}"
 else
+  # TRAVIS PULL REQUEST is literally "false" when not a PR, number otherwise
   if [ -z "$TRAVIS_PULL_REQUEST" ] || [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     SUFFIX="-$TRAVIS_BRANCH"
 
