@@ -102,12 +102,3 @@ func tableList(c *cli.Context, i interface{}) {
 	util.SimpleMapsTable(c, maps, keys)
 
 }
-
-// GetNestedID extracts the nested id from, e.g. the flavor from a server
-func GetNestedID(i interface{}) (string, bool) {
-	f, ok := i.(map[string]interface{})
-	if !ok {
-		return "", ok
-	}
-	return fmt.Sprint(f["id"]), ok
-}
