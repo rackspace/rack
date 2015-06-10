@@ -89,10 +89,9 @@ func commandRebuild(c *cli.Context) {
 	if c.IsSet("rename") {
 		opts.Name = c.String("rename")
 	} else if c.IsSet("id") { // Must get the name from compute by ID
-		getResult := osServers.Get(client, serverID)
-		serverResult, err := getResult.Extract()
+		serverResult, err := servers.Get(client, serverID).Extract()
 		if err != nil {
-			fmt.Printf("Error rebuilding server (%s): %s\n", serverID, err)
+			fmt.Printf("Error retrieving server (%s) for rebuild: %s\n", serverID, err)
 			os.Exit(1)
 		}
 		opts.Name = serverResult.Name
