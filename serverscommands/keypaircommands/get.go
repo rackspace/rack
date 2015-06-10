@@ -35,5 +35,6 @@ func commandGet(c *cli.Context) {
 		os.Exit(1)
 	}
 
+	// Assume they want the key directly
 	fmt.Fprintf(c.App.Writer, "%s", o.PublicKey)
 }
