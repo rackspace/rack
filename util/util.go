@@ -139,3 +139,24 @@ func SimpleListing(c *cli.Context, many []interface{}, keys []string) {
 	}
 	w.Flush()
 }
+
+// SimpleMapsTable writes a table listing from an array of map[string]interface{}
+func SimpleMapsTable(c *cli.Context, many []map[string]interface{}, keys []string) {
+	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 1, '\t', 0)
+	// Write the header
+	fmt.Fprintln(w, strings.Join(keys, "\t"))
+
+	for _, m := range many {
+		WriteMapEntry(w, m, keys)
+	}
+	w.Flush()
+}
+
+// WriteMapEntry writes a table entry from a map
+func WriteMapEntry(w *tabwriter.Writer, m map[string]interface{}, keys []string) {
+	f := []string{}
+	for _, key := range keys {
+		f = append(f, fmt.Sprint(m[key]))
+	}
+	fmt.Fprintln(w, strings.Join(f, "\t"))
+}

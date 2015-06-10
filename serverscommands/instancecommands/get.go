@@ -9,7 +9,6 @@ import (
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
-	"github.com/olekukonko/tablewriter"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
 )
 
@@ -42,15 +41,10 @@ func commandGet(c *cli.Context) {
 
 func tableGet(c *cli.Context, i interface{}) {
 	m := structs.Map(i)
-	t := tablewriter.NewWriter(c.App.Writer)
-	t.SetAlignment(tablewriter.ALIGN_LEFT)
-	t.SetHeader([]string{"property", "value"})
 	keys := []string{"ID", "Name", "Status", "Created", "Updated", "Image", "Flavor", "Public IPv4", "Public IPv6", "Private IPv4", "KeyName"}
 
 	mungeServerMap(m)
 
-	for _, key := range keys {
-		t.Append([]string{key, fmt.Sprint(m[key])})
-	}
-	t.Render()
+	util.SimpleMapsTable(c, []map[string]interface{}{m}, keys)
+
 }

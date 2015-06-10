@@ -3,8 +3,6 @@ package instancecommands
 import (
 	"fmt"
 	"os"
-	"strings"
-	"text/tabwriter"
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
@@ -94,19 +92,15 @@ func tableList(c *cli.Context, i interface{}) {
 
 	keys := []string{"ID", "Name", "Status", "Public IPv4", "Private IPv4", "Image", "Flavor"}
 
-	w := new(tabwriter.Writer)
-	w.Init(c.App.Writer, 0, 8, 0, '\t', 0)
-
-	// Write the header
-	fmt.Fprintln(w, strings.Join(keys, "\t"))
+	var maps []map[string]interface{}
 	for _, server := range servers {
 		m := structs.Map(server)
 		mungeServerMap(m)
-
-		fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", m["ID"], m["Name"], m["Status"], m["AccessIPv4"], m["Private IPv4"], m["Image"], m["Flavor"])
-
+		maps = append(maps, m)
 	}
-	w.Flush()
+
+	util.SimpleMapsTable(c, maps, keys)
+
 }
 
 // GetNestedID extracts the nested id from, e.g. the flavor from a server
