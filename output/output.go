@@ -9,10 +9,6 @@ func Print(c *cli.Context, f *func() interface{}, keys []string) {
 		jsonOut(i)
 		return
 	}
-	if len(keys) == 0 {
-		(*f)()
-		return
-	}
 	if c.IsSet("csv") {
 		switch i.(type) {
 		case map[string]interface{}:
@@ -22,7 +18,8 @@ func Print(c *cli.Context, f *func() interface{}, keys []string) {
 			m := i.([]map[string]interface{})
 			listCSV(c, m, keys)
 		}
-
+		default:
+			fmt.Fprintf(c.App.Writer, "%v", i)
 		return
 	}
 	switch i.(type) {
@@ -33,4 +30,6 @@ func Print(c *cli.Context, f *func() interface{}, keys []string) {
 		m := i.([]map[string]interface{})
 		listTable(c, m, keys)
 	}
+	default:
+		fmt.Fprintf(c.App.Writer, "%v", i)
 }
