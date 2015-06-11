@@ -1,14 +1,20 @@
 language: go
-
 go:
 - 1.4
+
+sudo: false
 
 env:
     - GIMME_OS=linux GIMME_ARCH=amd64
     - GIMME_OS=darwin GIMME_ARCH=amd64
     - GIMME_OS=windows GIMME_ARCH=amd64
 
-sudo: false
+install:
+    - go get -d -v ./...
+
+script:
+    - go build -v ./...
+
 before_deploy:
 - "./script/prep-travis-release.sh"
 - cd build
