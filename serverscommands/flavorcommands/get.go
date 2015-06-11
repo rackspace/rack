@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
+	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -35,10 +36,10 @@ func commandGet(c *cli.Context) {
 		fmt.Printf("Error retreiving flavor [%s]: %s\n", flavorID, err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableGet)
-}
 
-func tableGet(c *cli.Context, i interface{}) {
+	f := func() interface{} {
+		return structs.Map(o)
+	}
 	keys := []string{"ID", "Name", "Disk", "RAM", "RxTxFactor", "Swap", "VCPUs"}
-	output.MetaDataTable(c, i, keys)
+	output.Print(c, &f, keys)
 }

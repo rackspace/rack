@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
+	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -35,10 +36,9 @@ func commandGet(c *cli.Context) {
 		fmt.Printf("Error retreiving image [%s]: %s\n", imageID, err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableGet)
-}
-
-func tableGet(c *cli.Context, i interface{}) {
 	keys := []string{"ID", "Name", "Status", "Progress", "MinDisk", "MinRAM", "Created", "Updated"}
-	output.MetaDataTable(c, i, keys)
+	f := func() interface{} {
+		return structs.Map(o)
+	}
+	output.Print(c, &f, keys)
 }

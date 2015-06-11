@@ -65,22 +65,14 @@ func commandList(c *cli.Context) {
 		fmt.Printf("Error listing flavors: %s\n", err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableList)
-}
 
-func tableList(c *cli.Context, i interface{}) {
-	flavors, ok := i.([]osFlavors.Flavor)
-	if !ok {
-		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osFlavors.Flavor\n", i)
-		os.Exit(1)
+	f := func() interface{} {
+		m := make([]map[string]interface{}, len(o))
+		for j, flavor := range o {
+			m[j] = structs.Map(flavor)
+		}
+		return m
 	}
 	keys := []string{"ID", "Name", "RAM", "Disk", "Swap", "VCPUs", "RxTxFactor"}
-
-	var maps []map[string]interface{}
-	for _, flavor := range flavors {
-		maps = append(maps, structs.Map(flavor))
-	}
-
-	output.ListTable(c, maps, keys)
-
+	output.Print(c, &f, keys)
 }

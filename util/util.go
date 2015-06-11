@@ -38,6 +38,10 @@ func commonFlags() []cli.Flag {
 			Name:  "table",
 			Usage: "Return output in tabular format. This is the default output format.",
 		},
+		cli.BoolFlag{
+			Name:  "csv",
+			Usage: "Return output in csv format.",
+		},
 	}
 }
 

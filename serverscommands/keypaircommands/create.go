@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
+	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -58,10 +59,9 @@ func commandCreate(c *cli.Context) {
 		fmt.Printf("Error creating keypair [%s]: %s\n", keypairName, err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableCreate)
-}
-
-func tableCreate(c *cli.Context, i interface{}) {
 	keys := []string{"Name", "Fingerprint", "PublicKey", "PrivateKey"}
-	output.MetaDataTable(c, i, keys)
+	f := func() interface{} {
+		return structs.Map(o)
+	}
+	output.Print(c, &f, keys)
 }

@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -56,12 +55,10 @@ func commandUpdate(c *cli.Context) {
 		fmt.Printf("Error updating server: %s\n", err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableUpdate)
-}
 
-func tableUpdate(c *cli.Context, i interface{}) {
-	m := structs.Map(i)
 	keys := []string{"ID", "Name", "Public IPv4", "Public IPv6"}
-	mungeServerMap(m)
-	output.MetaDataMapTable(c, m, keys)
+	f := func() interface{} {
+		return serverSingle(o)
+	}
+	output.Print(c, &f, keys)
 }

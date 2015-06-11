@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -36,13 +35,10 @@ func commandGet(c *cli.Context) {
 		fmt.Printf("Error retrieving server (%s): %s\n", serverID, err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableGet)
-}
 
-func tableGet(c *cli.Context, i interface{}) {
-	m := structs.Map(i)
 	keys := []string{"ID", "Name", "Status", "Created", "Updated", "Image", "Flavor", "Public IPv4", "Public IPv6", "Private IPv4", "KeyName"}
-
-	mungeServerMap(m)
-	output.MetaDataMapTable(c, m, keys)
+	f := func() interface{} {
+		return serverSingle(o)
+	}
+	output.Print(c, &f, keys)
 }

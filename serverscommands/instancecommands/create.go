@@ -125,10 +125,10 @@ func commandCreate(c *cli.Context) {
 		fmt.Printf("Error creating server: %s\n", err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableCreate)
-}
 
-func tableCreate(c *cli.Context, i interface{}) {
 	keys := []string{"ID", "AdminPass"}
-	output.MetaDataTable(c, i, keys)
+	f := func() interface{} {
+		return serverSingle(o)
+	}
+	output.Print(c, &f, keys)
 }
