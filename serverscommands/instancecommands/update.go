@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -60,8 +59,9 @@ func commandUpdate(c *cli.Context) {
 }
 
 func tableUpdate(c *cli.Context, i interface{}) {
-	m := structs.Map(i)
 	keys := []string{"ID", "Name", "Public IPv4", "Public IPv6"}
-	mungeServerMap(m)
-	output.MetaDataMapTable(c, m, keys)
+	f := func() map[string]interface{} {
+		return serverSingle(i)
+	}
+	output.MetadataTable(c, &f, keys)
 }

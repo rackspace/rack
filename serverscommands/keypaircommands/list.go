@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -45,7 +44,7 @@ func commandList(c *cli.Context) {
 }
 
 func tableList(c *cli.Context, i interface{}) {
-	kps, ok := i.([]osKeypairs.KeyPair)
+	rawKps, ok := i.([]osKeypairs.KeyPair)
 	if !ok {
 		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osKeypairs.KeyPair\n", i)
 		os.Exit(1)
@@ -53,11 +52,14 @@ func tableList(c *cli.Context, i interface{}) {
 
 	keys := []string{"Name", "Fingerprint"}
 
-	var maps []map[string]interface{}
-	for _, kp := range kps {
-		maps = append(maps, structs.Map(kp))
+	f := func() []map[string]interface{} {
+		m := make([]map[string]interface{}, len(rawKps))
+		for j, rawKp := range rawKps {
+			m[j] = singleKeypair(rawKp)
+		}
+		return m
 	}
 
-	output.ListTable(c, maps, keys)
+	output.ListTable(c, &f, keys)
 
 }

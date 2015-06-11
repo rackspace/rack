@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -84,7 +83,7 @@ func commandList(c *cli.Context) {
 }
 
 func tableList(c *cli.Context, i interface{}) {
-	servers, ok := i.([]osServers.Server)
+	rawServers, ok := i.([]osServers.Server)
 	if !ok {
 		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osServers.Server\n", i)
 		os.Exit(1)
@@ -92,13 +91,12 @@ func tableList(c *cli.Context, i interface{}) {
 
 	keys := []string{"ID", "Name", "Status", "Public IPv4", "Private IPv4", "Image", "Flavor"}
 
-	var maps []map[string]interface{}
-	for _, server := range servers {
-		m := structs.Map(server)
-		mungeServerMap(m)
-		maps = append(maps, m)
+	f := func() []map[string]interface{} {
+		m := make([]map[string]interface{}, len(rawServers))
+		for j, rawServer := range rawServers {
+			m[j] = serverSingle(rawServer)
+		}
+		return m
 	}
-
-	output.ListTable(c, maps, keys)
-
+	output.ListTable(c, &f, keys)
 }

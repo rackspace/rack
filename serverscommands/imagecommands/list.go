@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -68,7 +67,7 @@ func commandList(c *cli.Context) {
 }
 
 func tableList(c *cli.Context, i interface{}) {
-	images, ok := i.([]osImages.Image)
+	rawImages, ok := i.([]osImages.Image)
 	if !ok {
 		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osImages.Image\n", i)
 		os.Exit(1)
@@ -76,11 +75,14 @@ func tableList(c *cli.Context, i interface{}) {
 
 	keys := []string{"ID", "Name", "Status", "MinDisk", "MinRAM"}
 
-	var maps []map[string]interface{}
-	for _, image := range images {
-		maps = append(maps, structs.Map(image))
+	f := func() []map[string]interface{} {
+		m := make([]map[string]interface{}, len(rawImages))
+		for j, rawImage := range rawImages {
+			m[j] = singleImage(rawImage)
+		}
+		return m
 	}
 
-	output.ListTable(c, maps, keys)
+	output.ListTable(c, &f, keys)
 
 }

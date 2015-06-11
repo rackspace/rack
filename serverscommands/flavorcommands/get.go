@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
+	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -40,5 +41,12 @@ func commandGet(c *cli.Context) {
 
 func tableGet(c *cli.Context, i interface{}) {
 	keys := []string{"ID", "Name", "Disk", "RAM", "RxTxFactor", "Swap", "VCPUs"}
-	output.MetaDataTable(c, i, keys)
+	f := func() map[string]interface{} {
+		return singleFlavor(i)
+	}
+	output.MetadataTable(c, &f, keys)
+}
+
+func singleFlavor(i interface{}) map[string]interface{} {
+	return structs.Map(i)
 }

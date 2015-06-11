@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
+	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -63,5 +64,12 @@ func commandCreate(c *cli.Context) {
 
 func tableCreate(c *cli.Context, i interface{}) {
 	keys := []string{"Name", "Fingerprint", "PublicKey", "PrivateKey"}
-	output.MetaDataTable(c, i, keys)
+	f := func() map[string]interface{} {
+		return singleKeypair(i)
+	}
+	output.MetadataTable(c, &f, keys)
+}
+
+func singleKeypair(i interface{}) map[string]interface{} {
+	return structs.Map(i)
 }

@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -69,18 +68,20 @@ func commandList(c *cli.Context) {
 }
 
 func tableList(c *cli.Context, i interface{}) {
-	flavors, ok := i.([]osFlavors.Flavor)
+	rawFlavors, ok := i.([]osFlavors.Flavor)
 	if !ok {
 		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osFlavors.Flavor\n", i)
 		os.Exit(1)
 	}
 	keys := []string{"ID", "Name", "RAM", "Disk", "Swap", "VCPUs", "RxTxFactor"}
 
-	var maps []map[string]interface{}
-	for _, flavor := range flavors {
-		maps = append(maps, structs.Map(flavor))
+	f := func() []map[string]interface{} {
+		m := make([]map[string]interface{}, len(rawFlavors))
+		for j, rawFlavor := range rawFlavors {
+			m[j] = singleFlavor(rawFlavor)
+		}
+		return m
 	}
 
-	output.ListTable(c, maps, keys)
-
+	output.ListTable(c, &f, keys)
 }

@@ -130,5 +130,8 @@ func commandCreate(c *cli.Context) {
 
 func tableCreate(c *cli.Context, i interface{}) {
 	keys := []string{"ID", "AdminPass"}
-	output.MetaDataTable(c, i, keys)
+	f := func() map[string]interface{} {
+		return serverSingle(i)
+	}
+	output.MetadataTable(c, &f, keys)
 }
