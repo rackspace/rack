@@ -42,11 +42,7 @@ func commandGet(c *cli.Context) {
 func tableGet(c *cli.Context, i interface{}) {
 	keys := []string{"ID", "Name", "Disk", "RAM", "RxTxFactor", "Swap", "VCPUs"}
 	f := func() map[string]interface{} {
-		return singleFlavor(i)
+		return structs.Map(i)
 	}
 	output.MetadataTable(c, &f, keys)
-}
-
-func singleFlavor(i interface{}) map[string]interface{} {
-	return structs.Map(i)
 }

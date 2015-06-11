@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
+	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -78,11 +79,10 @@ func tableList(c *cli.Context, i interface{}) {
 	f := func() []map[string]interface{} {
 		m := make([]map[string]interface{}, len(images))
 		for j, image := range images {
-			m[j] = singleImage(image)
+			m[j] = structs.Map(image)
 		}
 		return m
 	}
 
 	output.ListTable(c, &f, keys)
-
 }

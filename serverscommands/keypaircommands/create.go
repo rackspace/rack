@@ -65,11 +65,7 @@ func commandCreate(c *cli.Context) {
 func tableCreate(c *cli.Context, i interface{}) {
 	keys := []string{"Name", "Fingerprint", "PublicKey", "PrivateKey"}
 	f := func() map[string]interface{} {
-		return singleKeypair(i)
+		return structs.Map(i)
 	}
 	output.MetadataTable(c, &f, keys)
-}
-
-func singleKeypair(i interface{}) map[string]interface{} {
-	return structs.Map(i)
 }

@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
+	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -55,11 +56,10 @@ func tableList(c *cli.Context, i interface{}) {
 	f := func() []map[string]interface{} {
 		m := make([]map[string]interface{}, len(kps))
 		for j, kp := range kps {
-			m[j] = singleKeypair(kp)
+			m[j] = structs.Map(kp)
 		}
 		return m
 	}
 
 	output.ListTable(c, &f, keys)
-
 }

@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
+	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -78,7 +79,7 @@ func tableList(c *cli.Context, i interface{}) {
 	f := func() []map[string]interface{} {
 		m := make([]map[string]interface{}, len(flavors))
 		for j, flavor := range flavors {
-			m[j] = singleFlavor(flavor)
+			m[j] = structs.Map(flavor)
 		}
 		return m
 	}

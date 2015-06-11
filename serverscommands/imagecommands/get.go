@@ -42,11 +42,7 @@ func commandGet(c *cli.Context) {
 func tableGet(c *cli.Context, i interface{}) {
 	keys := []string{"ID", "Name", "Status", "Progress", "MinDisk", "MinRAM", "Created", "Updated"}
 	f := func() map[string]interface{} {
-		return singleImage(i)
+		return structs.Map(i)
 	}
 	output.MetadataTable(c, &f, keys)
-}
-
-func singleImage(i interface{}) map[string]interface{} {
-	return structs.Map(i)
 }
