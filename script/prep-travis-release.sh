@@ -1,9 +1,27 @@
 #!/usr/bin/env bash
 
-set -eo
+set -euo pipefail
+IFS=$'\n\t'
+
+
+################################################################################
+# Disable strict temporarily to accept global environment variables that come
+# from GIMME and Travis
+################################################################################
+set +u
 
 os=$GIMME_OS
 arch=$GIMME_ARCH
+# See http://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
+# for details about default Travis Environment Variables and their values
+if [ -z "$TRAVIS_BRANCH" ]; then
+  BRANCH=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
+else
+  BRANCH=$TRAVIS_BRANCH
+fi
+# Back to strict
+set -u
+################################################################################
 
 echo "Building for ${os}-${arch}"
 
@@ -20,14 +38,6 @@ go build -o $RACKBUILD
 SUFFIX=""
 if [ "$os" == "windows" ]; then
   SUFFIX=".exe"
-fi
-
-# See http://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
-# for details about default Travis Environment Variables and their values
-if [ -z "$TRAVIS_BRANCH" ]; then
-  BRANCH=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
-else
-  BRANCH=$TRAVIS_BRANCH
 fi
 
 cp $RACKBUILD build/commits/${COMMIT}/${BASENAME}-${COMMIT}${SUFFIX}
