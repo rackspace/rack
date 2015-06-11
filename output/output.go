@@ -57,7 +57,19 @@ import (
 //			return m
 //		}
 //
-//		Regardless of how the function looks, it is created with in the command
+//		Still yet, there may be cases when you just want a single piece of raw data
+//		(like in the case of `rack servers keypair get`). In these cases, you can
+//		chose to return a single field from the response body as a string:
+//
+//			f := func() interface{} {
+//				// o would be defined above and is the raw (or type casted) value
+//				// returned in the response body
+//				m := structs.Map(o)
+//				// This function returns an `interface{}` that has a `string` type.
+//				return m["PublicKey"]
+//			}
+//
+//		Regardless of how the function looks, it is created within the command
 // 		function as a closure around the data from response body.
 //
 // 3) a slice of strings: this slice contains the header values to print out for
