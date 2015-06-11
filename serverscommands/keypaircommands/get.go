@@ -39,6 +39,9 @@ func commandGet(c *cli.Context) {
 
 	f := func() interface{} {
 		m := structs.Map(o)
+		if c.IsSet("json") {
+			return m
+		}
 		// Assume they want the key directly
 		return m["PublicKey"]
 	}
