@@ -1,6 +1,10 @@
 package output
 
-import "github.com/codegangsta/cli"
+import (
+	"fmt"
+
+	"github.com/codegangsta/cli"
+)
 
 // Print prints the results of the CLI command.
 func Print(c *cli.Context, f *func() interface{}, keys []string) {
@@ -17,9 +21,9 @@ func Print(c *cli.Context, f *func() interface{}, keys []string) {
 		case []map[string]interface{}:
 			m := i.([]map[string]interface{})
 			listCSV(c, m, keys)
-		}
 		default:
 			fmt.Fprintf(c.App.Writer, "%v", i)
+		}
 		return
 	}
 	switch i.(type) {
@@ -29,7 +33,7 @@ func Print(c *cli.Context, f *func() interface{}, keys []string) {
 	case []map[string]interface{}:
 		m := i.([]map[string]interface{})
 		listTable(c, m, keys)
-	}
 	default:
 		fmt.Fprintf(c.App.Writer, "%v", i)
+	}
 }
