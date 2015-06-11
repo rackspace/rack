@@ -23,6 +23,8 @@ echo '
     export GIMME_OS="$os"
     export GIMME_ARCH="$arch"
 
+    echo "Building for $GIMME_OS-$GIMME_ARCH"
+
     BASENAME="rack-${os}-${arch}"
     RACKBUILD="build/${BASENAME}"
 
