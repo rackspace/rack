@@ -33,7 +33,7 @@ import (
 //		in the `Print` function might look like this:
 //
 //		f := func() interface{} {
-//    	// o would be defined above and is the raw (or type casted) value
+//			// o would be defined above and is the raw (or type casted) value
 //			// returned in the response body.
 //			// This function returns an `interface{}` that has a `map[string]interface{}`
 //			// type.
@@ -46,7 +46,7 @@ import (
 //		of a function for a `list` command:
 //
 //		f := func() interface{} {
-//    	// o would be defined above and is the raw (or type casted) value
+//			// o would be defined above and is the raw (or type casted) value
 //			// returned in the response body
 //			m := make([]map[string]interface{}, len(o))
 //			for j, kp := range o {
