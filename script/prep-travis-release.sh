@@ -3,8 +3,11 @@
 set -eo
 
 mkdir -p build
-mkdir -p build/commits/
 mkdir -p build/pr/
+
+# Provide a commit hash version
+COMMIT=`git rev-parse HEAD 2> /dev/null`
+mkdir -p "build/commits/${COMMIT}"
 
 echo '
   darwin   amd64    OS X
@@ -45,9 +48,7 @@ echo '
       BRANCH=$TRAVIS_BRANCH
     fi
 
-    # Provide a commit hash version
-    COMMIT=`git rev-parse HEAD 2> /dev/null`
-    cp $RACKBUILD build/commits/${BASENAME}-${COMMIT}${SUFFIX}
+    cp $RACKBUILD build/commits/${COMMIT}/${BASENAME}-${COMMIT}${SUFFIX}
 
     if [ "$BRANCH" != "master" ]; then
       # Ship /rack-branchname
