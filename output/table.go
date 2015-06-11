@@ -29,7 +29,6 @@ func ListTable(c *cli.Context, f *func() []map[string]interface{}, keys []string
 func MetadataTable(c *cli.Context, f *func() map[string]interface{}, keys []string) {
 	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 0, '\t', 0)
 	m := (*f)()
-	fmt.Printf("m: %+v\n", m)
 	fmt.Fprintln(w, "PROPERTY\tVALUE")
 	for _, key := range keys {
 		val := fmt.Sprint(m[key])
