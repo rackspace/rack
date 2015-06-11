@@ -40,22 +40,31 @@ func ListTable(c *cli.Context, f *func() []map[string]interface{}, keys []string
 
 // MetadataTable writes standardized metadata out
 func MetadataTable(c *cli.Context, f *func() map[string]interface{}, keys []string) {
-	m := (*f)()
 	if c.IsSet("csv") {
-		w := csv.NewWriter(c.App.Writer)
-		w.Write([]string{"PROPERTY", "VALUE"})
-		for _, key := range keys {
-			val := fmt.Sprint(m[key])
-			w.Write([]string{key, val})
-		}
-		w.Flush()
+		csvOut(c, f, keys)
 	} else {
-		w := tabwriter.NewWriter(c.App.Writer, 0, 8, 0, '\t', 0)
-		fmt.Fprintln(w, "PROPERTY\tVALUE")
-		for _, key := range keys {
-			val := fmt.Sprint(m[key])
-			fmt.Fprintf(w, "%s\t%s\n", key, strings.Replace(val, "\n", "\n\t", -1))
-		}
-		w.Flush()
+		tableOut(c, f, keys)
 	}
+}
+
+func csvOut(c *cli.Context, f *func() map[string]interface{}, keys []string) {
+	m := (*f)()
+	w := csv.NewWriter(c.App.Writer)
+	w.Write([]string{"PROPERTY", "VALUE"})
+	for _, key := range keys {
+		val := fmt.Sprint(m[key])
+		w.Write([]string{key, val})
+	}
+	w.Flush()
+}
+
+func tableOut(c *cli.Context, f *func() map[string]interface{}, keys []string) {
+	m := (*f)()
+	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 0, '\t', 0)
+	fmt.Fprintln(w, "PROPERTY\tVALUE")
+	for _, key := range keys {
+		val := fmt.Sprint(m[key])
+		fmt.Fprintf(w, "%s\t%s\n", key, strings.Replace(val, "\n", "\n\t", -1))
+	}
+	w.Flush()
 }
