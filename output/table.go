@@ -11,26 +11,38 @@ import (
 
 // ListTable writes a table listing from an array of map[string]interface{}
 func ListTable(c *cli.Context, f *func() []map[string]interface{}, keys []string) {
-	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 1, '\t', 0)
-	// Write the header
-	fmt.Fprintln(w, strings.Join(keys, "\t"))
-
 	many := (*f)()
-	for _, m := range many {
-		f := []string{}
-		for _, key := range keys {
-			f = append(f, fmt.Sprint(m[key]))
+	if c.IsSet("csv") {
+		w := csv.NewWriter(c.App.Writer)
+		w.Write(keys)
+		for _, m := range many {
+			f := []string{}
+			for _, key := range keys {
+				f = append(f, fmt.Sprint(m[key]))
+			}
+			w.Write(f)
 		}
-		fmt.Fprintln(w, strings.Join(f, "\t"))
+		w.Flush()
+	} else {
+		w := tabwriter.NewWriter(c.App.Writer, 0, 8, 1, '\t', 0)
+		// Write the header
+		fmt.Fprintln(w, strings.Join(keys, "\t"))
+		for _, m := range many {
+			f := []string{}
+			for _, key := range keys {
+				f = append(f, fmt.Sprint(m[key]))
+			}
+			fmt.Fprintln(w, strings.Join(f, "\t"))
+		}
+		w.Flush()
 	}
-	w.Flush()
 }
 
 // MetadataTable writes standardized metadata out
 func MetadataTable(c *cli.Context, f *func() map[string]interface{}, keys []string) {
+	m := (*f)()
 	if c.IsSet("csv") {
 		w := csv.NewWriter(c.App.Writer)
-		m := (*f)()
 		w.Write([]string{"PROPERTY", "VALUE"})
 		for _, key := range keys {
 			val := fmt.Sprint(m[key])
@@ -39,7 +51,6 @@ func MetadataTable(c *cli.Context, f *func() map[string]interface{}, keys []stri
 		w.Flush()
 	} else {
 		w := tabwriter.NewWriter(c.App.Writer, 0, 8, 0, '\t', 0)
-		m := (*f)()
 		fmt.Fprintln(w, "PROPERTY\tVALUE")
 		for _, key := range keys {
 			val := fmt.Sprint(m[key])

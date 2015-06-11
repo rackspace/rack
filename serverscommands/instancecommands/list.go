@@ -94,7 +94,7 @@ func tableList(c *cli.Context, i interface{}) {
 	f := func() []map[string]interface{} {
 		m := make([]map[string]interface{}, len(rawServers))
 		for j, rawServer := range rawServers {
-			m[j] = serverSingle(rawServer)
+			m[j] = serverSingle(&rawServer)
 		}
 		return m
 	}
