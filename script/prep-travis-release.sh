@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+# prep-travis-release is used to layout a build directory for Travis to use for
+# uploading to cloudfiles
+#
+# Assumes a gimme environment with GIMME_OS, GIMME_ARCH, and GOROOT, and PATH
+#
+# The script does not have to run on Travis though, as it will detect your
+# current branch instead of using $TRAVIS_BRANCH
+
 set -euo pipefail
 IFS=$'\n\t'
 
