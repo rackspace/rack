@@ -1,24 +1,36 @@
 package output
 
-import (
-	"encoding/json"
-	"fmt"
-
-	"github.com/codegangsta/cli"
-)
-
-// JSON prints results in JSON format.
-func JSON(i interface{}) {
-	j, _ := json.Marshal(i)
-	fmt.Println(string(j))
-}
+import "github.com/codegangsta/cli"
 
 // Print prints the results of the CLI command.
-func Print(c *cli.Context, i interface{}, table func(*cli.Context, interface{})) {
+func Print(c *cli.Context, f *func() interface{}, keys []string) {
+	i := (*f)()
 	if c.IsSet("json") {
-		JSON(i)
+		jsonOut(i)
 		return
 	}
-	table(c, i)
-	return
+	if len(keys) == 0 {
+		(*f)()
+		return
+	}
+	if c.IsSet("csv") {
+		switch i.(type) {
+		case map[string]interface{}:
+			m := i.(map[string]interface{})
+			metadataCSV(c, m, keys)
+		case []map[string]interface{}:
+			m := i.([]map[string]interface{})
+			listCSV(c, m, keys)
+		}
+
+		return
+	}
+	switch i.(type) {
+	case map[string]interface{}:
+		m := i.(map[string]interface{})
+		metadataTable(c, m, keys)
+	case []map[string]interface{}:
+		m := i.([]map[string]interface{})
+		listTable(c, m, keys)
+	}
 }

@@ -1,7 +1,6 @@
 package output
 
 import (
-	"encoding/csv"
 	"fmt"
 	"strings"
 	"text/tabwriter"
@@ -9,57 +8,21 @@ import (
 	"github.com/codegangsta/cli"
 )
 
-// ListTable writes a table listing from an array of map[string]interface{}
-func ListTable(c *cli.Context, f *func() []map[string]interface{}, keys []string) {
-	many := (*f)()
-	if c.IsSet("csv") {
-		w := csv.NewWriter(c.App.Writer)
-		w.Write(keys)
-		for _, m := range many {
-			f := []string{}
-			for _, key := range keys {
-				f = append(f, fmt.Sprint(m[key]))
-			}
-			w.Write(f)
+func listTable(c *cli.Context, many []map[string]interface{}, keys []string) {
+	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 1, '\t', 0)
+	// Write the header
+	fmt.Fprintln(w, strings.Join(keys, "\t"))
+	for _, m := range many {
+		f := []string{}
+		for _, key := range keys {
+			f = append(f, fmt.Sprint(m[key]))
 		}
-		w.Flush()
-	} else {
-		w := tabwriter.NewWriter(c.App.Writer, 0, 8, 1, '\t', 0)
-		// Write the header
-		fmt.Fprintln(w, strings.Join(keys, "\t"))
-		for _, m := range many {
-			f := []string{}
-			for _, key := range keys {
-				f = append(f, fmt.Sprint(m[key]))
-			}
-			fmt.Fprintln(w, strings.Join(f, "\t"))
-		}
-		w.Flush()
-	}
-}
-
-// MetadataTable writes standardized metadata out
-func MetadataTable(c *cli.Context, f *func() map[string]interface{}, keys []string) {
-	if c.IsSet("csv") {
-		csvOut(c, f, keys)
-	} else {
-		tableOut(c, f, keys)
-	}
-}
-
-func csvOut(c *cli.Context, f *func() map[string]interface{}, keys []string) {
-	m := (*f)()
-	w := csv.NewWriter(c.App.Writer)
-	w.Write([]string{"PROPERTY", "VALUE"})
-	for _, key := range keys {
-		val := fmt.Sprint(m[key])
-		w.Write([]string{key, val})
+		fmt.Fprintln(w, strings.Join(f, "\t"))
 	}
 	w.Flush()
 }
 
-func tableOut(c *cli.Context, f *func() map[string]interface{}, keys []string) {
-	m := (*f)()
+func metadataTable(c *cli.Context, m map[string]interface{}, keys []string) {
 	w := tabwriter.NewWriter(c.App.Writer, 0, 8, 0, '\t', 0)
 	fmt.Fprintln(w, "PROPERTY\tVALUE")
 	for _, key := range keys {
