@@ -16,7 +16,7 @@ import (
 // piece of information from a command. For example, a `rack servers keypair get`
 // command will return just the raw public key. Even though there are other fields
 // returned in the response body, the public key is almost always what the user
-// wants from the command, and printing out just the public key makes it easy to
+// wants from the command and printing out just the public key makes it easy to
 // copy (and paste).
 //
 // This function accepts 3 parameters:
@@ -59,7 +59,7 @@ import (
 //
 //		Still yet, there may be cases when you just want a single piece of raw data
 //		(like in the case of `rack servers keypair get`). In these cases, you can
-//		chose to return a single field from the response body as a string:
+//		choose to return a single field from the response body as a string:
 //
 //			f := func() interface{} {
 //				// o would be defined above and is the raw (or type casted) value
