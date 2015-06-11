@@ -44,7 +44,7 @@ func commandList(c *cli.Context) {
 }
 
 func tableList(c *cli.Context, i interface{}) {
-	rawKps, ok := i.([]osKeypairs.KeyPair)
+	kps, ok := i.([]osKeypairs.KeyPair)
 	if !ok {
 		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osKeypairs.KeyPair\n", i)
 		os.Exit(1)
@@ -53,9 +53,9 @@ func tableList(c *cli.Context, i interface{}) {
 	keys := []string{"Name", "Fingerprint"}
 
 	f := func() []map[string]interface{} {
-		m := make([]map[string]interface{}, len(rawKps))
-		for j, rawKp := range rawKps {
-			m[j] = singleKeypair(rawKp)
+		m := make([]map[string]interface{}, len(kps))
+		for j, kp := range kps {
+			m[j] = singleKeypair(kp)
 		}
 		return m
 	}

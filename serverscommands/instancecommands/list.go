@@ -83,7 +83,7 @@ func commandList(c *cli.Context) {
 }
 
 func tableList(c *cli.Context, i interface{}) {
-	rawServers, ok := i.([]osServers.Server)
+	servers, ok := i.([]osServers.Server)
 	if !ok {
 		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osServers.Server\n", i)
 		os.Exit(1)
@@ -92,9 +92,9 @@ func tableList(c *cli.Context, i interface{}) {
 	keys := []string{"ID", "Name", "Status", "Public IPv4", "Private IPv4", "Image", "Flavor"}
 
 	f := func() []map[string]interface{} {
-		m := make([]map[string]interface{}, len(rawServers))
-		for j, rawServer := range rawServers {
-			m[j] = serverSingle(&rawServer)
+		m := make([]map[string]interface{}, len(servers))
+		for j, server := range servers {
+			m[j] = serverSingle(&server)
 		}
 		return m
 	}

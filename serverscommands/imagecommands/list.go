@@ -67,7 +67,7 @@ func commandList(c *cli.Context) {
 }
 
 func tableList(c *cli.Context, i interface{}) {
-	rawImages, ok := i.([]osImages.Image)
+	images, ok := i.([]osImages.Image)
 	if !ok {
 		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osImages.Image\n", i)
 		os.Exit(1)
@@ -76,9 +76,9 @@ func tableList(c *cli.Context, i interface{}) {
 	keys := []string{"ID", "Name", "Status", "MinDisk", "MinRAM"}
 
 	f := func() []map[string]interface{} {
-		m := make([]map[string]interface{}, len(rawImages))
-		for j, rawImage := range rawImages {
-			m[j] = singleImage(rawImage)
+		m := make([]map[string]interface{}, len(images))
+		for j, image := range images {
+			m[j] = singleImage(image)
 		}
 		return m
 	}
