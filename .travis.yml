@@ -13,7 +13,7 @@ install:
     - go get -d -v ./...
 
 script:
-    - go build -v ./... -o rack
+    - go build -v ./...
 
 before_deploy:
 - "./script/prep-travis-release.sh"
