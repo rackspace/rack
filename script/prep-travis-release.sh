@@ -14,6 +14,10 @@ eval "$(gimme 1.4)"
 os=$GIMME_OS
 arch=$GIMME_ARCH
 
+echo "Pre-flight diagnostics"
+echo ls
+echo pwd
+
 echo "Building for ${os}-${arch}"
 
 BASENAME="rack-${os}-${arch}"
