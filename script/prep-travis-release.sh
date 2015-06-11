@@ -15,7 +15,7 @@ mkdir -p "build/commits/${COMMIT}"
 BASENAME="rack-${os}-${arch}"
 RACKBUILD="build/${BASENAME}"
 
-go build -a -o $RACKBUILD
+go build -o $RACKBUILD
 
 SUFFIX=""
 if [ "$os" == "windows" ]; then
