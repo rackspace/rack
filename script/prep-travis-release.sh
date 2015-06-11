@@ -55,7 +55,7 @@ echo '
       cp $RACKBUILD build/${BASENAME}-${BRANCH}${SUFFIX}
       # Remove our artifact
       rm $RACKBUILD
-    else if [ "$os" == "windows" ]; then
+    elif [ "$os" == "windows" ]; then
       cp $RACKBUILD $RACKBUILD${SUFFIX}
       rm $RACKBUILD
     fi
