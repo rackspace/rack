@@ -6,31 +6,60 @@ mkdir -p build
 mkdir -p build/commits/
 mkdir -p build/pr/
 
-BASENAME="rack"
-SUFFIX=""
+echo '
+  darwin   amd64    OS X
+  freebsd  386      FreeBSD 32-bit
+  freebsd  amd64    FreeBSD 64-bit
+  linux    386      Linux 32-bit
+  linux    amd64    Linux 64-bit
+  windows  386      Windows 32-bit
+  windows  amd64    Windows 64-bit
+' | {
+  while read os arch label; do
+    [ -n "$os" ] || continue
+    export GIMME_OS="$os"
+    export GIMME_ARCH="$arch"
 
-RACKBUILD="build/${BASENAME}"
+    BASENAME="rack-${os}-${arch}"
+    RACKBUILD="build/${BASENAME}"
 
-# Create build/rack
-go build -o $RACKBUILD
+    SUFFIX=""
+    if [ "$os" == "windows" ]; then
+      SUFFIX=".exe"
+    fi
 
-# See http://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
-# for details about default Travis Environment Variables and their values
-if [ -z "$TRAVIS_BRANCH" ]; then
-  BRANCH=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
-  cp $RACKBUILD build/${BASENAME}-${BRANCH}
-else
-  # Ship a PR binary
-  if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-    cp $RACKBUILD build/pr/${BASENAME}-pr${TRAVIS_PULL_REQUEST}
-  fi
+    # Create build/rack
+    go build -o $RACKBUILD
 
-  BRANCH=$TRAVIS_BRANCH
-fi
+    # See http://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
+    # for details about default Travis Environment Variables and their values
+    if [ -z "$TRAVIS_BRANCH" ]; then
+      BRANCH=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
+      cp $RACKBUILD build/${BASENAME}-${BRANCH}${SUFFIX}
+    else
+      # Ship a PR binary
+      if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+        cp $RACKBUILD build/pr/${BASENAME}-pr${TRAVIS_PULL_REQUEST}${SUFFIX}
+      fi
 
-# Ship /rack-branchname
-cp $RACKBUILD build/${BASENAME}-${BRANCH}
+      BRANCH=$TRAVIS_BRANCH
+    fi
 
-# Provide a commit hash version
-COMMIT=`git rev-parse HEAD 2> /dev/null`
-cp $RACKBUILD build/commits/${BASENAME}-${COMMIT}
+    if [ "$BRANCH" == "master" ]; then
+      cp $RACKBUILD build/${BASENAME}${SUFFIX}
+    else
+      # Ship /rack-branchname
+      cp $RACKBUILD build/${BASENAME}-${BRANCH}${SUFFIX}
+    fi
+
+    # Provide a commit hash version
+    COMMIT=`git rev-parse HEAD 2> /dev/null`
+    cp $RACKBUILD build/commits/${BASENAME}-${COMMIT}${SUFFIX}
+
+    if [ "$os" == "windows" ]; then
+      cp $RACKBUILD $RACKBUILD${SUFFIX}
+      rm $RACKBUILD
+    fi
+
+  done
+}
