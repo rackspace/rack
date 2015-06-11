@@ -64,25 +64,14 @@ func commandList(c *cli.Context) {
 		fmt.Printf("Error listing images: %s\n", err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableList)
-}
-
-func tableList(c *cli.Context, i interface{}) {
-	images, ok := i.([]osImages.Image)
-	if !ok {
-		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osImages.Image\n", i)
-		os.Exit(1)
-	}
 
 	keys := []string{"ID", "Name", "Status", "MinDisk", "MinRAM"}
-
-	f := func() []map[string]interface{} {
-		m := make([]map[string]interface{}, len(images))
-		for j, image := range images {
+	f := func() interface{} {
+		m := make([]map[string]interface{}, len(o))
+		for j, image := range o {
 			m[j] = structs.Map(image)
 		}
 		return m
 	}
-
-	output.ListTable(c, &f, keys)
+	output.Print(c, &f, keys)
 }

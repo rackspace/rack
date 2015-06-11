@@ -55,13 +55,10 @@ func commandUpdate(c *cli.Context) {
 		fmt.Printf("Error updating server: %s\n", err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableUpdate)
-}
 
-func tableUpdate(c *cli.Context, i interface{}) {
 	keys := []string{"ID", "Name", "Public IPv4", "Public IPv6"}
-	f := func() map[string]interface{} {
-		return serverSingle(i)
+	f := func() interface{} {
+		return serverSingle(o)
 	}
-	output.MetadataTable(c, &f, keys)
+	output.Print(c, &f, keys)
 }

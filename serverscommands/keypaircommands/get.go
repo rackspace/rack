@@ -37,12 +37,11 @@ func commandGet(c *cli.Context) {
 		os.Exit(1)
 	}
 
-	output.Print(c, o, plainGet)
-
-}
-
-func plainGet(c *cli.Context, i interface{}) {
-	m := structs.Map(i)
-	// Assume they want the key directly
-	fmt.Fprintf(c.App.Writer, "%s", m["PublicKey"])
+	f := func() interface{} {
+		m := structs.Map(o)
+		// Assume they want the key directly
+		fmt.Fprintf(c.App.Writer, "%s", m["PublicKey"])
+		return nil
+	}
+	output.Print(c, &f, []string{})
 }

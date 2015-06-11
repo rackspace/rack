@@ -35,14 +35,10 @@ func commandGet(c *cli.Context) {
 		fmt.Printf("Error retrieving server (%s): %s\n", serverID, err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableGet)
-}
 
-func tableGet(c *cli.Context, i interface{}) {
 	keys := []string{"ID", "Name", "Status", "Created", "Updated", "Image", "Flavor", "Public IPv4", "Public IPv6", "Private IPv4", "KeyName"}
-
-	f := func() map[string]interface{} {
-		return serverSingle(i)
+	f := func() interface{} {
+		return serverSingle(o)
 	}
-	output.MetadataTable(c, &f, keys)
+	output.Print(c, &f, keys)
 }

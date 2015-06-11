@@ -59,13 +59,9 @@ func commandCreate(c *cli.Context) {
 		fmt.Printf("Error creating keypair [%s]: %s\n", keypairName, err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableCreate)
-}
-
-func tableCreate(c *cli.Context, i interface{}) {
 	keys := []string{"Name", "Fingerprint", "PublicKey", "PrivateKey"}
-	f := func() map[string]interface{} {
-		return structs.Map(i)
+	f := func() interface{} {
+		return structs.Map(o)
 	}
-	output.MetadataTable(c, &f, keys)
+	output.Print(c, &f, keys)
 }

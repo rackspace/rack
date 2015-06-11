@@ -41,25 +41,14 @@ func commandList(c *cli.Context) {
 		fmt.Printf("Error listing keypairs: %s\n", err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableList)
-}
-
-func tableList(c *cli.Context, i interface{}) {
-	kps, ok := i.([]osKeypairs.KeyPair)
-	if !ok {
-		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osKeypairs.KeyPair\n", i)
-		os.Exit(1)
-	}
 
 	keys := []string{"Name", "Fingerprint"}
-
-	f := func() []map[string]interface{} {
-		m := make([]map[string]interface{}, len(kps))
-		for j, kp := range kps {
+	f := func() interface{} {
+		m := make([]map[string]interface{}, len(o))
+		for j, kp := range o {
 			m[j] = structs.Map(kp)
 		}
 		return m
 	}
-
-	output.ListTable(c, &f, keys)
+	output.Print(c, &f, keys)
 }

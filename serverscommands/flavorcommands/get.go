@@ -36,13 +36,10 @@ func commandGet(c *cli.Context) {
 		fmt.Printf("Error retreiving flavor [%s]: %s\n", flavorID, err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableGet)
-}
 
-func tableGet(c *cli.Context, i interface{}) {
-	keys := []string{"ID", "Name", "Disk", "RAM", "RxTxFactor", "Swap", "VCPUs"}
-	f := func() map[string]interface{} {
-		return structs.Map(i)
+	f := func() interface{} {
+		return structs.Map(o)
 	}
-	output.MetadataTable(c, &f, keys)
+	keys := []string{"ID", "Name", "Disk", "RAM", "RxTxFactor", "Swap", "VCPUs"}
+	output.Print(c, &f, keys)
 }

@@ -36,13 +36,9 @@ func commandGet(c *cli.Context) {
 		fmt.Printf("Error retreiving image [%s]: %s\n", imageID, err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableGet)
-}
-
-func tableGet(c *cli.Context, i interface{}) {
 	keys := []string{"ID", "Name", "Status", "Progress", "MinDisk", "MinRAM", "Created", "Updated"}
-	f := func() map[string]interface{} {
-		return structs.Map(i)
+	f := func() interface{} {
+		return structs.Map(o)
 	}
-	output.MetadataTable(c, &f, keys)
+	output.Print(c, &f, keys)
 }

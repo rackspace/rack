@@ -79,24 +79,13 @@ func commandList(c *cli.Context) {
 		os.Exit(1)
 	}
 
-	output.Print(c, o, tableList)
-}
-
-func tableList(c *cli.Context, i interface{}) {
-	servers, ok := i.([]osServers.Server)
-	if !ok {
-		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osServers.Server\n", i)
-		os.Exit(1)
-	}
-
 	keys := []string{"ID", "Name", "Status", "Public IPv4", "Private IPv4", "Image", "Flavor"}
-
-	f := func() []map[string]interface{} {
-		m := make([]map[string]interface{}, len(servers))
-		for j, server := range servers {
+	f := func() interface{} {
+		m := make([]map[string]interface{}, len(o))
+		for j, server := range o {
 			m[j] = serverSingle(&server)
 		}
 		return m
 	}
-	output.ListTable(c, &f, keys)
+	output.Print(c, &f, keys)
 }

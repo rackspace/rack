@@ -101,5 +101,10 @@ func commandRebuild(c *cli.Context) {
 		fmt.Printf("Error rebuilding server (%s): %s\n", serverID, err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableGet)
+
+	keys := []string{"ID", "Name", "Status", "Created", "Updated", "Image", "Flavor", "Public IPv4", "Public IPv6", "Private IPv4", "KeyName"}
+	f := func() interface{} {
+		return serverSingle(o)
+	}
+	output.Print(c, &f, keys)
 }
