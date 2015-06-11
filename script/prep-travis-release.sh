@@ -45,13 +45,6 @@ echo '
       BRANCH=$TRAVIS_BRANCH
     fi
 
-    if [ "$BRANCH" == "master" ]; then
-      cp $RACKBUILD build/${BASENAME}${SUFFIX}
-    else
-      # Ship /rack-branchname
-      cp $RACKBUILD build/${BASENAME}-${BRANCH}${SUFFIX}
-    fi
-
     # Provide a commit hash version
     COMMIT=`git rev-parse HEAD 2> /dev/null`
     cp $RACKBUILD build/commits/${BASENAME}-${COMMIT}${SUFFIX}
@@ -59,6 +52,12 @@ echo '
     if [ "$os" == "windows" ]; then
       cp $RACKBUILD $RACKBUILD${SUFFIX}
       rm $RACKBUILD
+    fi
+
+    if [ "$BRANCH" != "master" ]; then
+      # Ship /rack-branchname
+      cp $RACKBUILD build/${BASENAME}-${BRANCH}${SUFFIX}
+      rm -f $RACKBUILD
     fi
 
   done
