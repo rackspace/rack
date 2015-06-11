@@ -20,9 +20,9 @@ import (
 // copy (and paste).
 //
 // This function accepts 3 parameters:
-// 1) a pointer to the cli.Context: this is for checking the flags to determine the
+// c) a pointer to the cli.Context: this is for checking the flags to determine the
 // 		output format.
-// 2) a pointer to a function that returns an `interface{}`: this (pointer to a)
+// f) a pointer to a function that returns an `interface{}`: this (pointer to a)
 // 		function returns the data from the response body that gets returned from the
 //		command request. It returns an `interface{}` to accomodate the different data
 //		types that can be printed (e.g. `map[string]interface{}`, `[]map[string]interface{}`,
@@ -72,7 +72,7 @@ import (
 //		Regardless of how the function looks, it is created within the command
 // 		function as a closure around the data from response body.
 //
-// 3) a slice of strings: this slice contains the header values to print out for
+// keys) a slice of strings: this slice contains the header values to print out for
 // 		the tabular and csv formats.
 func Print(c *cli.Context, f *func() interface{}, keys []string) {
 	i := (*f)()
