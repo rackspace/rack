@@ -15,8 +15,8 @@ os=$GIMME_OS
 arch=$GIMME_ARCH
 
 echo "Pre-flight diagnostics"
-echo ls
-echo pwd
+ls
+pwd
 
 echo "Building for ${os}-${arch}"
 
@@ -35,13 +35,7 @@ go build -a -o $RACKBUILD
 # for details about default Travis Environment Variables and their values
 if [ -z "$TRAVIS_BRANCH" ]; then
   BRANCH=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
-  cp $RACKBUILD build/${BASENAME}-${BRANCH}${SUFFIX}
 else
-  # Ship a PR binary
-  if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-    cp $RACKBUILD build/pr/${BASENAME}-pr${TRAVIS_PULL_REQUEST}${SUFFIX}
-  fi
-
   BRANCH=$TRAVIS_BRANCH
 fi
 
