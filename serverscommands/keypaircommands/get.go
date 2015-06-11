@@ -40,8 +40,7 @@ func commandGet(c *cli.Context) {
 	f := func() interface{} {
 		m := structs.Map(o)
 		// Assume they want the key directly
-		fmt.Fprintf(c.App.Writer, "%s", m["PublicKey"])
-		return nil
+		return m["PublicKey"]
 	}
 	output.Print(c, &f, []string{})
 }
