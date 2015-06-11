@@ -22,7 +22,7 @@ echo '
     [ -n "$os" ] || continue
     export GIMME_OS="$os"
     export GIMME_ARCH="$arch"
-    eval "$(gimme 1.4.2)"
+    eval "$(gimme 1.4)"
 
     echo "Building for $GIMME_OS-$GIMME_ARCH"
 
