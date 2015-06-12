@@ -80,7 +80,7 @@ func Print(c *cli.Context, f *func() interface{}, keys []string) {
 	i := (*f)()
 	keys = limitFields(c, keys)
 	w := c.App.Writer
-	if c.IsSet("json") {
+	if c.GlobalIsSet("json") {
 		switch i.(type) {
 		case map[string]interface{}:
 			m := i.(map[string]interface{})
@@ -93,7 +93,7 @@ func Print(c *cli.Context, f *func() interface{}, keys []string) {
 		}
 		return
 	}
-	if c.IsSet("csv") {
+	if c.GlobalIsSet("csv") {
 		switch i.(type) {
 		case map[string]interface{}:
 			m := i.(map[string]interface{})
