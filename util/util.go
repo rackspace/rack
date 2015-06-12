@@ -24,11 +24,11 @@ func Contains(s []string, e string) bool {
 	return false
 }
 
-// OutputFlags are flags that all commands can use. There exists the possiblity
+// outputFlags are flags that all commands can use. There exists the possiblity
 // of setting app-level (global) flags, but that requires a user to properly
 // position them. Including these with the other command-level flags will allow
 // users to include them anywhere after the last subcommand (or argument, if applicable).
-func OutputFlags() []cli.Flag {
+func outputFlags() []cli.Flag {
 	of := []cli.Flag{
 		cli.BoolFlag{
 			Name:  "json",
@@ -43,6 +43,13 @@ func OutputFlags() []cli.Flag {
 			Usage: "Return output in csv format.",
 		},
 	}
+
+	return of
+}
+
+// GlobalFlags returns the global flags for a given command.
+func GlobalFlags() []cli.Flag {
+	of := outputFlags()
 
 	return of
 }
