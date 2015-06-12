@@ -43,13 +43,13 @@ To the extent of the preceding objectives, terseness is the last priority. We sh
 For example, we may be able to imply values without the `--id` flag as appropriate:
 
 ```
-rack servers instances get --id 12345
+rack servers instance get --id 12345
 ```
 
 might be synonymous with:
 
 ```
-rack servers instances get 12345
+rack servers instance get 12345
 ```
 
 This is an example of ways to add terseness without compromising consistency. The key in this example would be that *every* method that requires `--id` as a flag would be able to be shortened to use a fifth argument which is implicitly interpreted as `id`.
