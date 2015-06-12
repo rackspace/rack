@@ -14,7 +14,7 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       fmt.Sprintf("%s %s get <keypairName> [flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s [globals] %s get [--name <keypairName>] [flags]", util.Name, commandPrefix),
 	Description: "Retreives a keypair",
 	Action:      commandGet,
 	Flags:       util.CommandFlags(flagsGet, keysGet),
@@ -24,18 +24,28 @@ var get = cli.Command{
 }
 
 func flagsGet() []cli.Flag {
-	return []cli.Flag{}
+	return []cli.Flag{
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "[required] The name of the keypair",
+		},
+	}
 }
 
 var keysGet = []string{"Name", "Fingerprint", "PublicKey", "UserID"}
 
 func commandGet(c *cli.Context) {
-	util.CheckArgNum(c, 1)
-	flavorID := c.Args()[0]
+	util.CheckArgNum(c, 0)
+	if !c.IsSet("name") {
+		util.PrintError(c, util.ErrMissingFlag{
+			Msg: "--name is required.",
+		})
+	}
+	kpName := c.String("name")
 	client := auth.NewClient("compute")
-	o, err := keypairs.Get(client, flavorID).Extract()
+	o, err := keypairs.Get(client, kpName).Extract()
 	if err != nil {
-		fmt.Printf("Error retreiving image [%s]: %s\n", flavorID, err)
+		fmt.Printf("Error retreiving keypair [%s]: %s\n", kpName, err)
 		os.Exit(1)
 	}
 
