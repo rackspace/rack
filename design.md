@@ -32,7 +32,9 @@ All of the following are examples of the pattern being applied consistently:
 
 ## Completeness
 
-While versions of `rack` may be shipped without complete coverage of all services, our goal is to have 100% coverage of services and capabilities within those services of the Rackspace public cloud. Additionally, services should not be released without complete functional support within that service. For example, shipping Cloud Files support without container operations would not fulfill our expectations.
+Our ultimate goal is to have complete coverage of every public feature across the breadth of the Rackspace Public Cloud.
+
+Our initial releases may choose to ship a subset of services, but should be feature complete within those services. For example, we may choose for the initial release to support Cloud Servers and Cloud Files only, but these services should be feature complete. Subsequent releases should add one or more fully functional services. We should not release support for a service that is half-baked.
 
 ## Terseness
 
