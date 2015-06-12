@@ -30,10 +30,24 @@ func outputFlags() []cli.Flag {
 	return of
 }
 
-// GlobalFlags returns the global flags for a given command.
+// GlobalFlags returns the global flags.
 func GlobalFlags() []cli.Flag {
-	of := outputFlags()
-	return of
+	outputFlags := outputFlags()
+	return outputFlags
+}
+
+// GlobalOptions returns the global options (flags and commands).
+func GlobalOptions(app *cli.App) []interface{} {
+	var i []interface{}
+	globalFlags := GlobalFlags()
+	for _, globalFlag := range globalFlags {
+		i = append(i, globalFlag)
+	}
+
+	for _, cmd := range app.Commands {
+		i = append(i, cmd)
+	}
+	return i
 }
 
 // CommandFlags returns the flags for a given command. It takes as a parameter
@@ -56,6 +70,24 @@ func CommandFlags(f func() []cli.Flag, keys []string) []cli.Flag {
 	}
 
 	return of
+}
+
+// CompleteGlobals returns the options for completing global flags.
+func CompleteGlobals(vals []interface{}) {
+	for _, val := range vals {
+		switch val.(type) {
+		case cli.StringFlag:
+			fmt.Println("--" + val.(cli.StringFlag).Name)
+		case cli.IntFlag:
+			fmt.Println("--" + val.(cli.IntFlag).Name)
+		case cli.BoolFlag:
+			fmt.Println("--" + val.(cli.BoolFlag).Name)
+		case cli.Command:
+			fmt.Println(val.(cli.Command).Name)
+		default:
+			continue
+		}
+	}
 }
 
 // CompleteFlags returns the possible flags for bash completion.

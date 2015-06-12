@@ -23,7 +23,7 @@ func main() {
 	}
 	app.Flags = util.GlobalFlags()
 	app.BashComplete = func(c *cli.Context) {
-		util.CompleteFlags(util.GlobalFlags())
+		util.CompleteGlobals(util.GlobalOptions(app))
 	}
 	app.Run(os.Args)
 }
