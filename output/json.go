@@ -14,12 +14,7 @@ func defaultJSON(w io.Writer, i interface{}) {
 }
 
 func metadataJSON(w io.Writer, m map[string]interface{}, keys []string) {
-	mLimited := make(map[string]interface{})
-	for _, key := range keys {
-		if v, ok := m[key]; ok {
-			mLimited[key] = v
-		}
-	}
+	mLimited := limitJSONFields(m, keys)
 	j, _ := json.Marshal(mLimited)
 	fmt.Fprintf(w, "%v", string(j))
 }
@@ -27,13 +22,18 @@ func metadataJSON(w io.Writer, m map[string]interface{}, keys []string) {
 func listJSON(w io.Writer, maps []map[string]interface{}, keys []string) {
 	mLimited := make([]map[string]interface{}, len(maps))
 	for i, m := range maps {
-		mLimited[i] = make(map[string]interface{})
-		for _, key := range keys {
-			if v, ok := m[key]; ok {
-				mLimited[i][key] = v
-			}
-		}
+		mLimited[i] = limitJSONFields(m, keys)
 	}
 	j, _ := json.Marshal(mLimited)
 	fmt.Fprintf(w, "%v", string(j))
+}
+
+func limitJSONFields(m map[string]interface{}, keys []string) map[string]interface{} {
+	mLimited := make(map[string]interface{})
+	for _, key := range keys {
+		if v, ok := m[key]; ok {
+			mLimited[key] = v
+		}
+	}
+	return mLimited
 }
