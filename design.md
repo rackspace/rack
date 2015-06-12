@@ -23,7 +23,7 @@ rack <service> [--options] <model> <action> [--flags]
 
 An example of `service` might be `servers` or `files` or `networks`. `model` might be `instance`, `object` or `container`, or perhaps `network`. Action would be the underlying API call to make, for example `create` or `delete`.
 
-Specifying `options` might be explicitly providing authentication information, for example `username` or `apiKey`, or other options that are not specific to the underlying `action` flags.
+Specifying `options` might be explicitly providing authentication information, for example `username` or `apiKey`, or other options that are not specific to the underlying `action` flags. The complete list of valid global options will be listed in a separate specification.
 
 All of the following are examples of the pattern being applied consistently:
 
@@ -37,7 +37,7 @@ All of the following are examples of the pattern being applied consistently:
 
 Our ultimate goal is to have complete coverage of every public feature across the breadth of the Rackspace Public Cloud.
 
-Our initial releases may choose to ship a subset of services, but should be feature complete within those services. For example, we may choose for the initial release to support Cloud Servers and Cloud Files only, but these services should be feature complete. Subsequent releases should add one or more fully functional services. We should not release support for a service that is half-baked.
+Our initial releases may choose to ship a subset of services, but should be feature complete within those services. For example, we may choose for the initial release to support Cloud Servers and Cloud Networks, and Cloud Block Storage only, but these services should be feature complete. Subsequent releases should add one or more fully functional services. We should not release support for a service that is incomplete.
 
 ## Terseness
 
