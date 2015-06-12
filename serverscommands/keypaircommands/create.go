@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
@@ -29,9 +30,9 @@ func flagsCreate() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name: "publicKey",
-			Usage: `[optional] The public ssh key to associate with the user's account.
-	It may be the actual key or the file containing the key. If empty,
-	the key will be created for you and returned in the output.`,
+			Usage: strings.Join([]string{"[optional] The public ssh key to associate with the user's account.",
+				"It may be the actual key or the file containing the key. If empty,",
+				"the key will be created for you and returned in the output."}, "\n\t"),
 		},
 	}
 }
