@@ -45,5 +45,5 @@ func commandGet(c *cli.Context) {
 		// Assume they want the key directly
 		return m["PublicKey"]
 	}
-	output.Print(c, &f, []string{})
+	output.Print(c, &f, []string{"Name", "Fingerprint", "PublicKey", "UserID"})
 }
