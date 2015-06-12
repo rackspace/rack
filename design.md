@@ -15,7 +15,7 @@ As a top level objective, the CLI must operate correctly. It's unacceptable to d
 
 ## Consistency
 
-Our ambition for consistency is to provide a model that is used throughout the command line interface. Ideally, all calls take format:
+Our ambition for consistency is to provide a model that is used throughout the command line interface. All calls take the following format:
 
 ```
 rack <service> [--options] <model> <action> [--flags]
