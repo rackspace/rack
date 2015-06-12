@@ -16,9 +16,9 @@ var resize = cli.Command{
 	Usage:       fmt.Sprintf("%s %s resize %s [--flavorID <flavorID>] [optional flags]", util.Name, commandPrefix, idOrNameUsage),
 	Description: "Rebuilds an existing server",
 	Action:      commandResize,
-	Flags:       util.CommandFlags(flagsResize),
+	Flags:       util.CommandFlags(flagsResize, keysResize),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsResize))
+		util.CompleteFlags(util.CommandFlags(flagsResize, keysResize))
 	},
 }
 
@@ -31,6 +31,8 @@ func flagsResize() []cli.Flag {
 	}
 	return append(cf, idAndNameFlags...)
 }
+
+var keysResize = []string{}
 
 func commandResize(c *cli.Context) {
 	util.CheckArgNum(c, 0)

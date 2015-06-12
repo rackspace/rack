@@ -24,12 +24,12 @@ func Contains(s []string, e string) bool {
 	return false
 }
 
-// CommonFlags are flags that all commands can use. There exists the possiblity
+// outputFlags are flags that all commands can use. There exists the possiblity
 // of setting app-level (global) flags, but that requires a user to properly
 // position them. Including these with the other command-level flags will allow
 // users to include them anywhere after the last subcommand (or argument, if applicable).
-func commonFlags() []cli.Flag {
-	return []cli.Flag{
+func outputFlags(keys []string) []cli.Flag {
+	of := []cli.Flag{
 		cli.BoolFlag{
 			Name:  "json",
 			Usage: "Return output in JSON format.",
@@ -42,19 +42,29 @@ func commonFlags() []cli.Flag {
 			Name:  "csv",
 			Usage: "Return output in csv format.",
 		},
-		cli.StringFlag{
-			Name:  "fields",
-			Usage: "Only return these comma-separated fields for each item in the list.",
-		},
 	}
+
+	if len(keys) > 0 {
+		fields := make([]string, len(keys))
+		for i, key := range keys {
+			fields[i] = strings.Join(strings.Split(strings.ToLower(key), " "), "")
+		}
+		flagField := cli.StringFlag{
+			Name:  "fields",
+			Usage: fmt.Sprintf("Only return these comma-separated case-insensitive fields for each item in the list.\n\tChoices: %s", strings.Join(fields, ", ")),
+		}
+		of = append(of, flagField)
+	}
+
+	return of
 }
 
 // CommandFlags returns the flags for a given command. It takes as a parameter
 // a function for returning flags specific to that command, and then appends those
 // flags with flags that are valid for all commands.
-func CommandFlags(f func() []cli.Flag) []cli.Flag {
-	cf := commonFlags()
-	return append(cf, f()...)
+func CommandFlags(f func() []cli.Flag, fields []string) []cli.Flag {
+	of := outputFlags(fields)
+	return append(of, f()...)
 }
 
 // CheckArgNum checks that the provided number of arguments has the same

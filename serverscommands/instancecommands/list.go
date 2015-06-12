@@ -17,9 +17,9 @@ var list = cli.Command{
 	Usage:       fmt.Sprintf("%s %s list [optional flags]", util.Name, commandPrefix),
 	Description: "Lists existing servers",
 	Action:      commandList,
-	Flags:       util.CommandFlags(flagsList),
+	Flags:       util.CommandFlags(flagsList, keysList),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsList))
+		util.CompleteFlags(util.CommandFlags(flagsList, keysList))
 	},
 }
 
@@ -56,6 +56,8 @@ func flagsList() []cli.Flag {
 	}
 }
 
+var keysList = []string{"ID", "Name", "Status", "Public IPv4", "Private IPv4", "Image", "Flavor"}
+
 func commandList(c *cli.Context) {
 	util.CheckArgNum(c, 0)
 	client := auth.NewClient("compute")
@@ -79,7 +81,6 @@ func commandList(c *cli.Context) {
 		os.Exit(1)
 	}
 
-	keys := []string{"ID", "Name", "Status", "Public IPv4", "Private IPv4", "Image", "Flavor"}
 	f := func() interface{} {
 		m := make([]map[string]interface{}, len(o))
 		for j, server := range o {
@@ -87,5 +88,5 @@ func commandList(c *cli.Context) {
 		}
 		return m
 	}
-	output.Print(c, &f, keys)
+	output.Print(c, &f, keysList)
 }

@@ -17,15 +17,17 @@ var get = cli.Command{
 	Usage:       fmt.Sprintf("%s %s get <keypairName> [flags]", util.Name, commandPrefix),
 	Description: "Retreives a keypair",
 	Action:      commandGet,
-	Flags:       util.CommandFlags(flagsGet),
+	Flags:       util.CommandFlags(flagsGet, keysGet),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsGet))
+		util.CompleteFlags(util.CommandFlags(flagsGet, keysGet))
 	},
 }
 
 func flagsGet() []cli.Flag {
 	return []cli.Flag{}
 }
+
+var keysGet = []string{"Name", "Fingerprint", "PublicKey", "UserID"}
 
 func commandGet(c *cli.Context) {
 	util.CheckArgNum(c, 1)
@@ -45,5 +47,5 @@ func commandGet(c *cli.Context) {
 		// Assume they want the key directly
 		return m["PublicKey"]
 	}
-	output.Print(c, &f, []string{"Name", "Fingerprint", "PublicKey", "UserID"})
+	output.Print(c, &f, keysGet)
 }

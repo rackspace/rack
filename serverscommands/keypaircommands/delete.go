@@ -15,15 +15,17 @@ var remove = cli.Command{
 	Usage:       fmt.Sprintf("%s %s delete <keypairName> [flags]", util.Name, commandPrefix),
 	Description: "Deletes a keypair",
 	Action:      commandDelete,
-	Flags:       util.CommandFlags(flagsDelete),
+	Flags:       util.CommandFlags(flagsDelete, keysDelete),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsDelete))
+		util.CompleteFlags(util.CommandFlags(flagsDelete, keysDelete))
 	},
 }
 
 func flagsDelete() []cli.Flag {
 	return []cli.Flag{}
 }
+
+var keysDelete = []string{}
 
 func commandDelete(c *cli.Context) {
 	util.CheckArgNum(c, 1)

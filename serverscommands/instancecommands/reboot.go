@@ -16,9 +16,9 @@ var reboot = cli.Command{
 	Usage:       fmt.Sprintf("%s %s reboot %s [--soft | --hard] [optional flags]", util.Name, commandPrefix, idOrNameUsage),
 	Description: "Reboots an existing server",
 	Action:      commandReboot,
-	Flags:       util.CommandFlags(flagsReboot),
+	Flags:       util.CommandFlags(flagsReboot, keysReboot),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsReboot))
+		util.CompleteFlags(util.CommandFlags(flagsReboot, keysReboot))
 	},
 }
 
@@ -35,6 +35,8 @@ func flagsReboot() []cli.Flag {
 	}
 	return append(cf, idAndNameFlags...)
 }
+
+var keysReboot = []string{}
 
 func commandReboot(c *cli.Context) {
 	util.CheckArgNum(c, 0)

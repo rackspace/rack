@@ -18,15 +18,17 @@ var list = cli.Command{
 	Usage:       fmt.Sprintf("%s %s list [flags]", util.Name, commandPrefix),
 	Description: "Lists keypairs",
 	Action:      commandList,
-	Flags:       util.CommandFlags(flagsList),
+	Flags:       util.CommandFlags(flagsList, keysList),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsList))
+		util.CompleteFlags(util.CommandFlags(flagsList, keysList))
 	},
 }
 
 func flagsList() []cli.Flag {
 	return []cli.Flag{}
 }
+
+var keysList = []string{"Name", "Fingerprint"}
 
 func commandList(c *cli.Context) {
 	util.CheckArgNum(c, 0)
@@ -42,7 +44,6 @@ func commandList(c *cli.Context) {
 		os.Exit(1)
 	}
 
-	keys := []string{"Name", "Fingerprint"}
 	f := func() interface{} {
 		m := make([]map[string]interface{}, len(o))
 		for j, kp := range o {
@@ -50,5 +51,5 @@ func commandList(c *cli.Context) {
 		}
 		return m
 	}
-	output.Print(c, &f, keys)
+	output.Print(c, &f, keysList)
 }

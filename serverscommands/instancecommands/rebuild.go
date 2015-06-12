@@ -17,9 +17,9 @@ var rebuild = cli.Command{
 	Usage:       fmt.Sprintf("%s %s rebuild %s [--imageID <imageID>] [--adminPass <adminPass>] [optional flags]", util.Name, commandPrefix, idOrNameUsage),
 	Description: "Rebuilds an existing server",
 	Action:      commandRebuild,
-	Flags:       util.CommandFlags(flagsRebuild),
+	Flags:       util.CommandFlags(flagsRebuild, keysGet),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsRebuild))
+		util.CompleteFlags(util.CommandFlags(flagsRebuild, keysGet))
 	},
 }
 
@@ -102,9 +102,8 @@ func commandRebuild(c *cli.Context) {
 		os.Exit(1)
 	}
 
-	keys := []string{"ID", "Name", "Status", "Created", "Updated", "Image", "Flavor", "Public IPv4", "Public IPv6", "Private IPv4", "KeyName"}
 	f := func() interface{} {
 		return serverSingle(o)
 	}
-	output.Print(c, &f, keys)
+	output.Print(c, &f, keysGet)
 }

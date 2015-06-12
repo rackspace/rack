@@ -16,15 +16,17 @@ var remove = cli.Command{
 	Usage:       fmt.Sprintf("%s %s delete %s [optional flags]", util.Name, commandPrefix, idOrNameUsage),
 	Description: "Deletes an existing server",
 	Action:      commandDelete,
-	Flags:       util.CommandFlags(flagsDelete),
+	Flags:       util.CommandFlags(flagsDelete, keysDelete),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsDelete))
+		util.CompleteFlags(util.CommandFlags(flagsDelete, keysDelete))
 	},
 }
 
 func flagsDelete() []cli.Flag {
 	return idAndNameFlags
 }
+
+var keysDelete = []string{}
 
 func commandDelete(c *cli.Context) {
 	util.CheckArgNum(c, 0)
