@@ -25,9 +25,9 @@ An example of `service` might be `servers` or `files` or `networks`. `model` mig
 
 All of the following are examples of the pattern being applied consistently:
 
-* `rack servers instances list` - Get a list of all instances
-* `rack files containers list` - Get a list of all containers
-* `rack networks security-groups get --id 12345` - Get a security group by id
+* `rack servers instance list` - Get a list of all instances
+* `rack files container list` - Get a list of all containers
+* `rack networks security-group get --id 12345` - Get a security group by id
 * `rack load-balancers node remove --id 12345 --load-balancer-id abcdef` - Remove a node from a load balancer
 
 ## Completeness
