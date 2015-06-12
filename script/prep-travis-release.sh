@@ -27,9 +27,23 @@ if [ -z "$TRAVIS_BRANCH" ]; then
 else
   BRANCH=$TRAVIS_BRANCH
 fi
+
+# Ensure GOARM is defined later
+if [ "$arch" == "arm" -a -z "$GOARM" ]; then
+  GOARM="6"
+fi
+
 # Back to strict
 set -u
 ################################################################################
+
+SUFFIX=""
+if [ "$arch" == "arm" ]; then
+  arch="armv${GOARM}"
+fi
+if [ "$os" == "windows" ]; then
+  SUFFIX="${SUFFIX}.exe"
+fi
 
 echo "Building for ${os}-${arch}"
 
@@ -42,11 +56,6 @@ BASENAME="rack-${os}-${arch}"
 RACKBUILD="build/${BASENAME}"
 
 go build -o $RACKBUILD
-
-SUFFIX=""
-if [ "$os" == "windows" ]; then
-  SUFFIX=".exe"
-fi
 
 cp $RACKBUILD build/commits/${COMMIT}/${BASENAME}-${COMMIT}${SUFFIX}
 

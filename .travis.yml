@@ -8,7 +8,9 @@ env:
     - GIMME_OS=linux GIMME_ARCH=amd64
     - GIMME_OS=darwin GIMME_ARCH=amd64
     - GIMME_OS=windows GIMME_ARCH=amd64
-    - GIMME_OS=linux GIMME_ARCH=arm
+    - GIMME_OS=linux GIMME_ARCH=arm GOARM=5
+    - GIMME_OS=linux GIMME_ARCH=arm GOARM=6
+    - GIMME_OS=linux GIMME_ARCH=arm GOARM=7
 
 install:
     - go get -d -v ./...
