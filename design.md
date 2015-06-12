@@ -23,12 +23,15 @@ rack <service> [--options] <model> <action> [--flags]
 
 An example of `service` might be `servers` or `files` or `networks`. `model` might be `instance`, `object` or `container`, or perhaps `network`. Action would be the underlying API call to make, for example `create` or `delete`.
 
+Specifying `options` might be explicitly providing authentication information, for example `username` or `apiKey`, or other options that are not specific to the underlying `action` flags.
+
 All of the following are examples of the pattern being applied consistently:
 
 * `rack servers instance list` - Get a list of all instances
 * `rack files container list` - Get a list of all containers
 * `rack networks security-group get --id 12345` - Get a security group by id
 * `rack load-balancers node remove --id 12345 --load-balancer-id abcdef` - Remove a node from a load balancer
+* `rack files --username foobar --apiKey baz --region ORD object list --container mycontainer` - List all of the objects in container `mycontainer` in ORD for the user `foobar`
 
 ## Completeness
 
