@@ -24,11 +24,11 @@ func Contains(s []string, e string) bool {
 	return false
 }
 
-// outputFlags are flags that all commands can use. There exists the possiblity
+// OutputFlags are flags that all commands can use. There exists the possiblity
 // of setting app-level (global) flags, but that requires a user to properly
 // position them. Including these with the other command-level flags will allow
 // users to include them anywhere after the last subcommand (or argument, if applicable).
-func outputFlags(keys []string) []cli.Flag {
+func OutputFlags() []cli.Flag {
 	of := []cli.Flag{
 		cli.BoolFlag{
 			Name:  "json",
@@ -44,6 +44,16 @@ func outputFlags(keys []string) []cli.Flag {
 		},
 	}
 
+	return of
+}
+
+// CommandFlags returns the flags for a given command. It takes as a parameter
+// a function for returning flags specific to that command, and then appends those
+// flags with flags that are valid for all commands.
+func CommandFlags(f func() []cli.Flag, keys []string) []cli.Flag {
+	//of := outputFlags(fields)
+	//return append(of, f()...)
+	of := f()
 	if len(keys) > 0 {
 		fields := make([]string, len(keys))
 		for i, key := range keys {
@@ -57,14 +67,6 @@ func outputFlags(keys []string) []cli.Flag {
 	}
 
 	return of
-}
-
-// CommandFlags returns the flags for a given command. It takes as a parameter
-// a function for returning flags specific to that command, and then appends those
-// flags with flags that are valid for all commands.
-func CommandFlags(f func() []cli.Flag, fields []string) []cli.Flag {
-	of := outputFlags(fields)
-	return append(of, f()...)
 }
 
 // CheckArgNum checks that the provided number of arguments has the same

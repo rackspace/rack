@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/jrperritt/rack/serverscommands"
+	"github.com/jrperritt/rack/util"
 
 	"github.com/codegangsta/cli"
 )
@@ -20,5 +21,6 @@ func main() {
 			Subcommands: serverscommands.Get(),
 		},
 	}
+	app.Flags = util.OutputFlags()
 	app.Run(os.Args)
 }
