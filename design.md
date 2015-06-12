@@ -55,5 +55,5 @@ might be synonymous with:
 rack servers instance get 12345
 ```
 
-This is an example of ways to add terseness without compromising consistency. The key in this example would be that *every* method that requires `--id` as a flag would be able to be shortened to use a fifth argument which is implicitly interpreted as `id`.
+This is an example of a way to add terseness without compromising consistency. The key in this example would be that *every* method that requires `--id` as a flag would be able to be shortened to use a fifth argument which is implicitly interpreted as `id`.
 
