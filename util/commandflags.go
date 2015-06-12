@@ -11,19 +11,17 @@ import (
 // a function for returning flags specific to that command, and then appends those
 // flags with flags that are valid for all commands.
 func CommandFlags(f func() []cli.Flag, keys []string) []cli.Flag {
-	//of := outputFlags(fields)
-	//return append(of, f()...)
 	of := f()
 	if len(keys) > 0 {
 		fields := make([]string, len(keys))
 		for i, key := range keys {
 			fields[i] = strings.Join(strings.Split(strings.ToLower(key), " "), "")
 		}
-		flagField := cli.StringFlag{
+		flagFields := cli.StringFlag{
 			Name:  "fields",
-			Usage: fmt.Sprintf("Only return these comma-separated case-insensitive fields for each item in the list.\n\tChoices: %s", strings.Join(fields, ", ")),
+			Usage: fmt.Sprintf("Only return these comma-separated case-insensitive fields.\n\tChoices: %s", strings.Join(fields, ", ")),
 		}
-		of = append(of, flagField)
+		of = append(of, flagFields)
 	}
 
 	return of

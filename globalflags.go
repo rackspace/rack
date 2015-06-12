@@ -9,7 +9,7 @@ import (
 // outputFlags are global flags (i.e. flags that all commands can use) that let
 // users specify the format of the output from a command.
 func outputFlags() []cli.Flag {
-	of := []cli.Flag{
+	return []cli.Flag{
 		cli.BoolFlag{
 			Name:  "json",
 			Usage: "Return output in JSON format.",
@@ -23,8 +23,6 @@ func outputFlags() []cli.Flag {
 			Usage: "Return output in csv format.",
 		},
 	}
-
-	return of
 }
 
 // globalFlags returns the flags that can be used after `rack` in a command, such as
