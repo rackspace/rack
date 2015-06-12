@@ -2,7 +2,7 @@
 
 This document will attempt to outline the design for the Rackspace Global Command Line Interface. It will not exhaustively define each interface; rather, it will focus on the philosophy and representative examples that should be used to inform the successive specifications for the specific service implementations.
 
-As such, there are 4 core tenants we're using to define the design.
+As such, there are 4 core tenants we're using to define the design, in order of priority.
 
 1. Correctness
 2. Consistency
