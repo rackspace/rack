@@ -42,6 +42,10 @@ func commonFlags() []cli.Flag {
 			Name:  "csv",
 			Usage: "Return output in csv format.",
 		},
+		cli.StringFlag{
+			Name:  "fields",
+			Usage: "Only return these comma-separated fields for each item in the list.",
+		},
 	}
 }
 
