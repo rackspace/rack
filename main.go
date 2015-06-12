@@ -4,7 +4,6 @@ import (
 	"os"
 
 	"github.com/jrperritt/rack/serverscommands"
-	"github.com/jrperritt/rack/util"
 
 	"github.com/codegangsta/cli"
 )
@@ -21,9 +20,9 @@ func main() {
 			Subcommands: serverscommands.Get(),
 		},
 	}
-	app.Flags = util.GlobalFlags()
+	app.Flags = globalFlags()
 	app.BashComplete = func(c *cli.Context) {
-		util.CompleteGlobals(util.GlobalOptions(app))
+		completeGlobals(globalOptions(app))
 	}
 	app.Run(os.Args)
 }

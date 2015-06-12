@@ -7,49 +7,6 @@ import (
 	"github.com/codegangsta/cli"
 )
 
-// outputFlags are flags that all commands can use. There exists the possiblity
-// of setting app-level (global) flags, but that requires a user to properly
-// position them. Including these with the other command-level flags will allow
-// users to include them anywhere after the last subcommand (or argument, if applicable).
-func outputFlags() []cli.Flag {
-	of := []cli.Flag{
-		cli.BoolFlag{
-			Name:  "json",
-			Usage: "Return output in JSON format.",
-		},
-		cli.BoolFlag{
-			Name:  "table",
-			Usage: "Return output in tabular format. This is the default output format.",
-		},
-		cli.BoolFlag{
-			Name:  "csv",
-			Usage: "Return output in csv format.",
-		},
-	}
-
-	return of
-}
-
-// GlobalFlags returns the global flags.
-func GlobalFlags() []cli.Flag {
-	outputFlags := outputFlags()
-	return outputFlags
-}
-
-// GlobalOptions returns the global options (flags and commands).
-func GlobalOptions(app *cli.App) []interface{} {
-	var i []interface{}
-	globalFlags := GlobalFlags()
-	for _, globalFlag := range globalFlags {
-		i = append(i, globalFlag)
-	}
-
-	for _, cmd := range app.Commands {
-		i = append(i, cmd)
-	}
-	return i
-}
-
 // CommandFlags returns the flags for a given command. It takes as a parameter
 // a function for returning flags specific to that command, and then appends those
 // flags with flags that are valid for all commands.
@@ -70,24 +27,6 @@ func CommandFlags(f func() []cli.Flag, keys []string) []cli.Flag {
 	}
 
 	return of
-}
-
-// CompleteGlobals returns the options for completing global flags.
-func CompleteGlobals(vals []interface{}) {
-	for _, val := range vals {
-		switch val.(type) {
-		case cli.StringFlag:
-			fmt.Println("--" + val.(cli.StringFlag).Name)
-		case cli.IntFlag:
-			fmt.Println("--" + val.(cli.IntFlag).Name)
-		case cli.BoolFlag:
-			fmt.Println("--" + val.(cli.BoolFlag).Name)
-		case cli.Command:
-			fmt.Println(val.(cli.Command).Name)
-		default:
-			continue
-		}
-	}
 }
 
 // CompleteFlags returns the possible flags for bash completion.
