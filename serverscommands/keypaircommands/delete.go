@@ -12,7 +12,7 @@ import (
 
 var remove = cli.Command{
 	Name:        "delete",
-	Usage:       fmt.Sprintf("%s %s delete <keypairName> [flags]", util.Name, commandPrefix),
+	Usage:       fmt.Sprintf("%s %s delete [--name <keypairName>] [flags]", util.Name, commandPrefix),
 	Description: "Deletes a keypair",
 	Action:      commandDelete,
 	Flags:       util.CommandFlags(flagsDelete, keysDelete),
@@ -22,18 +22,28 @@ var remove = cli.Command{
 }
 
 func flagsDelete() []cli.Flag {
-	return []cli.Flag{}
+	return []cli.Flag{
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "[required] The name of the keypair",
+		},
+	}
 }
 
 var keysDelete = []string{}
 
 func commandDelete(c *cli.Context) {
-	util.CheckArgNum(c, 1)
-	keypairName := c.Args()[0]
+	util.CheckArgNum(c, 0)
+	if !c.IsSet("name") {
+		util.PrintError(c, util.ErrMissingFlag{
+			Msg: "--name is required.",
+		})
+	}
+	kpName := c.String("name")
 	client := auth.NewClient("compute")
-	err := keypairs.Delete(client, keypairName).ExtractErr()
+	err := keypairs.Delete(client, kpName).ExtractErr()
 	if err != nil {
-		fmt.Printf("Error deleting keypair [%s]: %s\n", keypairName, err)
+		fmt.Printf("Error deleting keypair [%s]: %s\n", kpName, err)
 		os.Exit(1)
 	}
 }
