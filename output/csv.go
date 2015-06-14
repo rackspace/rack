@@ -3,12 +3,11 @@ package output
 import (
 	"encoding/csv"
 	"fmt"
-
-	"github.com/codegangsta/cli"
+	"io"
 )
 
-func metadataCSV(c *cli.Context, m map[string]interface{}, keys []string) {
-	w := csv.NewWriter(c.App.Writer)
+func metadataCSV(writer io.Writer, m map[string]interface{}, keys []string) {
+	w := csv.NewWriter(writer)
 	w.Write([]string{"PROPERTY", "VALUE"})
 	for _, key := range keys {
 		w.Write([]string{key, fmt.Sprint(m[key])})
@@ -16,8 +15,8 @@ func metadataCSV(c *cli.Context, m map[string]interface{}, keys []string) {
 	w.Flush()
 }
 
-func listCSV(c *cli.Context, many []map[string]interface{}, keys []string) {
-	w := csv.NewWriter(c.App.Writer)
+func listCSV(writer io.Writer, many []map[string]interface{}, keys []string) {
+	w := csv.NewWriter(writer)
 	w.Write(keys)
 	for _, m := range many {
 		f := []string{}

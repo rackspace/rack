@@ -34,11 +34,11 @@ func idOrName(c *cli.Context, client *gophercloud.ServiceClient) string {
 var idAndNameFlags = []cli.Flag{
 	cli.StringFlag{
 		Name:  "id",
-		Usage: "[optional; required if 'name' is not provided] The ID of the server to update",
+		Usage: "[optional; required if 'name' is not provided] The ID of the resource",
 	},
 	cli.StringFlag{
 		Name:  "name",
-		Usage: "[optional; required if 'id' is not provided] The name of the server to update",
+		Usage: "[optional; required if 'id' is not provided] The name of the resource",
 	},
 }
 

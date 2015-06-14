@@ -18,9 +18,9 @@ var list = cli.Command{
 	Usage:       fmt.Sprintf("%s %s list [flags]", util.Name, commandPrefix),
 	Description: "Lists images",
 	Action:      commandList,
-	Flags:       util.CommandFlags(flagsList),
+	Flags:       util.CommandFlags(flagsList, keysList),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsList))
+		util.CompleteFlags(util.CommandFlags(flagsList, keysList))
 	},
 }
 
@@ -45,6 +45,8 @@ func flagsList() []cli.Flag {
 	}
 }
 
+var keysList = []string{"ID", "Name", "Status", "MinDisk", "MinRAM"}
+
 func commandList(c *cli.Context) {
 	util.CheckArgNum(c, 0)
 	client := auth.NewClient("compute")
@@ -65,7 +67,6 @@ func commandList(c *cli.Context) {
 		os.Exit(1)
 	}
 
-	keys := []string{"ID", "Name", "Status", "MinDisk", "MinRAM"}
 	f := func() interface{} {
 		m := make([]map[string]interface{}, len(o))
 		for j, image := range o {
@@ -73,5 +74,5 @@ func commandList(c *cli.Context) {
 		}
 		return m
 	}
-	output.Print(c, &f, keys)
+	output.Print(c, &f, keysList)
 }

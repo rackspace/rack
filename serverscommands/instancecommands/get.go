@@ -16,15 +16,17 @@ var get = cli.Command{
 	Usage:       fmt.Sprintf("%s %s get %s [optional flags]", util.Name, commandPrefix, idOrNameUsage),
 	Description: "Retrieves an existing server",
 	Action:      commandGet,
-	Flags:       util.CommandFlags(flagsGet),
+	Flags:       util.CommandFlags(flagsGet, keysGet),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsGet))
+		util.CompleteFlags(util.CommandFlags(flagsGet, keysGet))
 	},
 }
 
 func flagsGet() []cli.Flag {
 	return idAndNameFlags
 }
+
+var keysGet = []string{"ID", "Name", "Status", "Created", "Updated", "Image", "Flavor", "Public IPv4", "Public IPv6", "Private IPv4", "KeyName"}
 
 func commandGet(c *cli.Context) {
 	util.CheckArgNum(c, 0)
@@ -36,9 +38,8 @@ func commandGet(c *cli.Context) {
 		os.Exit(1)
 	}
 
-	keys := []string{"ID", "Name", "Status", "Created", "Updated", "Image", "Flavor", "Public IPv4", "Public IPv6", "Private IPv4", "KeyName"}
 	f := func() interface{} {
 		return serverSingle(o)
 	}
-	output.Print(c, &f, keys)
+	output.Print(c, &f, keysGet)
 }

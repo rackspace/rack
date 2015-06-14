@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
@@ -19,9 +20,9 @@ var create = cli.Command{
 	Usage:       fmt.Sprintf("%s %s create <keypairName> [flags]", util.Name, commandPrefix),
 	Description: "Creates a keypair",
 	Action:      commandCreate,
-	Flags:       util.CommandFlags(flagsCreate),
+	Flags:       util.CommandFlags(flagsCreate, keysCreate),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsCreate))
+		util.CompleteFlags(util.CommandFlags(flagsCreate, keysCreate))
 	},
 }
 
@@ -29,12 +30,14 @@ func flagsCreate() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name: "publicKey",
-			Usage: `[optional] The public ssh key to associate with the user's account.
-	It may be the actual key or the file containing the key. If empty,
-	the key will be created for you and returned in the output.`,
+			Usage: strings.Join([]string{"[optional] The public ssh key to associate with the user's account.",
+				"It may be the actual key or the file containing the key. If empty,",
+				"the key will be created for you and returned in the output."}, "\n\t"),
 		},
 	}
 }
+
+var keysCreate = []string{"Name", "Fingerprint", "PublicKey", "PrivateKey"}
 
 func commandCreate(c *cli.Context) {
 	util.CheckArgNum(c, 1)
@@ -59,9 +62,8 @@ func commandCreate(c *cli.Context) {
 		fmt.Printf("Error creating keypair [%s]: %s\n", keypairName, err)
 		os.Exit(1)
 	}
-	keys := []string{"Name", "Fingerprint", "PublicKey", "PrivateKey"}
 	f := func() interface{} {
 		return structs.Map(o)
 	}
-	output.Print(c, &f, keys)
+	output.Print(c, &f, keysCreate)
 }

@@ -20,5 +20,9 @@ func main() {
 			Subcommands: serverscommands.Get(),
 		},
 	}
+	app.Flags = globalFlags()
+	app.BashComplete = func(c *cli.Context) {
+		completeGlobals(globalOptions(app))
+	}
 	app.Run(os.Args)
 }

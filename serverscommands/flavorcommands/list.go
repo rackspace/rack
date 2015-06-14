@@ -18,9 +18,9 @@ var list = cli.Command{
 	Usage:       fmt.Sprintf("%s %s list [flags]", util.Name, commandPrefix),
 	Description: "Lists flavors",
 	Action:      commandList,
-	Flags:       util.CommandFlags(flagsList),
+	Flags:       util.CommandFlags(flagsList, keysList),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsList))
+		util.CompleteFlags(util.CommandFlags(flagsList, keysList))
 	},
 }
 
@@ -45,6 +45,8 @@ func flagsList() []cli.Flag {
 		},
 	}
 }
+
+var keysList = []string{"ID", "Name", "RAM", "Disk", "Swap", "VCPUs", "RxTxFactor"}
 
 func commandList(c *cli.Context) {
 	util.CheckArgNum(c, 0)
@@ -73,6 +75,5 @@ func commandList(c *cli.Context) {
 		}
 		return m
 	}
-	keys := []string{"ID", "Name", "RAM", "Disk", "Swap", "VCPUs", "RxTxFactor"}
-	output.Print(c, &f, keys)
+	output.Print(c, &f, keysList)
 }

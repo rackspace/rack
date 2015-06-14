@@ -2,8 +2,10 @@ package output
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/util"
 )
 
 // Print prints the results of the CLI command. This function is designed to centralize
@@ -76,31 +78,56 @@ import (
 // 		the tabular and csv formats.
 func Print(c *cli.Context, f *func() interface{}, keys []string) {
 	i := (*f)()
-	if c.IsSet("json") {
-		jsonOut(i)
-		return
-	}
-	if c.IsSet("csv") {
+	keys = limitFields(c, keys)
+	w := c.App.Writer
+	if c.GlobalIsSet("json") {
 		switch i.(type) {
 		case map[string]interface{}:
 			m := i.(map[string]interface{})
-			metadataCSV(c, m, keys)
+			metadataJSON(w, m, keys)
 		case []map[string]interface{}:
 			m := i.([]map[string]interface{})
-			listCSV(c, m, keys)
+			listJSON(w, m, keys)
 		default:
-			fmt.Fprintf(c.App.Writer, "%v", i)
+			defaultJSON(w, i)
+		}
+		return
+	}
+	if c.GlobalIsSet("csv") {
+		switch i.(type) {
+		case map[string]interface{}:
+			m := i.(map[string]interface{})
+			metadataCSV(w, m, keys)
+		case []map[string]interface{}:
+			m := i.([]map[string]interface{})
+			listCSV(w, m, keys)
+		default:
+			fmt.Fprintf(w, "%v", i)
 		}
 		return
 	}
 	switch i.(type) {
 	case map[string]interface{}:
 		m := i.(map[string]interface{})
-		metadataTable(c, m, keys)
+		metadataTable(w, m, keys)
 	case []map[string]interface{}:
 		m := i.([]map[string]interface{})
-		listTable(c, m, keys)
+		listTable(w, m, keys)
 	default:
-		fmt.Fprintf(c.App.Writer, "%v", i)
+		fmt.Fprintf(w, "%v", i)
 	}
+}
+
+func limitFields(c *cli.Context, keys []string) []string {
+	if c.IsSet("fields") {
+		fields := strings.Split(strings.ToLower(c.String("fields")), ",")
+		newKeys := []string{}
+		for _, key := range keys {
+			if util.Contains(fields, strings.Join(strings.Split(strings.ToLower(key), " "), "")) {
+				newKeys = append(newKeys, key)
+			}
+		}
+		return newKeys
+	}
+	return keys
 }

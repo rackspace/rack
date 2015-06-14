@@ -19,9 +19,9 @@ var create = cli.Command{
 	Usage:       fmt.Sprintf("%s %s create [--name <serverName>] [optional flags]", util.Name, commandPrefix),
 	Description: "Creates a new server",
 	Action:      commandCreate,
-	Flags:       util.CommandFlags(flagsCreate),
+	Flags:       util.CommandFlags(flagsCreate, keysCreate),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsCreate))
+		util.CompleteFlags(util.CommandFlags(flagsCreate, keysCreate))
 	},
 }
 
@@ -73,6 +73,8 @@ func flagsCreate() []cli.Flag {
 		},
 	}
 }
+
+var keysCreate = []string{"ID", "AdminPass"}
 
 func commandCreate(c *cli.Context) {
 	util.CheckArgNum(c, 0)
@@ -126,9 +128,8 @@ func commandCreate(c *cli.Context) {
 		os.Exit(1)
 	}
 
-	keys := []string{"ID", "AdminPass"}
 	f := func() interface{} {
 		return serverSingle(o)
 	}
-	output.Print(c, &f, keys)
+	output.Print(c, &f, keysCreate)
 }

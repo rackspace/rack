@@ -17,15 +17,17 @@ var get = cli.Command{
 	Usage:       fmt.Sprintf("%s %s get <imageID> [flags]", util.Name, commandPrefix),
 	Description: "Retreives an image",
 	Action:      commandGet,
-	Flags:       util.CommandFlags(flagsGet),
+	Flags:       util.CommandFlags(flagsGet, keysGet),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsGet))
+		util.CompleteFlags(util.CommandFlags(flagsGet, keysGet))
 	},
 }
 
 func flagsGet() []cli.Flag {
 	return []cli.Flag{}
 }
+
+var keysGet = []string{"ID", "Name", "Status", "Progress", "MinDisk", "MinRAM", "Created", "Updated"}
 
 func commandGet(c *cli.Context) {
 	util.CheckArgNum(c, 1)
@@ -36,9 +38,8 @@ func commandGet(c *cli.Context) {
 		fmt.Printf("Error retreiving image [%s]: %s\n", imageID, err)
 		os.Exit(1)
 	}
-	keys := []string{"ID", "Name", "Status", "Progress", "MinDisk", "MinRAM", "Created", "Updated"}
 	f := func() interface{} {
 		return structs.Map(o)
 	}
-	output.Print(c, &f, keys)
+	output.Print(c, &f, keysGet)
 }

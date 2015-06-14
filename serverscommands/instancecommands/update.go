@@ -17,9 +17,9 @@ var update = cli.Command{
 	Usage:       fmt.Sprintf("%s %s update %s [optional flags]", util.Name, commandPrefix, idOrNameUsage),
 	Description: "Updates an existing server",
 	Action:      commandUpdate,
-	Flags:       util.CommandFlags(flagsUpdate),
+	Flags:       util.CommandFlags(flagsUpdate, keysUpdate),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsUpdate))
+		util.CompleteFlags(util.CommandFlags(flagsUpdate, keysUpdate))
 	},
 }
 
@@ -41,6 +41,8 @@ func flagsUpdate() []cli.Flag {
 	return append(cf, idAndNameFlags...)
 }
 
+var keysUpdate = []string{"ID", "Name", "Public IPv4", "Public IPv6"}
+
 func commandUpdate(c *cli.Context) {
 	util.CheckArgNum(c, 0)
 	client := auth.NewClient("compute")
@@ -56,9 +58,8 @@ func commandUpdate(c *cli.Context) {
 		os.Exit(1)
 	}
 
-	keys := []string{"ID", "Name", "Public IPv4", "Public IPv6"}
 	f := func() interface{} {
 		return serverSingle(o)
 	}
-	output.Print(c, &f, keys)
+	output.Print(c, &f, keysUpdate)
 }
