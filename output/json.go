@@ -6,17 +6,18 @@ import (
 	"io"
 )
 
+// INDENT is the indentation passed to json.MarshalIndent
+const INDENT string = "  "
+
 // JSON prints results in JSON format.
 func defaultJSON(w io.Writer, i interface{}) {
 	m := map[string]interface{}{"result": i}
-	j, _ := json.Marshal(m)
-	fmt.Fprintf(w, "%v", string(j))
+	jsonOut(w, m)
 }
 
 func metadataJSON(w io.Writer, m map[string]interface{}, keys []string) {
 	mLimited := limitJSONFields(m, keys)
-	j, _ := json.Marshal(mLimited)
-	fmt.Fprintf(w, "%v", string(j))
+	jsonOut(w, mLimited)
 }
 
 func listJSON(w io.Writer, maps []map[string]interface{}, keys []string) {
@@ -24,8 +25,7 @@ func listJSON(w io.Writer, maps []map[string]interface{}, keys []string) {
 	for i, m := range maps {
 		mLimited[i] = limitJSONFields(m, keys)
 	}
-	j, _ := json.Marshal(mLimited)
-	fmt.Fprintf(w, "%v", string(j))
+	jsonOut(w, mLimited)
 }
 
 func limitJSONFields(m map[string]interface{}, keys []string) map[string]interface{} {
@@ -36,4 +36,9 @@ func limitJSONFields(m map[string]interface{}, keys []string) map[string]interfa
 		}
 	}
 	return mLimited
+}
+
+func jsonOut(w io.Writer, i interface{}) {
+	j, _ := json.MarshalIndent(i, "", INDENT)
+	fmt.Fprintln(w, string(j))
 }
