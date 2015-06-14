@@ -39,11 +39,11 @@ func commandDelete(c *cli.Context) {
 			Msg: "--name is required.",
 		})
 	}
-	kpName := c.String("name")
+	keypairName := c.String("name")
 	client := auth.NewClient("compute")
-	err := keypairs.Delete(client, kpName).ExtractErr()
+	err := keypairs.Delete(client, keypairName).ExtractErr()
 	if err != nil {
-		fmt.Printf("Error deleting keypair [%s]: %s\n", kpName, err)
+		fmt.Printf("Error deleting keypair [%s]: %s\n", keypairName, err)
 		os.Exit(1)
 	}
 }

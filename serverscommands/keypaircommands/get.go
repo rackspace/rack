@@ -41,11 +41,11 @@ func commandGet(c *cli.Context) {
 			Msg: "--name is required.",
 		})
 	}
-	kpName := c.String("name")
+	keypairName := c.String("name")
 	client := auth.NewClient("compute")
-	o, err := keypairs.Get(client, kpName).Extract()
+	o, err := keypairs.Get(client, keypairName).Extract()
 	if err != nil {
-		fmt.Printf("Error retreiving keypair [%s]: %s\n", kpName, err)
+		fmt.Printf("Error retreiving keypair [%s]: %s\n", keypairName, err)
 		os.Exit(1)
 	}
 
