@@ -5,11 +5,9 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
-	"github.com/olekukonko/tablewriter"
 	osServers "github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
 )
@@ -19,9 +17,9 @@ var update = cli.Command{
 	Usage:       fmt.Sprintf("%s %s update %s [optional flags]", util.Name, commandPrefix, idOrNameUsage),
 	Description: "Updates an existing server",
 	Action:      commandUpdate,
-	Flags:       util.CommandFlags(flagsUpdate),
+	Flags:       util.CommandFlags(flagsUpdate, keysUpdate),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsUpdate))
+		util.CompleteFlags(util.CommandFlags(flagsUpdate, keysUpdate))
 	},
 }
 
@@ -43,6 +41,8 @@ func flagsUpdate() []cli.Flag {
 	return append(cf, idAndNameFlags...)
 }
 
+var keysUpdate = []string{"ID", "Name", "Public IPv4", "Public IPv6"}
+
 func commandUpdate(c *cli.Context) {
 	util.CheckArgNum(c, 0)
 	client := auth.NewClient("compute")
@@ -57,29 +57,9 @@ func commandUpdate(c *cli.Context) {
 		fmt.Printf("Error updating server: %s\n", err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableUpdate)
-}
 
-func tableUpdate(c *cli.Context, i interface{}) {
-	m := structs.Map(i)
-	t := tablewriter.NewWriter(c.App.Writer)
-	t.SetAlignment(tablewriter.ALIGN_LEFT)
-	t.SetHeader([]string{"property", "value"})
-	keys := []string{"ID", "Name", "Public IPv4", "Public IPv6"}
-	for _, key := range keys {
-		tmp := ""
-		switch key {
-		case "Public IPv4":
-			tmp = fmt.Sprint(m["AccessIPv4"])
-		case "Public IPv6":
-			tmp = fmt.Sprint(m["AccessIPv6"])
-		default:
-			tmp = fmt.Sprint(m[key])
-		}
-		if tmp == "<nil>" {
-			tmp = ""
-		}
-		t.Append([]string{key, tmp})
+	f := func() interface{} {
+		return serverSingle(o)
 	}
-	t.Render()
+	output.Print(c, &f, keysUpdate)
 }

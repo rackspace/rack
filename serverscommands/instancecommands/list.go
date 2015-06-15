@@ -5,11 +5,9 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
-	"github.com/olekukonko/tablewriter"
 	osServers "github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
 )
@@ -19,9 +17,9 @@ var list = cli.Command{
 	Usage:       fmt.Sprintf("%s %s list [optional flags]", util.Name, commandPrefix),
 	Description: "Lists existing servers",
 	Action:      commandList,
-	Flags:       util.CommandFlags(flagsList),
+	Flags:       util.CommandFlags(flagsList, keysList),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsList))
+		util.CompleteFlags(util.CommandFlags(flagsList, keysList))
 	},
 }
 
@@ -58,6 +56,8 @@ func flagsList() []cli.Flag {
 	}
 }
 
+var keysList = []string{"ID", "Name", "Status", "Public IPv4", "Private IPv4", "Image", "Flavor"}
+
 func commandList(c *cli.Context) {
 	util.CheckArgNum(c, 0)
 	client := auth.NewClient("compute")
@@ -80,67 +80,13 @@ func commandList(c *cli.Context) {
 		fmt.Printf("Error listing servers: %s\n", err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableList)
-}
 
-func tableList(c *cli.Context, i interface{}) {
-	servers, ok := i.([]osServers.Server)
-	if !ok {
-		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osServers.Server\n", i)
-		os.Exit(1)
-	}
-	t := tablewriter.NewWriter(c.App.Writer)
-	t.SetAlignment(tablewriter.ALIGN_LEFT)
-	keys := []string{"ID", "Name", "Status", "Public IPv4", "Private IPv4", "Image", "Flavor"}
-	t.SetHeader(keys)
-	for _, server := range servers {
-		m := structs.Map(server)
-		f := []string{}
-		for _, key := range keys {
-			tmp := ""
-			switch key {
-			case "Public IPv4":
-				tmp = fmt.Sprint(m["AccessIPv4"])
-			case "Private IPv4":
-				i, ok := m["Addresses"].(map[string]interface{})
-				if !ok {
-					tmp = ""
-					break
-				}
-				j, ok := i["private"].([]interface{})
-				if !ok || len(j) == 0 {
-					tmp = ""
-					break
-				}
-				i, ok = j[0].(map[string]interface{})
-				if !ok {
-					tmp = ""
-					break
-				}
-				tmp = fmt.Sprint(i["addr"])
-			case "Image":
-				i, ok := m["Image"].(map[string]interface{})
-				if !ok {
-					tmp = ""
-					break
-				}
-				tmp = fmt.Sprint(i["id"])
-			case "Flavor":
-				i, ok := m["Flavor"].(map[string]interface{})
-				if !ok {
-					tmp = ""
-					break
-				}
-				tmp = fmt.Sprint(i["id"])
-			default:
-				tmp = fmt.Sprint(m[key])
-			}
-			if tmp == "<nil>" {
-				tmp = ""
-			}
-			f = append(f, tmp)
+	f := func() interface{} {
+		m := make([]map[string]interface{}, len(o))
+		for j, server := range o {
+			m[j] = serverSingle(&server)
 		}
-		t.Append(f)
+		return m
 	}
-	t.Render()
+	output.Print(c, &f, keysList)
 }

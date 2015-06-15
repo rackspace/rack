@@ -9,7 +9,6 @@ import (
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
-	"github.com/olekukonko/tablewriter"
 	osKeypairs "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs"
 )
@@ -19,15 +18,17 @@ var list = cli.Command{
 	Usage:       fmt.Sprintf("%s %s list [flags]", util.Name, commandPrefix),
 	Description: "Lists keypairs",
 	Action:      commandList,
-	Flags:       util.CommandFlags(flagsList),
+	Flags:       util.CommandFlags(flagsList, keysList),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsList))
+		util.CompleteFlags(util.CommandFlags(flagsList, keysList))
 	},
 }
 
 func flagsList() []cli.Flag {
 	return []cli.Flag{}
 }
+
+var keysList = []string{"Name", "Fingerprint"}
 
 func commandList(c *cli.Context) {
 	util.CheckArgNum(c, 0)
@@ -42,25 +43,13 @@ func commandList(c *cli.Context) {
 		fmt.Printf("Error listing keypairs: %s\n", err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableList)
-}
 
-func tableList(c *cli.Context, i interface{}) {
-	kps, ok := i.([]osKeypairs.KeyPair)
-	if !ok {
-		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osKeypairs.KeyPair\n", i)
-		os.Exit(1)
-	}
-	t := tablewriter.NewWriter(c.App.Writer)
-	keys := []string{"Name", "Fingerprint"}
-	t.SetHeader(keys)
-	for _, kp := range kps {
-		m := structs.Map(kp)
-		f := []string{}
-		for _, key := range keys {
-			f = append(f, fmt.Sprint(m[key]))
+	f := func() interface{} {
+		m := make([]map[string]interface{}, len(o))
+		for j, kp := range o {
+			m[j] = structs.Map(kp)
 		}
-		t.Append(f)
+		return m
 	}
-	t.Render()
+	output.Print(c, &f, keysList)
 }

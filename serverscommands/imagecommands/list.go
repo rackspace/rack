@@ -9,7 +9,6 @@ import (
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
-	"github.com/olekukonko/tablewriter"
 	osImages "github.com/rackspace/gophercloud/openstack/compute/v2/images"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/images"
 )
@@ -19,9 +18,9 @@ var list = cli.Command{
 	Usage:       fmt.Sprintf("%s %s list [flags]", util.Name, commandPrefix),
 	Description: "Lists images",
 	Action:      commandList,
-	Flags:       util.CommandFlags(flagsList),
+	Flags:       util.CommandFlags(flagsList, keysList),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsList))
+		util.CompleteFlags(util.CommandFlags(flagsList, keysList))
 	},
 }
 
@@ -46,6 +45,8 @@ func flagsList() []cli.Flag {
 	}
 }
 
+var keysList = []string{"ID", "Name", "Status", "MinDisk", "MinRAM"}
+
 func commandList(c *cli.Context) {
 	util.CheckArgNum(c, 0)
 	client := auth.NewClient("compute")
@@ -65,27 +66,13 @@ func commandList(c *cli.Context) {
 		fmt.Printf("Error listing images: %s\n", err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableList)
-}
 
-func tableList(c *cli.Context, i interface{}) {
-	images, ok := i.([]osImages.Image)
-	if !ok {
-		fmt.Fprintf(c.App.Writer, "Could not type assert interface\n%+v\nto []osImages.Image\n", i)
-		os.Exit(1)
-	}
-	t := tablewriter.NewWriter(c.App.Writer)
-	t.SetAlignment(tablewriter.ALIGN_LEFT)
-	t.SetColWidth(100)
-	keys := []string{"ID", "Name", "Status", "MinDisk", "MinRAM"}
-	t.SetHeader(keys)
-	for _, image := range images {
-		m := structs.Map(image)
-		f := []string{}
-		for _, key := range keys {
-			f = append(f, fmt.Sprint(m[key]))
+	f := func() interface{} {
+		m := make([]map[string]interface{}, len(o))
+		for j, image := range o {
+			m[j] = structs.Map(image)
 		}
-		t.Append(f)
+		return m
 	}
-	t.Render()
+	output.Print(c, &f, keysList)
 }

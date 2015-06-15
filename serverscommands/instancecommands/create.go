@@ -7,11 +7,9 @@ import (
 	"strings"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
-	"github.com/olekukonko/tablewriter"
 	osServers "github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
 )
@@ -21,9 +19,9 @@ var create = cli.Command{
 	Usage:       fmt.Sprintf("%s %s create [--name <serverName>] [optional flags]", util.Name, commandPrefix),
 	Description: "Creates a new server",
 	Action:      commandCreate,
-	Flags:       util.CommandFlags(flagsCreate),
+	Flags:       util.CommandFlags(flagsCreate, keysCreate),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsCreate))
+		util.CompleteFlags(util.CommandFlags(flagsCreate, keysCreate))
 	},
 }
 
@@ -76,6 +74,8 @@ func flagsCreate() []cli.Flag {
 	}
 }
 
+var keysCreate = []string{"ID", "AdminPass"}
+
 func commandCreate(c *cli.Context) {
 	util.CheckArgNum(c, 0)
 
@@ -127,17 +127,9 @@ func commandCreate(c *cli.Context) {
 		fmt.Printf("Error creating server: %s\n", err)
 		os.Exit(1)
 	}
-	output.Print(c, o, tableCreate)
-}
 
-func tableCreate(c *cli.Context, i interface{}) {
-	m := structs.Map(i)
-	t := tablewriter.NewWriter(c.App.Writer)
-	t.SetAlignment(tablewriter.ALIGN_LEFT)
-	t.SetHeader([]string{"property", "value"})
-	keys := []string{"ID", "AdminPass"}
-	for _, key := range keys {
-		t.Append([]string{key, fmt.Sprint(m[key])})
+	f := func() interface{} {
+		return serverSingle(o)
 	}
-	t.Render()
+	output.Print(c, &f, keysCreate)
 }
