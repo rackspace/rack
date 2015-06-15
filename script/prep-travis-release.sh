@@ -63,38 +63,36 @@ case $arch in
   arm)
     # Note that we can never be 1:1 between `uname -m` and arm versions
     arch="armv${GOARM}"
-    SUFFIX="-${os}-${arch}"
     ;;
 esac
 
-if [[ "$os" == "Windows" && "$arch" == "amd64" ]]; then
+SUFFIX=""
+if [ "$os" == "Windows" ]; then
   SUFFIX=".exe"
-elif [[ "$os" == "Windows" && "$arch" != "amd64" ]]; then
-  SUFFIX="-${arch}.exe"
-elif [ "$arch" == "amd64" ]; then
-  # Assume 64 bit gets to be as is
-  SUFFIX="-${os}"
-else
-  SUFFIX="-${os}-${arch}"
 fi
 
-echo "Building for ${os}-${arch}"
+BASEDIR="build/${os}/${arch}"
+
+# Mirror the github layout for branches, tags, commits
+TREEDIR="${BASEDIR}/tree"
 
 mkdir -p build
-# Provide a commit hash version
-COMMIT=`git rev-parse HEAD 2> /dev/null`
-mkdir -p "build/commits/${COMMIT}"
+mkdir -p $BASEDIR
+mkdir -p $TREEDIR
 
 BASENAME="rack"
-RACKBUILD="build/${BASENAME}${SUFFIX}"
+
+# Base build not in build dir to prevent accidental upload with no prefix
+RACKBUILD="${BASENAME}${SUFFIX}"
 
 go build -o $RACKBUILD
 
-cp $RACKBUILD build/commits/${COMMIT}/${BASENAME}-${COMMIT}${SUFFIX}
+# Ship /tree/rack-branchname
+cp $RACKBUILD ${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}
 
-if [ "$BRANCH" != "master" ]; then
-  # Ship /rack-branchname
-  cp $RACKBUILD build/${BASENAME}-${BRANCH}${SUFFIX}
-  # Remove our artifact
-  rm $RACKBUILD
+if [ "$BRANCH" == "master" ]; then
+  # Only when we're on master do we spit out the official ones.
+  cp $RACKBUILD ${BASEDIR}/${BASENAME}${SUFFIX}
 fi
+
+rm $RACKBUILD
