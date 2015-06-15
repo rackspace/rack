@@ -67,13 +67,15 @@ So, for example on OSX and Linux; you would type::
 
 You can get your API key by logging into the `Cloud Control panel`_ and clicking
 on *account -> account settings* and clicking "show" next to "API Key". Be careful;
-this key is special. Don't share it! [#]_
+this key is special. Don't share it! [#]_ [#]_
 
 
 .. [#] **No, seriously** - don't share it, don't check it into source control, the API
       gives anyone who has it god-like powers. We've accidentally shared it in the
       past and literally had a rip in space-time that sucked us into an alternate
       dimension that has mutant pug overlords. Please save us.
+
+.. [#] Hush now human. No tears. Only sleep.
 
 .. _go: https://golang.org/
 .. _Mac OSX (64 bit): https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com/rack-darwin-amd64
