@@ -5,12 +5,12 @@ Rackspace Command Line Interface
 
 .. warning:: The ``rack`` tool is under heavy development; the name of the binary
              and other portions may rapidly change. If you want to participate or
-             provide early feedback, see the `Github project <https://github.com/jrperritt/rack>`_
+             provide early feedback, see the `Github project`_
 
 Description
 -----------
 
-The Rackspace Command Line Interface is a unified tool to manage your AWS
+The Rackspace Command Line Interface is a unified tool to manage your Rackspace
 services. It provides streamlined and secure configuration as well as a single
 point of entry for all Rackspace Cloud services.
 
@@ -82,3 +82,5 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`search`
+
+.. _Github project: https://github.com/jrperritt/rack
