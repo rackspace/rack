@@ -44,7 +44,7 @@ Windows
 
 After downloading the binary on Windows, you can immediately run it.
 
-We recommend that you rename the executable to ``rack``, copy it to a location outside of your Downloads folder (e.g. C:\\tools) and add that location to your PATH. You must open a new command prompt after modifying the PATH variable.
+We recommend that you rename the executable to ``rack.exe``, copy it to a location outside of your Downloads folder (e.g. C:\\tools) and add that location to your PATH. You must open a new command prompt after modifying the PATH variable.
 
 1. Create a new directory for command line tools, if you don't already have one, e.g. C:\\tools.
 2. Copy rack-windows-amd64.exe to that directory and rename it to rack.exe.
