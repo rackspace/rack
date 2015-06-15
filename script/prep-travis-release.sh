@@ -18,6 +18,11 @@ IFS=$'\n\t'
 ################################################################################
 set +u
 
+if [[ -z "$GIMME_OS" && -z "$GIMME_ARCH" ]]; then
+  echo "GIMME_OS and GIMME_ARCH must be defined"
+  exit 2
+fi
+
 os=$GIMME_OS
 arch=$GIMME_ARCH
 # See http://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
@@ -37,34 +42,68 @@ fi
 set -u
 ################################################################################
 
+case $os in
+  windows)
+    os="Windows"
+    ;;
+  linux)
+    os="Linux"
+    ;;
+  darwin)
+    os="Darwin"
+    ;;
+  freebsd)
+    os="FreeBSD"
+    ;;
+  *)
+    echo "Unknown OS ${os}. Assuming it's a valid OS for gimme/go and charging ahead."
+esac
+
+case $arch in
+  arm)
+    # Note that we can never be 1:1 between `uname -m` and arm versions
+    arch="armv${GOARM}"
+    ;;
+esac
+
 SUFFIX=""
-if [ "$arch" == "arm" ]; then
-  arch="armv${GOARM}"
-fi
-if [ "$os" == "windows" ]; then
-  SUFFIX="${SUFFIX}.exe"
+if [ "$os" == "Windows" ]; then
+  SUFFIX=".exe"
 fi
 
-echo "Building for ${os}-${arch}"
+################################################################################
+# Set up the build and deploy layout
+################################################################################
 
-mkdir -p build
-# Provide a commit hash version
-COMMIT=`git rev-parse HEAD 2> /dev/null`
-mkdir -p "build/commits/${COMMIT}"
+BUILDDIR="build"
+BASEDIR="${os}/${arch}"
+# Mirror the github layout for branches, tags, commits
+TREEDIR="${os}/${arch}/tree"
 
-BASENAME="rack-${os}-${arch}"
-RACKBUILD="build/${BASENAME}"
+CDN="https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com"
+
+mkdir -p $BUILDDIR
+mkdir -p $BUILDDIR/$BASEDIR
+mkdir -p $BUILDDIR/$TREEDIR
+
+BASENAME="rack"
+
+# Base build not in build dir to prevent accidental upload on failure
+RACKBUILD="${BASENAME}${SUFFIX}"
 
 go build -o $RACKBUILD
 
-cp $RACKBUILD build/commits/${COMMIT}/${BASENAME}-${COMMIT}${SUFFIX}
+# Ship /tree/rack-branchname
+cp $RACKBUILD ${BUILDDIR}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}
+echo "Fresh build for branch '${BRANCH}' at "
+echo "${CDN}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}"
 
-if [ "$BRANCH" != "master" ]; then
-  # Ship /rack-branchname
-  cp $RACKBUILD build/${BASENAME}-${BRANCH}${SUFFIX}
-  # Remove our artifact
-  rm $RACKBUILD
-elif [ "$os" == "windows" ]; then
-  cp $RACKBUILD $RACKBUILD${SUFFIX}
-  rm $RACKBUILD
+if [ "$BRANCH" == "master" ]; then
+  # Only when we're on master do we spit out the official ones.
+  cp $RACKBUILD ${BUILDDIR}/${BASEDIR}/${BASENAME}${SUFFIX}
+  echo "Get it while it's hot at"
+  echo "${CDN}/${BASEDIR}/${BASENAME}${SUFFIX}"
 fi
+
+# Clean up after build
+rm $RACKBUILD
