@@ -27,13 +27,13 @@ OSX and Linux
 After downloading the binary on OSX and Linux you will need to make the binary
 executable by typing::
 
-    chmod a+x /path/to/rack-*
+    chmod a+x /path/to/rack
 
 We also recommend you rename or symbolically link it on these platforms to the
 ``rack`` name::
 
     mkdir -p /usr/local/bin/
-    ln -s /path/to/rack-* /usr/local/bin/rack
+    ln -s /path/to/rack /usr/local/bin/rack
 
 You can now add it to your path with::
 
@@ -103,7 +103,7 @@ For example::
 .. [#] Hush now human. No tears. Only sleep.
 
 .. _go: https://golang.org/
-.. _Mac OSX (64 bit): https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com/rack-Darwin
-.. _Linux (64 bit): https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com/rack-Linux
-.. _Windows (64 bit): https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com/rack.exe
+.. _Mac OSX (64 bit): https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com/Darwin/amd64/rack
+.. _Linux (64 bit): https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com/Linux/amd64/rack
+.. _Windows (64 bit): https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com/Windows/amd64/rack.exe
 .. _Cloud Control panel: https://mycloud.rackspace.com/
