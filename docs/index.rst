@@ -30,8 +30,8 @@ list all running servers on your Rackspace account, you would type::
 
 And the response (**default**: table-based output) would look like::
 
-  ID    Name           Status      Public IPv4	Private IPv4	Image   Flavor
-  01	my_server      ACTIVE	   10.1.1.1     10.2.2.2        bob-01  io1-30
+      ID	Name		Status	Public IPv4	Private IPv4	Image	Flavor
+      GUID	my_server	ACTIVE	101.130.19.31	10.208.128.233	GUID	io1-30
 
 Options
 -------
