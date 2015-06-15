@@ -79,6 +79,7 @@ Example Usage::
 Example Usage::
 
     rack servers image list [flags]
+
 ``get``
 ^^^^^^^^
 Example Usage::
