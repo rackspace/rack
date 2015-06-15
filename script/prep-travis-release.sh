@@ -71,28 +71,39 @@ if [ "$os" == "Windows" ]; then
   SUFFIX=".exe"
 fi
 
-BASEDIR="build/${os}/${arch}"
+################################################################################
+# Set up the build and deploy layout
+################################################################################
 
+BUILDDIR="build"
+BASEDIR="${os}/${arch}"
 # Mirror the github layout for branches, tags, commits
-TREEDIR="${BASEDIR}/tree"
+TREEDIR="${os}/${arch}/tree"
 
-mkdir -p build
-mkdir -p $BASEDIR
-mkdir -p $TREEDIR
+CDN="https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com"
+
+mkdir -p $BUILDDIR
+mkdir -p $BUILDDIR/$BASEDIR
+mkdir -p $BUILDDIR/$TREEDIR
 
 BASENAME="rack"
 
-# Base build not in build dir to prevent accidental upload with no prefix
+# Base build not in build dir to prevent accidental upload on failure
 RACKBUILD="${BASENAME}${SUFFIX}"
 
 go build -o $RACKBUILD
 
 # Ship /tree/rack-branchname
-cp $RACKBUILD ${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}
+cp $RACKBUILD ${BUILDDIR}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}
+echo "Fresh build for branch '${BRANCH}' at "
+echo "${CDN}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}"
 
 if [ "$BRANCH" == "master" ]; then
   # Only when we're on master do we spit out the official ones.
-  cp $RACKBUILD ${BASEDIR}/${BASENAME}${SUFFIX}
+  cp $RACKBUILD ${BUILDDIR}/${BASEDIR}/${BASENAME}${SUFFIX}
+  echo "Get it while it's hot at"
+  echo "${CDN}/${BASEDIR}/${BASENAME}${SUFFIX}"
 fi
 
+# Clean up after build
 rm $RACKBUILD
