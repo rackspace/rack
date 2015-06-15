@@ -13,12 +13,10 @@ func NewClient(t string) *gophercloud.ServiceClient {
 	var err error
 	ao, region, err := authMethod()
 	if err != nil {
-		if err == rackspace.ErrNoAuthURL {
-			ao.IdentityEndpoint = rackspace.RackspaceUSIdentity
-		} else {
-			fmt.Printf("Error determining AuthOptions and/or region: %s\n", err)
-			os.Exit(1)
-		}
+		fmt.Printf("Error retrieving authentication credentials: %s\n", err)
+	}
+	if ao.IdentityEndpoint == "" {
+		ao.IdentityEndpoint = rackspace.RackspaceUSIdentity
 	}
 	pc, err := rackspace.AuthenticatedClient(ao)
 	if err != nil {
