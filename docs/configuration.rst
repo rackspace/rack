@@ -55,20 +55,32 @@ export the following environment variables (case matters):
 
 * RS_REGION_NAME (DFW, IAD, ORD, LON, SYD, HKG)
 * RS_USERNAME (Your Rackspace username)
-* RS_AUTH_URL (https://identity.api.rackspacecloud.com/v2.0)
 * RS_API_KEY (Your Rackspace API key)
 
 So, for example on OSX and Linux; you would type::
 
     export RS_REGION_NAME=IAD
     export RS_USERNAME=<your rackspace username>
-    export RS_AUTH_URL=https://identity.api.rackspacecloud.com/v2.0/
     export RS_API_KEY=<secrets>
 
 You can get your API key by logging into the `Cloud Control panel`_ and clicking
 on *account -> account settings* and clicking "show" next to "API Key". Be careful;
 this key is special. Don't share it! [#]_ [#]_
 
+Advanced Configuration Values
+-----------------------------
+
+Identity Endpoint
+^^^^^^^^^^^^^^^^^
+
+If you require pointing to a custom Cloud Identity endpoint; you can set the
+following environment variable:
+
+* RS_AUTH_URL (https://identity.api.rackspacecloud.com/v2.0)
+
+For example::
+
+    export RS_AUTH_URL=https://identity.api.rackspacecloud.com/v2.0
 
 .. [#] **No, seriously** - don't share it, don't check it into source control, the API
       gives anyone who has it god-like powers. We've accidentally shared it in the
