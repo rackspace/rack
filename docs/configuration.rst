@@ -42,7 +42,14 @@ You can now add it to your path with::
 Windows
 ^^^^^^^
 
-.. todo:: If you know how to do this on windows, pull request welcome I got nothing.
+After downloading the binary on Windows, you can immediately run it.
+
+We recommend that you rename the executable to ``rack.exe``, copy it to a location outside of your Downloads folder (e.g. C:\\tools) and add that location to your PATH. You must open a new command prompt after modifying the PATH variable.
+
+1. Create a new directory for command line tools, if you don't already have one, e.g. C:\\tools.
+2. Copy rack-windows-amd64.exe to that directory and rename it to rack.exe.
+3. Add the directory to your user's PATH environment variable, e.g. ``setx path "%path%;C:\tools"`` or press the Windows key, type "set env", select "Edit environment variables for your account", select the PATH user variable and append ";C:\\tools" to the value and save your changes.
+4. Open a new command prompt after modifying the PATH variable.
 
 
 Configuration
@@ -62,6 +69,12 @@ So, for example on OSX and Linux; you would type::
     export RS_REGION_NAME=IAD
     export RS_USERNAME=<your rackspace username>
     export RS_API_KEY=<secrets>
+
+On Windows you would type::
+
+    set RS_REGION_NAME=IAD
+    set RS_USERNAME=<your rackspace username>
+    set RS_API_KEY=<secrets>
 
 You can get your API key by logging into the `Cloud Control panel`_ and clicking
 on *account -> account settings* and clicking "show" next to "API Key". Be careful;
