@@ -29,8 +29,7 @@ executable by typing::
 
     chmod a+x /path/to/rack
 
-We also recommend you rename or symbolically link it on these platforms to the
-``rack`` name::
+We also recommend you move or symbolically link it on these platforms to `/usr/local/bin`::
 
     mkdir -p /usr/local/bin/
     ln -s /path/to/rack /usr/local/bin/rack
