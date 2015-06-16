@@ -15,7 +15,7 @@ import (
 var resize = cli.Command{
 	Name:        "resize",
 	Usage:       util.Usage(commandPrefix, "resize", strings.Join([]string{util.IDOrNameUsage("instance"), "--flavorID <flavorID>"}, " ")),
-	Description: "Rebuilds an existing server",
+	Description: "Resizes an existing server",
 	Action:      commandResize,
 	Flags:       util.CommandFlags(flagsResize, keysResize),
 	BashComplete: func(c *cli.Context) {
