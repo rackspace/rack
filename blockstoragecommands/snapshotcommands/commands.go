@@ -13,3 +13,5 @@ func Get() []cli.Command {
 		update,
 	}
 }
+
+var serviceClientType = "blockstorage"
