@@ -2,7 +2,6 @@ package imagecommands
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
@@ -15,7 +14,7 @@ import (
 
 var list = cli.Command{
 	Name:        "list",
-	Usage:       fmt.Sprintf("%s %s list [flags]", util.Name, commandPrefix),
+	Usage:       util.Usage(commandPrefix, "list", util.IDOrNameUsage("image")),
 	Description: "Lists images",
 	Action:      commandList,
 	Flags:       util.CommandFlags(flagsList, keysList),
@@ -36,11 +35,11 @@ func flagsList() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "marker",
-			Usage: "Start listing flavors at this flavor ID.",
+			Usage: "Start listing images at this image ID.",
 		},
 		cli.IntFlag{
 			Name:  "limit",
-			Usage: "Only return this many flavors at most.",
+			Usage: "Only return this many images at most.",
 		},
 	}
 }
@@ -48,8 +47,26 @@ func flagsList() []cli.Flag {
 var keysList = []string{"ID", "Name", "Status", "MinDisk", "MinRAM"}
 
 func commandList(c *cli.Context) {
-	util.CheckArgNum(c, 0)
-	client := auth.NewClient("compute")
+	var err error
+	outputParams := &output.Params{
+		Context: c,
+		Keys:    keysList,
+	}
+	err = util.CheckArgNum(c, 0)
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+
+	outputParams.ServiceClientType = serviceClientType
+	client, err := auth.NewClient(c, outputParams.ServiceClientType)
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+
 	opts := osImages.ListOpts{
 		Name:   c.String("name"),
 		Status: c.String("status"),
@@ -57,14 +74,17 @@ func commandList(c *cli.Context) {
 		Limit:  c.Int("limit"),
 	}
 	allPages, err := images.ListDetail(client, opts).AllPages()
+	outputParams.ServiceClient = client
 	if err != nil {
-		fmt.Printf("Error listing images: %s\n", err)
-		os.Exit(1)
+		outputParams.Err = fmt.Errorf("Error listing images: %s\n", err)
+		output.Print(outputParams)
+		return
 	}
-	o, err := images.ExtractImages(allPages)
+	o, err := osImages.ExtractImages(allPages)
 	if err != nil {
-		fmt.Printf("Error listing images: %s\n", err)
-		os.Exit(1)
+		outputParams.Err = fmt.Errorf("Error listing images: %s\n", err)
+		output.Print(outputParams)
+		return
 	}
 
 	f := func() interface{} {
@@ -74,5 +94,6 @@ func commandList(c *cli.Context) {
 		}
 		return m
 	}
-	output.Print(c, &f, keysList)
+	outputParams.F = &f
+	output.Print(outputParams)
 }

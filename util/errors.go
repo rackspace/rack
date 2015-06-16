@@ -2,20 +2,17 @@ package util
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/codegangsta/cli"
 )
 
-// PrintError is used for printing information when an error is encountered.
-func PrintError(c *cli.Context, err error) {
-	w := c.App.Writer
-	switch err.(type) {
-	case ErrMissingFlag, ErrFlagFormatting:
-		fmt.Fprintf(w, "%s", err.Error())
-		fmt.Fprintf(w, "Usage: %s\n", c.Command.Usage)
+// Error is used for printing information when an error is encountered.
+func Error(c *cli.Context, e error) error {
+	switch e.(type) {
+	case ErrMissingFlag, ErrFlagFormatting, ErrArgs:
+		return fmt.Errorf("%s\nUsage: %s\n", e.Error(), c.Command.Usage)
 	}
-	os.Exit(1)
+	return fmt.Errorf("%s\n", e)
 }
 
 // ErrMissingFlagPrefix is the prefix for when a required flag is missing.
@@ -40,4 +37,14 @@ type ErrFlagFormatting struct {
 
 func (e ErrFlagFormatting) Error() string {
 	return fmt.Sprintf("%s %s\n", ErrFlagFormattingPrefix, e.Msg)
+}
+
+var ErrArgsFlagPrefix = "Argument error:"
+
+type ErrArgs struct {
+	Msg string
+}
+
+func (e ErrArgs) Error() string {
+	return fmt.Sprintf("%s %s\n", ErrArgsFlagPrefix, e.Msg)
 }

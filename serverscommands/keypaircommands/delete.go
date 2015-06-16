@@ -2,17 +2,17 @@ package keypaircommands
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/auth"
+	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs"
 )
 
 var remove = cli.Command{
 	Name:        "delete",
-	Usage:       fmt.Sprintf("%s %s delete [--name <keypairName>] [flags]", util.Name, commandPrefix),
+	Usage:       util.Usage(commandPrefix, "delete", "--name <keypairName>"),
 	Description: "Deletes a keypair",
 	Action:      commandDelete,
 	Flags:       util.CommandFlags(flagsDelete, keysDelete),
@@ -33,17 +33,43 @@ func flagsDelete() []cli.Flag {
 var keysDelete = []string{}
 
 func commandDelete(c *cli.Context) {
-	util.CheckArgNum(c, 0)
-	if !c.IsSet("name") {
-		util.PrintError(c, util.ErrMissingFlag{
-			Msg: "--name is required.",
-		})
+	var err error
+	outputParams := &output.Params{
+		Context: c,
+		Keys:    keysGet,
 	}
-	keypairName := c.String("name")
-	client := auth.NewClient("compute")
-	err := keypairs.Delete(client, keypairName).ExtractErr()
+	err = util.CheckArgNum(c, 0)
 	if err != nil {
-		fmt.Printf("Error deleting keypair [%s]: %s\n", keypairName, err)
-		os.Exit(1)
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
 	}
+	err = util.CheckFlagsSet(c, []string{"name"})
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+
+	outputParams.ServiceClientType = serviceClientType
+	client, err := auth.NewClient(c, outputParams.ServiceClientType)
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+
+	keypairName := c.String("name")
+	err = keypairs.Delete(client, keypairName).ExtractErr()
+	outputParams.ServiceClient = client
+	if err != nil {
+		outputParams.Err = fmt.Errorf("Error deleting keypair [%s]: %s\n", keypairName, err)
+		output.Print(outputParams)
+		return
+	}
+	f := func() interface{} {
+		return fmt.Sprintf("Successfully deleted keypair [%s]", keypairName)
+	}
+	outputParams.F = &f
+	output.Print(outputParams)
 }

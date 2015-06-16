@@ -3,7 +3,6 @@ package instancecommands
 import (
 	"fmt"
 	"io/ioutil"
-	"os"
 	"strings"
 
 	"github.com/codegangsta/cli"
@@ -16,7 +15,7 @@ import (
 
 var create = cli.Command{
 	Name:        "create",
-	Usage:       fmt.Sprintf("%s %s create [--name <serverName>] [optional flags]", util.Name, commandPrefix),
+	Usage:       util.Usage(commandPrefix, "create", "--name <serverName>"),
 	Description: "Creates a new server",
 	Action:      commandCreate,
 	Flags:       util.CommandFlags(flagsCreate, keysCreate),
@@ -77,16 +76,27 @@ func flagsCreate() []cli.Flag {
 var keysCreate = []string{"ID", "AdminPass"}
 
 func commandCreate(c *cli.Context) {
-	util.CheckArgNum(c, 0)
-
-	if !c.IsSet("name") {
-		util.PrintError(c, util.ErrMissingFlag{
-			Msg: "--name is required.",
-		})
+	var err error
+	outputParams := &output.Params{
+		Context: c,
+		Keys:    keysCreate,
 	}
+	err = util.CheckArgNum(c, 0)
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+	err = util.CheckFlagsSet(c, []string{"name"})
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+	serverName := c.String("name")
 
 	opts := &servers.CreateOpts{
-		Name:           c.String("name"),
+		Name:           serverName,
 		ImageRef:       c.String("imageRef"),
 		ImageName:      c.String("imageName"),
 		FlavorRef:      c.String("flavorRef"),
@@ -118,18 +128,33 @@ func commandCreate(c *cli.Context) {
 	}
 
 	if c.IsSet("metadata") {
-		opts.Metadata = util.CheckKVFlag(c, "metadata")
+		opts.Metadata, err = util.CheckKVFlag(c, "metadata")
+		if err != nil {
+			outputParams.Err = err
+			output.Print(outputParams)
+			return
+		}
 	}
 
-	client := auth.NewClient("compute")
-	o, err := servers.Create(client, opts).Extract()
+	outputParams.ServiceClientType = serviceClientType
+	client, err := auth.NewClient(c, outputParams.ServiceClientType)
 	if err != nil {
-		fmt.Printf("Error creating server: %s\n", err)
-		os.Exit(1)
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+
+	o, err := servers.Create(client, opts).Extract()
+	outputParams.ServiceClient = client
+	if err != nil {
+		outputParams.Err = fmt.Errorf("Error creating server (%s): %s\n", serverName, err)
+		output.Print(outputParams)
+		return
 	}
 
 	f := func() interface{} {
 		return serverSingle(o)
 	}
-	output.Print(c, &f, keysCreate)
+	outputParams.F = &f
+	output.Print(outputParams)
 }

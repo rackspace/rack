@@ -2,7 +2,7 @@ package instancecommands
 
 import (
 	"fmt"
-	"os"
+	"strings"
 
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/auth"
@@ -14,7 +14,7 @@ import (
 
 var rebuild = cli.Command{
 	Name:        "rebuild",
-	Usage:       fmt.Sprintf("%s %s rebuild %s [--imageID <imageID>] [--adminPass <adminPass>] [optional flags]", util.Name, commandPrefix, idOrNameUsage),
+	Usage:       util.Usage(commandPrefix, "rebuild", strings.Join([]string{util.IDOrNameUsage("instance"), "--imageID <imageID>", "--adminPass <adminPass>"}, " ")),
 	Description: "Rebuilds an existing server",
 	Action:      commandRebuild,
 	Flags:       util.CommandFlags(flagsRebuild, keysGet),
@@ -50,45 +50,68 @@ func flagsRebuild() []cli.Flag {
 			Usage: "[optional] A comma-separated string a key=value pairs.",
 		},
 	}
-	return append(cf, idAndNameFlags...)
+	return append(cf, util.IDAndNameFlags...)
 }
 
 func commandRebuild(c *cli.Context) {
-	util.CheckArgNum(c, 0)
-
-	if !c.IsSet("imageID") {
-		util.PrintError(c, util.ErrMissingFlag{
-			Msg: "--imageID is required.",
-		})
+	var err error
+	outputParams := &output.Params{
+		Context: c,
+		Keys:    keysGet,
 	}
-
-	if !c.IsSet("adminPass") {
-		util.PrintError(c, util.ErrMissingFlag{
-			Msg: "--adminPass is required.",
-		})
+	err = util.CheckArgNum(c, 0)
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
 	}
+	err = util.CheckFlagsSet(c, []string{"imageID", "adminPass"})
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+	imageID := c.String("imageID")
 
 	opts := osServers.RebuildOpts{
-		ImageID:    c.String("imageID"),
+		ImageID:    imageID,
 		AdminPass:  c.String("adminPass"),
 		AccessIPv4: c.String("accessIPv4"),
 		AccessIPv6: c.String("accessIPv6"),
 	}
 
 	if c.IsSet("metadata") {
-		opts.Metadata = util.CheckKVFlag(c, "metadata")
+		opts.Metadata, err = util.CheckKVFlag(c, "metadata")
+		if err != nil {
+			outputParams.Err = err
+			output.Print(outputParams)
+			return
+		}
 	}
 
-	client := auth.NewClient("compute")
-	serverID := idOrName(c, client)
+	outputParams.ServiceClientType = serviceClientType
+	client, err := auth.NewClient(c, outputParams.ServiceClientType)
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+
+	serverID, err := util.IDOrName(c, client, osServers.IDFromName)
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
 
 	if c.IsSet("rename") {
 		opts.Name = c.String("rename")
 	} else if c.IsSet("id") { // Must get the name from compute by ID
 		serverResult, err := servers.Get(client, serverID).Extract()
 		if err != nil {
-			fmt.Printf("Error retrieving server (%s) for rebuild: %s\n", serverID, err)
-			os.Exit(1)
+			outputParams.Err = fmt.Errorf("Error retrieving instance [%s] for rebuild: %s\n", serverID, err)
+			output.Print(outputParams)
+			return
 		}
 		opts.Name = serverResult.Name
 	} else if c.IsSet("name") {
@@ -97,13 +120,16 @@ func commandRebuild(c *cli.Context) {
 	}
 
 	o, err := servers.Rebuild(client, serverID, opts).Extract()
+	outputParams.ServiceClient = client
 	if err != nil {
-		fmt.Printf("Error rebuilding server (%s): %s\n", serverID, err)
-		os.Exit(1)
+		outputParams.Err = fmt.Errorf("Error rebuilding instance [%s] with image [%s]: %s\n", serverID, imageID, err)
+		output.Print(outputParams)
+		return
 	}
 
 	f := func() interface{} {
 		return serverSingle(o)
 	}
-	output.Print(c, &f, keysGet)
+	outputParams.F = &f
+	output.Print(outputParams)
 }
