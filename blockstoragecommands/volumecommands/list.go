@@ -55,7 +55,6 @@ func commandList(c *cli.Context) {
 		fmt.Printf("Error listing volumes: %s\n", err)
 		os.Exit(1)
 	}
-
 	f := func() interface{} {
 		m := make([]map[string]interface{}, len(o))
 		for j, volume := range o {
