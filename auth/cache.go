@@ -16,6 +16,7 @@ import (
 // Cache represents a place to store user authentication credentials.
 type Cache struct {
 	items map[string]CacheItem
+	os.File
 	sync.RWMutex
 }
 
@@ -55,13 +56,13 @@ func (cache *Cache) all() error {
 		return err
 	}
 	cache.RLock()
+	defer cache.RUnlock()
 	f, _ := os.Open(filename)
 	defer f.Close()
 
 	// gob is used instead of JSON because Go can't handle marshalling an
 	// http.Client to a JSON object.
 	err = gob.NewDecoder(f).Decode(&cache.items)
-	cache.RUnlock()
 	if err != nil {
 		if err == io.EOF {
 			cache.items = make(map[string]CacheItem)
@@ -101,6 +102,7 @@ func (cache *Cache) SetValue(cacheKey string, cacheValue *CacheItem) error {
 		return err
 	}
 	cache.Lock()
+	defer cache.Unlock()
 	f, err := os.Create(filename)
 	if err != nil {
 		return fmt.Errorf("Error setting cache value: %s", err)
@@ -108,7 +110,6 @@ func (cache *Cache) SetValue(cacheKey string, cacheValue *CacheItem) error {
 	defer f.Close()
 	// write cache to file
 	err = gob.NewEncoder(f).Encode(cache.items)
-	cache.Unlock()
 	if err != nil {
 		return fmt.Errorf("Error setting cache value: %s", err)
 	}
