@@ -45,7 +45,8 @@ func cacheFile() (string, error) {
 		return filepath, nil
 	}
 	// create the cache file if it doesn't already exist
-	_, err = os.Create(filepath)
+	f, err := os.Create(filepath)
+	defer f.Close()
 	return filepath, err
 }
 
