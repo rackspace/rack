@@ -3,9 +3,9 @@ package main
 import (
 	"os"
 
-	"github.com/jrperritt/rack/serverscommands"
-
 	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/blockstoragecommands"
+	"github.com/jrperritt/rack/serverscommands"
 )
 
 func main() {
@@ -18,6 +18,11 @@ func main() {
 			Name:        "servers",
 			Usage:       "Used for the Servers service",
 			Subcommands: serverscommands.Get(),
+		},
+		{
+			Name:        "blockstorage",
+			Usage:       "Used for the BlockStorage service",
+			Subcommands: blockstoragecommands.Get(),
 		},
 	}
 	app.Flags = globalFlags()
