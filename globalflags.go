@@ -49,6 +49,10 @@ func authFlags() []cli.Flag {
 			Name:  "profile",
 			Usage: "The config file profile to use for authentication.",
 		},
+		cli.BoolFlag{
+			Name:  "no-cache",
+			Usage: "Don't get or set authentication credentials in the rack cache.",
+		},
 	}
 }
 

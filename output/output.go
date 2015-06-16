@@ -97,8 +97,9 @@ type Params struct {
 func Print(o *Params) {
 	c := o.Context
 	serviceClient := o.ServiceClient
-	// if o.ServiceClient is nil, the HTTP request for the command didn't get sent
-	if o.ServiceClient != nil {
+	// if o.ServiceClient is nil, the HTTP request for the command didn't get sent.
+	// don't set cache if the `no-cache` flag is provided
+	if o.ServiceClient != nil && !c.GlobalIsSet("no-cache") {
 		newCacheValue := &auth.CacheItem{
 			TokenID:         serviceClient.TokenID,
 			ServiceEndpoint: serviceClient.Endpoint,

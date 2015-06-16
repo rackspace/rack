@@ -30,6 +30,10 @@ func NewClient(c *cli.Context, serviceType string) (*gophercloud.ServiceClient, 
 		ao.IdentityEndpoint = rackspace.RackspaceUSIdentity
 	}
 
+	if c.GlobalIsSet("no-cache") {
+		return authFromScratch(ao, region, serviceType)
+	}
+
 	// form the cache key
 	cacheKey := CacheKey(ao, region, serviceType)
 	// initialize cache
@@ -51,39 +55,43 @@ func NewClient(c *cli.Context, serviceType string) (*gophercloud.ServiceClient, 
 			}, nil
 		}
 	} else {
-		pc, err := rackspace.AuthenticatedClient(ao)
-		if err != nil {
-			return nil, fmt.Errorf("Error creating ProviderClient: %s\n", err)
-		}
-		var sc *gophercloud.ServiceClient
-		switch serviceType {
-		case "compute":
-			sc, err = rackspace.NewComputeV2(pc, gophercloud.EndpointOpts{
-				Region: region,
-			})
-			break
-		case "blockstorage":
-			sc, err = rackspace.NewBlockStorageV1(pc, gophercloud.EndpointOpts{
-				Region: region,
-			})
-			break
-		case "networking":
-			sc, err = rackspace.NewNetworkV2(pc, gophercloud.EndpointOpts{
-				Region: region,
-			})
-			break
-		}
-		if err != nil {
-			return nil, fmt.Errorf("Error creating ServiceClient: %s\n", err)
-		}
-		if sc == nil {
-			return nil, fmt.Errorf("Unable to create service client: Unknown service type: %s", serviceType)
-		}
-		sc.UserAgent.Prepend("rack/" + util.Version)
-		return sc, nil
+		return authFromScratch(ao, region, serviceType)
 	}
 
 	return nil, nil
+}
+
+func authFromScratch(ao gophercloud.AuthOptions, region, serviceType string) (*gophercloud.ServiceClient, error) {
+	pc, err := rackspace.AuthenticatedClient(ao)
+	if err != nil {
+		return nil, fmt.Errorf("Error creating ProviderClient: %s\n", err)
+	}
+	var sc *gophercloud.ServiceClient
+	switch serviceType {
+	case "compute":
+		sc, err = rackspace.NewComputeV2(pc, gophercloud.EndpointOpts{
+			Region: region,
+		})
+		break
+	case "blockstorage":
+		sc, err = rackspace.NewBlockStorageV1(pc, gophercloud.EndpointOpts{
+			Region: region,
+		})
+		break
+	case "networking":
+		sc, err = rackspace.NewNetworkV2(pc, gophercloud.EndpointOpts{
+			Region: region,
+		})
+		break
+	}
+	if err != nil {
+		return nil, fmt.Errorf("Error creating ServiceClient: %s\n", err)
+	}
+	if sc == nil {
+		return nil, fmt.Errorf("Unable to create service client: Unknown service type: %s", serviceType)
+	}
+	sc.UserAgent.Prepend("rack/" + util.Version)
+	return sc, nil
 }
 
 // Credentials determines the appropriate authentication method for the user.
