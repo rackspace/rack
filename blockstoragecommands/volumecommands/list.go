@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
@@ -20,7 +19,7 @@ var list = cli.Command{
 	Action:      commandList,
 }
 
-var keysList = []string{"ID", "DisplayName", "DisplayDescription", "Size", "VolumeType", "SnapshotID", "Attachments", "CreatedAt"}
+var keysList = []string{"ID", "Name", "Description", "Size", "Volume Type", "Snapshot ID", "Attachments", "Created"}
 
 func commandList(c *cli.Context) {
 	var err error
@@ -58,7 +57,7 @@ func commandList(c *cli.Context) {
 	f := func() interface{} {
 		m := make([]map[string]interface{}, len(o))
 		for j, volume := range o {
-			m[j] = structs.Map(&volume)
+			m[j] = volumeSingle(&volume)
 		}
 		return m
 	}
