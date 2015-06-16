@@ -86,8 +86,12 @@ func (cache *Cache) SetValue(cacheKey string, cacheValue *CacheItem) error {
 	if err != nil {
 		return err
 	}
-	// set cache value for cacheKey
-	cache.items[cacheKey] = *cacheValue
+	if cacheValue == nil {
+		delete(cache.items, cacheKey)
+	} else {
+		// set cache value for cacheKey
+		cache.items[cacheKey] = *cacheValue
+	}
 	filename, err := cacheFile()
 	if err != nil {
 		return err
