@@ -79,8 +79,7 @@ func (cache *Cache) all() error {
 func (cache *Cache) Value(cacheKey string) (*CacheItem, error) {
 	err := cache.all()
 	if err != nil {
-		fmt.Printf("Error getting cache value: %s", err)
-		return nil, err
+		return nil, fmt.Errorf("Error getting cache value: %s", err)
 	}
 	creds := cache.items[cacheKey]
 	if creds.TokenID == "" {

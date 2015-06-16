@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"fmt"
 	"path"
 
 	"github.com/codegangsta/cli"
@@ -12,13 +11,13 @@ import (
 func configfile(c *cli.Context, have map[string]string, need map[string]string) {
 	dir, err := util.RackDir()
 	if err != nil {
-		fmt.Fprint(c.App.Writer, err)
+		//fmt.Printf("Error reading config file: %s\n", err)
 		return
 	}
 	f := path.Join(dir, "config")
 	cfg, err := ini.Load(f)
 	if err != nil {
-		fmt.Printf("Error reading config file: %s\n", err)
+		//fmt.Printf("Error reading config file: %s\n", err)
 		return
 	}
 	cfg.BlockMode = false
@@ -28,7 +27,7 @@ func configfile(c *cli.Context, have map[string]string, need map[string]string) 
 	}
 	section, err := cfg.GetSection(profile)
 	if err != nil {
-		fmt.Printf("Error reading config file: %s\n", err)
+		//fmt.Printf("Error reading config file: %s\n", err)
 		return
 	}
 
