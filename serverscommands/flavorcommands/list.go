@@ -69,8 +69,8 @@ func commandList(c *cli.Context) {
 	}
 
 	opts := flavors.ListOpts{
-		MinDisk: c.Int("minDisk"),
-		MinRAM:  c.Int("minRam"),
+		MinDisk: c.Int("min-disk"),
+		MinRAM:  c.Int("min-ram"),
 		Marker:  c.String("marker"),
 		Limit:   c.Int("limit"),
 	}
