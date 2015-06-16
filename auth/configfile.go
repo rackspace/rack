@@ -1,34 +1,41 @@
 package auth
 
 import (
-	"errors"
 	"fmt"
-	"os"
 	"path"
 
 	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/util"
 	"gopkg.in/ini.v1"
 )
 
 func configfile(c *cli.Context, have map[string]string, need map[string]string) {
-	dir, err := rackDir()
+	dir, err := util.RackDir()
 	if err != nil {
 		fmt.Fprint(c.App.Writer, err)
 		return
 	}
-	f := path.Join(dir, "creds")
+	f := path.Join(dir, "config")
 	cfg, err := ini.Load(f)
-	fmt.Printf("cfg: %+v\n", cfg)
-}
-
-func rackDir() (string, error) {
-	homeDir := os.Getenv("HOME") // *nix
-	if homeDir == "" {           // Windows
-		homeDir = os.Getenv("USERPROFILE")
+	if err != nil {
+		fmt.Printf("Error reading config file: %s\n", err)
+		return
 	}
-	if homeDir == "" {
-		return "", errors.New("User home directory not found.")
+	cfg.BlockMode = false
+	var profile string
+	if c.GlobalIsSet("profile") {
+		profile = c.GlobalString("profile")
+	}
+	section, err := cfg.GetSection(profile)
+	if err != nil {
+		fmt.Printf("Error reading config file: %s\n", err)
+		return
 	}
 
-	return path.Join(homeDir, ".rack"), nil
+	for opt := range need {
+		if val := section.Key(opt).String(); val != "" {
+			have[opt] = val
+			delete(need, opt)
+		}
+	}
 }

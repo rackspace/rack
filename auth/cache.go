@@ -1,78 +1,116 @@
 package auth
 
 import (
-	"encoding/json"
+	"encoding/gob"
 	"fmt"
-	"io/ioutil"
+	"io"
+	"net/http"
+	"os"
 	"path"
+	"sync"
 
+	"github.com/jrperritt/rack/util"
 	"github.com/rackspace/gophercloud"
 )
 
-// Creds are values that are cached to prevent re-authenticating for
-// every CLI command.
-type Creds struct {
-	Ao     gophercloud.AuthOptions
-	Region string
+// Cache represents a place to store user authentication credentials.
+type Cache struct {
+	items map[string]CacheItem
+	sync.RWMutex
 }
 
-// GetCacheValue returns the cached value for the given key if it exists. It
-func GetCacheValue(cacheKey string) (map[string]interface{}, error) {
-	dir, err := rackDir()
-	if err != nil {
-		return nil, fmt.Errorf("Error reading from cache: %s", err)
-	}
-	f := path.Join(dir, "cache")
-	cacheRaw, err := ioutil.ReadFile(f)
-	if err != nil {
-		return nil, fmt.Errorf("Error reading from cache: %s", err)
-	}
-	var m map[string]map[string]interface{}
-	err = json.Unmarshal(cacheRaw, m)
-	if err != nil {
-		return nil, fmt.Errorf("Error reading from cache: %s", err)
-	}
-	return m[cacheKey], nil
+// CacheItem represents a single item in the cache.
+type CacheItem struct {
+	IdentityBase     string
+	IdentityEndpoint string
+	TokenID          string
+	HTTPClient       http.Client
+	ServiceEndpoint  string
 }
 
-// GetCacheValueCreds returns the user's cached credentials.
-func GetCacheValueCreds(cacheKey string) (*Creds, error) {
-	m, err := GetCacheValue(cacheKey)
+// CacheKey returns the cache key formed from the user's authentication credentials.
+func CacheKey(ao gophercloud.AuthOptions, region string, serviceClientType string) string {
+	return fmt.Sprintf("%s,%s,%s,%s", ao.Username, ao.IdentityEndpoint, region, serviceClientType)
+}
+
+func cacheFile() (string, error) {
+	dir, err := util.RackDir()
 	if err != nil {
+		return "", fmt.Errorf("Error reading from cache: %s", err)
+	}
+	filepath := path.Join(dir, "cache")
+	// check if the cache file exists
+	if _, err := os.Stat(filepath); err == nil {
+		return filepath, nil
+	}
+	// create the cache file if it doesn't already exist
+	_, err = os.Create(filepath)
+	return filepath, err
+}
+
+// all returns all the values in the cache
+func (cache *Cache) all() error {
+	filename, err := cacheFile()
+	if err != nil {
+		return err
+	}
+	cache.RLock()
+	f, _ := os.Open(filename)
+	defer f.Close()
+
+	// gob is used instead of JSON because Go can't handle marshalling an
+	// http.Client to a JSON object.
+	err = gob.NewDecoder(f).Decode(&cache.items)
+	cache.RUnlock()
+	if err != nil {
+		if err == io.EOF {
+			cache.items = make(map[string]CacheItem)
+			return nil
+		}
+		return err
+	}
+
+	return nil
+}
+
+// Value returns the cached value for the given key if it exists.
+func (cache *Cache) Value(cacheKey string) (*CacheItem, error) {
+	err := cache.all()
+	if err != nil {
+		fmt.Printf("Error getting cache value: %s", err)
 		return nil, err
 	}
-	if m != nil {
-		if raw := m["creds"]; raw != nil {
-			if cc, ok := raw.(Creds); ok {
-				return &cc, nil
-			}
-		}
+	creds := cache.items[cacheKey]
+	if creds.TokenID == "" {
+		return nil, nil
 	}
-	return nil, nil
+	return &creds, nil
 }
 
-// SetCacheValueCreds writes the user's current credentials to the cache.
-func SetCacheValueCreds(cacheKey, cacheValue *Creds) {
-
-}
-
-// GetCacheValueProviderClient returns the user's cached provider client.
-func GetCacheValueProviderClient(cacheKey string) (*gophercloud.ProviderClient, error) {
-	m, err := GetCacheValue(cacheKey)
+// SetValue writes the user's current provider client to the cache.
+func (cache *Cache) SetValue(cacheKey string, cacheValue *CacheItem) error {
+	// get cache items
+	err := cache.all()
 	if err != nil {
-		return nil, err
+		return err
 	}
-	if m != nil {
-		if raw := m["pc"]; raw != nil {
-			if cc, ok := raw.(gophercloud.ProviderClient); ok {
-				return &cc, nil
-			}
-		}
+	// set cache value for cacheKey
+	cache.items[cacheKey] = *cacheValue
+	filename, err := cacheFile()
+	if err != nil {
+		return err
 	}
-	return nil, nil
-}
-
-// SetCacheValueProviderClient writes the user's current provider client to the cache.
-func SetCacheValueProviderClient(cacheKey, cacheValue *gophercloud.ProviderClient) {
-
+	cache.Lock()
+	f, err := os.Create(filename)
+	if err != nil {
+		return fmt.Errorf("Error setting cache value: %s", err)
+	}
+	defer f.Close()
+	// write cache to file
+	err = gob.NewEncoder(f).Encode(cache.items)
+	cache.Unlock()
+	if err != nil {
+		return fmt.Errorf("Error setting cache value: %s", err)
+	}
+	return nil
 }
