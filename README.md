@@ -27,7 +27,9 @@ You can set auth parameters on the command-line using global flags:
 `rack --username user1 --apikey 123456789 --region DFW servers instance list`
 
 ### Config file
-You can create a config file in `~/.rack/config`:
+You can create a config file in ` ~/.rack/config`:
+
+```
 [DEFAULT]
 username=user1
 apikey=123456789
@@ -37,7 +39,7 @@ region=DFW
 username=user2
 apikey=987654321
 region=IAD
-
+```
 
 If you're using the default profile, you can call a command without additional flags:
 ```sh
