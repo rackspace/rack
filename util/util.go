@@ -72,6 +72,9 @@ func CheckFlagsSet(c *cli.Context, flagNames []string) error {
 // whether he or she passed an `id` or a `name` flag.
 func IDOrName(c *cli.Context, client *gophercloud.ServiceClient, idFromName func(*gophercloud.ServiceClient, string) (string, error)) (string, error) {
 	if c.IsSet("id") {
+		if c.IsSet("name") {
+			return "", fmt.Errorf("Only one of either --id or --name may be provided.")
+		}
 		return c.String("id"), nil
 	} else if c.IsSet("name") {
 		name := c.String("name")
