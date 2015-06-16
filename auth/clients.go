@@ -30,8 +30,6 @@ func NewClient(c *cli.Context, t string) (*gophercloud.ServiceClient, error) {
 		ao.IdentityEndpoint = rackspace.RackspaceUSIdentity
 	}
 
-	var sc *gophercloud.ServiceClient
-
 	// form the cache key
 	cacheKey := CacheKey(ao, region, t)
 	// initialize cache
@@ -40,11 +38,24 @@ func NewClient(c *cli.Context, t string) (*gophercloud.ServiceClient, error) {
 	creds, err := cache.Value(cacheKey)
 	// if there was an error accessing the cache or there was nothing in the cache,
 	// authenticate from scratch
-	if err != nil || creds == nil {
+	if err == nil && creds != nil {
+		// we successfully retrieved a value from the cache
+		pc, err := rackspace.NewClient(ao.IdentityEndpoint)
+		if err == nil {
+			pc.TokenID = creds.TokenID
+			pc.ReauthFunc = reauthFunc(pc, ao)
+			pc.UserAgent.Prepend("rack/" + util.Version)
+			return &gophercloud.ServiceClient{
+				ProviderClient: pc,
+				Endpoint:       creds.ServiceEndpoint,
+			}, nil
+		}
+	} else {
 		pc, err := rackspace.AuthenticatedClient(ao)
 		if err != nil {
 			return nil, fmt.Errorf("Error creating ProviderClient: %s\n", err)
 		}
+		var sc *gophercloud.ServiceClient
 		switch t {
 		case "compute":
 			sc, err = rackspace.NewComputeV2(pc, gophercloud.EndpointOpts{
@@ -65,25 +76,14 @@ func NewClient(c *cli.Context, t string) (*gophercloud.ServiceClient, error) {
 		if err != nil {
 			return nil, fmt.Errorf("Error creating ServiceClient: %s\n", err)
 		}
-	} else {
-		// we successfully retrieved a value from the cache
-		pc := &gophercloud.ProviderClient{
-			IdentityBase:     creds.IdentityBase,
-			IdentityEndpoint: creds.IdentityEndpoint,
-			TokenID:          creds.TokenID,
-			HTTPClient:       creds.HTTPClient,
+		if sc == nil {
+			return nil, fmt.Errorf("Unable to create service client: Unknown service type: %s", t)
 		}
-		pc.ReauthFunc = reauthFunc(pc, ao)
-		sc = &gophercloud.ServiceClient{
-			ProviderClient: pc,
-			Endpoint:       creds.ServiceEndpoint,
-		}
+		sc.UserAgent.Prepend("rack/" + util.Version)
+		return sc, nil
 	}
 
-	// set the user-agent
-	sc.UserAgent.Prepend("rack/" + util.Version)
-
-	return sc, nil
+	return nil, nil
 }
 
 // Credentials determines the appropriate authentication method for the user.

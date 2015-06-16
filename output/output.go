@@ -100,11 +100,8 @@ func Print(o *Params) {
 	// if o.ServiceClient is nil, the HTTP request for the command didn't get sent
 	if o.ServiceClient != nil {
 		newCacheValue := &auth.CacheItem{
-			IdentityBase:     serviceClient.IdentityBase,
-			IdentityEndpoint: serviceClient.IdentityEndpoint,
-			TokenID:          serviceClient.TokenID,
-			HTTPClient:       serviceClient.HTTPClient,
-			ServiceEndpoint:  serviceClient.Endpoint,
+			TokenID:         serviceClient.TokenID,
+			ServiceEndpoint: serviceClient.Endpoint,
 		}
 		// get auth credentials
 		ao, region := auth.Credentials(c)
