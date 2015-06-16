@@ -2,7 +2,6 @@ package instancecommands
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/auth"
@@ -14,7 +13,7 @@ import (
 
 var update = cli.Command{
 	Name:        "update",
-	Usage:       fmt.Sprintf("%s %s update %s [optional flags]", util.Name, commandPrefix, idOrNameUsage),
+	Usage:       util.Usage(commandPrefix, "update", util.IDOrNameUsage("instance")),
 	Description: "Updates an existing server",
 	Action:      commandUpdate,
 	Flags:       util.CommandFlags(flagsUpdate, keysUpdate),
@@ -38,28 +37,54 @@ func flagsUpdate() []cli.Flag {
 			Usage: "[optional] Update the server's IPv6 address",
 		},
 	}
-	return append(cf, idAndNameFlags...)
+	return append(cf, util.IDAndNameFlags...)
 }
 
 var keysUpdate = []string{"ID", "Name", "Public IPv4", "Public IPv6"}
 
 func commandUpdate(c *cli.Context) {
-	util.CheckArgNum(c, 0)
-	client := auth.NewClient("compute")
-	serverID := idOrName(c, client)
+	var err error
+	outputParams := &output.Params{
+		Context: c,
+		Keys:    keysUpdate,
+	}
+	err = util.CheckArgNum(c, 0)
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+
+	outputParams.ServiceClientType = serviceClientType
+	client, err := auth.NewClient(c, outputParams.ServiceClientType)
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+
+	serverID, err := util.IDOrName(c, client, osServers.IDFromName)
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
 	opts := &osServers.UpdateOpts{
 		Name:       c.String("newName"),
 		AccessIPv4: c.String("newIPv4"),
 		AccessIPv6: c.String("newIPv6"),
 	}
 	o, err := servers.Update(client, serverID, opts).Extract()
+	outputParams.ServiceClient = client
 	if err != nil {
-		fmt.Printf("Error updating server: %s\n", err)
-		os.Exit(1)
+		outputParams.Err = fmt.Errorf("Error updating instance [%s] : %s\n", serverID, err)
+		output.Print(outputParams)
+		return
 	}
 
 	f := func() interface{} {
 		return serverSingle(o)
 	}
-	output.Print(c, &f, keysUpdate)
+	outputParams.F = &f
+	output.Print(outputParams)
 }

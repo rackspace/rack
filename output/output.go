@@ -5,8 +5,26 @@ import (
 	"strings"
 
 	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/util"
+	"github.com/rackspace/gophercloud"
 )
+
+// Params are the variables that the `Print` function needs to finish processing
+// output from the command:
+// Context: used for getting the output format (json, csv, table) and fields to return,
+// F: a pointer to a function that return the data to be returned,
+// Keys: the available fields to return for the command,
+// ServiceClient: used for caching a user's authentication credentials,
+// Err: the error encountered while running the command, if any.
+type Params struct {
+	Context           *cli.Context
+	F                 *func() interface{}
+	Keys              []string
+	ServiceClient     *gophercloud.ServiceClient
+	ServiceClientType string
+	Err               error
+}
 
 // Print prints the results of the CLI command. This function is designed to centralize
 // printing command output and to accomodate the way the Rackspace API is designed.
@@ -76,9 +94,42 @@ import (
 //
 // keys) a slice of strings: this slice contains the header values to print out for
 // 		the tabular and csv formats.
-func Print(c *cli.Context, f *func() interface{}, keys []string) {
-	i := (*f)()
-	keys = limitFields(c, keys)
+func Print(o *Params) {
+	c := o.Context
+	serviceClient := o.ServiceClient
+	// if o.ServiceClient is nil, the HTTP request for the command didn't get sent.
+	// don't set cache if the `no-cache` flag is provided
+	if o.ServiceClient != nil && !c.GlobalIsSet("no-cache") {
+		var newCacheValue *auth.CacheItem
+		if o.Err == nil {
+			newCacheValue = &auth.CacheItem{
+				TokenID:         serviceClient.TokenID,
+				ServiceEndpoint: serviceClient.Endpoint,
+			}
+		}
+		// get auth credentials
+		ao, region := auth.Credentials(c)
+		// form the cache key
+		cacheKey := auth.CacheKey(ao, region, o.ServiceClientType)
+		// initialize the cache
+		cache := &auth.Cache{}
+		// set the cache value to the current values
+		_ = cache.SetValue(cacheKey, newCacheValue)
+	}
+
+	// limit the returned fields if any were given in the `fields` flag
+	keys := limitFields(c, o.Keys)
+
+	var i interface{}
+	// if an error occurred during the command, only return the error message
+	if o.Err != nil {
+		keys = []string{"error"}
+		i = map[string]interface{}{"error": o.Err.Error()}
+		// otherwise, get the data to return
+	} else {
+		i = (*o.F)()
+	}
+
 	w := c.App.Writer
 	if c.GlobalIsSet("json") {
 		switch i.(type) {

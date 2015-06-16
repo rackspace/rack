@@ -3,7 +3,6 @@ package keypaircommands
 import (
 	"fmt"
 	"io/ioutil"
-	"os"
 	"strings"
 
 	"github.com/codegangsta/cli"
@@ -17,7 +16,7 @@ import (
 
 var create = cli.Command{
 	Name:        "create",
-	Usage:       fmt.Sprintf("%s %s create <keypairName> [flags]", util.Name, commandPrefix),
+	Usage:       util.Usage(commandPrefix, "create", "--name <keypairName>"),
 	Description: "Creates a keypair",
 	Action:      commandCreate,
 	Flags:       util.CommandFlags(flagsCreate, keysCreate),
@@ -34,15 +33,43 @@ func flagsCreate() []cli.Flag {
 				"It may be the actual key or the file containing the key. If empty,",
 				"the key will be created for you and returned in the output."}, "\n\t"),
 		},
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "[required] The name of the keypair",
+		},
 	}
 }
 
 var keysCreate = []string{"Name", "Fingerprint", "PublicKey", "PrivateKey"}
 
 func commandCreate(c *cli.Context) {
-	util.CheckArgNum(c, 1)
-	keypairName := c.Args()[0]
-	client := auth.NewClient("compute")
+	var err error
+	outputParams := &output.Params{
+		Context: c,
+		Keys:    keysCreate,
+	}
+	err = util.CheckArgNum(c, 0)
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+	err = util.CheckFlagsSet(c, []string{"name"})
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+
+	outputParams.ServiceClientType = serviceClientType
+	client, err := auth.NewClient(c, outputParams.ServiceClientType)
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+
+	keypairName := c.String("name")
 	opts := osKeypairs.CreateOpts{
 		Name: keypairName,
 	}
@@ -58,12 +85,15 @@ func commandCreate(c *cli.Context) {
 	}
 
 	o, err := keypairs.Create(client, opts).Extract()
+	outputParams.ServiceClient = client
 	if err != nil {
-		fmt.Printf("Error creating keypair [%s]: %s\n", keypairName, err)
-		os.Exit(1)
+		outputParams.Err = fmt.Errorf("Error creating keypair [%s]: %s\n", keypairName, err)
+		output.Print(outputParams)
+		return
 	}
 	f := func() interface{} {
 		return structs.Map(o)
 	}
-	output.Print(c, &f, keysCreate)
+	outputParams.F = &f
+	output.Print(outputParams)
 }

@@ -2,7 +2,6 @@ package flavorcommands
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
@@ -15,7 +14,7 @@ import (
 
 var list = cli.Command{
 	Name:        "list",
-	Usage:       fmt.Sprintf("%s %s list [flags]", util.Name, commandPrefix),
+	Usage:       util.Usage(commandPrefix, "list", util.IDOrNameUsage("flavor")),
 	Description: "Lists flavors",
 	Action:      commandList,
 	Flags:       util.CommandFlags(flagsList, keysList),
@@ -49,8 +48,26 @@ func flagsList() []cli.Flag {
 var keysList = []string{"ID", "Name", "RAM", "Disk", "Swap", "VCPUs", "RxTxFactor"}
 
 func commandList(c *cli.Context) {
-	util.CheckArgNum(c, 0)
-	client := auth.NewClient("compute")
+	var err error
+	outputParams := &output.Params{
+		Context: c,
+		Keys:    keysList,
+	}
+	err = util.CheckArgNum(c, 0)
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+
+	outputParams.ServiceClientType = serviceClientType
+	client, err := auth.NewClient(c, outputParams.ServiceClientType)
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+
 	opts := flavors.ListOpts{
 		MinDisk: c.Int("minDisk"),
 		MinRAM:  c.Int("minRam"),
@@ -58,14 +75,17 @@ func commandList(c *cli.Context) {
 		Limit:   c.Int("limit"),
 	}
 	allPages, err := flavors.ListDetail(client, opts).AllPages()
+	outputParams.ServiceClient = client
 	if err != nil {
-		fmt.Printf("Error listing flavors: %s\n", err)
-		os.Exit(1)
+		outputParams.Err = fmt.Errorf("Error listing flavors: %s\n", err)
+		output.Print(outputParams)
+		return
 	}
 	o, err := osFlavors.ExtractFlavors(allPages)
 	if err != nil {
-		fmt.Printf("Error listing flavors: %s\n", err)
-		os.Exit(1)
+		outputParams.Err = fmt.Errorf("Error listing flavors: %s\n", err)
+		output.Print(outputParams)
+		return
 	}
 
 	f := func() interface{} {
@@ -75,5 +95,6 @@ func commandList(c *cli.Context) {
 		}
 		return m
 	}
-	output.Print(c, &f, keysList)
+	outputParams.F = &f
+	output.Print(outputParams)
 }

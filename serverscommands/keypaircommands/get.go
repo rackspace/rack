@@ -2,7 +2,6 @@ package keypaircommands
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
@@ -14,7 +13,7 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       fmt.Sprintf("%s [globals] %s get [--name <keypairName>] [flags]", util.Name, commandPrefix),
+	Usage:       util.Usage(commandPrefix, "get", "--name <keypairName>"),
 	Description: "Retreives a keypair",
 	Action:      commandGet,
 	Flags:       util.CommandFlags(flagsGet, keysGet),
@@ -35,18 +34,39 @@ func flagsGet() []cli.Flag {
 var keysGet = []string{"Name", "Fingerprint", "PublicKey", "UserID"}
 
 func commandGet(c *cli.Context) {
-	util.CheckArgNum(c, 0)
-	if !c.IsSet("name") {
-		util.PrintError(c, util.ErrMissingFlag{
-			Msg: "--name is required.",
-		})
+	var err error
+	outputParams := &output.Params{
+		Context: c,
+		Keys:    keysGet,
 	}
-	keypairName := c.String("name")
-	client := auth.NewClient("compute")
-	o, err := keypairs.Get(client, keypairName).Extract()
+	err = util.CheckArgNum(c, 0)
 	if err != nil {
-		fmt.Printf("Error retreiving keypair [%s]: %s\n", keypairName, err)
-		os.Exit(1)
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+	err = util.CheckFlagsSet(c, []string{"name"})
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+
+	outputParams.ServiceClientType = serviceClientType
+	client, err := auth.NewClient(c, outputParams.ServiceClientType)
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+
+	keypairName := c.String("name")
+	o, err := keypairs.Get(client, keypairName).Extract()
+	outputParams.ServiceClient = client
+	if err != nil {
+		outputParams.Err = fmt.Errorf("Error retreiving keypair [%s]: %s\n", keypairName, err)
+		output.Print(outputParams)
+		return
 	}
 
 	f := func() interface{} {
@@ -57,5 +77,6 @@ func commandGet(c *cli.Context) {
 		// Assume they want the key directly
 		return m["PublicKey"]
 	}
-	output.Print(c, &f, keysGet)
+	outputParams.F = &f
+	output.Print(outputParams)
 }

@@ -15,7 +15,7 @@ import (
 
 var list = cli.Command{
 	Name:        "list",
-	Usage:       fmt.Sprintf("%s %s list [flags]", util.Name, commandPrefix),
+	Usage:       util.Usage(commandPrefix, "list", ""),
 	Description: "Lists keypairs",
 	Action:      commandList,
 	Flags:       util.CommandFlags(flagsList, keysList),
@@ -31,9 +31,28 @@ func flagsList() []cli.Flag {
 var keysList = []string{"Name", "Fingerprint"}
 
 func commandList(c *cli.Context) {
-	util.CheckArgNum(c, 0)
-	client := auth.NewClient("compute")
+	var err error
+	outputParams := &output.Params{
+		Context: c,
+		Keys:    keysList,
+	}
+	err = util.CheckArgNum(c, 0)
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+
+	outputParams.ServiceClientType = serviceClientType
+	client, err := auth.NewClient(c, outputParams.ServiceClientType)
+	if err != nil {
+		outputParams.Err = err
+		output.Print(outputParams)
+		return
+	}
+
 	allPages, err := keypairs.List(client).AllPages()
+	outputParams.ServiceClient = client
 	if err != nil {
 		fmt.Printf("Error listing keypairs: %s\n", err)
 		os.Exit(1)
@@ -51,5 +70,6 @@ func commandList(c *cli.Context) {
 		}
 		return m
 	}
-	output.Print(c, &f, keysList)
+	outputParams.F = &f
+	output.Print(outputParams)
 }

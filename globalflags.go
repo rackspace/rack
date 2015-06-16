@@ -25,11 +25,43 @@ func outputFlags() []cli.Flag {
 	}
 }
 
+// authFlags are global flags (i.e. flags that all commands can use) that let
+// users specify authentication parameters.
+func authFlags() []cli.Flag {
+	return []cli.Flag{
+		cli.StringFlag{
+			Name:  "username",
+			Usage: "The username with which to authenticate.",
+		},
+		cli.StringFlag{
+			Name:  "apikey",
+			Usage: "The API key with which to authenticate.",
+		},
+		cli.StringFlag{
+			Name:  "authurl",
+			Usage: "The endpoint to which authenticate.",
+		},
+		cli.StringFlag{
+			Name:  "region",
+			Usage: "The region to which authenticate.",
+		},
+		cli.StringFlag{
+			Name:  "profile",
+			Usage: "The config file profile to use for authentication.",
+		},
+		cli.BoolFlag{
+			Name:  "no-cache",
+			Usage: "Don't get or set authentication credentials in the rack cache.",
+		},
+	}
+}
+
 // globalFlags returns the flags that can be used after `rack` in a command, such as
-// `--json`, `--csv`, and `--table`.
+// output flags and authentication flags.
 func globalFlags() []cli.Flag {
-	outputFlags := outputFlags()
-	return outputFlags
+	gFlags := outputFlags()
+	gFlags = append(gFlags, authFlags()...)
+	return gFlags
 }
 
 // completeGlobals returns the options for completing global flags.
