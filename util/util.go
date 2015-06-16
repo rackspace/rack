@@ -41,8 +41,9 @@ func RackDir() (string, error) {
 	if homeDir == "" {
 		return "", errors.New("User home directory not found.")
 	}
-
-	return path.Join(homeDir, ".rack"), nil
+	dirpath := path.Join(homeDir, ".rack")
+	err := os.MkdirAll(dirpath, 0644)
+	return dirpath, err
 }
 
 // CheckArgNum checks that the provided number of arguments has the same
