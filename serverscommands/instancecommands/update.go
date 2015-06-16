@@ -25,15 +25,15 @@ var update = cli.Command{
 func flagsUpdate() []cli.Flag {
 	cf := []cli.Flag{
 		cli.StringFlag{
-			Name:  "newName",
+			Name:  "new-name",
 			Usage: "[optional] Update the server's name",
 		},
 		cli.StringFlag{
-			Name:  "newIPv4",
+			Name:  "new-ipv4",
 			Usage: "[optional] Update the server's IPv4 address",
 		},
 		cli.StringFlag{
-			Name:  "newIPv6",
+			Name:  "new-ipv6",
 			Usage: "[optional] Update the server's IPv6 address",
 		},
 	}
@@ -70,9 +70,9 @@ func commandUpdate(c *cli.Context) {
 		return
 	}
 	opts := &osServers.UpdateOpts{
-		Name:       c.String("newName"),
-		AccessIPv4: c.String("newIPv4"),
-		AccessIPv6: c.String("newIPv6"),
+		Name:       c.String("new-name"),
+		AccessIPv4: c.String("new-ipv4"),
+		AccessIPv6: c.String("new-ipv6"),
 	}
 	o, err := servers.Update(client, serverID, opts).Extract()
 	outputParams.ServiceClient = client

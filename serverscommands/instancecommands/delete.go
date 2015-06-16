@@ -41,12 +41,6 @@ func commandDelete(c *cli.Context) {
 		output.Print(outputParams)
 		return
 	}
-	err = util.CheckFlagsSet(c, []string{"name"})
-	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
-	}
 
 	outputParams.ServiceClientType = serviceClientType
 	client, err := auth.NewClient(c, outputParams.ServiceClientType)

@@ -14,7 +14,7 @@ import (
 
 var resize = cli.Command{
 	Name:        "resize",
-	Usage:       util.Usage(commandPrefix, "resize", strings.Join([]string{util.IDOrNameUsage("instance"), "--flavorID <flavorID>"}, " ")),
+	Usage:       util.Usage(commandPrefix, "resize", strings.Join([]string{util.IDOrNameUsage("instance"), "--flavor-id <flavor-id>"}, " ")),
 	Description: "Resizes an existing server",
 	Action:      commandResize,
 	Flags:       util.CommandFlags(flagsResize, keysResize),
@@ -26,7 +26,7 @@ var resize = cli.Command{
 func flagsResize() []cli.Flag {
 	cf := []cli.Flag{
 		cli.StringFlag{
-			Name:  "flavorID",
+			Name:  "flavor-id",
 			Usage: "[required] The ID of the flavor that the resized server should have.",
 		},
 	}
@@ -48,7 +48,7 @@ func commandResize(c *cli.Context) {
 		return
 	}
 
-	err = util.CheckFlagsSet(c, []string{"flavorID"})
+	err = util.CheckFlagsSet(c, []string{"flavor-id"})
 	if err != nil {
 		outputParams.Err = err
 		output.Print(outputParams)
@@ -70,7 +70,7 @@ func commandResize(c *cli.Context) {
 		return
 	}
 
-	flavorID := c.String("flavorID")
+	flavorID := c.String("flavor-id")
 	opts := osServers.ResizeOpts{
 		FlavorRef: flavorID,
 	}

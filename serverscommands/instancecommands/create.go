@@ -31,27 +31,27 @@ func flagsCreate() []cli.Flag {
 			Usage: "[required] The name that the server should have.",
 		},
 		cli.StringFlag{
-			Name:  "imageRef",
+			Name:  "image-ref",
 			Usage: "[optional; required if imageName and bootFromVolume flags are not provided] The image ID from which to create the server.",
 		},
 		cli.StringFlag{
-			Name:  "imageName",
+			Name:  "image-name",
 			Usage: "[optional; required if imageRef and bootFromVolume flags are not provided] The name of the image from which to create the server.",
 		},
 		cli.StringFlag{
-			Name:  "flavorRef",
+			Name:  "flavor-ref",
 			Usage: "[optional; required if flavorName is not provided] The flavor ID that the server should have.",
 		},
 		cli.StringFlag{
-			Name:  "flavorName",
+			Name:  "flavor-name",
 			Usage: "[optional; required if flavorRef is not provided] The name of the flavor that the server should have.",
 		},
 		cli.StringFlag{
-			Name:  "securityGroups",
+			Name:  "security-groups",
 			Usage: "[optional] A comma-separated string of names of the security groups to which this server should belong.",
 		},
 		cli.StringFlag{
-			Name:  "userData",
+			Name:  "user-data",
 			Usage: "[optional] Configuration information or scripts to use after the server boots.",
 		},
 		cli.StringFlag{
@@ -63,7 +63,7 @@ func flagsCreate() []cli.Flag {
 			Usage: "[optional] A comma-separated string a key=value pairs.",
 		},
 		cli.StringFlag{
-			Name:  "adminPass",
+			Name:  "admin-pass",
 			Usage: "[optional] The root password for the server. If not provided, one will be randomly generated and returned in the output.",
 		},
 		cli.StringFlag{
@@ -97,17 +97,17 @@ func commandCreate(c *cli.Context) {
 
 	opts := &servers.CreateOpts{
 		Name:           serverName,
-		ImageRef:       c.String("imageRef"),
-		ImageName:      c.String("imageName"),
-		FlavorRef:      c.String("flavorRef"),
-		FlavorName:     c.String("flavorName"),
-		SecurityGroups: strings.Split(c.String("securityGroups"), ","),
-		AdminPass:      c.String("adminPass"),
+		ImageRef:       c.String("image-ref"),
+		ImageName:      c.String("image-name"),
+		FlavorRef:      c.String("flavor-ref"),
+		FlavorName:     c.String("flavor-name"),
+		SecurityGroups: strings.Split(c.String("security-groups"), ","),
+		AdminPass:      c.String("admin-pass"),
 		KeyPair:        c.String("keypair"),
 	}
 
-	if c.IsSet("userData") {
-		s := c.String("userData")
+	if c.IsSet("user-data") {
+		s := c.String("user-data")
 		userData, err := ioutil.ReadFile(s)
 		if err != nil {
 			opts.UserData = userData
