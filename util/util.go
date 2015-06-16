@@ -18,7 +18,7 @@ var Version = "0.0.0-dev"
 
 // Usage return a string that specifies how to call a particular command.
 func Usage(commandPrefix, action, mandatoryFlags string) string {
-	return fmt.Sprintf("%s [globals] %s %s %s [flags]", name, commandPrefix, action, mandatoryFlags)
+	return fmt.Sprintf("%s [GLOBALS] %s %s %s [OPTIONS]", name, commandPrefix, action, mandatoryFlags)
 }
 
 // Contains checks whether a given string is in a provided slice of strings.
