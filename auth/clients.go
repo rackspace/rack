@@ -18,7 +18,7 @@ func reauthFunc(pc *gophercloud.ProviderClient, ao gophercloud.AuthOptions) func
 }
 
 // NewClient creates and returns a Rackspace client for the given service.
-func NewClient(c *cli.Context, t string) (*gophercloud.ServiceClient, error) {
+func NewClient(c *cli.Context, serviceType string) (*gophercloud.ServiceClient, error) {
 	// get the user's authentication credentials
 	ao, region := Credentials(c)
 	// upper-case the region
@@ -31,7 +31,7 @@ func NewClient(c *cli.Context, t string) (*gophercloud.ServiceClient, error) {
 	}
 
 	// form the cache key
-	cacheKey := CacheKey(ao, region, t)
+	cacheKey := CacheKey(ao, region, serviceType)
 	// initialize cache
 	cache := &Cache{}
 	// get the value from the cache
@@ -56,7 +56,7 @@ func NewClient(c *cli.Context, t string) (*gophercloud.ServiceClient, error) {
 			return nil, fmt.Errorf("Error creating ProviderClient: %s\n", err)
 		}
 		var sc *gophercloud.ServiceClient
-		switch t {
+		switch serviceType {
 		case "compute":
 			sc, err = rackspace.NewComputeV2(pc, gophercloud.EndpointOpts{
 				Region: region,
@@ -77,7 +77,7 @@ func NewClient(c *cli.Context, t string) (*gophercloud.ServiceClient, error) {
 			return nil, fmt.Errorf("Error creating ServiceClient: %s\n", err)
 		}
 		if sc == nil {
-			return nil, fmt.Errorf("Unable to create service client: Unknown service type: %s", t)
+			return nil, fmt.Errorf("Unable to create service client: Unknown service type: %s", serviceType)
 		}
 		sc.UserAgent.Prepend("rack/" + util.Version)
 		return sc, nil
