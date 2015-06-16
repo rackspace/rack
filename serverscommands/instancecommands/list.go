@@ -29,7 +29,7 @@ func flagsList() []cli.Flag {
 			Usage: "Only list servers with this name.",
 		},
 		cli.StringFlag{
-			Name:  "changesSince",
+			Name:  "changes-since",
 			Usage: "Only list servers that have been changed since this time/date stamp.",
 		},
 		cli.StringFlag{
@@ -79,7 +79,7 @@ func commandList(c *cli.Context) {
 	}
 
 	opts := osServers.ListOpts{
-		ChangesSince: c.String("changesSince"),
+		ChangesSince: c.String("changes-since"),
 		Image:        c.String("image"),
 		Flavor:       c.String("flavor"),
 		Name:         c.String("name"),

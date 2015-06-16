@@ -14,7 +14,7 @@ import (
 
 var rebuild = cli.Command{
 	Name:        "rebuild",
-	Usage:       util.Usage(commandPrefix, "rebuild", strings.Join([]string{util.IDOrNameUsage("instance"), "--imageID <imageID>", "--adminPass <adminPass>"}, " ")),
+	Usage:       util.Usage(commandPrefix, "rebuild", strings.Join([]string{util.IDOrNameUsage("instance"), "--image-id <image-id>", "--admin-pass <admin-pass>"}, " ")),
 	Description: "Rebuilds an existing server",
 	Action:      commandRebuild,
 	Flags:       util.CommandFlags(flagsRebuild, keysGet),
@@ -26,11 +26,11 @@ var rebuild = cli.Command{
 func flagsRebuild() []cli.Flag {
 	cf := []cli.Flag{
 		cli.StringFlag{
-			Name:  "imageID",
+			Name:  "image-id",
 			Usage: "[required] The ID of the image on which the server will be provisioned.",
 		},
 		cli.StringFlag{
-			Name:  "adminPass",
+			Name:  "admin-pass",
 			Usage: "[required] The server's administrative password.",
 		},
 		cli.StringFlag{
@@ -38,11 +38,11 @@ func flagsRebuild() []cli.Flag {
 			Usage: "[optional] The name for the rebuilt server.",
 		},
 		cli.StringFlag{
-			Name:  "accessIPv4",
+			Name:  "ipv4",
 			Usage: "[optional] The IPv4 address for the rebuilt server.",
 		},
 		cli.StringFlag{
-			Name:  "accessIPv6",
+			Name:  "ipv6",
 			Usage: "[optional] The IPv6 address for the rebuilt server.",
 		},
 		cli.StringFlag{
@@ -65,19 +65,19 @@ func commandRebuild(c *cli.Context) {
 		output.Print(outputParams)
 		return
 	}
-	err = util.CheckFlagsSet(c, []string{"imageID", "adminPass"})
+	err = util.CheckFlagsSet(c, []string{"image-id", "admin-pass"})
 	if err != nil {
 		outputParams.Err = err
 		output.Print(outputParams)
 		return
 	}
-	imageID := c.String("imageID")
+	imageID := c.String("image-id")
 
 	opts := osServers.RebuildOpts{
 		ImageID:    imageID,
-		AdminPass:  c.String("adminPass"),
-		AccessIPv4: c.String("accessIPv4"),
-		AccessIPv6: c.String("accessIPv6"),
+		AdminPass:  c.String("admin-pass"),
+		AccessIPv4: c.String("ipv4"),
+		AccessIPv6: c.String("ipv6"),
 	}
 
 	if c.IsSet("metadata") {

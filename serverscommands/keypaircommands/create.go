@@ -28,7 +28,7 @@ var create = cli.Command{
 func flagsCreate() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name: "publicKey",
+			Name: "public-key",
 			Usage: strings.Join([]string{"[optional] The public ssh key to associate with the user's account.",
 				"It may be the actual key or the file containing the key. If empty,",
 				"the key will be created for you and returned in the output."}, "\n\t"),
@@ -74,8 +74,8 @@ func commandCreate(c *cli.Context) {
 		Name: keypairName,
 	}
 
-	if c.IsSet("publicKey") {
-		s := c.String("publicKey")
+	if c.IsSet("public-key") {
+		s := c.String("public-key")
 		pk, err := ioutil.ReadFile(s)
 		if err != nil {
 			opts.PublicKey = string(pk)

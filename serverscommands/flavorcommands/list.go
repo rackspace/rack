@@ -26,11 +26,11 @@ var list = cli.Command{
 func flagsList() []cli.Flag {
 	return []cli.Flag{
 		cli.IntFlag{
-			Name:  "minDisk",
+			Name:  "min-disk",
 			Usage: "[optional] Only list flavors that have at least this much disk storage (in GB).",
 		},
 		cli.IntFlag{
-			Name:  "minRam",
+			Name:  "min-ram",
 			Usage: "[optional] Only list flavors that have at least this much RAM (in GB).",
 		},
 
@@ -69,8 +69,8 @@ func commandList(c *cli.Context) {
 	}
 
 	opts := flavors.ListOpts{
-		MinDisk: c.Int("minDisk"),
-		MinRAM:  c.Int("minRam"),
+		MinDisk: c.Int("min-disk"),
+		MinRAM:  c.Int("min-ram"),
 		Marker:  c.String("marker"),
 		Limit:   c.Int("limit"),
 	}
