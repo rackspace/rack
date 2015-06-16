@@ -51,6 +51,11 @@ OPTIONS:
 			Usage:       "Used for the Networks service",
 			Subcommands: networkscommands.Get(),
 		},
+{
+			Name:        "blockstorage",
+			Usage:       "Used for the BlockStorage service",
+			Subcommands: blockstoragecommands.Get(),
+		},
 	}
 	app.Flags = util.GlobalFlags()
 	app.BashComplete = func(c *cli.Context) {
