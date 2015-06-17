@@ -2,6 +2,7 @@ package output
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/codegangsta/cli"
@@ -144,9 +145,7 @@ func Print(o *Params) {
 		default:
 			defaultJSON(w, i)
 		}
-		return
-	}
-	if c.GlobalIsSet("csv") {
+	} else if c.GlobalIsSet("csv") {
 		switch i.(type) {
 		case map[string]interface{}:
 			m := i.(map[string]interface{})
@@ -157,17 +156,20 @@ func Print(o *Params) {
 		default:
 			fmt.Fprintf(w, "%v", i)
 		}
-		return
+	} else {
+		switch i.(type) {
+		case map[string]interface{}:
+			m := i.(map[string]interface{})
+			metadataTable(w, m, keys)
+		case []map[string]interface{}:
+			m := i.([]map[string]interface{})
+			listTable(w, m, keys)
+		default:
+			fmt.Fprintf(w, "%v", i)
+		}
 	}
-	switch i.(type) {
-	case map[string]interface{}:
-		m := i.(map[string]interface{})
-		metadataTable(w, m, keys)
-	case []map[string]interface{}:
-		m := i.([]map[string]interface{})
-		listTable(w, m, keys)
-	default:
-		fmt.Fprintf(w, "%v", i)
+	if o.Err != nil {
+		os.Exit(1)
 	}
 }
 
