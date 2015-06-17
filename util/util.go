@@ -42,7 +42,7 @@ func RackDir() (string, error) {
 		return "", errors.New("User home directory not found.")
 	}
 	dirpath := path.Join(homeDir, ".rack")
-	err := os.MkdirAll(dirpath, 0644)
+	err := os.MkdirAll(dirpath, 0744)
 	return dirpath, err
 }
 
