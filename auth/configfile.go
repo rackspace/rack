@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"fmt"
 	"path"
 
 	"github.com/codegangsta/cli"
@@ -8,17 +9,17 @@ import (
 	"gopkg.in/ini.v1"
 )
 
-func configfile(c *cli.Context, have map[string]string, need map[string]string) {
+func configfile(c *cli.Context, have map[string]string, need map[string]string) error {
 	dir, err := util.RackDir()
 	if err != nil {
-		//fmt.Printf("Error reading config file: %s\n", err)
-		return
+		// return fmt.Errorf("Error retrieving rack directory: %s\n", err)
+		return nil
 	}
 	f := path.Join(dir, "config")
 	cfg, err := ini.Load(f)
 	if err != nil {
-		//fmt.Printf("Error reading config file: %s\n", err)
-		return
+		// return fmt.Errorf("Error loading config file: %s\n", err)
+		return nil
 	}
 	cfg.BlockMode = false
 	var profile string
@@ -26,9 +27,8 @@ func configfile(c *cli.Context, have map[string]string, need map[string]string) 
 		profile = c.GlobalString("profile")
 	}
 	section, err := cfg.GetSection(profile)
-	if err != nil {
-		//fmt.Printf("Error reading config file: %s\n", err)
-		return
+	if err != nil && profile != "" {
+		return fmt.Errorf("Invalid config file profile: %s\n", profile)
 	}
 
 	for opt := range need {
@@ -37,4 +37,5 @@ func configfile(c *cli.Context, have map[string]string, need map[string]string) 
 			delete(need, opt)
 		}
 	}
+	return nil
 }
