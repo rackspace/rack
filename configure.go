@@ -12,6 +12,8 @@ import (
 	"gopkg.in/ini.v1"
 )
 
+var availableRegions = []string{"DFW", "IAD", "ORD", "LON", "SYD", "HKG"}
+
 func configure(c *cli.Context) {
 	intro := []string{"\nThis interactive session will walk you through creating",
 		"a profile in your configuration file. You may fill in all or none of the",
@@ -31,9 +33,7 @@ func configure(c *cli.Context) {
 	apiKey, _ := reader.ReadString('\n')
 	m["apikey"] = strings.TrimSuffix(apiKey, string('\n'))
 
-	fmt.Print("Rackspace Region (DFW, IAD, ORD, LON, SYD, HKG): ")
-	region, _ := reader.ReadString('\n')
-	m["region"] = strings.TrimSuffix(region, string('\n'))
+	regionPrompt(m, reader)
 
 	fmt.Print("Profile Name: ")
 	profile, _ := reader.ReadString('\n')
@@ -70,26 +70,34 @@ func configure(c *cli.Context) {
 	}
 }
 
-func checkIfProfileExists(cfg *ini.File, profile string, reader *bufio.Reader) {
-	if _, err := cfg.GetSection(profile); err == nil {
-		askToOverwriteProfile(cfg, profile, reader)
+func regionPrompt(m map[string]string, reader *bufio.Reader) {
+	fmt.Printf("Rackspace Region (%s): ", strings.Join(availableRegions, ", "))
+	region, _ := reader.ReadString('\n')
+	region = strings.ToUpper(strings.TrimSuffix(region, string('\n')))
+	if util.Contains(availableRegions, region) {
+		m["region"] = region
+		return
 	}
+	fmt.Printf("\nWhoops, that's not a valid region. These are your options : %s\n", strings.Join(availableRegions, ", "))
+	regionPrompt(m, reader)
 }
 
-func askToOverwriteProfile(cfg *ini.File, profile string, reader *bufio.Reader) {
-	fmt.Printf("\nA profile named %s already exists. Overwrite? (y/n): ", profile)
-	choice, _ := reader.ReadString('\n')
-	choice = strings.TrimSuffix(choice, string('\n'))
-	switch strings.ToLower(choice) {
-	case "y", "yes":
-		break
-	case "n", "no":
-		fmt.Print("Profile Name: ")
-		profile, _ := reader.ReadString('\n')
-		profile = strings.TrimSuffix(profile, string('\n'))
-		checkIfProfileExists(cfg, profile, reader)
-	default:
-		askToOverwriteProfile(cfg, profile, reader)
+func checkIfProfileExists(cfg *ini.File, profile string, reader *bufio.Reader) {
+	if _, err := cfg.GetSection(profile); err == nil {
+		fmt.Printf("\nA profile named %s already exists. Overwrite? (y/n): ", profile)
+		choice, _ := reader.ReadString('\n')
+		choice = strings.TrimSuffix(choice, string('\n'))
+		switch strings.ToLower(choice) {
+		case "y", "yes":
+			break
+		case "n", "no":
+			fmt.Print("Profile Name: ")
+			profile, _ := reader.ReadString('\n')
+			profile = strings.TrimSuffix(profile, string('\n'))
+			checkIfProfileExists(cfg, profile, reader)
+		default:
+			checkIfProfileExists(cfg, profile, reader)
+		}
 	}
 }
 
