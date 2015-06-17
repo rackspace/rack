@@ -50,6 +50,9 @@ func configure(c *cli.Context) {
 	if profile == "" {
 		profile = "DEFAULT"
 	}
+
+	checkIfProfileExists(cfg, profile, reader)
+
 	section, err := cfg.NewSection(profile)
 	if err != nil {
 		fmt.Printf("Error creating new section [%s] in config file: %s\n", profile, err)
@@ -64,6 +67,29 @@ func configure(c *cli.Context) {
 	if err != nil {
 		fmt.Printf("Error saving config file: %s\n", err)
 		return
+	}
+}
+
+func checkIfProfileExists(cfg *ini.File, profile string, reader *bufio.Reader) {
+	if _, err := cfg.GetSection(profile); err == nil {
+		askToOverwriteProfile(cfg, profile, reader)
+	}
+}
+
+func askToOverwriteProfile(cfg *ini.File, profile string, reader *bufio.Reader) {
+	fmt.Printf("\nA profile named %s already exists. Overwrite? (y/n): ", profile)
+	choice, _ := reader.ReadString('\n')
+	choice = strings.TrimSuffix(choice, string('\n'))
+	switch strings.ToLower(choice) {
+	case "y", "yes":
+		break
+	case "n", "no":
+		fmt.Print("Profile Name: ")
+		profile, _ := reader.ReadString('\n')
+		profile = strings.TrimSuffix(profile, string('\n'))
+		checkIfProfileExists(cfg, profile, reader)
+	default:
+		askToOverwriteProfile(cfg, profile, reader)
 	}
 }
 
