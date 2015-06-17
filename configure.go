@@ -13,6 +13,10 @@ import (
 )
 
 func configure(c *cli.Context) {
+	intro := []string{"\nThis interactive session will walk you through creating",
+		"a profile in your configuration file. You may fill in all or none of the",
+		"values.\n"}
+	fmt.Println(strings.Join(intro, "\n"))
 	reader := bufio.NewReader(os.Stdin)
 	m := map[string]string{
 		"username": "",
