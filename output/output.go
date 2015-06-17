@@ -134,6 +134,10 @@ func Print(o *Params) {
 	}
 
 	w := c.App.Writer
+	if o.Err != nil {
+		w = os.Stderr
+	}
+
 	if c.GlobalIsSet("json") {
 		switch i.(type) {
 		case map[string]interface{}:
