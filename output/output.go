@@ -108,13 +108,15 @@ func Print(o *Params) {
 			}
 		}
 		// get auth credentials
-		ao, region := auth.Credentials(c)
-		// form the cache key
-		cacheKey := auth.CacheKey(ao, region, o.ServiceClientType)
-		// initialize the cache
-		cache := &auth.Cache{}
-		// set the cache value to the current values
-		_ = cache.SetValue(cacheKey, newCacheValue)
+		ao, region, err := auth.Credentials(c)
+		if err == nil {
+			// form the cache key
+			cacheKey := auth.CacheKey(*ao, region, o.ServiceClientType)
+			// initialize the cache
+			cache := &auth.Cache{}
+			// set the cache value to the current values
+			_ = cache.SetValue(cacheKey, newCacheValue)
+		}
 	}
 
 	// limit the returned fields if any were given in the `fields` flag

@@ -20,7 +20,10 @@ func reauthFunc(pc *gophercloud.ProviderClient, ao gophercloud.AuthOptions) func
 // NewClient creates and returns a Rackspace client for the given service.
 func NewClient(c *cli.Context, serviceType string) (*gophercloud.ServiceClient, error) {
 	// get the user's authentication credentials
-	ao, region := Credentials(c)
+	ao, region, err := Credentials(c)
+	if err != nil {
+		return nil, err
+	}
 	// upper-case the region
 	region = strings.ToUpper(region)
 	// allow Gophercloud to re-authenticate
@@ -31,11 +34,11 @@ func NewClient(c *cli.Context, serviceType string) (*gophercloud.ServiceClient, 
 	}
 
 	if c.GlobalIsSet("no-cache") {
-		return authFromScratch(ao, region, serviceType)
+		return authFromScratch(*ao, region, serviceType)
 	}
 
 	// form the cache key
-	cacheKey := CacheKey(ao, region, serviceType)
+	cacheKey := CacheKey(*ao, region, serviceType)
 	// initialize cache
 	cache := &Cache{}
 	// get the value from the cache
@@ -47,7 +50,7 @@ func NewClient(c *cli.Context, serviceType string) (*gophercloud.ServiceClient, 
 		pc, err := rackspace.NewClient(ao.IdentityEndpoint)
 		if err == nil {
 			pc.TokenID = creds.TokenID
-			pc.ReauthFunc = reauthFunc(pc, ao)
+			pc.ReauthFunc = reauthFunc(pc, *ao)
 			pc.UserAgent.Prepend("rack/" + util.Version)
 			return &gophercloud.ServiceClient{
 				ProviderClient: pc,
@@ -55,7 +58,7 @@ func NewClient(c *cli.Context, serviceType string) (*gophercloud.ServiceClient, 
 			}, nil
 		}
 	} else {
-		return authFromScratch(ao, region, serviceType)
+		return authFromScratch(*ao, region, serviceType)
 	}
 
 	return nil, nil
@@ -100,7 +103,7 @@ func authFromScratch(ao gophercloud.AuthOptions, region, serviceType string) (*g
 // It will use command-line authentication parameters if available, then it will
 // look for any unset parameters in the config file, and then finally in
 // environment variables.
-func Credentials(c *cli.Context) (gophercloud.AuthOptions, string) {
+func Credentials(c *cli.Context) (*gophercloud.AuthOptions, string, error) {
 	have := make(map[string]string)
 	need := map[string]string{
 		"username": "",
@@ -114,7 +117,10 @@ func Credentials(c *cli.Context) (gophercloud.AuthOptions, string) {
 	// are there any unset auth variables?
 	if len(need) != 0 {
 		// if so, look in config file
-		configfile(c, have, need)
+		err := configfile(c, have, need)
+		if err != nil {
+			return nil, "", err
+		}
 		// still unset auth variables?
 		if len(need) != 0 {
 			// if so, look in environment variables
@@ -122,10 +128,10 @@ func Credentials(c *cli.Context) (gophercloud.AuthOptions, string) {
 		}
 	}
 
-	ao := gophercloud.AuthOptions{
+	ao := &gophercloud.AuthOptions{
 		Username:         have["username"],
 		APIKey:           have["apikey"],
 		IdentityEndpoint: have["authurl"],
 	}
-	return ao, have["region"]
+	return ao, have["region"], nil
 }
