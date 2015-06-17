@@ -31,7 +31,7 @@ func configure(c *cli.Context) {
 	apiKey, _ := reader.ReadString('\n')
 	m["apikey"] = strings.TrimSuffix(apiKey, string('\n'))
 
-	fmt.Print("Rackspace Region: ")
+	fmt.Print("Rackspace Region (DFW, IAD, ORD, LON, SYD, HKG): ")
 	region, _ := reader.ReadString('\n')
 	m["region"] = strings.TrimSuffix(region, string('\n'))
 
