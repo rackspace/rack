@@ -60,13 +60,13 @@ Usage::
 ^^^^^^^^^^^
 Usage::
 
-    rack servers instance rebuild [--id <serverID> | --name <serverName>] [--imageID <imageID>] [--adminPass <adminPass>] [optional flags]
+    rack servers instance rebuild [--id <serverID> | --name <serverName>] --imageID <imageID> --adminPass <adminPass> [optional flags]
 
 ``resize``
 ^^^^^^^^^^
 Usage::
 
-    rack servers instance resize [--id <serverID> | --name <serverName>] [--flavorID <flavorID>] [optional flags]
+    rack servers instance resize [--id <serverID> | --name <serverName>] --flavorID <flavorID> [optional flags]
 
 
 ``image``
@@ -84,7 +84,7 @@ Usage::
 ^^^^^^^^
 Usage::
 
-    rack servers image get <imageID> [flags]
+    rack servers image get [--id <serverID> | --name <serverName>] [optional flags]
 
 ``flavor``
 ~~~~~~~~~~
@@ -101,7 +101,7 @@ Usage::
 ^^^^^^^
 Usage::
 
-    rack servers flavor get <flavorID> [flags]
+    rack servers flavor get [--id <serverID> | --name <serverName>] [optional flags]
 
 
 ``keypair``
@@ -119,16 +119,16 @@ Usage::
 ^^^^^^^^^^
 Usage::
 
-    rack servers keypair create <keypairName> [flags]
+    rack servers keypair create --name <keypairName> [optional flags]
 
 ``get``
 ^^^^^^^
 Usage::
 
-    rack [globals] servers keypair get [--name <keypairName>] [flags]
+    rack [globals] servers keypair get --name <keypairName> [optional flags]
 
 ``delete``
 ^^^^^^^^^^
 Usage::
 
-    rack servers keypair delete [--name <keypairName>] [flags]
+    rack servers keypair delete --name <keypairName> [optional flags]
