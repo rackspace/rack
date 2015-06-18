@@ -54,18 +54,25 @@ We recommend that you copy it to a location outside of your Downloads folder (e.
 Configuration
 -------------
 
-.. warning:: This will change. I warned you.
+.. warning:: This may change.
 
 To authenticate against the Rackspace API, there are 4 required paramaters:
 
 * Username: a Rackspace username
 * API key: a Rackspace API key
 * Region: a Rackspace region
-* Authentication Endpoint (URL): a URL to send the authentication request. For
-Rackspace customers, the default value that ``rack`` uses for this parameter
-will work, so there is no need to provide it.
+* Authentication Endpoint (URL): (Optional/Advanced) A URL to send the authentication request.
 
-``rack`` lets you provide these parameters in a few different ways:
+
+By default, if this is your first time using the ``rack`` CLI, we recommend you
+run the interactive ``configure`` command::
+
+    rack configure
+
+This command will automatically create a configuration file for you if it
+doesn't exist and walk you through creating a profile for it.
+
+Otherwise, ``rack`` lets you provide these parameters in a few different ways:
 
 Command-line Options
 ^^^^^^^^^^^^^^^^^^^^
@@ -83,7 +90,7 @@ Config File
 
 If provided, any authentication parameters not set on the command-line will be
 looked for in a config file. The config file should be located in ``$HOME/.rack/config``.
-The config file format is like the following:
+The config file format is like the following::
 
     [DEFAULT]
     username=<your rackspace username>
@@ -101,15 +108,8 @@ the ``profile`` flag.
     rack --profile another-profile servers instance list
 
 Note that not all (or any) of the authentication parameters
-have to be set in the config file. Those not set there will be looked for elsewhere.
+have to be set in the config file. Parameters not set there will be looked for elsewhere.
 
-In addition to creating your own config file manually, ``rack`` provides a command
-for interactively creating a config file:
-
-    rack configure
-
-That command will automatically create the config file if it doesn't exist and
-walk you through creating a profile for it.
 
 Environment Variables
 ^^^^^^^^^^^^^^^^^^^^^
@@ -135,7 +135,7 @@ On Windows you would type::
 
 You can get your API key by logging into the `Cloud Control panel`_ and clicking
 on *account -> account settings* and clicking "show" next to "API Key". Be careful;
-this key is special. Don't share it! [#]_ [#]_
+this key is special. Don't share it!
 
 Advanced Configuration Values
 -----------------------------
@@ -156,12 +156,7 @@ In addition, you may provide it as a flag on the command-line or as a value in a
 config file profile. In either case, the parameter name will be ``authurl``.
 
 
-.. [#] **No, seriously** - don't share it, don't check it into source control, the API
-      gives anyone who has it god-like powers. We've accidentally shared it in the
-      past and literally had a rip in space-time that sucked us into an alternate
-      dimension that has mutant pug overlords. Please save us.
 
-.. [#] Hush now human. No tears. Only sleep.
 
 .. _go: https://golang.org/
 .. _Mac OSX (64 bit): https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com/Darwin/amd64/rack
