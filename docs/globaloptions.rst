@@ -199,8 +199,15 @@ a command.
 
     Generate bash completion directives for tab-completion of commands.
 
-.. warning:: Not working right now. Sorry!
+**Advanced Usage Only**: (Requires golang development environment)
+This allows you to set up tab completion of commands for the ``rack`` utility. To
+set this up add the following line to your .bash_profile or .bashrc::
 
+    PROG=rack source $GOPATH/src/github.com/codegangsta/cli/autocomplete/bash_autocomplete
+
+Then source it::
+
+    source ~/.bashrc or source ~/.bash_profile
 
 ``--version, -v``
 ~~~~~~~~~~~~~~~~~
