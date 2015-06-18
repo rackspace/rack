@@ -92,6 +92,36 @@ Adding the CSV option returns::
 
 This presents a compact format with appropriate CSV headers.
 
+``--username``
+~~~~~~~~~~~~~~
+
+  (string) The Rackspace username to use for authentication.
+
+``--apikey``
+~~~~~~~~~~~~~~
+
+  (string) The Rackspace API key to use for authentication.
+
+``--region``
+~~~~~~~~~~~~~~
+
+  (string) The Rackspace region to use for authentication.
+
+``--authurl``
+~~~~~~~~~~~~~~
+
+  (string) The Rackspace URL to use for authentication. If not provided, this
+  will default to the public U.S. Rackspace endpoint.
+
+``--profile``
+~~~~~~~~~~~~~
+
+  (string) The name of the config file profile to use to look for authentication credentials.
+
+``--no-cache``
+~~~~~~~~~~~~~~
+
+  (boolean) Don't get or set authentication credentials in the rack cache.
 
 ``--help, -h``
 ~~~~~~~~~~~~~~

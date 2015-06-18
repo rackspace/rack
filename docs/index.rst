@@ -48,6 +48,25 @@ pass in other required **global** information into the tool, these are:
 ``--csv``
   Return output in csv format.
 
+``--username``
+  The Rackspace username to use for authentication.
+
+``--apikey``
+  The Rackspace API key to use for authentication.
+
+``--region``
+  The Rackspace region to use for authentication.
+
+``--authurl``
+  The Rackspace URL to use for authentication. If not provided, this
+  will default to the public U.S. Rackspace endpoint.
+
+``--profile``
+  The name of the config file profile to use to look for authentication credentials.
+
+``--no-cache``
+  Don't get or set authentication credentials in the rack cache.
+
 ``--help, -h``
   Show help
 
