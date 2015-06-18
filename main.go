@@ -15,6 +15,11 @@ func main() {
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
 		{
+			Name:   "configure",
+			Usage:  "Used to interactively create a config file for Rackspace authentication.",
+			Action: configure,
+		},
+		{
 			Name:        "servers",
 			Usage:       "Used for the Servers service",
 			Subcommands: serverscommands.Get(),

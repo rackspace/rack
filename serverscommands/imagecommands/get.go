@@ -5,11 +5,11 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
-	"github.com/rackspace/gophercloud/rackspace/compute/v2/images"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
 	osImages "github.com/rackspace/gophercloud/openstack/compute/v2/images"
+	"github.com/rackspace/gophercloud/rackspace/compute/v2/images"
 )
 
 var get = cli.Command{
