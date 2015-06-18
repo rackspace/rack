@@ -6,6 +6,10 @@ An opinionated CLI for Rackspace interactions
 This repo is under active development and is not ready for anything but testing
 and development.
 
+## Documentation
+
+For complete documentation, see [the docs](http://rackspace-cli.readthedocs.org/en/latest/).
+
 ## Installation
 
 Make sure you have Go installed and the GOPATH environment variable set.
