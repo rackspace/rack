@@ -1,17 +1,17 @@
-package keypaircommands
+package containercommands
 
 import (
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	"github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs"
+	"github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers"
 )
 
-var get = cli.Command{
+var create = cli.Command{
 	Name:        "get",
-	Usage:       util.Usage(commandPrefix, "get", "[--keypair <keypairName> | stdin keypair]"),
-	Description: "Retreives a keypair",
+	Usage:       util.Usage(commandPrefix, "get", "[--container <containerName> | --stdin container]"),
+	Description: "Retreives a container",
 	Action:      actionGet,
 	Flags:       util.CommandFlags(flagsGet, keysGet),
 	BashComplete: func(c *cli.Context) {
@@ -22,20 +22,20 @@ var get = cli.Command{
 func flagsGet() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "keypair",
-			Usage: "[optional; required if `stdin` isn't provided] The name of the keypair",
+			Name:  "container",
+			Usage: "[optional; required if `stdin` isn't provided] The name of the container",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `keypair` isn't provided] The field being piped into STDIN. Valid values are: keypair",
+			Usage: "[optional; required if `container` isn't provided] The field being piped into STDIN. Valid values are: container",
 		},
 	}
 }
 
-var keysGet = []string{"Name", "Fingerprint", "PublicKey", "UserID"}
+var keysGet = []string{"Name", "ObjectCount", "BytesUsed", "ContentLength"}
 
 type paramsGet struct {
-	keypair string
+	container string
 }
 
 type commandGet handler.Command
@@ -67,35 +67,31 @@ func (command *commandGet) HandleFlags(resource *handler.Resource) error {
 }
 
 func (command *commandGet) HandlePipe(resource *handler.Resource, item string) error {
-	resource.Params.(*paramsGet).keypair = item
+	resource.Params.(*paramsGet).container = item
 	return nil
 }
 
 func (command *commandGet) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"name"})
+	err := command.Ctx.CheckFlagsSet([]string{"container"})
 	if err != nil {
 		return err
 	}
-	resource.Params.(*paramsGet).keypair = command.Ctx.CLIContext.String("name")
+	containerName := command.Ctx.CLIContext.String("container")
+	resource.Params = containerName
 	return err
 }
 
 func (command *commandGet) Execute(resource *handler.Resource) {
-	keypairName := resource.Params.(*paramsGet).keypair
-	keypair, err := keypairs.Get(command.Ctx.ServiceClient, keypairName).Extract()
+	containerName := resource.Params.(*paramsGet).container
+	containerInfo, err := containers.Get(command.Ctx.ServiceClient, containerName).Extract()
 	if err != nil {
 		resource.Err = err
 		return
 	}
-	result := structs.Map(keypair)
-	if command.Ctx.CLIContext.GlobalIsSet("json") {
-		resource.Result = result
-	} else {
-		// Assume they want the key directly
-		resource.Result = result["PublicKey"]
-	}
+	resource.Result = structs.Map(containerInfo)
+	resource.Result.(map[string]interface{})["Name"] = containerName
 }
 
 func (command *commandGet) StdinField() string {
-	return "keypair"
+	return "container"
 }

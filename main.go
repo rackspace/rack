@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 
+	"github.com/jrperritt/rack/filescommands"
 	"github.com/jrperritt/rack/serverscommands"
 
 	"github.com/codegangsta/cli"
@@ -23,6 +24,11 @@ func main() {
 			Name:        "servers",
 			Usage:       "Used for the Servers service",
 			Subcommands: serverscommands.Get(),
+		},
+		{
+			Name:        "files",
+			Usage:       "Used for the Files service",
+			Subcommands: filescommands.Get(),
 		},
 	}
 	app.Flags = globalFlags()

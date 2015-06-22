@@ -9,8 +9,9 @@ var serviceClientType = "compute"
 func Get() []cli.Command {
 	return []cli.Command{
 		list,
-		create,
 		get,
 		remove,
+		upload,
+		generate,
 	}
 }

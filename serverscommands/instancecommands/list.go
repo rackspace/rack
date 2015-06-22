@@ -1,11 +1,8 @@
 package instancecommands
 
 import (
-	"fmt"
-
 	"github.com/codegangsta/cli"
-	"github.com/jrperritt/rack/auth"
-	"github.com/jrperritt/rack/output"
+	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
 	osServers "github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
@@ -15,7 +12,7 @@ var list = cli.Command{
 	Name:        "list",
 	Usage:       util.Usage(commandPrefix, "list", ""),
 	Description: "Lists existing servers",
-	Action:      commandList,
+	Action:      actionList,
 	Flags:       util.CommandFlags(flagsList, keysList),
 	BashComplete: func(c *cli.Context) {
 		util.CompleteFlags(util.CommandFlags(flagsList, keysList))
@@ -48,37 +45,41 @@ func flagsList() []cli.Flag {
 			Name:  "marker",
 			Usage: "Start listing servers at this server ID.",
 		},
-		cli.IntFlag{
-			Name:  "limit",
-			Usage: "Only return this many servers at most.",
-		},
 	}
 }
 
 var keysList = []string{"ID", "Name", "Status", "Public IPv4", "Private IPv4", "Image", "Flavor"}
 
-func commandList(c *cli.Context) {
-	var err error
-	outputParams := &output.Params{
-		Context: c,
-		Keys:    keysList,
-	}
-	err = util.CheckArgNum(c, 0)
-	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
-	}
+type paramsList struct {
+	opts *osServers.ListOpts
+}
 
-	outputParams.ServiceClientType = serviceClientType
-	client, err := auth.NewClient(c, outputParams.ServiceClientType)
-	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
-	}
+type commandList handler.Command
 
-	opts := osServers.ListOpts{
+func actionList(c *cli.Context) {
+	command := &commandList{
+		Ctx: &handler.Context{
+			CLIContext: c,
+		},
+	}
+	handler.Handle(command)
+}
+
+func (command *commandList) Context() *handler.Context {
+	return command.Ctx
+}
+
+func (command *commandList) Keys() []string {
+	return keysList
+}
+
+func (command *commandList) ServiceClientType() string {
+	return serviceClientType
+}
+
+func (command *commandList) HandleFlags(resource *handler.Resource) error {
+	c := command.Ctx.CLIContext
+	opts := &osServers.ListOpts{
 		ChangesSince: c.String("changes-since"),
 		Image:        c.String("image"),
 		Flavor:       c.String("flavor"),
@@ -87,27 +88,31 @@ func commandList(c *cli.Context) {
 		Marker:       c.String("marker"),
 		Limit:        c.Int("limit"),
 	}
-	allPages, err := servers.List(client, opts).AllPages()
-	outputParams.ServiceClient = client
-	if err != nil {
-		outputParams.Err = fmt.Errorf("Error listing servers: %s\n", err)
-		output.Print(outputParams)
-		return
+	resource.Params = &paramsList{
+		opts: opts,
 	}
-	o, err := servers.ExtractServers(allPages)
-	if err != nil {
-		outputParams.Err = fmt.Errorf("Error listing servers: %s\n", err)
-		output.Print(outputParams)
-		return
-	}
+	return nil
+}
 
-	f := func() interface{} {
-		m := make([]map[string]interface{}, len(o))
-		for j, server := range o {
-			m[j] = serverSingle(&server)
-		}
-		return m
+func (command *commandList) HandleSingle(resource *handler.Resource) error {
+	return nil
+}
+
+func (command *commandList) Execute(resource *handler.Resource) {
+	opts := resource.Params.(*paramsList).opts
+	allPages, err := servers.List(command.Ctx.ServiceClient, opts).AllPages()
+	if err != nil {
+		resource.Err = err
+		return
 	}
-	outputParams.F = &f
-	output.Print(outputParams)
+	servers, err := servers.ExtractServers(allPages)
+	if err != nil {
+		resource.Err = err
+		return
+	}
+	result := make([]map[string]interface{}, len(servers))
+	for j, server := range servers {
+		result[j] = serverSingle(&server)
+	}
+	resource.Result = result
 }

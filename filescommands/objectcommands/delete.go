@@ -1,4 +1,4 @@
-package keypaircommands
+package objectcommands
 
 import (
 	"fmt"
@@ -6,13 +6,13 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	"github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs"
+	"github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
 )
 
 var remove = cli.Command{
 	Name:        "delete",
-	Usage:       util.Usage(commandPrefix, "delete", "[--keypair <keypairName> | --stdin keypair]"),
-	Description: "Deletes a keypair",
+	Usage:       util.Usage(commandPrefix, "delete", "--container <containerName> [--object <objectName> | --stdin object]"),
+	Description: "Deletes an object",
 	Action:      actionDelete,
 	Flags:       util.CommandFlags(flagsDelete, keysDelete),
 	BashComplete: func(c *cli.Context) {
@@ -23,12 +23,16 @@ var remove = cli.Command{
 func flagsDelete() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "keypair",
-			Usage: "[optional; required if `stdin` isn't provided] The name of the keypair",
+			Name:  "container",
+			Usage: "[required] The name of the container",
+		},
+		cli.StringFlag{
+			Name:  "object",
+			Usage: "[optional; required if `stdin` isn't provided] The name of the object",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `keypair` isn't provided] The field being piped into STDIN. Valid values are: keypair",
+			Usage: "[optional; required if `object` isn't provided] The field being piped to STDIN. Valid values are: object",
 		},
 	}
 }
@@ -36,7 +40,8 @@ func flagsDelete() []cli.Flag {
 var keysDelete = []string{}
 
 type paramsDelete struct {
-	keypair string
+	container string
+	object    string
 }
 
 type commandDelete handler.Command
@@ -63,34 +68,42 @@ func (command *commandDelete) ServiceClientType() string {
 }
 
 func (command *commandDelete) HandleFlags(resource *handler.Resource) error {
-	resource.Params = &paramsDelete{}
+	err := command.Ctx.CheckFlagsSet([]string{"container"})
+	if err != nil {
+		return err
+	}
+	container := command.Ctx.CLIContext.String("container")
+	resource.Params = &paramsDelete{
+		container: container,
+	}
 	return nil
 }
 
 func (command *commandDelete) HandlePipe(resource *handler.Resource, item string) error {
-	resource.Params.(*paramsDelete).keypair = item
+	resource.Params.(*paramsDelete).object = item
 	return nil
 }
 
 func (command *commandDelete) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"name"})
+	err := command.Ctx.CheckFlagsSet([]string{"object"})
 	if err != nil {
 		return err
 	}
-	resource.Params.(*paramsDelete).keypair = command.Ctx.CLIContext.String("name")
-	return err
+	resource.Params.(*paramsDelete).object = command.Ctx.CLIContext.String("object")
+	return nil
 }
 
 func (command *commandDelete) Execute(resource *handler.Resource) {
-	keypairName := resource.Params.(*paramsDelete).keypair
-	err := keypairs.Delete(command.Ctx.ServiceClient, keypairName).ExtractErr()
-	if err != nil {
-		resource.Err = err
+	containerName := resource.Params.(*paramsDelete).container
+	objectName := resource.Params.(*paramsDelete).object
+	rawResponse := objects.Delete(command.Ctx.ServiceClient, containerName, objectName, nil)
+	if rawResponse.Err != nil {
+		resource.Err = rawResponse.Err
 		return
 	}
-	resource.Result = fmt.Sprintf("Successfully deleted keypair [%s]", keypairName)
+	resource.Result = fmt.Sprintf("Successfully deleted object [%s] from container [%s]\n", objectName, containerName)
 }
 
 func (command *commandDelete) StdinField() string {
-	return "keypair"
+	return "object"
 }

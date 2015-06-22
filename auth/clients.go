@@ -76,6 +76,11 @@ func authFromScratch(ao gophercloud.AuthOptions, region, serviceType string) (*g
 			Region: region,
 		})
 		break
+	case "object-store":
+		sc, err = rackspace.NewObjectStorageV1(pc, gophercloud.EndpointOpts{
+			Region: region,
+		})
+		break
 	case "blockstorage":
 		sc, err = rackspace.NewBlockStorageV1(pc, gophercloud.EndpointOpts{
 			Region: region,
