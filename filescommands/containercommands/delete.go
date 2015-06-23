@@ -14,7 +14,7 @@ import (
 
 var remove = cli.Command{
 	Name:        "delete",
-	Usage:       util.Usage(commandPrefix, "delete", "[--container <containerName> | --stdin container]"),
+	Usage:       util.Usage(commandPrefix, "delete", "[--container <containerName> | --stdin name]"),
 	Description: "Deletes a container",
 	Action:      actionDelete,
 	Flags:       util.CommandFlags(flagsDelete, keysDelete),
@@ -26,7 +26,7 @@ var remove = cli.Command{
 func flagsDelete() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "container",
+			Name:  "name",
 			Usage: "[optional; required if `stdin` isn't provided] The name of the container",
 		},
 		cli.BoolFlag{
@@ -35,7 +35,7 @@ func flagsDelete() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `container` isn't provided] The field being piped into STDIN. Valid values are: container",
+			Usage: "[optional; required if `name` isn't provided] The field being piped into STDIN. Valid values are: name",
 		},
 	}
 }
@@ -80,11 +80,11 @@ func (command *commandDelete) HandlePipe(resource *handler.Resource, item string
 }
 
 func (command *commandDelete) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"container"})
+	err := command.Ctx.CheckFlagsSet([]string{"name"})
 	if err != nil {
 		return err
 	}
-	resource.Params.(*paramsDelete).container = command.Ctx.CLIContext.String("container")
+	resource.Params.(*paramsDelete).container = command.Ctx.CLIContext.String("name")
 	return nil
 }
 
@@ -146,5 +146,5 @@ func (command *commandDelete) Execute(resource *handler.Resource) {
 }
 
 func (command *commandDelete) StdinField() string {
-	return "container"
+	return "name"
 }

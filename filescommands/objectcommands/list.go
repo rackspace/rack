@@ -26,7 +26,11 @@ func flagsList() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "container",
-			Usage: "[required] The name of the container containing the objects to list.",
+			Usage: "[optional; required if `stdin` isn't provided] The name of the container",
+		},
+		cli.StringFlag{
+			Name:  "stdin",
+			Usage: "[optional; required if `container` isn't provided] The field being piped into STDIN. Valid values are: container",
 		},
 		cli.BoolFlag{
 			Name:  "full",

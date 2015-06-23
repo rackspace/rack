@@ -10,7 +10,7 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       util.Usage(commandPrefix, "get", "[--keypair <keypairName> | stdin keypair]"),
+	Usage:       util.Usage(commandPrefix, "get", "[--name <keypairName> | stdin name]"),
 	Description: "Retreives a keypair",
 	Action:      actionGet,
 	Flags:       util.CommandFlags(flagsGet, keysGet),
@@ -22,12 +22,12 @@ var get = cli.Command{
 func flagsGet() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "keypair",
+			Name:  "name",
 			Usage: "[optional; required if `stdin` isn't provided] The name of the keypair",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `keypair` isn't provided] The field being piped into STDIN. Valid values are: keypair",
+			Usage: "[optional; required if `name` isn't provided] The field being piped into STDIN. Valid values are: name",
 		},
 	}
 }
@@ -72,11 +72,11 @@ func (command *commandGet) HandlePipe(resource *handler.Resource, item string) e
 }
 
 func (command *commandGet) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"keypair"})
+	err := command.Ctx.CheckFlagsSet([]string{"name"})
 	if err != nil {
 		return err
 	}
-	resource.Params.(*paramsGet).keypair = command.Ctx.CLIContext.String("keypair")
+	resource.Params.(*paramsGet).keypair = command.Ctx.CLIContext.String("name")
 	return err
 }
 
@@ -97,5 +97,5 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 }
 
 func (command *commandGet) StdinField() string {
-	return "keypair"
+	return "name"
 }

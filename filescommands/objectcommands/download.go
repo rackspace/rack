@@ -11,7 +11,7 @@ import (
 
 var download = cli.Command{
 	Name:        "download",
-	Usage:       util.Usage(commandPrefix, "download", "--container <containerName> --object <objectName>"),
+	Usage:       util.Usage(commandPrefix, "download", "--container <containerName> --name <objectName>"),
 	Description: "Downloads an object",
 	Action:      actionDownload,
 	Flags:       util.CommandFlags(flagsDownload, keysDownload),
@@ -27,7 +27,7 @@ func flagsDownload() []cli.Flag {
 			Usage: "[required] The name of the container containing the object to download",
 		},
 		cli.StringFlag{
-			Name:  "object",
+			Name:  "name",
 			Usage: "[required] The name of the object to download",
 		},
 	}
@@ -64,12 +64,12 @@ func (command *commandDownload) ServiceClientType() string {
 }
 
 func (command *commandDownload) HandleFlags(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"container", "object"})
+	err := command.Ctx.CheckFlagsSet([]string{"container", "name"})
 	if err != nil {
 		return err
 	}
 	container := command.Ctx.CLIContext.String("container")
-	object := command.Ctx.CLIContext.String("object")
+	object := command.Ctx.CLIContext.String("name")
 	resource.Params = &paramsDownload{
 		container: container,
 		object:    object,

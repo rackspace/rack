@@ -10,7 +10,7 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       util.Usage(commandPrefix, "get", "--container <containerName> --object <objectName>"),
+	Usage:       util.Usage(commandPrefix, "get", "--container <containerName> --name <objectName>"),
 	Description: "Retreives an object",
 	Action:      actionGet,
 	Flags:       util.CommandFlags(flagsGet, keysGet),
@@ -26,7 +26,7 @@ func flagsGet() []cli.Flag {
 			Usage: "[required] The name of the container",
 		},
 		cli.StringFlag{
-			Name:  "object",
+			Name:  "name",
 			Usage: "[required] The name of the object",
 		},
 	}
@@ -63,12 +63,12 @@ func (command *commandGet) ServiceClientType() string {
 }
 
 func (command *commandGet) HandleFlags(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"container", "object"})
+	err := command.Ctx.CheckFlagsSet([]string{"container", "name"})
 	if err != nil {
 		return err
 	}
 	container := command.Ctx.CLIContext.String("container")
-	object := command.Ctx.CLIContext.String("object")
+	object := command.Ctx.CLIContext.String("name")
 	resource.Params = &paramsGet{
 		container: container,
 		object:    object,

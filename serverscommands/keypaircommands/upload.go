@@ -14,7 +14,7 @@ import (
 
 var upload = cli.Command{
 	Name:        "upload",
-	Usage:       util.Usage(commandPrefix, "upload", "--keypair <keypairName> [public-key <publicKey> | file <file>]"),
+	Usage:       util.Usage(commandPrefix, "upload", "--name <keypairName> [public-key <publicKey> | file <file>]"),
 	Description: "Uploads a keypair",
 	Action:      actionUpload,
 	Flags:       util.CommandFlags(flagsUpload, keysUpload),
@@ -26,7 +26,7 @@ var upload = cli.Command{
 func flagsUpload() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "keypair",
+			Name:  "name",
 			Usage: "[required] The name of the keypair",
 		},
 		cli.StringFlag{
@@ -70,12 +70,12 @@ func (command *commandUpload) ServiceClientType() string {
 }
 
 func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"keypair"})
+	err := command.Ctx.CheckFlagsSet([]string{"name"})
 	if err != nil {
 		return err
 	}
 	opts := &osKeypairs.CreateOpts{
-		Name: command.Ctx.CLIContext.String("keypair"),
+		Name: command.Ctx.CLIContext.String("name"),
 	}
 
 	if command.Ctx.CLIContext.IsSet("file") {

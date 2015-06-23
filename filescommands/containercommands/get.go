@@ -10,7 +10,7 @@ import (
 
 var create = cli.Command{
 	Name:        "get",
-	Usage:       util.Usage(commandPrefix, "get", "[--container <containerName> | --stdin container]"),
+	Usage:       util.Usage(commandPrefix, "get", "[--container <containerName> | --stdin name]"),
 	Description: "Retreives a container",
 	Action:      actionGet,
 	Flags:       util.CommandFlags(flagsGet, keysGet),
@@ -22,12 +22,12 @@ var create = cli.Command{
 func flagsGet() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "container",
+			Name:  "name",
 			Usage: "[optional; required if `stdin` isn't provided] The name of the container",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `container` isn't provided] The field being piped into STDIN. Valid values are: container",
+			Usage: "[optional; required if `name` isn't provided] The field being piped into STDIN. Valid values are: name",
 		},
 	}
 }
@@ -72,11 +72,11 @@ func (command *commandGet) HandlePipe(resource *handler.Resource, item string) e
 }
 
 func (command *commandGet) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"container"})
+	err := command.Ctx.CheckFlagsSet([]string{"name"})
 	if err != nil {
 		return err
 	}
-	containerName := command.Ctx.CLIContext.String("container")
+	containerName := command.Ctx.CLIContext.String("name")
 	resource.Params = containerName
 	return err
 }
@@ -93,5 +93,5 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 }
 
 func (command *commandGet) StdinField() string {
-	return "container"
+	return "name"
 }

@@ -15,7 +15,7 @@ import (
 
 var upload = cli.Command{
 	Name:        "upload",
-	Usage:       util.Usage(commandPrefix, "upload", "--container <containerName> --object <objectName>"),
+	Usage:       util.Usage(commandPrefix, "upload", "--container <containerName> --name <objectName>"),
 	Description: "Uploads an object",
 	Action:      actionUpload,
 	Flags:       util.CommandFlags(flagsUpload, keysUpload),
@@ -31,7 +31,7 @@ func flagsUpload() []cli.Flag {
 			Usage: "[required] The name of the container to upload the object upload",
 		},
 		cli.StringFlag{
-			Name:  "object",
+			Name:  "name",
 			Usage: "[required] The name the object should have in the Cloud Files container",
 		},
 		cli.StringFlag{
@@ -83,13 +83,13 @@ func (command *commandUpload) ServiceClientType() string {
 }
 
 func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"container", "object"})
+	err := command.Ctx.CheckFlagsSet([]string{"container", "name"})
 	if err != nil {
 		return err
 	}
 
 	container := command.Ctx.CLIContext.String("container")
-	object := command.Ctx.CLIContext.String("object")
+	object := command.Ctx.CLIContext.String("name")
 	resource.Params = &paramsUpload{
 		container: container,
 		object:    object,
