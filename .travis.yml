@@ -13,6 +13,7 @@ install:
 script:
 - go build -v ./...
 before_deploy:
+- curl -X POST http://readthedocs.org/build/rackspace-cli
 - "./script/prep-travis-release.sh"
 - cd build
 deploy:
