@@ -27,7 +27,33 @@ The tl;dr version is to grab the binary for your platform:
 * `Windows (64 bit)`_
 
 Once downloaded; you need to make it executable, if you are unfamiliar with this
-or are running Windows, please see :ref:`installation_and_configuration`. 
+or are running Windows, please see :ref:`installation_and_configuration`.
+
+Next, run::
+
+    rack configure
+
+This command will automatically create a configuration file for you if it
+doesn't exist and walk you through creating a profile for it::
+
+    rack configure
+
+This interactive session will walk you through creating
+a profile in your configuration file. You may fill in all or none of the
+values::
+
+    Rackspace Username: iamacat
+    Rackspace API key: secrets
+    Rackspace Region : IAD
+    Profile Name:
+
+    A profile named DEFAULT already exists. Overwrite? (y/n): y
+
+This allows you to immediately get working::
+
+    rack servers instance list
+
+
 
 Synopsis
 --------
