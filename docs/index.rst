@@ -115,3 +115,7 @@ Indices and tables
 * :ref:`search`
 
 .. _Github project: https://github.com/jrperritt/rack
+.. _Mac OSX (64 bit): https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com/Darwin/amd64/rack
+.. _Linux (64 bit): https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com/Linux/amd64/rack
+.. _Windows (64 bit): https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com/Windows/amd64/rack.exe
+.. _Cloud Control panel: https://mycloud.rackspace.com/
