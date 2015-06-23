@@ -86,7 +86,6 @@ func (command *commandList) HandleFlags(resource *handler.Resource) error {
 		Name:         c.String("name"),
 		Status:       c.String("status"),
 		Marker:       c.String("marker"),
-		Limit:        c.Int("limit"),
 	}
 	resource.Params = &paramsList{
 		opts: opts,

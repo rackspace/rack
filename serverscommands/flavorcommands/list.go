@@ -72,7 +72,6 @@ func (command *commandList) HandleFlags(resource *handler.Resource) error {
 		MinDisk: c.Int("min-disk"),
 		MinRAM:  c.Int("min-ram"),
 		Marker:  c.String("marker"),
-		Limit:   c.Int("limit"),
 	}
 	resource.Params = &paramsList{
 		opts: opts,
