@@ -56,13 +56,13 @@ func TestDeleteHandlePipe(t *testing.T) {
 	cmd := &commandDelete{}
 	expected := &handler.Resource{
 		Params: &paramsDelete{
-			keypair: "kepair1",
+			keypair: "keypair1",
 		},
 	}
 	actual := &handler.Resource{
 		Params: &paramsDelete{},
 	}
-	err := cmd.HandlePipe(actual, "kepair1")
+	err := cmd.HandlePipe(actual, "keypair1")
 	th.AssertNoErr(t, err)
 	th.AssertEquals(t, expected.Params.(*paramsDelete).keypair, actual.Params.(*paramsDelete).keypair)
 }
