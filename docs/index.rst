@@ -16,6 +16,12 @@ point of entry for all Rackspace Cloud services.
 
 See :ref:`installation_and_configuration` to get started.
 
+Quickstart
+----------
+
+
+
+
 Synopsis
 --------
 
@@ -32,6 +38,7 @@ And the response (**default**: table-based output) would look like::
 
       ID	Name		Status	Public IPv4	Private IPv4	Image	Flavor
       GUID	my_server	ACTIVE	101.130.19.31	10.208.128.233	GUID	io1-30
+
 
 Options
 -------
