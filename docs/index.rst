@@ -37,11 +37,7 @@ This command will automatically create a configuration file for you if it
 doesn't exist and walk you through creating a profile for it::
 
     rack configure
-
-This interactive session will walk you through creating
-a profile in your configuration file. You may fill in all or none of the
-values::
-
+    
     Rackspace Username: iamacat
     Rackspace API key: secrets
     Rackspace Region : IAD
