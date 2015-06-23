@@ -26,6 +26,8 @@ The tl;dr version is to grab the binary for your platform:
 * `Linux (64 bit)`_
 * `Windows (64 bit)`_
 
+Once downloaded; you need to make it executable, if you are unfamiliar with this
+or are running Windows, please see :ref:`installation_and_configuration`. 
 
 Synopsis
 --------
