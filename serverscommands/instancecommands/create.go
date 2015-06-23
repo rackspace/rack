@@ -107,13 +107,15 @@ func (command *commandCreate) ServiceClientType() string {
 func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 	c := command.Ctx.CLIContext
 	opts := &servers.CreateOpts{
-		ImageRef:       c.String("image-id"),
-		ImageName:      c.String("image-name"),
-		FlavorRef:      c.String("flavor-id"),
-		FlavorName:     c.String("flavor-name"),
-		SecurityGroups: strings.Split(c.String("security-groups"), ","),
-		AdminPass:      c.String("admin-pass"),
-		KeyPair:        c.String("keypair"),
+		ImageRef:   c.String("image-id"),
+		ImageName:  c.String("image-name"),
+		FlavorRef:  c.String("flavor-id"),
+		FlavorName: c.String("flavor-name"),
+		AdminPass:  c.String("admin-pass"),
+		KeyPair:    c.String("keypair"),
+	}
+	if c.IsSet("security-groups") {
+		opts.SecurityGroups = strings.Split(c.String("security-groups"), ",")
 	}
 	if c.IsSet("user-data") {
 		s := c.String("user-data")
