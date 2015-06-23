@@ -5,8 +5,7 @@ import (
 	"strings"
 
 	"github.com/codegangsta/cli"
-	"github.com/jrperritt/rack/auth"
-	"github.com/jrperritt/rack/output"
+	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
 	osServers "github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
@@ -16,7 +15,7 @@ var resize = cli.Command{
 	Name:        "resize",
 	Usage:       util.Usage(commandPrefix, "resize", strings.Join([]string{util.IDOrNameUsage("instance"), "--flavor-id <flavor-id>"}, " ")),
 	Description: "Resizes an existing server",
-	Action:      commandResize,
+	Action:      actionResize,
 	Flags:       util.CommandFlags(flagsResize, keysResize),
 	BashComplete: func(c *cli.Context) {
 		util.CompleteFlags(util.CommandFlags(flagsResize, keysResize))
@@ -29,61 +28,80 @@ func flagsResize() []cli.Flag {
 			Name:  "flavor-id",
 			Usage: "[required] The ID of the flavor that the resized server should have.",
 		},
+		cli.StringFlag{
+			Name:  "stdin",
+			Usage: "[optional; required if `id` or `name` isn't provided] The field being piped into STDIN. Valid values are: id",
+		},
 	}
 	return append(cf, util.IDAndNameFlags...)
 }
 
 var keysResize = []string{}
 
-func commandResize(c *cli.Context) {
-	var err error
-	outputParams := &output.Params{
-		Context: c,
-		Keys:    keysResize,
-	}
-	err = util.CheckArgNum(c, 0)
-	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
-	}
+type paramsResize struct {
+	serverID string
+	opts     *osServers.ResizeOpts
+}
 
-	err = util.CheckFlagsSet(c, []string{"flavor-id"})
-	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
-	}
+type commandResize handler.Command
 
-	outputParams.ServiceClientType = serviceClientType
-	client, err := auth.NewClient(c, outputParams.ServiceClientType)
-	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
+func actionResize(c *cli.Context) {
+	command := &commandResize{
+		Ctx: &handler.Context{
+			CLIContext: c,
+		},
 	}
+	handler.Handle(command)
+}
 
-	serverID, err := util.IDOrName(c, client, osServers.IDFromName)
+func (command *commandResize) Context() *handler.Context {
+	return command.Ctx
+}
+
+func (command *commandResize) Keys() []string {
+	return keysResize
+}
+
+func (command *commandResize) ServiceClientType() string {
+	return serviceClientType
+}
+
+func (command *commandResize) HandleFlags(resource *handler.Resource) error {
+	err := command.Ctx.CheckFlagsSet([]string{"flavor-id"})
 	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
+		return err
 	}
-
-	flavorID := c.String("flavor-id")
-	opts := osServers.ResizeOpts{
+	flavorID := command.Ctx.CLIContext.String("flavor-id")
+	opts := &osServers.ResizeOpts{
 		FlavorRef: flavorID,
 	}
-	err = servers.Resize(client, serverID, opts).ExtractErr()
-	outputParams.ServiceClient = client
+	resource.Params = &paramsResize{
+		opts: opts,
+	}
+	return nil
+}
+
+func (command *commandResize) HandlePipe(resource *handler.Resource, item string) error {
+	resource.Params.(*paramsResize).serverID = item
+	return nil
+}
+
+func (command *commandResize) HandleSingle(resource *handler.Resource) error {
+	id, err := command.Ctx.IDOrName(osServers.IDFromName)
+	resource.Params.(*paramsResize).serverID = id
+	return err
+}
+
+func (command *commandResize) Execute(resource *handler.Resource) {
+	params := resource.Params.(*paramsResize)
+	err := servers.Resize(command.Ctx.ServiceClient, params.serverID, params.opts).ExtractErr()
 	if err != nil {
-		outputParams.Err = fmt.Errorf("Error resizing instance [%s] to flavor [%s]: %s\n", serverID, flavorID, err)
-		output.Print(outputParams)
+		resource.Err = err
 		return
 	}
-	f := func() interface{} {
-		return fmt.Sprintf("Successfully resized instance [%s] to flavor [%s]", serverID, flavorID)
-	}
-	outputParams.F = &f
-	output.Print(outputParams)
+	resource.Result = fmt.Sprintf("Successfully resized instance [%s] to flavor [%s]", params.serverID, params.opts.FlavorRef)
+}
+
+func (command *commandResize) StdinField() string {
+	return "id"
 }

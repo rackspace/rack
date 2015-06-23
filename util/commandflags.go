@@ -15,7 +15,7 @@ func CommandFlags(f func() []cli.Flag, keys []string) []cli.Flag {
 	if len(keys) > 0 {
 		fields := make([]string, len(keys))
 		for i, key := range keys {
-			fields[i] = strings.Join(strings.Split(strings.ToLower(key), " "), "")
+			fields[i] = strings.Join(strings.Split(strings.ToLower(key), " "), "-")
 		}
 		flagFields := cli.StringFlag{
 			Name:  "fields",
@@ -43,20 +43,4 @@ func CompleteFlags(flags []cli.Flag) {
 		}
 		fmt.Println("--" + flagName)
 	}
-}
-
-// CheckKVFlag is a function used for verifying the format of a key-value flag.
-func CheckKVFlag(c *cli.Context, flagName string) (map[string]string, error) {
-	kv := make(map[string]string)
-	kvStrings := strings.Split(c.String(flagName), ",")
-	for _, kvString := range kvStrings {
-		temp := strings.Split(kvString, "=")
-		if len(temp) != 2 {
-			return nil, Error(c, ErrFlagFormatting{
-				Msg: fmt.Sprintf("Expected key1=value1,key2=value2 format but got %s for --%s.\n", kvString, flagName),
-			})
-		}
-		kv[temp[0]] = temp[1]
-	}
-	return kv, nil
 }

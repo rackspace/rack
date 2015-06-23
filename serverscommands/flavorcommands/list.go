@@ -1,14 +1,10 @@
 package flavorcommands
 
 import (
-	"fmt"
-
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
-	"github.com/jrperritt/rack/auth"
-	"github.com/jrperritt/rack/output"
+	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	osFlavors "github.com/rackspace/gophercloud/openstack/compute/v2/flavors"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/flavors"
 )
 
@@ -16,7 +12,7 @@ var list = cli.Command{
 	Name:        "list",
 	Usage:       util.Usage(commandPrefix, "list", util.IDOrNameUsage("flavor")),
 	Description: "Lists flavors",
-	Action:      commandList,
+	Action:      actionList,
 	Flags:       util.CommandFlags(flagsList, keysList),
 	BashComplete: func(c *cli.Context) {
 		util.CompleteFlags(util.CommandFlags(flagsList, keysList))
@@ -25,6 +21,7 @@ var list = cli.Command{
 
 func flagsList() []cli.Flag {
 	return []cli.Flag{
+
 		cli.IntFlag{
 			Name:  "min-disk",
 			Usage: "[optional] Only list flavors that have at least this much disk storage (in GB).",
@@ -33,68 +30,74 @@ func flagsList() []cli.Flag {
 			Name:  "min-ram",
 			Usage: "[optional] Only list flavors that have at least this much RAM (in GB).",
 		},
-
 		cli.StringFlag{
 			Name:  "marker",
 			Usage: "[optional] Start listing flavors at this flavor ID.",
-		},
-		cli.IntFlag{
-			Name:  "limit",
-			Usage: "[optional] Only return this many flavors at most.",
 		},
 	}
 }
 
 var keysList = []string{"ID", "Name", "RAM", "Disk", "Swap", "VCPUs", "RxTxFactor"}
 
-func commandList(c *cli.Context) {
-	var err error
-	outputParams := &output.Params{
-		Context: c,
-		Keys:    keysList,
-	}
-	err = util.CheckArgNum(c, 0)
-	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
-	}
+type paramsList struct {
+	opts *flavors.ListOpts
+}
 
-	outputParams.ServiceClientType = serviceClientType
-	client, err := auth.NewClient(c, outputParams.ServiceClientType)
-	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
-	}
+type commandList handler.Command
 
-	opts := flavors.ListOpts{
+func actionList(c *cli.Context) {
+	command := &commandList{
+		Ctx: &handler.Context{
+			CLIContext: c,
+		},
+	}
+	handler.Handle(command)
+}
+
+func (command *commandList) Context() *handler.Context {
+	return command.Ctx
+}
+
+func (command *commandList) Keys() []string {
+	return keysList
+}
+
+func (command *commandList) ServiceClientType() string {
+	return serviceClientType
+}
+
+func (command *commandList) HandleFlags(resource *handler.Resource) error {
+	c := command.Ctx.CLIContext
+	opts := &flavors.ListOpts{
 		MinDisk: c.Int("min-disk"),
 		MinRAM:  c.Int("min-ram"),
 		Marker:  c.String("marker"),
-		Limit:   c.Int("limit"),
 	}
-	allPages, err := flavors.ListDetail(client, opts).AllPages()
-	outputParams.ServiceClient = client
-	if err != nil {
-		outputParams.Err = fmt.Errorf("Error listing flavors: %s\n", err)
-		output.Print(outputParams)
-		return
+	resource.Params = &paramsList{
+		opts: opts,
 	}
-	o, err := osFlavors.ExtractFlavors(allPages)
-	if err != nil {
-		outputParams.Err = fmt.Errorf("Error listing flavors: %s\n", err)
-		output.Print(outputParams)
-		return
-	}
+	return nil
+}
 
-	f := func() interface{} {
-		m := make([]map[string]interface{}, len(o))
-		for j, flavor := range o {
-			m[j] = structs.Map(flavor)
-		}
-		return m
+func (command *commandList) HandleSingle(resource *handler.Resource) error {
+	return nil
+}
+
+func (command *commandList) Execute(resource *handler.Resource) {
+	opts := resource.Params.(*paramsList).opts
+	allPages, err := flavors.ListDetail(command.Ctx.ServiceClient, opts).AllPages()
+	if err != nil {
+		resource.Err = err
+		return
 	}
-	outputParams.F = &f
-	output.Print(outputParams)
+	flavors, err := flavors.ExtractFlavors(allPages)
+	if err != nil {
+		resource.Err = err
+		return
+	}
+	result := make([]map[string]interface{}, len(flavors))
+	for j, flavor := range flavors {
+		result[j] = structs.Map(flavor)
+	}
+	resource.Result = result
 }

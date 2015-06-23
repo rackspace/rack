@@ -1,12 +1,9 @@
 package imagecommands
 
 import (
-	"fmt"
-
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
-	"github.com/jrperritt/rack/auth"
-	"github.com/jrperritt/rack/output"
+	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
 	osImages "github.com/rackspace/gophercloud/openstack/compute/v2/images"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/images"
@@ -16,7 +13,7 @@ var list = cli.Command{
 	Name:        "list",
 	Usage:       util.Usage(commandPrefix, "list", util.IDOrNameUsage("image")),
 	Description: "Lists images",
-	Action:      commandList,
+	Action:      actionList,
 	Flags:       util.CommandFlags(flagsList, keysList),
 	BashComplete: func(c *cli.Context) {
 		util.CompleteFlags(util.CommandFlags(flagsList, keysList))
@@ -37,63 +34,70 @@ func flagsList() []cli.Flag {
 			Name:  "marker",
 			Usage: "Start listing images at this image ID.",
 		},
-		cli.IntFlag{
-			Name:  "limit",
-			Usage: "Only return this many images at most.",
-		},
 	}
 }
 
 var keysList = []string{"ID", "Name", "Status", "MinDisk", "MinRAM"}
 
-func commandList(c *cli.Context) {
-	var err error
-	outputParams := &output.Params{
-		Context: c,
-		Keys:    keysList,
-	}
-	err = util.CheckArgNum(c, 0)
-	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
-	}
+type paramsList struct {
+	opts *osImages.ListOpts
+}
 
-	outputParams.ServiceClientType = serviceClientType
-	client, err := auth.NewClient(c, outputParams.ServiceClientType)
-	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
-	}
+type commandList handler.Command
 
-	opts := osImages.ListOpts{
+func actionList(c *cli.Context) {
+	command := &commandList{
+		Ctx: &handler.Context{
+			CLIContext: c,
+		},
+	}
+	handler.Handle(command)
+}
+
+func (command *commandList) Context() *handler.Context {
+	return command.Ctx
+}
+
+func (command *commandList) Keys() []string {
+	return keysList
+}
+
+func (command *commandList) ServiceClientType() string {
+	return serviceClientType
+}
+
+func (command *commandList) HandleFlags(resource *handler.Resource) error {
+	c := command.Ctx.CLIContext
+	opts := &osImages.ListOpts{
 		Name:   c.String("name"),
 		Status: c.String("status"),
 		Marker: c.String("marker"),
-		Limit:  c.Int("limit"),
 	}
-	allPages, err := images.ListDetail(client, opts).AllPages()
-	outputParams.ServiceClient = client
-	if err != nil {
-		outputParams.Err = fmt.Errorf("Error listing images: %s\n", err)
-		output.Print(outputParams)
-		return
+	resource.Params = &paramsList{
+		opts: opts,
 	}
-	o, err := osImages.ExtractImages(allPages)
-	if err != nil {
-		outputParams.Err = fmt.Errorf("Error listing images: %s\n", err)
-		output.Print(outputParams)
-		return
-	}
+	return nil
+}
 
-	f := func() interface{} {
-		m := make([]map[string]interface{}, len(o))
-		for j, image := range o {
-			m[j] = structs.Map(image)
-		}
-		return m
+func (command *commandList) HandleSingle(resource *handler.Resource) error {
+	return nil
+}
+
+func (command *commandList) Execute(resource *handler.Resource) {
+	opts := resource.Params.(*paramsList).opts
+	allPages, err := images.ListDetail(command.Ctx.ServiceClient, opts).AllPages()
+	if err != nil {
+		resource.Err = err
+		return
 	}
-	outputParams.F = &f
-	output.Print(outputParams)
+	images, err := osImages.ExtractImages(allPages)
+	if err != nil {
+		resource.Err = err
+		return
+	}
+	result := make([]map[string]interface{}, len(images))
+	for j, image := range images {
+		result[j] = structs.Map(image)
+	}
+	resource.Result = result
 }

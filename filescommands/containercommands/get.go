@@ -1,18 +1,17 @@
-package imagecommands
+package containercommands
 
 import (
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	osImages "github.com/rackspace/gophercloud/openstack/compute/v2/images"
-	"github.com/rackspace/gophercloud/rackspace/compute/v2/images"
+	"github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers"
 )
 
-var get = cli.Command{
+var create = cli.Command{
 	Name:        "get",
-	Usage:       util.Usage(commandPrefix, "get", util.IDOrNameUsage("image")),
-	Description: "Retreives an image",
+	Usage:       util.Usage(commandPrefix, "get", "[--container <containerName> | --stdin name]"),
+	Description: "Retreives a container",
 	Action:      actionGet,
 	Flags:       util.CommandFlags(flagsGet, keysGet),
 	BashComplete: func(c *cli.Context) {
@@ -21,19 +20,22 @@ var get = cli.Command{
 }
 
 func flagsGet() []cli.Flag {
-	stdin := []cli.Flag{
+	return []cli.Flag{
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "[optional; required if `stdin` isn't provided] The name of the container",
+		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `id` or `name` isn't provided] The field being piped to STDIN. Valid values are: id",
+			Usage: "[optional; required if `name` isn't provided] The field being piped into STDIN. Valid values are: name",
 		},
 	}
-	return append(stdin, util.IDAndNameFlags...)
 }
 
-var keysGet = []string{"ID", "Name", "Status", "Progress", "MinDisk", "MinRAM", "Created", "Updated"}
+var keysGet = []string{"Name", "ObjectCount", "BytesUsed", "ContentLength"}
 
 type paramsGet struct {
-	image string
+	container string
 }
 
 type commandGet handler.Command
@@ -60,30 +62,36 @@ func (command *commandGet) ServiceClientType() string {
 }
 
 func (command *commandGet) HandleFlags(resource *handler.Resource) error {
+	resource.Params = &paramsGet{}
 	return nil
 }
 
 func (command *commandGet) HandlePipe(resource *handler.Resource, item string) error {
-	resource.Params.(*paramsGet).image = item
+	resource.Params.(*paramsGet).container = item
 	return nil
 }
 
 func (command *commandGet) HandleSingle(resource *handler.Resource) error {
-	id, err := command.Ctx.IDOrName(osImages.IDFromName)
-	resource.Params.(*paramsGet).image = id
+	err := command.Ctx.CheckFlagsSet([]string{"name"})
+	if err != nil {
+		return err
+	}
+	containerName := command.Ctx.CLIContext.String("name")
+	resource.Params = containerName
 	return err
 }
 
 func (command *commandGet) Execute(resource *handler.Resource) {
-	imageID := resource.Params.(*paramsGet).image
-	image, err := images.Get(command.Ctx.ServiceClient, imageID).Extract()
+	containerName := resource.Params.(*paramsGet).container
+	containerInfo, err := containers.Get(command.Ctx.ServiceClient, containerName).Extract()
 	if err != nil {
 		resource.Err = err
 		return
 	}
-	resource.Result = structs.Map(image)
+	resource.Result = structs.Map(containerInfo)
+	resource.Result.(map[string]interface{})["Name"] = containerName
 }
 
 func (command *commandGet) StdinField() string {
-	return "id"
+	return "name"
 }

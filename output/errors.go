@@ -1,19 +1,6 @@
-package util
+package output
 
-import (
-	"fmt"
-
-	"github.com/codegangsta/cli"
-)
-
-// Error is used for printing information when an error is encountered.
-func Error(c *cli.Context, e error) error {
-	switch e.(type) {
-	case ErrMissingFlag, ErrFlagFormatting, ErrArgs:
-		return fmt.Errorf("%s\nUsage: %s\n", e.Error(), c.Command.Usage)
-	}
-	return fmt.Errorf("%s\n", e)
-}
+import "fmt"
 
 // ErrMissingFlagPrefix is the prefix for when a required flag is missing.
 var ErrMissingFlagPrefix = "Missing flag:"
@@ -39,8 +26,10 @@ func (e ErrFlagFormatting) Error() string {
 	return fmt.Sprintf("%s %s\n", ErrFlagFormattingPrefix, e.Msg)
 }
 
+// ErrArgsFlagPrefix is the prefix for when a flag's argument is invalid.
 var ErrArgsFlagPrefix = "Argument error:"
 
+// ErrArgs is used when a flag's arguments are invalid.
 type ErrArgs struct {
 	Msg string
 }

@@ -1,11 +1,8 @@
 package instancecommands
 
 import (
-	"fmt"
-
 	"github.com/codegangsta/cli"
-	"github.com/jrperritt/rack/auth"
-	"github.com/jrperritt/rack/output"
+	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
 	osServers "github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
@@ -15,7 +12,7 @@ var update = cli.Command{
 	Name:        "update",
 	Usage:       util.Usage(commandPrefix, "update", util.IDOrNameUsage("instance")),
 	Description: "Updates an existing server",
-	Action:      commandUpdate,
+	Action:      actionUpdate,
 	Flags:       util.CommandFlags(flagsUpdate, keysUpdate),
 	BashComplete: func(c *cli.Context) {
 		util.CompleteFlags(util.CommandFlags(flagsUpdate, keysUpdate))
@@ -42,49 +39,64 @@ func flagsUpdate() []cli.Flag {
 
 var keysUpdate = []string{"ID", "Name", "Public IPv4", "Public IPv6"}
 
-func commandUpdate(c *cli.Context) {
-	var err error
-	outputParams := &output.Params{
-		Context: c,
-		Keys:    keysUpdate,
-	}
-	err = util.CheckArgNum(c, 0)
-	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
-	}
+type paramsUpdate struct {
+	serverID string
+	opts     *osServers.UpdateOpts
+}
 
-	outputParams.ServiceClientType = serviceClientType
-	client, err := auth.NewClient(c, outputParams.ServiceClientType)
-	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
-	}
+type commandUpdate handler.Command
 
-	serverID, err := util.IDOrName(c, client, osServers.IDFromName)
-	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
+func actionUpdate(c *cli.Context) {
+	command := &commandUpdate{
+		Ctx: &handler.Context{
+			CLIContext: c,
+		},
 	}
+	handler.Handle(command)
+}
+
+func (command *commandUpdate) Context() *handler.Context {
+	return command.Ctx
+}
+
+func (command *commandUpdate) Keys() []string {
+	return keysUpdate
+}
+
+func (command *commandUpdate) ServiceClientType() string {
+	return serviceClientType
+}
+
+func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
+	c := command.Ctx.CLIContext
 	opts := &osServers.UpdateOpts{
 		Name:       c.String("new-name"),
 		AccessIPv4: c.String("new-ipv4"),
 		AccessIPv6: c.String("new-ipv6"),
 	}
-	o, err := servers.Update(client, serverID, opts).Extract()
-	outputParams.ServiceClient = client
+	resource.Params = &paramsUpdate{
+		opts: opts,
+	}
+	return nil
+}
+
+func (command *commandUpdate) HandlePipe(resource handler.Resource, item string) (*handler.Resource, error) {
+	resource.Params.(*paramsUpdate).serverID = item
+	return &resource, nil
+}
+
+func (command *commandUpdate) HandleSingle(resource *handler.Resource) error {
+	id, err := command.Ctx.IDOrName(osServers.IDFromName)
+	resource.Params.(*paramsUpdate).serverID = id
+	return err
+}
+
+func (command *commandUpdate) Execute(resource *handler.Resource) {
+	params := resource.Params.(*paramsUpdate)
+	server, err := servers.Update(command.Ctx.ServiceClient, params.serverID, params.opts).Extract()
 	if err != nil {
-		outputParams.Err = fmt.Errorf("Error updating instance [%s] : %s\n", serverID, err)
-		output.Print(outputParams)
+		resource.Err = err
 		return
 	}
-
-	f := func() interface{} {
-		return serverSingle(o)
-	}
-	outputParams.F = &f
-	output.Print(outputParams)
+	resource.Result = serverSingle(server)
 }

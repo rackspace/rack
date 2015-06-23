@@ -8,7 +8,7 @@ import (
 	"github.com/jrperritt/rack/serverscommands/keypaircommands"
 )
 
-// Get returns all the commands allowed for a `compute` request.
+// Get returns all the commands allowed for a `servers` request.
 func Get() []cli.Command {
 	return []cli.Command{
 		{

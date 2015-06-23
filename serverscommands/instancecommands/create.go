@@ -1,13 +1,11 @@
 package instancecommands
 
 import (
-	"fmt"
 	"io/ioutil"
 	"strings"
 
 	"github.com/codegangsta/cli"
-	"github.com/jrperritt/rack/auth"
-	"github.com/jrperritt/rack/output"
+	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
 	osServers "github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
@@ -15,9 +13,9 @@ import (
 
 var create = cli.Command{
 	Name:        "create",
-	Usage:       util.Usage(commandPrefix, "create", "--name <serverName>"),
-	Description: "Creates a new server",
-	Action:      commandCreate,
+	Usage:       util.Usage(commandPrefix, "create", "[--name <instanceName> | --stdin name"),
+	Description: "Creates a new server instance",
+	Action:      actionCreate,
 	Flags:       util.CommandFlags(flagsCreate, keysCreate),
 	BashComplete: func(c *cli.Context) {
 		util.CompleteFlags(util.CommandFlags(flagsCreate, keysCreate))
@@ -28,7 +26,11 @@ func flagsCreate() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "name",
-			Usage: "[required] The name that the server should have.",
+			Usage: "[optional; required if `stdin` isn't provided] The name that the instance should have.",
+		},
+		cli.StringFlag{
+			Name:  "stdin",
+			Usage: "[optional; required if `name` isn't provided] The field being piped into STDIN. Valid values are: name",
 		},
 		cli.StringFlag{
 			Name:  "image-id",
@@ -75,37 +77,46 @@ func flagsCreate() []cli.Flag {
 
 var keysCreate = []string{"ID", "AdminPass"}
 
-func commandCreate(c *cli.Context) {
-	var err error
-	outputParams := &output.Params{
-		Context: c,
-		Keys:    keysCreate,
-	}
-	err = util.CheckArgNum(c, 0)
-	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
-	}
-	err = util.CheckFlagsSet(c, []string{"name"})
-	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
-	}
-	serverName := c.String("name")
+type paramsCreate struct {
+	opts *servers.CreateOpts
+}
 
+type commandCreate handler.Command
+
+func actionCreate(c *cli.Context) {
+	command := &commandCreate{
+		Ctx: &handler.Context{
+			CLIContext: c,
+		},
+	}
+	handler.Handle(command)
+}
+
+func (command *commandCreate) Context() *handler.Context {
+	return command.Ctx
+}
+
+func (command *commandCreate) Keys() []string {
+	return keysCreate
+}
+
+func (command *commandCreate) ServiceClientType() string {
+	return serviceClientType
+}
+
+func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
+	c := command.Ctx.CLIContext
 	opts := &servers.CreateOpts{
-		Name:           serverName,
-		ImageRef:       c.String("image-id"),
-		ImageName:      c.String("image-name"),
-		FlavorRef:      c.String("flavor-id"),
-		FlavorName:     c.String("flavor-name"),
-		SecurityGroups: strings.Split(c.String("security-groups"), ","),
-		AdminPass:      c.String("admin-pass"),
-		KeyPair:        c.String("keypair"),
+		ImageRef:   c.String("image-id"),
+		ImageName:  c.String("image-name"),
+		FlavorRef:  c.String("flavor-id"),
+		FlavorName: c.String("flavor-name"),
+		AdminPass:  c.String("admin-pass"),
+		KeyPair:    c.String("keypair"),
 	}
-
+	if c.IsSet("security-groups") {
+		opts.SecurityGroups = strings.Split(c.String("security-groups"), ",")
+	}
 	if c.IsSet("user-data") {
 		s := c.String("user-data")
 		userData, err := ioutil.ReadFile(s)
@@ -115,7 +126,6 @@ func commandCreate(c *cli.Context) {
 			opts.UserData = []byte(s)
 		}
 	}
-
 	if c.IsSet("networks") {
 		netIDs := strings.Split(c.String("networks"), ",")
 		networks := make([]osServers.Network, len(netIDs))
@@ -126,35 +136,44 @@ func commandCreate(c *cli.Context) {
 		}
 		opts.Networks = networks
 	}
-
 	if c.IsSet("metadata") {
-		opts.Metadata, err = util.CheckKVFlag(c, "metadata")
+		metadata, err := command.Ctx.CheckKVFlag("metadata")
 		if err != nil {
-			outputParams.Err = err
-			output.Print(outputParams)
-			return
+			return err
 		}
+		opts.Metadata = metadata
 	}
+	resource.Params = &paramsCreate{
+		opts: opts,
+	}
+	return nil
+}
 
-	outputParams.ServiceClientType = serviceClientType
-	client, err := auth.NewClient(c, outputParams.ServiceClientType)
+func (command *commandCreate) HandlePipe(resource *handler.Resource, item string) error {
+	resource.Params.(*paramsCreate).opts.Name = item
+	return nil
+}
+
+func (command *commandCreate) HandleSingle(resource *handler.Resource) error {
+	err := command.Ctx.CheckFlagsSet([]string{"name"})
 	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
+		return err
+	}
+	serverName := command.Ctx.CLIContext.String("name")
+	resource.Params.(*paramsCreate).opts.Name = serverName
+	return nil
+}
+
+func (command *commandCreate) Execute(resource *handler.Resource) {
+	opts := resource.Params.(*paramsCreate).opts
+	server, err := servers.Create(command.Ctx.ServiceClient, opts).Extract()
+	if err != nil {
+		resource.Err = err
 		return
 	}
+	resource.Result = serverSingle(server)
+}
 
-	o, err := servers.Create(client, opts).Extract()
-	outputParams.ServiceClient = client
-	if err != nil {
-		outputParams.Err = fmt.Errorf("Error creating server (%s): %s\n", serverName, err)
-		output.Print(outputParams)
-		return
-	}
-
-	f := func() interface{} {
-		return serverSingle(o)
-	}
-	outputParams.F = &f
-	output.Print(outputParams)
+func (command *commandCreate) StdinField() string {
+	return "name"
 }
