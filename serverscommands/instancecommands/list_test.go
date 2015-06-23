@@ -91,7 +91,7 @@ func TestListExecute(t *testing.T) {
 	defer th.TeardownHTTP()
 	th.Mux.HandleFunc("/servers/detail", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, `{ "servers": [] }`)
+		fmt.Fprintf(w, `{"servers":[]}`)
 	})
 	cmd := &commandList{
 		Ctx: &handler.Context{

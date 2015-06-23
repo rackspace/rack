@@ -2,6 +2,8 @@ package instancecommands
 
 import (
 	"flag"
+	"fmt"
+	"net/http"
 	"testing"
 
 	"github.com/codegangsta/cli"
@@ -9,6 +11,7 @@ import (
 	osServers "github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
 	th "github.com/rackspace/gophercloud/testhelper"
+	"github.com/rackspace/gophercloud/testhelper/client"
 )
 
 func TestCreateContext(t *testing.T) {
@@ -139,7 +142,28 @@ func TestCreateHandleSingle(t *testing.T) {
 }
 
 func TestCreateExecute(t *testing.T) {
-
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+	th.Mux.HandleFunc("/servers", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusAccepted)
+		w.Header().Add("Content-Type", "application/json")
+		fmt.Fprintf(w, `{"server":{}}`)
+	})
+	cmd := &commandCreate{
+		Ctx: &handler.Context{
+			ServiceClient: client.ServiceClient(),
+		},
+	}
+	actual := &handler.Resource{
+		Params: &paramsCreate{
+			opts: &servers.CreateOpts{
+				ImageRef:  "foo",
+				FlavorRef: "bar",
+			},
+		},
+	}
+	cmd.Execute(actual)
+	th.AssertNoErr(t, actual.Err)
 }
 
 func TestCreateStdinField(t *testing.T) {
