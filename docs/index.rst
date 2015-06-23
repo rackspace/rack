@@ -36,8 +36,6 @@ Next, run::
 This command will automatically create a configuration file for you if it
 doesn't exist and walk you through creating a profile for it::
 
-    rack configure
-    
     Rackspace Username: iamacat
     Rackspace API key: secrets
     Rackspace Region : IAD
