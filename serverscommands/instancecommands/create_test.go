@@ -49,8 +49,8 @@ func TestCreateHandleFlags(t *testing.T) {
 	flagset.String("metadata", "", "")
 	flagset.String("admin-pass", "", "")
 	flagset.String("keypair", "", "")
-	flagset.Set("image-id", "foo")
-	flagset.Set("flavor-id", "bar")
+	flagset.Set("image-id", "13ba-75c0-4483-acf9")
+	flagset.Set("flavor-id", "1234-b95f-ac5b-cd23")
 	flagset.Set("security-groups", "sg1,sg2,sg3")
 	flagset.Set("networks", "1111-2222-3333-4444,5555-7777-8888-9999")
 	flagset.Set("metadata", "img=foo,flavor=bar")
@@ -65,8 +65,8 @@ func TestCreateHandleFlags(t *testing.T) {
 	expected := &handler.Resource{
 		Params: &paramsCreate{
 			opts: &servers.CreateOpts{
-				ImageRef:       "foo",
-				FlavorRef:      "bar",
+				ImageRef:       "13ba-75c0-4483-acf9",
+				FlavorRef:      "1234-b95f-ac5b-cd23",
 				SecurityGroups: []string{"sg1", "sg2", "sg3"},
 				Networks: []osServers.Network{
 					{
