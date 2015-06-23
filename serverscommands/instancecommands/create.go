@@ -13,7 +13,7 @@ import (
 
 var create = cli.Command{
 	Name:        "create",
-	Usage:       util.Usage(commandPrefix, "create", "[--instance <instanceName> | --stdin instance"),
+	Usage:       util.Usage(commandPrefix, "create", "[--name <instanceName> | --stdin name"),
 	Description: "Creates a new server instance",
 	Action:      actionCreate,
 	Flags:       util.CommandFlags(flagsCreate, keysCreate),
@@ -25,12 +25,12 @@ var create = cli.Command{
 func flagsCreate() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "instance",
+			Name:  "name",
 			Usage: "[optional; required if `stdin` isn't provided] The name that the instance should have.",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `instance` isn't provided] The field being piped into STDIN. Valid values are: instance",
+			Usage: "[optional; required if `name` isn't provided] The field being piped into STDIN. Valid values are: name",
 		},
 		cli.StringFlag{
 			Name:  "image-id",
