@@ -14,12 +14,11 @@ The Rackspace Command Line Interface is a unified tool to manage your Rackspace
 services. It provides streamlined and secure configuration as well as a single
 point of entry for all Rackspace Cloud services.
 
-See :ref:`installation_and_configuration` to get started.
 
 Quickstart
 ----------
 
-
+For full instuctions on how to get started you should read :ref:`installation_and_configuration`,
 
 
 Synopsis
