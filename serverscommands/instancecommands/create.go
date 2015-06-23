@@ -175,5 +175,5 @@ func (command *commandCreate) Execute(resource *handler.Resource) {
 }
 
 func (command *commandCreate) StdinField() string {
-	return "instance"
+	return "name"
 }
