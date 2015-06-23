@@ -142,7 +142,7 @@ func TestCreateExecute(t *testing.T) {
 
 }
 
-func StdinField(t *testing.T) {
+func TestCreateStdinField(t *testing.T) {
 	cmd := &commandCreate{}
 	expected := "name"
 	actual := cmd.StdinField()
