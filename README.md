@@ -47,12 +47,12 @@ region=IAD
 
 If you're using the default profile, you can call a command without additional flags:
 ```sh
-rack compute servers list
+rack servers instance list
 ```
 
 However, if you'd like to use a different profile (such as PROFILE2 above):
 ```sh
-rack --profile PROFILE2 compute servers list
+rack --profile PROFILE2 servers instance list
 ```
 
 
