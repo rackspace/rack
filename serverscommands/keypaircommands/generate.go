@@ -63,7 +63,9 @@ func (command *commandGenerate) ServiceClientType() string {
 }
 
 func (command *commandGenerate) HandleFlags(resource *handler.Resource) error {
-	resource.Params = &osKeypairs.CreateOpts{}
+	resource.Params = &paramsGenerate{
+		opts: &osKeypairs.CreateOpts{},
+	}
 	return nil
 }
 
