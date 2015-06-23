@@ -72,11 +72,11 @@ func (command *commandGet) HandlePipe(resource *handler.Resource, item string) e
 }
 
 func (command *commandGet) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"name"})
+	err := command.Ctx.CheckFlagsSet([]string{"keypair"})
 	if err != nil {
 		return err
 	}
-	resource.Params.(*paramsGet).keypair = command.Ctx.CLIContext.String("name")
+	resource.Params.(*paramsGet).keypair = command.Ctx.CLIContext.String("keypair")
 	return err
 }
 

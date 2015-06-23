@@ -73,11 +73,11 @@ func (command *commandDelete) HandlePipe(resource *handler.Resource, item string
 }
 
 func (command *commandDelete) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"name"})
+	err := command.Ctx.CheckFlagsSet([]string{"keypair"})
 	if err != nil {
 		return err
 	}
-	resource.Params.(*paramsDelete).keypair = command.Ctx.CLIContext.String("name")
+	resource.Params.(*paramsDelete).keypair = command.Ctx.CLIContext.String("keypair")
 	return err
 }
 
