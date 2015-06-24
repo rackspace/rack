@@ -44,7 +44,7 @@ func flagsUpload() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `file` or `content` isn't provided] The field being piped to STDIN, if any. Valid values are: file",
+			Usage: "[optional; required if `file` or `content` isn't provided] The field being piped to STDIN, if any. Valid values are: content",
 		},
 	}
 }
@@ -56,6 +56,7 @@ type paramsUpload struct {
 	object    string
 	content   string
 	fileName  string
+	stream    bool
 	opts      osObjects.CreateOpts
 }
 
@@ -98,7 +99,6 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 }
 
 func (command *commandUpload) HandlePipe(resource *handler.Resource, item string) error {
-	resource.Params.(*paramsUpload).fileName = item
 	return nil
 }
 
@@ -114,12 +114,15 @@ func (command *commandUpload) HandleSingle(resource *handler.Resource) error {
 }
 
 func (command *commandUpload) Execute(resource *handler.Resource) {
-	containerName := resource.Params.(*paramsUpload).container
-	objectName := resource.Params.(*paramsUpload).object
-	opts := resource.Params.(*paramsUpload).opts
+	params := resource.Params.(*paramsUpload)
+	containerName := params.container
+	objectName := params.object
+	opts := params.opts
 	var readSeeker io.ReadSeeker
 	var err error
-	if fileName := resource.Params.(*paramsUpload).fileName; fileName != "" {
+	if stream := params.stream; stream {
+		readSeeker = os.Stdin
+	} else if fileName := params.fileName; fileName != "" {
 		// this file will be closed by Gophercloud, if not closed before then
 		readSeeker, err = os.Open(fileName)
 		if err != nil {
@@ -127,7 +130,7 @@ func (command *commandUpload) Execute(resource *handler.Resource) {
 			return
 		}
 	} else {
-		content := resource.Params.(*paramsUpload).content
+		content := params.content
 		readSeeker = strings.NewReader(content)
 	}
 	rawResponse := objects.Create(command.Ctx.ServiceClient, containerName, objectName, readSeeker, opts)
@@ -139,5 +142,10 @@ func (command *commandUpload) Execute(resource *handler.Resource) {
 }
 
 func (command *commandUpload) StdinField() string {
-	return "file"
+	return "content"
+}
+
+func (command *commandUpload) HandleStreamPipe(resource *handler.Resource) error {
+	resource.Params.(*paramsUpload).stream = true
+	return nil
 }

@@ -65,7 +65,7 @@ Usage::
 
     rack files object upload --container <containerName> --name <objectName> --content <contentToUpload> [optional flags]
     rack files object upload --container <containerName> --name <objectName> --file <fileToUpload> [optional flags]
-    echo fileToUpload.txt | rack files object upload --container <containerName> --name <objectName> --stdin file [optional flags]
+    cat fileToUpload.txt | rack files object upload --container <containerName> --name <objectName> --stdin content [optional flags]
 
 ``download``
 ^^^^^^^^
