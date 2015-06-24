@@ -103,21 +103,29 @@ func (command *commandList) Execute(resource *handler.Resource) {
 	allPages := resource.Params.(*paramsList).allPages
 	pager := containers.List(command.Ctx.ServiceClient, opts)
 	var containerInfo []osContainers.Container
-	var err error
 	if allPages {
 		pages, err := pager.AllPages()
 		if err != nil {
 			resource.Err = err
 			return
 		}
-		containerInfo, err = containers.ExtractInfo(pages)
+		info, err := containers.ExtractInfo(pages)
+		if err != nil {
+			resource.Err = err
+			return
+		}
+		containerInfo = info
 	} else {
-		err = pager.EachPage(func(page pagination.Page) (bool, error) {
-			containerInfo, err = containers.ExtractInfo(page)
+		err := pager.EachPage(func(page pagination.Page) (bool, error) {
+			info, err := containers.ExtractInfo(page)
 			if err != nil {
 				return false, err
 			}
-			return false, nil
+			containerInfo = append(containerInfo, info...)
+			if len(containerInfo) >= opts.Limit {
+				return false, nil
+			}
+			return true, nil
 		})
 		if err != nil {
 			resource.Err = err

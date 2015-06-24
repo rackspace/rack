@@ -114,22 +114,29 @@ func (command *commandList) Execute(resource *handler.Resource) {
 	allPages := resource.Params.(*paramsList).allPages
 	pager := servers.List(command.Ctx.ServiceClient, opts)
 	var serverInfo []osServers.Server
-	var err error
 	if allPages {
 		pages, err := pager.AllPages()
 		if err != nil {
 			resource.Err = err
 			return
 		}
-		serverInfo, err = servers.ExtractServers(pages)
+		info, err := servers.ExtractServers(pages)
+		if err != nil {
+			resource.Err = err
+			return
+		}
+		serverInfo = info
 	} else {
-		err = pager.EachPage(func(page pagination.Page) (bool, error) {
-			serverInfo, err = servers.ExtractServers(page)
-
+		err := pager.EachPage(func(page pagination.Page) (bool, error) {
+			info, err := servers.ExtractServers(page)
 			if err != nil {
 				return false, err
 			}
-			return false, nil
+			serverInfo = append(serverInfo, info...)
+			if len(serverInfo) >= opts.Limit {
+				return false, nil
+			}
+			return true, nil
 		})
 		if err != nil {
 			resource.Err = err
