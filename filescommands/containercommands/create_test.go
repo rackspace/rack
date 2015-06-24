@@ -13,13 +13,8 @@ import (
 )
 
 func TestCreateContext(t *testing.T) {
-	app := cli.NewApp()
-	flagset := flag.NewFlagSet("flags", 1)
-	c := cli.NewContext(app, flagset, nil)
 	cmd := &commandCreate{
-		Ctx: &handler.Context{
-			CLIContext: c,
-		},
+		Ctx: &handler.Context{},
 	}
 	expected := cmd.Ctx
 	actual := cmd.Context()
@@ -47,8 +42,6 @@ func TestCreateHandleFlags(t *testing.T) {
 	flagset.String("container-read", "", "")
 	flagset.String("container-write", "", "")
 	flagset.Set("metadata", "key=val,foo=bar")
-	flagset.Set("admin-pass", "secret")
-	flagset.Set("keypair", "kp1")
 	c := cli.NewContext(app, flagset, nil)
 	cmd := &commandCreate{
 		Ctx: &handler.Context{
