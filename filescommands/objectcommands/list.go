@@ -13,7 +13,7 @@ import (
 
 var list = cli.Command{
 	Name:        "list",
-	Usage:       util.Usage(commandPrefix, "list", "[--container <containerName> | stdin container]"),
+	Usage:       util.Usage(commandPrefix, "list", "[--container <containerName> | --stdin container]"),
 	Description: "Lists objects in a container",
 	Action:      actionList,
 	Flags:       util.CommandFlags(flagsList, keysList),

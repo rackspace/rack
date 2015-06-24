@@ -14,7 +14,7 @@ import (
 
 var remove = cli.Command{
 	Name:        "delete",
-	Usage:       util.Usage(commandPrefix, "delete", "[--container <containerName> | --stdin name]"),
+	Usage:       util.Usage(commandPrefix, "delete", "[--name <containerName> | --stdin name]"),
 	Description: "Deletes a container",
 	Action:      actionDelete,
 	Flags:       util.CommandFlags(flagsDelete, keysDelete),
