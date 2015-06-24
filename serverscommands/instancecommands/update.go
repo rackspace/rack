@@ -80,11 +80,6 @@ func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
 	return nil
 }
 
-func (command *commandUpdate) HandlePipe(resource handler.Resource, item string) (*handler.Resource, error) {
-	resource.Params.(*paramsUpdate).serverID = item
-	return &resource, nil
-}
-
 func (command *commandUpdate) HandleSingle(resource *handler.Resource) error {
 	id, err := command.Ctx.IDOrName(osServers.IDFromName)
 	resource.Params.(*paramsUpdate).serverID = id
