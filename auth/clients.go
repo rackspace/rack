@@ -51,7 +51,7 @@ func NewClient(c *cli.Context, serviceType string) (*gophercloud.ServiceClient, 
 		if err == nil {
 			pc.TokenID = creds.TokenID
 			pc.ReauthFunc = reauthFunc(pc, *ao)
-			pc.UserAgent.Prepend("rack/" + util.Version)
+			pc.UserAgent.Prepend(util.UserAgent)
 			return &gophercloud.ServiceClient{
 				ProviderClient: pc,
 				Endpoint:       creds.ServiceEndpoint,
@@ -98,7 +98,7 @@ func authFromScratch(ao gophercloud.AuthOptions, region, serviceType string) (*g
 	if sc == nil {
 		return nil, fmt.Errorf("Unable to create service client: Unknown service type: %s", serviceType)
 	}
-	sc.UserAgent.Prepend("rack/" + util.Version)
+	sc.UserAgent.Prepend(util.UserAgent)
 	return sc, nil
 }
 

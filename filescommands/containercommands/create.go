@@ -30,6 +30,18 @@ func flagsCreate() []cli.Flag {
 			Name:  "stdin",
 			Usage: "[optional; required if `name` isn't provided] The field being piped into STDIN. Valid values are: name",
 		},
+		cli.StringFlag{
+			Name:  "metadata",
+			Usage: "[optional] Comma-separated key-value pairs (key1=val1,key2=val2) for the container",
+		},
+		cli.StringFlag{
+			Name:  "container-read",
+			Usage: "[optional] Comma-separated list of users for whom to grant read access to the container",
+		},
+		cli.StringFlag{
+			Name:  "container-write",
+			Usage: "[optional] Comma-separated list of users for whom to grant write access to the container",
+		},
 	}
 }
 
@@ -64,7 +76,21 @@ func (command *commandCreate) ServiceClientType() string {
 }
 
 func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
-	resource.Params = &paramsCreate{}
+	c := command.Ctx.CLIContext
+	opts := containers.CreateOpts{
+		ContainerRead:  c.String("container-read"),
+		ContainerWrite: c.String("container-write"),
+	}
+	if c.IsSet("metadata") {
+		metadata, err := command.Ctx.CheckKVFlag("metadata")
+		if err != nil {
+			return err
+		}
+		opts.Metadata = metadata
+	}
+	resource.Params = &paramsCreate{
+		opts: opts,
+	}
 	return nil
 }
 
