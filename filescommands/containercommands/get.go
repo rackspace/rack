@@ -77,7 +77,7 @@ func (command *commandGet) HandleSingle(resource *handler.Resource) error {
 		return err
 	}
 	containerName := command.Ctx.CLIContext.String("name")
-	resource.Params = containerName
+	resource.Params.(*paramsGet).container = containerName
 	return err
 }
 
