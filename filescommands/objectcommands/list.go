@@ -137,7 +137,7 @@ func (command *commandList) Execute(resource *handler.Resource) {
 			if err != nil {
 				return false, err
 			}
-			return true, nil
+			return false, nil
 		})
 		if err != nil {
 			resource.Err = err

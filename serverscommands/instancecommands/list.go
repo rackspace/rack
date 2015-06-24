@@ -1,8 +1,6 @@
 package instancecommands
 
 import (
-	"fmt"
-
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
@@ -52,6 +50,10 @@ func flagsList() []cli.Flag {
 			Name:  "marker",
 			Usage: "Start listing servers at this server ID.",
 		},
+		cli.IntFlag{
+			Name:  "limit",
+			Usage: "[optional] Only return this many servers at most.",
+		},
 	}
 }
 
@@ -94,6 +96,7 @@ func (command *commandList) HandleFlags(resource *handler.Resource) error {
 		Name:         c.String("name"),
 		Status:       c.String("status"),
 		Marker:       c.String("marker"),
+		Limit:        c.Int("limit"),
 	}
 	resource.Params = &paramsList{
 		opts:     opts,
@@ -126,19 +129,16 @@ func (command *commandList) Execute(resource *handler.Resource) {
 			if err != nil {
 				return false, err
 			}
-			return true, nil
+			return false, nil
 		})
 		if err != nil {
 			resource.Err = err
 			return
 		}
 	}
-	fmt.Printf("serverInfo: %+v\n", serverInfo)
-	fmt.Printf("len serverInfo: %d\n", len(serverInfo))
 	result := make([]map[string]interface{}, len(serverInfo))
 	for j, server := range serverInfo {
 		result[j] = serverSingle(&server)
 	}
-	fmt.Printf("result: %+v\n", resource.Result)
 	resource.Result = result
 }

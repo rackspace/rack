@@ -39,6 +39,10 @@ func flagsList() []cli.Flag {
 			Name:  "marker",
 			Usage: "Start listing images at this image ID.",
 		},
+		cli.IntFlag{
+			Name:  "limit",
+			Usage: "[optional] Only return this many images at most.",
+		},
 	}
 }
 
@@ -78,6 +82,7 @@ func (command *commandList) HandleFlags(resource *handler.Resource) error {
 		Name:   c.String("name"),
 		Status: c.String("status"),
 		Marker: c.String("marker"),
+		Limit:  c.Int("limit"),
 	}
 	resource.Params = &paramsList{
 		opts:     opts,
@@ -109,7 +114,7 @@ func (command *commandList) Execute(resource *handler.Resource) {
 			if err != nil {
 				return false, err
 			}
-			return true, nil
+			return false, nil
 		})
 		if err != nil {
 			resource.Err = err
