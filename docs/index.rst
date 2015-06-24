@@ -116,6 +116,7 @@ Services
 --------
 
 * :ref:`servers` - Commands for Rackspace Cloud Servers, dedicated and virtual.
+* :ref:`files` - Commands for Rackspace Cloud Files.
 
 
 .. toctree::

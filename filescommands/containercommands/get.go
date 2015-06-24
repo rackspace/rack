@@ -10,7 +10,7 @@ import (
 
 var create = cli.Command{
 	Name:        "get",
-	Usage:       util.Usage(commandPrefix, "get", "[--container <containerName> | --stdin name]"),
+	Usage:       util.Usage(commandPrefix, "get", "[--name <containerName> | --stdin name]"),
 	Description: "Retreives a container",
 	Action:      actionGet,
 	Flags:       util.CommandFlags(flagsGet, keysGet),
