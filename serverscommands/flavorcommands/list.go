@@ -5,6 +5,8 @@ import (
 	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
+	osFlavors "github.com/rackspace/gophercloud/openstack/compute/v2/flavors"
+	"github.com/rackspace/gophercloud/pagination"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/flavors"
 )
 
@@ -21,7 +23,10 @@ var list = cli.Command{
 
 func flagsList() []cli.Flag {
 	return []cli.Flag{
-
+		cli.BoolFlag{
+			Name:  "all-pages",
+			Usage: "[optional] Return all flavors. Default is to paginate.",
+		},
 		cli.IntFlag{
 			Name:  "min-disk",
 			Usage: "[optional] Only list flavors that have at least this much disk storage (in GB).",
@@ -34,13 +39,18 @@ func flagsList() []cli.Flag {
 			Name:  "marker",
 			Usage: "[optional] Start listing flavors at this flavor ID.",
 		},
+		cli.IntFlag{
+			Name:  "limit",
+			Usage: "[optional] Return at most this many flavors.",
+		},
 	}
 }
 
 var keysList = []string{"ID", "Name", "RAM", "Disk", "Swap", "VCPUs", "RxTxFactor"}
 
 type paramsList struct {
-	opts *flavors.ListOpts
+	opts     *flavors.ListOpts
+	allPages bool
 }
 
 type commandList handler.Command
@@ -72,9 +82,11 @@ func (command *commandList) HandleFlags(resource *handler.Resource) error {
 		MinDisk: c.Int("min-disk"),
 		MinRAM:  c.Int("min-ram"),
 		Marker:  c.String("marker"),
+		Limit:   c.Int("limit"),
 	}
 	resource.Params = &paramsList{
-		opts: opts,
+		opts:     opts,
+		allPages: c.Bool("all-pages"),
 	}
 	return nil
 }
@@ -85,18 +97,32 @@ func (command *commandList) HandleSingle(resource *handler.Resource) error {
 
 func (command *commandList) Execute(resource *handler.Resource) {
 	opts := resource.Params.(*paramsList).opts
-	allPages, err := flavors.ListDetail(command.Ctx.ServiceClient, opts).AllPages()
-	if err != nil {
-		resource.Err = err
-		return
+	allPages := resource.Params.(*paramsList).allPages
+	pager := flavors.ListDetail(command.Ctx.ServiceClient, opts)
+	var flavorInfo []osFlavors.Flavor
+	var err error
+	if allPages {
+		pages, err := pager.AllPages()
+		if err != nil {
+			resource.Err = err
+			return
+		}
+		flavorInfo, err = flavors.ExtractFlavors(pages)
+	} else {
+		err = pager.EachPage(func(page pagination.Page) (bool, error) {
+			flavorInfo, err = flavors.ExtractFlavors(page)
+			if err != nil {
+				return false, err
+			}
+			return true, nil
+		})
+		if err != nil {
+			resource.Err = err
+			return
+		}
 	}
-	flavors, err := flavors.ExtractFlavors(allPages)
-	if err != nil {
-		resource.Err = err
-		return
-	}
-	result := make([]map[string]interface{}, len(flavors))
-	for j, flavor := range flavors {
+	result := make([]map[string]interface{}, len(flavorInfo))
+	for j, flavor := range flavorInfo {
 		result[j] = structs.Map(flavor)
 	}
 	resource.Result = result

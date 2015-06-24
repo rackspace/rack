@@ -1,13 +1,12 @@
 package objectcommands
 
 import (
-	"strings"
-
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
 	osObjects "github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
+	"github.com/rackspace/gophercloud/pagination"
 	"github.com/rackspace/gophercloud/rackspace/objectstorage/v1/objects"
 )
 
@@ -33,8 +32,8 @@ func flagsList() []cli.Flag {
 			Usage: "[optional; required if `container` isn't provided] The field being piped into STDIN. Valid values are: container",
 		},
 		cli.BoolFlag{
-			Name:  "full",
-			Usage: "[optional] If false, return just object names. If true, return more complete object information. Defaults to false.",
+			Name:  "all-pages",
+			Usage: "[optional] Return all objects. Default is to paginate.",
 		},
 		cli.StringFlag{
 			Name:  "prefix",
@@ -60,6 +59,7 @@ var keysList = []string{"Name", "Bytes", "ContentType", "LastModified"}
 type paramsList struct {
 	container string
 	opts      *osObjects.ListOpts
+	allPages  bool
 }
 
 type commandList handler.Command
@@ -96,7 +96,8 @@ func (command *commandList) HandleFlags(resource *handler.Resource) error {
 	}
 
 	resource.Params = &paramsList{
-		opts: opts,
+		opts:     opts,
+		allPages: c.Bool("all-pages"),
 	}
 	return nil
 }
@@ -117,31 +118,36 @@ func (command *commandList) HandleSingle(resource *handler.Resource) error {
 
 func (command *commandList) Execute(resource *handler.Resource) {
 	opts := resource.Params.(*paramsList).opts
+	opts.Full = true
 	containerName := resource.Params.(*paramsList).container
-	allPages, err := objects.List(command.Ctx.ServiceClient, containerName, opts).AllPages()
-	if err != nil {
-		resource.Err = err
-		return
-	}
-	if command.Ctx.CLIContext.IsSet("full") {
-		objectInfo, err := objects.ExtractInfo(allPages)
+	allPages := resource.Params.(*paramsList).allPages
+	pager := objects.List(command.Ctx.ServiceClient, containerName, opts)
+	var objectInfo []osObjects.Object
+	var err error
+	if allPages {
+		pages, err := pager.AllPages()
 		if err != nil {
 			resource.Err = err
 			return
 		}
-		result := make([]map[string]interface{}, len(objectInfo))
-		for j, obj := range objectInfo {
-			result[j] = structs.Map(&obj)
+		objectInfo, err = objects.ExtractInfo(pages)
+	} else {
+		err = pager.EachPage(func(page pagination.Page) (bool, error) {
+			objectInfo, err = objects.ExtractInfo(page)
+			if err != nil {
+				return false, err
+			}
+			return true, nil
+		})
+		if err != nil {
+			resource.Err = err
+			return
 		}
-		resource.Result = result
-		return
 	}
-	objectNames, err := objects.ExtractNames(allPages)
-	if err != nil {
-		resource.Err = err
-		return
+	result := make([]map[string]interface{}, len(objectInfo))
+	for j, obj := range objectInfo {
+		result[j] = structs.Map(&obj)
 	}
-	result := strings.Join(objectNames, "\n")
 	resource.Result = result
 }
 

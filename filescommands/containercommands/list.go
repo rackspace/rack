@@ -1,13 +1,12 @@
 package containercommands
 
 import (
-	"strings"
-
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
 	osContainers "github.com/rackspace/gophercloud/openstack/objectstorage/v1/containers"
+	"github.com/rackspace/gophercloud/pagination"
 	"github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers"
 )
 
@@ -25,24 +24,24 @@ var list = cli.Command{
 func flagsList() []cli.Flag {
 	return []cli.Flag{
 		cli.BoolFlag{
-			Name:  "full",
-			Usage: "If false, return just container names. If true, return more complete container information. Defaults to false.",
+			Name:  "all-pages",
+			Usage: "[optional] Return all containers. Default is to paginate.",
 		},
 		cli.StringFlag{
 			Name:  "prefix",
-			Usage: "Only return containers with this prefix.",
+			Usage: "[optional] Only return containers with this prefix.",
 		},
 		cli.StringFlag{
 			Name:  "end-marker",
-			Usage: "Only return containers with name less than this value.",
+			Usage: "[optional] Only return containers with name less than this value.",
 		},
 		cli.StringFlag{
 			Name:  "marker",
-			Usage: "Start listing containers at this container name.",
+			Usage: "[optional] Start listing containers at this container name.",
 		},
 		cli.IntFlag{
 			Name:  "limit",
-			Usage: "Only return this many containers at most.",
+			Usage: "[optional] Only return this many containers at most.",
 		},
 	}
 }
@@ -50,7 +49,8 @@ func flagsList() []cli.Flag {
 var keysList = []string{"Name", "Count", "Bytes"}
 
 type paramsList struct {
-	opts *osContainers.ListOpts
+	opts     *osContainers.ListOpts
+	allPages bool
 }
 
 type commandList handler.Command
@@ -87,7 +87,8 @@ func (command *commandList) HandleFlags(resource *handler.Resource) error {
 	}
 
 	resource.Params = &paramsList{
-		opts: opts,
+		opts:     opts,
+		allPages: c.Bool("all-pages"),
 	}
 	return nil
 }
@@ -98,29 +99,34 @@ func (command *commandList) HandleSingle(resource *handler.Resource) error {
 
 func (command *commandList) Execute(resource *handler.Resource) {
 	opts := resource.Params.(*paramsList).opts
-	allPages, err := containers.List(command.Ctx.ServiceClient, opts).AllPages()
-	if err != nil {
-		resource.Err = err
-		return
-	}
-	if command.Ctx.CLIContext.IsSet("full") {
-		containers, err := containers.ExtractInfo(allPages)
+	opts.Full = true
+	allPages := resource.Params.(*paramsList).allPages
+	pager := containers.List(command.Ctx.ServiceClient, opts)
+	var containerInfo []osContainers.Container
+	var err error
+	if allPages {
+		pages, err := pager.AllPages()
 		if err != nil {
 			resource.Err = err
 			return
 		}
-		result := make([]map[string]interface{}, len(containers))
-		for j, container := range containers {
-			result[j] = structs.Map(&container)
-		}
-		resource.Result = result
+		containerInfo, err = containers.ExtractInfo(pages)
 	} else {
-		containers, err := containers.ExtractNames(allPages)
+		err = pager.EachPage(func(page pagination.Page) (bool, error) {
+			containerInfo, err = containers.ExtractInfo(page)
+			if err != nil {
+				return false, err
+			}
+			return true, nil
+		})
 		if err != nil {
 			resource.Err = err
 			return
 		}
-		result := strings.Join(containers, "\n")
-		resource.Result = result
 	}
+	result := make([]map[string]interface{}, len(containerInfo))
+	for j, container := range containerInfo {
+		result[j] = structs.Map(&container)
+	}
+	resource.Result = result
 }
