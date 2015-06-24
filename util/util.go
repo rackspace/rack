@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"runtime"
 
 	"github.com/codegangsta/cli"
 )
@@ -14,6 +15,9 @@ var Name = "rack"
 
 // Version is the current CLI version
 var Version = "0.0.0-dev"
+
+// UserAgent is the user-agent used for each HTTP request
+var UserAgent = fmt.Sprintf("%s-%s/%s", "rackcli", runtime.GOOS, Version)
 
 // Usage return a string that specifies how to call a particular command.
 func Usage(commandPrefix, action, mandatoryFlags string) string {
