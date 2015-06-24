@@ -2,6 +2,7 @@ package auth
 
 import (
 	"fmt"
+	"runtime"
 	"strings"
 
 	"github.com/codegangsta/cli"
@@ -51,7 +52,7 @@ func NewClient(c *cli.Context, serviceType string) (*gophercloud.ServiceClient, 
 		if err == nil {
 			pc.TokenID = creds.TokenID
 			pc.ReauthFunc = reauthFunc(pc, *ao)
-			pc.UserAgent.Prepend("rack/" + util.Version)
+			pc.UserAgent.Prepend(fmt.Sprintf("%s-%s/%s", "rackcli", runtime.GOOS, util.Version))
 			return &gophercloud.ServiceClient{
 				ProviderClient: pc,
 				Endpoint:       creds.ServiceEndpoint,
