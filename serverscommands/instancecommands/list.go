@@ -1,8 +1,9 @@
 package instancecommands
 
 import (
+	"fmt"
+
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
 	osServers "github.com/rackspace/gophercloud/openstack/compute/v2/servers"
@@ -121,6 +122,7 @@ func (command *commandList) Execute(resource *handler.Resource) {
 	} else {
 		err = pager.EachPage(func(page pagination.Page) (bool, error) {
 			serverInfo, err = servers.ExtractServers(page)
+
 			if err != nil {
 				return false, err
 			}
@@ -131,9 +133,12 @@ func (command *commandList) Execute(resource *handler.Resource) {
 			return
 		}
 	}
+	fmt.Printf("serverInfo: %+v\n", serverInfo)
+	fmt.Printf("len serverInfo: %d\n", len(serverInfo))
 	result := make([]map[string]interface{}, len(serverInfo))
 	for j, server := range serverInfo {
-		result[j] = structs.Map(server)
+		result[j] = serverSingle(&server)
 	}
+	fmt.Printf("result: %+v\n", resource.Result)
 	resource.Result = result
 }
