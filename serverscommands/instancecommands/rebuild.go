@@ -55,7 +55,7 @@ var keysRebuild = []string{"ID", "Name", "Status", "Created", "Updated", "Image"
 
 type paramsRebuild struct {
 	serverID string
-	opts     *osServers.RebuildOpts
+	opts     *servers.RebuildOpts
 }
 
 type commandRebuild handler.Command
@@ -82,22 +82,28 @@ func (command *commandRebuild) ServiceClientType() string {
 }
 
 func (command *commandRebuild) HandleFlags(resource *handler.Resource) error {
-	c := command.Context().CLIContext
-	err := command.Context().CheckFlagsSet([]string{"image-id", "admin-pass"})
+	c := command.Ctx.CLIContext
+	err := command.Ctx.CheckFlagsSet([]string{"image-id", "admin-pass"})
 	if err != nil {
 		return err
 	}
-	opts := &osServers.RebuildOpts{
+	opts := &servers.RebuildOpts{
 		ImageID:    c.String("image-id"),
 		AdminPass:  c.String("admin-pass"),
 		AccessIPv4: c.String("ipv4"),
 		AccessIPv6: c.String("ipv6"),
 	}
 	if c.IsSet("metadata") {
-		opts.Metadata, err = command.Context().CheckKVFlag("metadata")
+		opts.Metadata, err = command.Ctx.CheckKVFlag("metadata")
 		if err != nil {
 			return err
 		}
+	}
+	if c.IsSet("rename") {
+		opts.Name = c.String("rename")
+	} else if c.IsSet("name") {
+		// Did not set rename, did not set id, can assume name
+		opts.Name = c.String("name")
 	}
 	resource.Params = &paramsRebuild{
 		opts: opts,
@@ -106,7 +112,7 @@ func (command *commandRebuild) HandleFlags(resource *handler.Resource) error {
 }
 
 func (command *commandRebuild) HandleSingle(resource *handler.Resource) error {
-	id, err := command.Context().IDOrName(osServers.IDFromName)
+	id, err := command.Ctx.IDOrName(osServers.IDFromName)
 	resource.Params.(*paramsRebuild).serverID = id
 	return err
 }
@@ -114,25 +120,10 @@ func (command *commandRebuild) HandleSingle(resource *handler.Resource) error {
 func (command *commandRebuild) Execute(resource *handler.Resource) {
 	opts := resource.Params.(*paramsRebuild).opts
 	serverID := resource.Params.(*paramsRebuild).serverID
-	c := command.Context().CLIContext
-	if c.IsSet("rename") {
-		opts.Name = c.String("rename")
-	} else if c.IsSet("id") { // Must get the name from compute by ID
-		server, err := servers.Get(command.Context().ServiceClient, serverID).Extract()
-		if err != nil {
-			resource.Err = err
-			return
-		}
-		opts.Name = server.Name
-	} else if c.IsSet("name") {
-		// Did not set rename, did not set id, can assume name
-		opts.Name = c.String("name")
-	}
-	server, err := servers.Rebuild(command.Context().ServiceClient, serverID, opts).Extract()
+	server, err := servers.Rebuild(command.Ctx.ServiceClient, serverID, opts).Extract()
 	if err != nil {
 		resource.Err = err
 		return
 	}
 	resource.Result = serverSingle(server)
-	command.Context().Results <- resource
 }
