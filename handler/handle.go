@@ -15,6 +15,8 @@ type Resource struct {
 	// Keys are the fields available to output. These may be limited by the `fields`
 	// flag.
 	Keys []string
+	// Print is a function for custom printing.
+	Print *func(*Resource)
 	// Params will be the command-specific parameters, such as an instance ID or
 	// list options.
 	Params interface{}
@@ -25,6 +27,16 @@ type Resource struct {
 	ErrExit1 bool
 	// Err will store any error encountered while processing the command.
 	Err error
+}
+
+// StreamPipeHandler is an interface that commands implement if they can stream input
+// from STDIN.
+type StreamPipeHandler interface {
+	// PipeHandler is an interface that commands implement if they can accept input
+	// from STDIN.
+	PipeHandler
+	// HandlePipe is a method that commands implement for processing piped input.
+	HandleStreamPipe(*Resource) error
 }
 
 // PipeHandler is an interface that commands implement if they can accept input
@@ -83,62 +95,70 @@ func Handle(command Commander) {
 	}
 	ctx.ServiceClient = client
 
+	err = command.HandleFlags(resource)
 	if err != nil {
 		resource.Err = err
 		ctx.ErrExit1(resource)
 	}
 
-	if pipeableCommand, ok := command.(PipeHandler); ok && ctx.CLIContext.IsSet("stdin") {
+	// should we expect something on STDIN?
+	if ctx.CLIContext.IsSet("stdin") {
 		stdinField := ctx.CLIContext.String("stdin")
-		if stdinField == pipeableCommand.StdinField() {
-			scanner := bufio.NewScanner(os.Stdin)
-			for scanner.Scan() {
-				item := scanner.Text()
-				localResource := &Resource{}
-				*localResource = *resource
-				err = command.HandleFlags(localResource)
-				if err != nil {
-					resource.Err = err
-					ctx.ErrExit1(resource)
-				}
-				err := pipeableCommand.HandlePipe(localResource, item)
-				if err != nil {
-					localResource.Err = fmt.Errorf("Error running pipeable command on %s: %s\n", item, err)
-					ctx.WaitGroup.Add(1)
-					ctx.Results <- localResource
-				} else {
+		// can the command accept input on STDIN?
+		if pipeableCommand, ok := command.(PipeHandler); ok {
+			// if so, does the given field accept pipeable input?
+			if stdinField == pipeableCommand.StdinField() {
+				// if so, does the given command and field accept streaming input?
+				if streamPipeableCommand, ok := pipeableCommand.(StreamPipeHandler); ok {
 					ctx.WaitGroup.Add(1)
 					go func() {
-						pipeableCommand.Execute(localResource)
-						ctx.Results <- localResource
+						err := streamPipeableCommand.HandleStreamPipe(resource)
+						if err != nil {
+							resource.Err = fmt.Errorf("Error handling streamable, pipeable command: %s\n", err)
+							ctx.Results <- resource
+						} else {
+							streamPipeableCommand.Execute(resource)
+							ctx.Results <- resource
+						}
 					}()
+				} else {
+					scanner := bufio.NewScanner(os.Stdin)
+					for scanner.Scan() {
+						item := scanner.Text()
+						ctx.WaitGroup.Add(1)
+						go func() {
+							err := pipeableCommand.HandlePipe(resource, item)
+							if err != nil {
+								resource.Err = fmt.Errorf("Error handling pipeable command on %s: %s\n", item, err)
+								ctx.Results <- resource
+							} else {
+								pipeableCommand.Execute(resource)
+								ctx.Results <- resource
+							}
+						}()
+					}
+					if scanner.Err() != nil {
+						resource.Err = scanner.Err()
+						ctx.ErrExit1(resource)
+					}
 				}
-			}
-			if scanner.Err() != nil {
-				resource.Err = scanner.Err()
+			} else {
+				resource.Err = fmt.Errorf("Unknown STDIN field: %s\n", stdinField)
 				ctx.ErrExit1(resource)
 			}
-		} else {
-			resource.Err = fmt.Errorf("Unknown STDIN field: %s\n", stdinField)
-			ctx.ErrExit1(resource)
 		}
 	} else {
-		localResource := &Resource{}
-		*localResource = *resource
-		err = command.HandleFlags(localResource)
-		if err != nil {
-			localResource.Err = err
-			ctx.ErrExit1(localResource)
-		}
-		err = command.HandleSingle(localResource)
-		if err != nil {
-			localResource.Err = err
-			ctx.ErrExit1(localResource)
-			return
-		}
 		ctx.WaitGroup.Add(1)
-		command.Execute(localResource)
-		ctx.Results <- localResource
+		go func() {
+			err = command.HandleSingle(resource)
+			if err != nil {
+				resource.Err = err
+				ctx.ErrExit1(resource)
+			} else {
+				command.Execute(resource)
+				ctx.Results <- resource
+			}
+		}()
 	}
 	ctx.WaitGroup.Wait()
 	ctx.StoreCredentials()
