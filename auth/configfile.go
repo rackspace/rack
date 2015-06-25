@@ -23,9 +23,10 @@ func configfile(c *cli.Context, have map[string]string, need map[string]string) 
 	}
 	cfg.BlockMode = false
 	var profile string
-	if c.GlobalIsSet("profile") || c.IsSet("profile") {
+	if c.GlobalIsSet("profile") {
 		profile = c.GlobalString("profile")
-	}
+	} else if c.IsSet("profile") {
+		profile = c.String("profile")
 	section, err := cfg.GetSection(profile)
 	if err != nil && profile != "" {
 		return fmt.Errorf("Invalid config file profile: %s\n", profile)
