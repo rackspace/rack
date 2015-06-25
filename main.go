@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/jrperritt/rack/filescommands"
+	"github.com/jrperritt/rack/networkscommands"
 	"github.com/jrperritt/rack/serverscommands"
 	"github.com/jrperritt/rack/util"
 
@@ -31,6 +32,11 @@ func main() {
 			Name:        "files",
 			Usage:       "Used for the Files service",
 			Subcommands: filescommands.Get(),
+		},
+		{
+			Name:        "networks",
+			Usage:       "Used for the Networks service",
+			Subcommands: networkscommands.Get(),
 		},
 	}
 	app.Flags = util.GlobalFlags()
