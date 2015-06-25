@@ -35,7 +35,7 @@ func configure(c *cli.Context) {
 	region, _ := reader.ReadString('\n')
 	m["region"] = strings.ToUpper(strings.TrimSuffix(region, string('\n')))
 
-	fmt.Print("Profile Name: ")
+	fmt.Print("Profile Name (leave blank to create a default profile): ")
 	profile, _ := reader.ReadString('\n')
 	profile = strings.TrimSuffix(profile, string('\n'))
 
@@ -43,11 +43,11 @@ func configure(c *cli.Context) {
 	var cfg *ini.File
 	cfg, err = ini.Load(configFile)
 	if err != nil {
-		fmt.Printf("Error loading config file: %s\n", err)
+		// fmt.Printf("Error loading config file: %s\n", err)
 		cfg = ini.Empty()
 	}
 
-	if profile == "" {
+	if profile == "" || strings.ToLower(profile) == "default" {
 		profile = "DEFAULT"
 	}
 
@@ -74,7 +74,7 @@ func configure(c *cli.Context) {
 
 	section, err := cfg.NewSection(profile)
 	if err != nil {
-		fmt.Printf("Error creating new section [%s] in config file: %s\n", profile, err)
+		//fmt.Printf("Error creating new section [%s] in config file: %s\n", profile, err)
 		return
 	}
 
@@ -84,7 +84,7 @@ func configure(c *cli.Context) {
 
 	err = cfg.SaveTo(configFile)
 	if err != nil {
-		fmt.Printf("Error saving config file: %s\n", err)
+		//fmt.Printf("Error saving config file: %s\n", err)
 		return
 	}
 }
