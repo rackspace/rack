@@ -58,11 +58,11 @@ func RackDir() (string, error) {
 var IDAndNameFlags = []cli.Flag{
 	cli.StringFlag{
 		Name:  "id",
-		Usage: "[optional; required if 'name' is not provided] The ID of the resource",
+		Usage: "[optional] The ID of the resource",
 	},
 	cli.StringFlag{
 		Name:  "name",
-		Usage: "[optional; required if 'id' is not provided] The name of the resource",
+		Usage: "[optional] The name of the resource",
 	},
 }
 

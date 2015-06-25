@@ -9,5 +9,6 @@ var serviceClientType = "network"
 func Get() []cli.Command {
 	return []cli.Command{
 		create,
+		get,
 	}
 }
