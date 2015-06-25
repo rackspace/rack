@@ -100,21 +100,29 @@ func (command *commandList) Execute(resource *handler.Resource) {
 	allPages := resource.Params.(*paramsList).allPages
 	pager := flavors.ListDetail(command.Ctx.ServiceClient, opts)
 	var flavorInfo []osFlavors.Flavor
-	var err error
 	if allPages {
 		pages, err := pager.AllPages()
 		if err != nil {
 			resource.Err = err
 			return
 		}
-		flavorInfo, err = flavors.ExtractFlavors(pages)
+		info, err := flavors.ExtractFlavors(pages)
+		if err != nil {
+			resource.Err = err
+			return
+		}
+		flavorInfo = info
 	} else {
-		err = pager.EachPage(func(page pagination.Page) (bool, error) {
-			flavorInfo, err = flavors.ExtractFlavors(page)
+		err := pager.EachPage(func(page pagination.Page) (bool, error) {
+			info, err := flavors.ExtractFlavors(page)
 			if err != nil {
 				return false, err
 			}
-			return false, nil
+			flavorInfo = append(flavorInfo, info...)
+			if len(flavorInfo) >= opts.Limit {
+				return false, nil
+			}
+			return true, nil
 		})
 		if err != nil {
 			resource.Err = err

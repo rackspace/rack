@@ -100,21 +100,29 @@ func (command *commandList) Execute(resource *handler.Resource) {
 	allPages := resource.Params.(*paramsList).allPages
 	pager := images.ListDetail(command.Ctx.ServiceClient, opts)
 	var imageInfo []osImages.Image
-	var err error
 	if allPages {
 		pages, err := pager.AllPages()
 		if err != nil {
 			resource.Err = err
 			return
 		}
-		imageInfo, err = osImages.ExtractImages(pages)
+		info, err := osImages.ExtractImages(pages)
+		if err != nil {
+			resource.Err = err
+			return
+		}
+		imageInfo = info
 	} else {
-		err = pager.EachPage(func(page pagination.Page) (bool, error) {
-			imageInfo, err = osImages.ExtractImages(page)
+		err := pager.EachPage(func(page pagination.Page) (bool, error) {
+			info, err := osImages.ExtractImages(page)
 			if err != nil {
 				return false, err
 			}
-			return false, nil
+			imageInfo = append(imageInfo, info...)
+			if len(imageInfo) >= opts.Limit {
+				return false, nil
+			}
+			return true, nil
 		})
 		if err != nil {
 			resource.Err = err
