@@ -23,6 +23,7 @@ func CommandFlags(f func() []cli.Flag, keys []string) []cli.Flag {
 		}
 		of = append(of, flagFields)
 	}
+	of = append(of, GlobalFlags()...)
 
 	return of
 }
