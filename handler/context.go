@@ -70,7 +70,7 @@ func (ctx *Context) Print(resource *Resource) {
 	// limit the returned fields if any were given in the `fields` flag
 	keys := ctx.limitFields(resource)
 	w := ctx.CLIContext.App.Writer
-	if ctx.CLIContext.GlobalIsSet("json") {
+	if ctx.CLIContext.GlobalIsSet("json") || ctx.CLIContext.IsSet("json") {
 		switch resource.Result.(type) {
 		case map[string]interface{}:
 			m := resource.Result.(map[string]interface{})
@@ -89,7 +89,7 @@ func (ctx *Context) Print(resource *Resource) {
 		default:
 			output.DefaultJSON(w, resource.Result)
 		}
-	} else if ctx.CLIContext.GlobalIsSet("csv") {
+	} else if ctx.CLIContext.GlobalIsSet("csv") || ctx.CLIContext.GlobalIsSet("csv") {
 		switch resource.Result.(type) {
 		case map[string]interface{}:
 			m := resource.Result.(map[string]interface{})
@@ -151,7 +151,7 @@ func (ctx *Context) limitFields(resource *Resource) []string {
 func (ctx *Context) StoreCredentials() {
 	// if serviceClient is nil, the HTTP request for the command didn't get sent.
 	// don't set cache if the `no-cache` flag is provided
-	if ctx.ServiceClient != nil && !ctx.CLIContext.GlobalIsSet("no-cache") {
+	if ctx.ServiceClient != nil && !ctx.CLIContext.GlobalIsSet("no-cache") && !ctx.CLIContext.IsSet("no-cache") {
 		newCacheValue := &auth.CacheItem{
 			TokenID:         ctx.ServiceClient.TokenID,
 			ServiceEndpoint: ctx.ServiceClient.Endpoint,

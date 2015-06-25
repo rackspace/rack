@@ -88,7 +88,7 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 		return
 	}
 	result := structs.Map(keypair)
-	if command.Ctx.CLIContext.GlobalIsSet("json") {
+	if command.Ctx.CLIContext.GlobalIsSet("json") || command.Ctx.CLIContext.IsSet("json") {
 		resource.Result = result
 	} else {
 		// Assume they want the key directly

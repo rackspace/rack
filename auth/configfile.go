@@ -23,7 +23,7 @@ func configfile(c *cli.Context, have map[string]string, need map[string]string) 
 	}
 	cfg.BlockMode = false
 	var profile string
-	if c.GlobalIsSet("profile") {
+	if c.GlobalIsSet("profile") || c.IsSet("profile") {
 		profile = c.GlobalString("profile")
 	}
 	section, err := cfg.GetSection(profile)

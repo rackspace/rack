@@ -33,7 +33,7 @@ func NewClient(c *cli.Context, serviceType string) (*gophercloud.ServiceClient, 
 		ao.IdentityEndpoint = rackspace.RackspaceUSIdentity
 	}
 
-	if c.GlobalIsSet("no-cache") {
+	if c.GlobalIsSet("no-cache") || c.IsSet("no-cache") {
 		return authFromScratch(*ao, region, serviceType)
 	}
 
