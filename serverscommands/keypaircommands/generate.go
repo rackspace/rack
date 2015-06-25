@@ -92,14 +92,14 @@ func (command *commandGenerate) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = print(keypair)
+	resource.Result = printGenerate(keypair)
 }
 
 func (command *commandGenerate) StdinField() string {
 	return "name"
 }
 
-func print(kp *osKeypairs.KeyPair) string {
+func printGenerate(kp *osKeypairs.KeyPair) string {
 	output := []string{"PROPERTY\tVALUE",
 		"Name\t\t%s",
 		"Fingerprint\t%s",
