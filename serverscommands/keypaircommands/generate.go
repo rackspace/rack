@@ -1,8 +1,10 @@
 package keypaircommands
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
 	osKeypairs "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs"
@@ -90,9 +92,19 @@ func (command *commandGenerate) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = structs.Map(keypair)
+	resource.Result = print(keypair)
 }
 
 func (command *commandGenerate) StdinField() string {
 	return "name"
+}
+
+func print(kp *osKeypairs.KeyPair) string {
+	output := []string{"PROPERTY\tVALUE",
+		"Name\t\t%s",
+		"Fingerprint\t%s",
+		"PublicKey\t%s",
+		"PrivateKey:\n%s",
+	}
+	return fmt.Sprintf(strings.Join(output, "\n"), kp.Name, kp.Fingerprint, kp.PublicKey, kp.PrivateKey)
 }
