@@ -47,7 +47,7 @@ func configure(c *cli.Context) {
 		cfg = ini.Empty()
 	}
 
-	if profile == "" || strings.ToLower(profile) == "default" {
+	if strings.TrimSpace(profile) == "" || strings.ToLower(profile) == "default" {
 		profile = "DEFAULT"
 	}
 
