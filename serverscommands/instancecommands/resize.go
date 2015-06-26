@@ -99,7 +99,7 @@ func (command *commandResize) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = fmt.Sprintf("Successfully resized instance [%s] to flavor [%s]", params.serverID, params.opts.FlavorRef)
+	resource.Result = fmt.Sprintf("Successfully resized instance [%s] to flavor [%s]\n", params.serverID, params.opts.FlavorRef)
 }
 
 func (command *commandResize) StdinField() string {

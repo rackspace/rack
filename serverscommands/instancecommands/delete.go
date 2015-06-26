@@ -87,7 +87,7 @@ func (command *commandDelete) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = fmt.Sprintf("Deleting instance [%s]", serverID)
+	resource.Result = fmt.Sprintf("Deleting instance [%s]\n", serverID)
 }
 
 func (command *commandDelete) StdinField() string {

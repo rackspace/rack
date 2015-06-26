@@ -88,7 +88,7 @@ func (command *commandDelete) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = fmt.Sprintf("Successfully deleted keypair [%s]", keypairName)
+	resource.Result = fmt.Sprintf("Successfully deleted keypair [%s]\n", keypairName)
 }
 
 func (command *commandDelete) StdinField() string {

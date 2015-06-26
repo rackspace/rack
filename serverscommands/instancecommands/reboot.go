@@ -105,7 +105,7 @@ func (command *commandReboot) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = fmt.Sprintf("Successfully rebooted instance [%s]", params.serverID)
+	resource.Result = fmt.Sprintf("Successfully rebooted instance [%s]\n", params.serverID)
 }
 
 func (command *commandReboot) StdinField() string {
