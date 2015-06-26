@@ -36,12 +36,14 @@ Next, run::
 This command will automatically create a configuration file for you if it
 doesn't exist and walk you through creating a profile for it::
 
+    This interactive session will walk you through creating
+    a profile in your configuration file. You may fill in all or none of the
+    values.
+
     Rackspace Username: iamacat
     Rackspace API key: secrets
     Rackspace Region : IAD
-    Profile Name:
-
-    A profile named DEFAULT already exists. Overwrite? (y/n): y
+    Profile Name (leave blank to create a default profile):
 
 This allows you to immediately get working::
 

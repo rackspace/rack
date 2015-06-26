@@ -81,9 +81,7 @@ doesn't exist and walk you through creating a profile for it::
     Rackspace Username: iamacat
     Rackspace API key: secrets
     Rackspace Region : IAD
-    Profile Name:
-
-    A profile named DEFAULT already exists. Overwrite? (y/n): y
+    Profile Name (leave blank to create a default profile):
 
 This allows you to immediately get working::
 
@@ -110,7 +108,6 @@ If provided, any authentication parameters not set on the command-line will be
 looked for in a config file. The config file should be located in ``$HOME/.rack/config``.
 The config file format is like the following::
 
-    [DEFAULT]
     username=<your rackspace username>
     apikey=<your rackspace api key>
     region=<the rackspace region>
@@ -119,9 +116,7 @@ The config file format is like the following::
     username=<another rackspace username>
     apikey=<another rackspace api key>
 
-In the example above, "DEFAULT" and "another-profile" are different profiles in
-the config file. A specific profile can be specified on the command-line with
-the ``profile`` flag.
+In the example above there is a default profile that doesn't have a named section. "another-profile" is a different profile in the config file. When using the default profile, you don't need to supply a flag when executing ``rack``. A specific profile can be specified on the command-line with the ``profile`` flag.
 
     rack --profile another-profile servers instance list
 
