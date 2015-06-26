@@ -10,5 +10,6 @@ func Get() []cli.Command {
 	return []cli.Command{
 		create,
 		get,
+		remove,
 	}
 }
