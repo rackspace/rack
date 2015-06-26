@@ -1,6 +1,9 @@
 package keypaircommands
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/handler"
@@ -90,9 +93,24 @@ func (command *commandGenerate) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = structs.Map(keypair)
+	c := command.Ctx.CLIContext
+	if c.IsSet("json") || c.IsSet("csv") || c.GlobalIsSet("json") || c.GlobalIsSet("csv") {
+		resource.Result = structs.Map(keypair)
+	} else {
+		resource.Result = printGenerate(keypair)
+	}
 }
 
 func (command *commandGenerate) StdinField() string {
 	return "name"
+}
+
+func printGenerate(kp *osKeypairs.KeyPair) string {
+	output := []string{"PROPERTY\tVALUE",
+		"Name\t\t%s",
+		"Fingerprint\t%s",
+		"PublicKey\t%s",
+		"PrivateKey:\n%s",
+	}
+	return fmt.Sprintf(strings.Join(output, "\n"), kp.Name, kp.Fingerprint, kp.PublicKey, kp.PrivateKey)
 }
