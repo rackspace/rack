@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/codegangsta/cli"
+	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
 	osKeypairs "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs"
@@ -92,7 +93,12 @@ func (command *commandGenerate) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = printGenerate(keypair)
+	c := command.Ctx.CLIContext
+	if c.IsSet("json") || c.IsSet("csv") || c.GlobalIsSet("json") || c.GlobalIsSet("csv") {
+		resource.Result = structs.Map(keypair)
+	} else {
+		resource.Result = printGenerate(keypair)
+	}
 }
 
 func (command *commandGenerate) StdinField() string {
