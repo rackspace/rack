@@ -79,11 +79,11 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 		TenantID: c.String("tenant-id"),
 	}
 	if c.IsSet("up") {
-		up := c.Bool("up")
+		up := true
 		opts.AdminStateUp = &up
 	}
 	if c.IsSet("shared") {
-		shared := c.Bool("shared")
+		shared := true
 		opts.Shared = &shared
 	}
 	resource.Params = &paramsCreate{

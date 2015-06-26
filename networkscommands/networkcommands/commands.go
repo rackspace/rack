@@ -11,5 +11,6 @@ func Get() []cli.Command {
 		create,
 		get,
 		remove,
+		list,
 	}
 }
