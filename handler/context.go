@@ -89,7 +89,7 @@ func (ctx *Context) Print(resource *Resource) {
 		default:
 			output.DefaultJSON(w, resource.Result)
 		}
-	} else if ctx.CLIContext.GlobalIsSet("csv") || ctx.CLIContext.GlobalIsSet("csv") {
+	} else if ctx.CLIContext.GlobalIsSet("csv") || ctx.CLIContext.IsSet("csv") {
 		switch resource.Result.(type) {
 		case map[string]interface{}:
 			m := resource.Result.(map[string]interface{})
