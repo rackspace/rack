@@ -35,7 +35,7 @@ func flagsGet() []cli.Flag {
 	}
 }
 
-var keysGet = []string{"ID", "Name", "Up", "Status", "Shared", "Tenant ID"}
+var keysGet = []string{"ID", "Name", "Up", "Status", "Subnets", "Shared", "Tenant ID"}
 
 type paramsGet struct {
 	networkID string
