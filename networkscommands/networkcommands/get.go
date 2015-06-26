@@ -32,18 +32,6 @@ func flagsGet() []cli.Flag {
 			Name:  "stdin",
 			Usage: "[optional; required if `name` or `id` isn't provided] The field being piped into STDIN. Valid values are: id",
 		},
-		cli.BoolFlag{
-			Name:  "up",
-			Usage: "[optional] If provided, the network will be up.",
-		},
-		cli.BoolFlag{
-			Name:  "shared",
-			Usage: "[optional] If provided, the network is shared among all tenants.",
-		},
-		cli.StringFlag{
-			Name:  "tenant-id",
-			Usage: "[optional] The ID of the tenant who should own this network.",
-		},
 	}
 }
 
