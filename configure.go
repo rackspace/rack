@@ -87,6 +87,13 @@ func configure(c *cli.Context) {
 		//fmt.Printf("Error saving config file: %s\n", err)
 		return
 	}
+
+	if profile == "DEFAULT" {
+	    fmt.Printf("\nCreated new default profile for username %s", username)
+	} else {
+	    fmt.Printf("\nCreated profile %s with username %s", profile, username)
+	}
+
 }
 
 func configFile() (string, error) {
