@@ -25,19 +25,19 @@ func configure(c *cli.Context) {
 	}
 	fmt.Print("Rackspace Username: ")
 	username, _ := reader.ReadString('\n')
-	m["username"] = strings.TrimSuffix(username, string('\n'))
+	m["username"] = strings.TrimSpace(username)
 
 	fmt.Print("Rackspace API key: ")
 	apiKey, _ := reader.ReadString('\n')
-	m["apikey"] = strings.TrimSuffix(apiKey, string('\n'))
+	m["apikey"] = strings.TrimSpace(apiKey)
 
 	fmt.Print("Rackspace Region : ")
 	region, _ := reader.ReadString('\n')
-	m["region"] = strings.ToUpper(strings.TrimSuffix(region, string('\n')))
+	m["region"] = strings.ToUpper(strings.TrimSpace(region))
 
 	fmt.Print("Profile Name (leave blank to create a default profile): ")
 	profile, _ := reader.ReadString('\n')
-	profile = strings.TrimSuffix(profile, string('\n'))
+	profile = strings.TrimSpace(profile)
 
 	configFile, err := configFile()
 	var cfg *ini.File
@@ -55,14 +55,14 @@ func configure(c *cli.Context) {
 		if _, err := cfg.GetSection(profile); err == nil {
 			fmt.Printf("\nA profile named %s already exists. Overwrite? (y/n): ", profile)
 			choice, _ := reader.ReadString('\n')
-			choice = strings.TrimSuffix(choice, string('\n'))
+			choice = strings.TrimSpace(choice)
 			switch strings.ToLower(choice) {
 			case "y", "yes":
 				break
 			case "n", "no":
 				fmt.Print("Profile Name: ")
-				profile, _ := reader.ReadString('\n')
-				profile = strings.TrimSuffix(profile, string('\n'))
+				profile, _ = reader.ReadString('\n')
+				profile = strings.TrimSpace(profile)
 				continue
 			default:
 				continue
