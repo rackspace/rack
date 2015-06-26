@@ -52,7 +52,7 @@ func configure(c *cli.Context) {
 	}
 
 	for {
-		if _, err := cfg.GetSection(profile); err == nil {
+		if section, err := cfg.GetSection(profile); err == nil && len(section.Keys()) != 0 {
 			fmt.Printf("\nA profile named %s already exists. Overwrite? (y/n): ", profile)
 			choice, _ := reader.ReadString('\n')
 			choice = strings.TrimSpace(choice)
