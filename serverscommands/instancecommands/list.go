@@ -28,27 +28,27 @@ func flagsList() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "name",
-			Usage: "Only list servers with this name.",
+			Usage: "[optional] Only list servers with this name.",
 		},
 		cli.StringFlag{
 			Name:  "changes-since",
-			Usage: "Only list servers that have been changed since this time/date stamp.",
+			Usage: "[optional] Only list servers that have been changed since this time/date stamp.",
 		},
 		cli.StringFlag{
 			Name:  "image",
-			Usage: "Only list servers that have this image ID.",
+			Usage: "[optional] Only list servers that have this image ID.",
 		},
 		cli.StringFlag{
 			Name:  "flavor",
-			Usage: "Only list servers that have this flavor ID.",
+			Usage: "[optional] Only list servers that have this flavor ID.",
 		},
 		cli.StringFlag{
 			Name:  "status",
-			Usage: "Only list servers that have this status.",
+			Usage: "[optional] Only list servers that have this status.",
 		},
 		cli.StringFlag{
 			Name:  "marker",
-			Usage: "Start listing servers at this server ID.",
+			Usage: "[optional] Start listing servers at this server ID.",
 		},
 		cli.IntFlag{
 			Name:  "limit",
