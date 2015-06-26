@@ -34,5 +34,9 @@ func GlobalFlags() []cli.Flag {
 			Name:  "no-cache",
 			Usage: "Don't get or set authentication credentials in the rack cache.",
 		},
+		cli.StringFlag{
+			Name:  "log",
+			Usage: "Print debug information from the command. Options are: debug, info",
+		},
 	}
 }

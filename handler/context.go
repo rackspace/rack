@@ -8,6 +8,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
@@ -38,6 +39,8 @@ type Context struct {
 	// OutputFormat is the format in which the user wants the output. This is obtained
 	// from the `output` flag and will default to "table" if not provided.
 	OutputFormat string
+	// Logger is used to log information acquired while processing the command.
+	Logger *logrus.Logger
 }
 
 // ListenAndReceive creates the Results channel and processes the results that
@@ -185,6 +188,27 @@ func (ctx *Context) StoreCredentials() {
 			_ = cache.SetValue(cacheKey, newCacheValue)
 		}
 	}
+}
+
+func (ctx *Context) handleLogging() error {
+	var opt string
+	if ctx.CLIContext.GlobalIsSet("log") {
+		opt = ctx.CLIContext.GlobalString("log")
+	} else if ctx.CLIContext.IsSet("log") {
+		opt = ctx.CLIContext.String("log")
+	}
+	if opt != "" {
+		switch strings.ToLower(opt) {
+		case "debug":
+			ctx.ServiceClient.Logger.Level = logrus.DebugLevel
+		case "info":
+			ctx.ServiceClient.Logger.Level = logrus.InfoLevel
+		default:
+			return fmt.Errorf("Invalid value for `log` flag: %s. Valid options are: debug, info", opt)
+		}
+		ctx.ServiceClient.Logger.Out = ctx.CLIContext.App.Writer
+	}
+	return nil
 }
 
 // ErrExit1 tells `rack` to print the error and exit.
