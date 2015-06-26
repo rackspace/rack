@@ -116,8 +116,7 @@ The config file format is like the following::
     username=<another rackspace username>
     apikey=<another rackspace api key>
 
-In the example above there is a default profile that doesn't have a named section. "another-profile" is a different profile in
-the config file. When using the default profile, you don't need to supply a flag when executing ``rack``. A specific profile can be specified on the command-line with the ``profile`` flag.
+In the example above there is a default profile that doesn't have a named section. "another-profile" is a different profile in the config file. When using the default profile, you don't need to supply a flag when executing ``rack``. A specific profile can be specified on the command-line with the ``profile`` flag.
 
     rack --profile another-profile servers instance list
 
