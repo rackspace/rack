@@ -46,12 +46,12 @@ func flagsList() []cli.Flag {
 			Usage: "[optional] Only list ports that have this status.",
 		},
 		cli.StringFlag{
-			Name:  "mac-address",
-			Usage: "[optional] Only list ports with this MAC address.",
-		},
-		cli.StringFlag{
 			Name:  "tenant-id",
 			Usage: "[optional] Only list ports that are owned by the tenant with this tenant ID.",
+		},
+		cli.StringFlag{
+			Name:  "device-id",
+			Usage: "[optional] Only list ports with this device ID.",
 		},
 		cli.StringFlag{
 			Name:  "marker",
@@ -98,13 +98,13 @@ func (command *commandList) HandleFlags(resource *handler.Resource) error {
 	c := command.Ctx.CLIContext
 
 	opts := &osPorts.ListOpts{
-		Name:       c.String("name"),
-		NetworkID:  c.String("network-id"),
-		Status:     c.String("status"),
-		MACAddress: c.String("mac-address"),
-		TenantID:   c.String("tenant-id"),
-		Marker:     c.String("marker"),
-		Limit:      c.Int("limit"),
+		Name:      c.String("name"),
+		NetworkID: c.String("network-id"),
+		DeviceID:  c.String("device-id"),
+		Status:    c.String("status"),
+		TenantID:  c.String("tenant-id"),
+		Marker:    c.String("marker"),
+		Limit:     c.Int("limit"),
 	}
 
 	if c.IsSet("up") {
