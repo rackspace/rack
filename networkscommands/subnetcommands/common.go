@@ -19,17 +19,20 @@ func subnetSingle(subnet *osSubnets.Subnet) map[string]interface{} {
 		m["Allocation Pools"] = strings.Join(out, "\n")
 	}
 
-	m["Host Routes"] = m["HostRoutes"]
-	delete(m, "HostRoutes")
-	if hostRoutes, ok := m["Host Routes"].([]osSubnets.HostRoute); ok && len(hostRoutes) > 0 {
-		out := []string{"Destination CIDR\tNext Hop"}
-		for _, route := range hostRoutes {
-			out = append(out, fmt.Sprintf("%s\t%s", route.DestinationCIDR, route.NextHop))
+	/*
+		m["Host Routes"] = m["HostRoutes"]
+		delete(m, "HostRoutes")
+		if hostRoutes, ok := m["Host Routes"].([]osSubnets.HostRoute); ok && len(hostRoutes) > 0 {
+			fmt.Printf("hostRoutes: %+v\n", hostRoutes)
+			out := []string{"Destination CIDR\tNext Hop"}
+			for _, route := range hostRoutes {
+				out = append(out, fmt.Sprintf("%s\t%s", route.DestinationCIDR, route.NextHop))
+			}
+			m["Host Routes"] = strings.Join(out, "\n")
+		} else {
+			m["Host Routes"] = ""
 		}
-		m["Host Routes"] = strings.Join(out, "\n")
-	} else {
-		m["Host Routes"] = ""
-	}
+	*/
 
 	if nameServers, ok := m["DNSNameservers"].([]string); ok && len(nameServers) > 0 {
 		m["DNS Nameservers"] = strings.Join(nameServers, "\n")

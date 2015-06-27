@@ -61,16 +61,18 @@ func flagsCreate() []cli.Flag {
 			Name:  "dns-nameservers",
 			Usage: "[optional] A comma-separated list of DNS Nameservers for this subnet.",
 		},
-		cli.StringSliceFlag{
-			Name: "host-route",
-			Usage: strings.Join([]string{"[optional] A host route for this subnet. This flag may be provided several times.\n",
-				"\tEach one of these flags takes 2 values: dest (the destination CIDR) and next (the next hop).\n",
-				"\tExamle: --host-route dest=40.0.1.0/24,next=40.0.0.2"}, ""),
-		},
+		/*
+			cli.StringSliceFlag{
+				Name: "host-route",
+				Usage: strings.Join([]string{"[optional] A host route for this subnet. This flag may be provided several times.\n",
+					"\tEach one of these flags takes 2 values: dest (the destination CIDR) and next (the next hop).\n",
+					"\tExamle: --host-route dest=40.0.1.0/24,next=40.0.0.2"}, ""),
+			},
+		*/
 	}
 }
 
-var keysCreate = []string{"ID", "Name", "Network ID", "CIDR", "EnableDHCP", "Gateway IP", "DNS Nameservers", "Allocation Pools", "Host Routes"}
+var keysCreate = []string{"ID", "Name", "Network ID", "CIDR", "EnableDHCP", "Gateway IP", "DNS Nameservers", "Allocation Pools"}
 
 type paramsCreate struct {
 	opts *osSubnets.CreateOpts
@@ -146,21 +148,23 @@ func (command *commandCreate) HandleSingle(resource *handler.Resource) error {
 		opts.AllocationPools = allocationPools
 	}
 
-	if c.IsSet("host-route") {
-		hostRoutesRaw := c.StringSlice("host-route")
-		hostRoutesRawSlice, err := command.Ctx.CheckStructFlag(hostRoutesRaw)
-		if err != nil {
-			return err
-		}
-		hostRoutes := make([]osSubnets.HostRoute, len(hostRoutesRawSlice))
-		for i, hostRouteMap := range hostRoutesRawSlice {
-			hostRoutes[i] = osSubnets.HostRoute{
-				DestinationCIDR: hostRouteMap["dest"].(string),
-				NextHop:         hostRouteMap["next"].(string),
+	/*
+		if c.IsSet("host-route") {
+			hostRoutesRaw := c.StringSlice("host-route")
+			hostRoutesRawSlice, err := command.Ctx.CheckStructFlag(hostRoutesRaw)
+			if err != nil {
+				return err
 			}
+			hostRoutes := make([]osSubnets.HostRoute, len(hostRoutesRawSlice))
+			for i, hostRouteMap := range hostRoutesRawSlice {
+				hostRoutes[i] = osSubnets.HostRoute{
+					DestinationCIDR: hostRouteMap["dest"].(string),
+					NextHop:         hostRouteMap["next"].(string),
+				}
+			}
+			opts.HostRoutes = hostRoutes
 		}
-		opts.HostRoutes = hostRoutes
-	}
+	*/
 
 	resource.Params.(*paramsCreate).opts = opts
 	return nil
