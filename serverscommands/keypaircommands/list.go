@@ -6,6 +6,7 @@ import (
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
 	osKeypairs "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs"
+	"github.com/rackspace/gophercloud/pagination"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs"
 )
 
@@ -60,19 +61,23 @@ func (command *commandList) HandleSingle(resource *handler.Resource) error {
 }
 
 func (command *commandList) Execute(resource *handler.Resource) {
-	allPages, err := keypairs.List(command.Ctx.ServiceClient).AllPages()
+	err := keypairs.List(command.Ctx.ServiceClient).EachPage(func(page pagination.Page) (bool, error) {
+		info, err := osKeypairs.ExtractKeyPairs(page)
+		if err != nil {
+			return false, err
+		}
+		result := make([]map[string]interface{}, len(info))
+		for j, key := range info {
+			result[j] = structs.Map(key)
+		}
+		resource.Result = result
+		return false, nil
+	})
 	if err != nil {
 		resource.Err = err
 		return
 	}
-	keys, err := osKeypairs.ExtractKeyPairs(allPages)
-	if err != nil {
-		resource.Err = err
-		return
+	if resource.Result == nil {
+		resource.Result = []map[string]interface{}{}
 	}
-	result := make([]map[string]interface{}, len(keys))
-	for j, key := range keys {
-		result[j] = structs.Map(key)
-	}
-	resource.Result = result
 }
