@@ -127,9 +127,9 @@ func (command *commandList) Execute(resource *handler.Resource) {
 			}
 			resource.Result = result
 			if len(info) >= opts.Limit {
-				limit -= len(info)
 				return false, nil
 			}
+			limit -= len(info)
 			command.Ctx.WaitGroup.Add(1)
 			command.Ctx.Results <- resource
 			return true, nil

@@ -130,7 +130,6 @@ func (command *commandList) Execute(resource *handler.Resource) {
 	opts := resource.Params.(*paramsList).opts
 	allPages := resource.Params.(*paramsList).allPages
 	pager := networks.List(command.Ctx.ServiceClient, opts)
-	var networkInfo []osNetworks.Network
 	if allPages {
 		pages, err := pager.AllPages()
 		if err != nil {
@@ -142,17 +141,29 @@ func (command *commandList) Execute(resource *handler.Resource) {
 			resource.Err = err
 			return
 		}
-		networkInfo = info
+		result := make([]map[string]interface{}, len(info))
+		for j, network := range info {
+			result[j] = networkSingle(&network)
+		}
+		resource.Result = result
 	} else {
+		limit := opts.Limit
 		err := pager.EachPage(func(page pagination.Page) (bool, error) {
 			info, err := osNetworks.ExtractNetworks(page)
 			if err != nil {
 				return false, err
 			}
-			networkInfo = append(networkInfo, info...)
-			if len(networkInfo) >= opts.Limit {
+			result := make([]map[string]interface{}, len(info))
+			for j, network := range info {
+				result[j] = networkSingle(&network)
+			}
+			resource.Result = result
+			if len(info) >= limit {
 				return false, nil
 			}
+			limit -= len(info)
+			command.Ctx.WaitGroup.Add(1)
+			command.Ctx.Results <- resource
 			return true, nil
 		})
 		if err != nil {
@@ -160,9 +171,4 @@ func (command *commandList) Execute(resource *handler.Resource) {
 			return
 		}
 	}
-	result := make([]map[string]interface{}, len(networkInfo))
-	for j, network := range networkInfo {
-		result[j] = networkSingle(&network)
-	}
-	resource.Result = result
 }
