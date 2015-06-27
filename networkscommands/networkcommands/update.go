@@ -44,14 +44,6 @@ func flagsUpdate() []cli.Flag {
 			Name:  "up",
 			Usage: "[optional] Whether or not the newtork should be up. Options are: true, false.",
 		},
-		cli.StringFlag{
-			Name:  "shared",
-			Usage: "[optional] Whether or not the network should be shared among tenants. Options are: true, false.",
-		},
-		cli.StringFlag{
-			Name:  "tenant-id",
-			Usage: "[optional] The ID of the tenant who should own this network.",
-		},
 	}
 }
 
@@ -88,7 +80,7 @@ func (command *commandUpdate) ServiceClientType() string {
 func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
 	c := command.Ctx.CLIContext
 	opts := &osNetworks.UpdateOpts{
-		TenantID: c.String("tenant-id"),
+		Name: c.String("rename"),
 	}
 	if c.IsSet("up") {
 		upRaw := c.String("up")
@@ -96,19 +88,16 @@ func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
 		if err != nil {
 			return fmt.Errorf("Invalid value for flag `up`: %s. Options are: true, false", upRaw)
 		}
-		opts.AdminStateUp = &up
-	}
-	if c.IsSet("shared") {
-		sharedRaw := c.String("shared")
-		shared, err := strconv.ParseBool(sharedRaw)
-		if err != nil {
-			return fmt.Errorf("Invalid value for flag `shared`: %s. Options are: true, false", sharedRaw)
+		if up {
+			opts.AdminStateUp = osNetworks.Up
+		} else {
+			opts.AdminStateUp = osNetworks.Down
 		}
-		opts.Shared = &shared
 	}
 	resource.Params = &paramsUpdate{
 		opts: opts,
 	}
+	//fmt.Printf("opts: %+v\n", opts)
 	return nil
 }
 
