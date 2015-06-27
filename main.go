@@ -2,7 +2,11 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
+	"strings"
+	"text/tabwriter"
+	"text/template"
 
 	"github.com/jrperritt/rack/filescommands"
 	"github.com/jrperritt/rack/networkscommands"
@@ -13,6 +17,15 @@ import (
 )
 
 func main() {
+	cli.HelpPrinter = printHelp
+	cli.CommandHelpTemplate = `NAME: {{.Name}} - {{.Usage}}{{if .Description}}
+
+DESCRIPTION: {{.Description}}{{end}}{{if .Flags}}
+
+OPTIONS:
+{{range .Flags}}{{flag .}}
+{{end}}{{ end }}
+`
 	app := cli.NewApp()
 	app.Name = "rack"
 	app.Usage = "An opinionated CLI for the Rackspace cloud"
@@ -42,6 +55,10 @@ func main() {
 	app.Flags = util.GlobalFlags()
 	app.BashComplete = func(c *cli.Context) {
 		completeGlobals(globalOptions(app))
+	}
+	app.Before = func(c *cli.Context) error {
+		//fmt.Printf("c.Args: %+v\n", c.Args())
+		return nil
 	}
 	app.Run(os.Args)
 }
@@ -78,4 +95,37 @@ func globalOptions(app *cli.App) []interface{} {
 		i = append(i, cmd)
 	}
 	return i
+}
+
+func printHelp(out io.Writer, templ string, data interface{}) {
+	funcMap := template.FuncMap{
+		"join": strings.Join,
+		"flag": flag,
+	}
+
+	w := tabwriter.NewWriter(out, 0, 8, 1, '\t', 0)
+	t := template.Must(template.New("help").Funcs(funcMap).Parse(templ))
+	err := t.Execute(w, data)
+	if err != nil {
+		panic(err)
+	}
+	w.Flush()
+}
+
+func flag(flag cli.Flag) string {
+	switch flag.(type) {
+	case cli.StringFlag:
+		flagType := flag.(cli.StringFlag)
+		return fmt.Sprintf("%s\t%s", flagType.Name, flagType.Usage)
+	case cli.IntFlag:
+		flagType := flag.(cli.IntFlag)
+		return fmt.Sprintf("%s\t%s", flagType.Name, flagType.Usage)
+	case cli.BoolFlag:
+		flagType := flag.(cli.BoolFlag)
+		return fmt.Sprintf("%s\t%s", flagType.Name, flagType.Usage)
+	case cli.StringSliceFlag:
+		flagType := flag.(cli.StringSliceFlag)
+		return fmt.Sprintf("%s\t%s", flagType.Name, flagType.Usage)
+	}
+	return ""
 }
