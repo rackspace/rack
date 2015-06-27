@@ -39,6 +39,8 @@ func CompleteFlags(flags []cli.Flag) {
 			flagName = flag.(cli.IntFlag).Name
 		case cli.BoolFlag:
 			flagName = flag.(cli.BoolFlag).Name
+		case cli.StringSliceFlag:
+			flagName = flag.(cli.StringSliceFlag).Name
 		default:
 			continue
 		}
