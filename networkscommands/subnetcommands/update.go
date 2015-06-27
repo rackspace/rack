@@ -39,10 +39,12 @@ func flagsUpdate() []cli.Flag {
 			Name:  "gateway-ip",
 			Usage: "[optional] The gateway IP address this subnet should have.",
 		},
-		cli.BoolFlag{
-			Name:  "enable-dhcp",
-			Usage: "[optional] If set, DHCP will be enabled on this subnet.",
-		},
+		/*
+			cli.StringFlag{
+				Name:  "enable-dhcp",
+				Usage: "[optional] Whether or not DHCP should be enabled on this subnet. Options are: true, false",
+			},
+		*/
 		cli.StringFlag{
 			Name:  "dns-nameservers",
 			Usage: "[optional] A comma-separated list of DNS Nameservers for this subnet.",
@@ -96,10 +98,16 @@ func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
 		GatewayIP: c.String("gateway-ip"),
 	}
 
-	if c.IsSet("enable-dhcp") {
-		enableDHCP := true
-		opts.EnableDHCP = &enableDHCP
-	}
+	/*
+		if c.IsSet("enable-dhcp") {
+			enableDHCPRaw := c.String("enable-dhcp")
+			enableDHCP, err := strconv.ParseBool(enableDHCPRaw)
+			if err != nil {
+				return fmt.Errorf("Invalid value for flag `shared`: %s. Options are: true, false", enableDHCPRaw)
+			}
+			opts.EnableDHCP = &enableDHCP
+		}
+	*/
 
 	if c.IsSet("dns-nameservers") {
 		opts.DNSNameservers = strings.Split(c.String("dns-nameservers"), ",")

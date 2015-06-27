@@ -1,6 +1,9 @@
 package networkcommands
 
 import (
+	"fmt"
+	"strconv"
+
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
@@ -88,11 +91,19 @@ func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
 		TenantID: c.String("tenant-id"),
 	}
 	if c.IsSet("up") {
-		up := true
+		upRaw := c.String("up")
+		up, err := strconv.ParseBool(upRaw)
+		if err != nil {
+			return fmt.Errorf("Invalid value for flag `up`: %s. Options are: true, false", upRaw)
+		}
 		opts.AdminStateUp = &up
 	}
 	if c.IsSet("shared") {
-		shared := true
+		sharedRaw := c.String("shared")
+		shared, err := strconv.ParseBool(sharedRaw)
+		if err != nil {
+			return fmt.Errorf("Invalid value for flag `shared`: %s. Options are: true, false", sharedRaw)
+		}
 		opts.Shared = &shared
 	}
 	resource.Params = &paramsUpdate{
