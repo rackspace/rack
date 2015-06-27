@@ -122,7 +122,6 @@ func (command *commandList) Execute(resource *handler.Resource) {
 	containerName := resource.Params.(*paramsList).container
 	allPages := resource.Params.(*paramsList).allPages
 	pager := objects.List(command.Ctx.ServiceClient, containerName, opts)
-	var objectInfo []osObjects.Object
 	if allPages {
 		pages, err := pager.AllPages()
 		if err != nil {
@@ -134,17 +133,29 @@ func (command *commandList) Execute(resource *handler.Resource) {
 			resource.Err = err
 			return
 		}
-		objectInfo = info
+		result := make([]map[string]interface{}, len(info))
+		for j, obj := range info {
+			result[j] = structs.Map(&obj)
+		}
+		resource.Result = result
 	} else {
+		limit := opts.Limit
 		err := pager.EachPage(func(page pagination.Page) (bool, error) {
 			info, err := objects.ExtractInfo(page)
 			if err != nil {
 				return false, err
 			}
-			objectInfo = append(objectInfo, info...)
-			if len(objectInfo) >= opts.Limit {
+			result := make([]map[string]interface{}, len(info))
+			for j, obj := range info {
+				result[j] = structs.Map(&obj)
+			}
+			resource.Result = result
+			if len(info) >= limit {
+				limit -= len(info)
 				return false, nil
 			}
+			command.Ctx.WaitGroup.Add(1)
+			command.Ctx.Results <- resource
 			return true, nil
 		})
 		if err != nil {
@@ -152,11 +163,6 @@ func (command *commandList) Execute(resource *handler.Resource) {
 			return
 		}
 	}
-	result := make([]map[string]interface{}, len(objectInfo))
-	for j, obj := range objectInfo {
-		result[j] = structs.Map(&obj)
-	}
-	resource.Result = result
 }
 
 func (command *commandList) StdinField() string {

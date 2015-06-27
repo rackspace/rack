@@ -99,7 +99,6 @@ func (command *commandList) Execute(resource *handler.Resource) {
 	opts := resource.Params.(*paramsList).opts
 	allPages := resource.Params.(*paramsList).allPages
 	pager := images.ListDetail(command.Ctx.ServiceClient, opts)
-	var imageInfo []osImages.Image
 	if allPages {
 		pages, err := pager.AllPages()
 		if err != nil {
@@ -111,17 +110,29 @@ func (command *commandList) Execute(resource *handler.Resource) {
 			resource.Err = err
 			return
 		}
-		imageInfo = info
+		result := make([]map[string]interface{}, len(info))
+		for j, image := range info {
+			result[j] = structs.Map(image)
+		}
+		resource.Result = result
 	} else {
+		limit := opts.Limit
 		err := pager.EachPage(func(page pagination.Page) (bool, error) {
 			info, err := osImages.ExtractImages(page)
 			if err != nil {
 				return false, err
 			}
-			imageInfo = append(imageInfo, info...)
-			if len(imageInfo) >= opts.Limit {
+			result := make([]map[string]interface{}, len(info))
+			for j, image := range info {
+				result[j] = structs.Map(image)
+			}
+			resource.Result = result
+			if len(info) >= limit {
+				limit -= len(info)
 				return false, nil
 			}
+			command.Ctx.WaitGroup.Add(1)
+			command.Ctx.Results <- resource
 			return true, nil
 		})
 		if err != nil {
@@ -129,9 +140,4 @@ func (command *commandList) Execute(resource *handler.Resource) {
 			return
 		}
 	}
-	result := make([]map[string]interface{}, len(imageInfo))
-	for j, image := range imageInfo {
-		result[j] = structs.Map(image)
-	}
-	resource.Result = result
 }

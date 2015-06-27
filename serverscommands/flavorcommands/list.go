@@ -5,7 +5,6 @@ import (
 	"github.com/fatih/structs"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	osFlavors "github.com/rackspace/gophercloud/openstack/compute/v2/flavors"
 	"github.com/rackspace/gophercloud/pagination"
 	"github.com/rackspace/gophercloud/rackspace/compute/v2/flavors"
 )
@@ -99,7 +98,6 @@ func (command *commandList) Execute(resource *handler.Resource) {
 	opts := resource.Params.(*paramsList).opts
 	allPages := resource.Params.(*paramsList).allPages
 	pager := flavors.ListDetail(command.Ctx.ServiceClient, opts)
-	var flavorInfo []osFlavors.Flavor
 	if allPages {
 		pages, err := pager.AllPages()
 		if err != nil {
@@ -111,17 +109,29 @@ func (command *commandList) Execute(resource *handler.Resource) {
 			resource.Err = err
 			return
 		}
-		flavorInfo = info
+		result := make([]map[string]interface{}, len(info))
+		for j, flavor := range info {
+			result[j] = structs.Map(flavor)
+		}
+		resource.Result = result
 	} else {
+		limit := opts.Limit
 		err := pager.EachPage(func(page pagination.Page) (bool, error) {
 			info, err := flavors.ExtractFlavors(page)
 			if err != nil {
 				return false, err
 			}
-			flavorInfo = append(flavorInfo, info...)
-			if len(flavorInfo) >= opts.Limit {
+			result := make([]map[string]interface{}, len(info))
+			for j, flavor := range info {
+				result[j] = structs.Map(flavor)
+			}
+			resource.Result = result
+			if len(info) >= opts.Limit {
+				limit -= len(info)
 				return false, nil
 			}
+			command.Ctx.WaitGroup.Add(1)
+			command.Ctx.Results <- resource
 			return true, nil
 		})
 		if err != nil {
@@ -129,9 +139,4 @@ func (command *commandList) Execute(resource *handler.Resource) {
 			return
 		}
 	}
-	result := make([]map[string]interface{}, len(flavorInfo))
-	for j, flavor := range flavorInfo {
-		result[j] = structs.Map(flavor)
-	}
-	resource.Result = result
 }
