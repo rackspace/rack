@@ -5,7 +5,7 @@ import "github.com/codegangsta/cli"
 var commandPrefix = "networks network"
 var serviceClientType = "network"
 
-// Get returns all the commands allowed for a `files container` request.
+// Get returns all the commands allowed for a `networks network` request.
 func Get() []cli.Command {
 	return []cli.Command{
 		create,
