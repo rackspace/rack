@@ -12,7 +12,7 @@ import (
 
 var create = cli.Command{
 	Name:        "create",
-	Usage:       util.Usage(commandPrefix, "create", "--network-id <networkID> --cidr <CIDR>"),
+	Usage:       util.Usage(commandPrefix, "create", "--network-id <networkID> --cidr <CIDR> --ip-version <4|6>"),
 	Description: "Creates a subnet",
 	Action:      actionCreate,
 	Flags:       util.CommandFlags(flagsCreate, keysCreate),
@@ -31,14 +31,13 @@ func flagsCreate() []cli.Flag {
 			Name:  "cidr",
 			Usage: "[required] The CIDR of this subnet.",
 		},
+		cli.IntFlag{
+			Name:  "ip-version",
+			Usage: "[required] The IP version this subnet should have. Options are: 4, 6.",
+		},
 		cli.StringFlag{
 			Name:  "name",
 			Usage: "[optional] The name this subnet should have.",
-		},
-		cli.IntFlag{
-			Name:  "ip-version",
-			Usage: "[optional] The IP version this subnet should have. Options are: 4, 6.",
-			Value: 10,
 		},
 		cli.StringFlag{
 			Name:  "gateway-ip",
@@ -57,7 +56,6 @@ func flagsCreate() []cli.Flag {
 			Usage: strings.Join([]string{"[optional] An allocation pool for this subnet. This flag may be provided several times.\n",
 				"\tEach one of these flags takes 2 values: start and end.\n",
 				"\tExamle: --allocation-pool start=192.0.2.1,end=192.0.2.254 --allocation-pool start:172.20.0.1,end=172.20.0.254"}, ""),
-			//Value: []string{},
 		},
 		cli.StringFlag{
 			Name:  "dns-nameservers",
@@ -68,7 +66,6 @@ func flagsCreate() []cli.Flag {
 			Usage: strings.Join([]string{"[optional] A host route for this subnet. This flag may be provided several times.\n",
 				"\tEach one of these flags takes 2 values: dest (the destination CIDR) and next (the next hop).\n",
 				"\tExamle: --host-route dest=40.0.1.0/24,next=40.0.0.2"}, ""),
-			//Value: []string{},
 		},
 	}
 }
@@ -108,7 +105,7 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 }
 
 func (command *commandCreate) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"network-id", "cidr"})
+	err := command.Ctx.CheckFlagsSet([]string{"network-id", "cidr", "ip-version"})
 	if err != nil {
 		return err
 	}
