@@ -24,23 +24,23 @@ func flagsList() []cli.Flag {
 	return []cli.Flag{
 		cli.BoolFlag{
 			Name:  "all-pages",
-			Usage: "[optional] Return all subnets. Default is to paginate.",
+			Usage: "[optional] Return all security groups. Default is to paginate.",
 		},
 		cli.StringFlag{
 			Name:  "name",
-			Usage: "[optional] Only list subnets with this name.",
+			Usage: "[optional] Only list security groups with this name.",
 		},
 		cli.StringFlag{
 			Name:  "tenant-id",
-			Usage: "[optional] Only list subnets that are owned by the tenant with this tenant ID.",
+			Usage: "[optional] Only list security groups that are owned by the tenant with this tenant ID.",
 		},
 		cli.StringFlag{
 			Name:  "marker",
-			Usage: "[optional] Start listing subnets at this ID.",
+			Usage: "[optional] Start listing security groups at this ID.",
 		},
 		cli.IntFlag{
 			Name:  "limit",
-			Usage: "[optional] Only return this many subnets at most.",
+			Usage: "[optional] Only return this many security groups at most.",
 		},
 	}
 }

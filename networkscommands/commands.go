@@ -5,6 +5,7 @@ import (
 	"github.com/jrperritt/rack/networkscommands/networkcommands"
 	"github.com/jrperritt/rack/networkscommands/portcommands"
 	"github.com/jrperritt/rack/networkscommands/securitygroupcommands"
+	"github.com/jrperritt/rack/networkscommands/securitygrouprulecommands"
 	"github.com/jrperritt/rack/networkscommands/subnetcommands"
 )
 
@@ -30,6 +31,11 @@ func Get() []cli.Command {
 			Name:        "securitygroup",
 			Usage:       "Used for Cloud Networks security group operations",
 			Subcommands: securitygroupcommands.Get(),
+		},
+		{
+			Name:        "securitygrouprule",
+			Usage:       "Used for Cloud Networks security group rule operations",
+			Subcommands: securitygrouprulecommands.Get(),
 		},
 	}
 }

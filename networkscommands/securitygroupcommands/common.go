@@ -9,8 +9,8 @@ import (
 	osSecurityGroupRules "github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/rules"
 )
 
-func securityGroupSingle(port *osSecurityGroups.SecGroup) map[string]interface{} {
-	m := structs.Map(port)
+func securityGroupSingle(securityGroup *osSecurityGroups.SecGroup) map[string]interface{} {
+	m := structs.Map(securityGroup)
 
 	if rules, ok := m["Rules"].([]osSecurityGroupRules.SecGroupRule); ok && len(rules) > 0 {
 		out := []string{"ID\tDirection\tEtherType\tProtocol"}
