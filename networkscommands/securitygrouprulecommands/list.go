@@ -14,7 +14,7 @@ import (
 var list = cli.Command{
 	Name:        "list",
 	Usage:       util.Usage(commandPrefix, "list", ""),
-	Description: "Lists existing security groups",
+	Description: "Lists existing security group rules",
 	Action:      actionList,
 	Flags:       util.CommandFlags(flagsList, keysList),
 	BashComplete: func(c *cli.Context) {
