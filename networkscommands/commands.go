@@ -4,6 +4,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/networkscommands/networkcommands"
 	"github.com/jrperritt/rack/networkscommands/portcommands"
+	"github.com/jrperritt/rack/networkscommands/securitygroupcommands"
 	"github.com/jrperritt/rack/networkscommands/subnetcommands"
 )
 
@@ -24,6 +25,11 @@ func Get() []cli.Command {
 			Name:        "port",
 			Usage:       "Used for Cloud Networks port operations",
 			Subcommands: portcommands.Get(),
+		},
+		{
+			Name:        "securitygroup",
+			Usage:       "Used for Cloud Networks security group operations",
+			Subcommands: securitygroupcommands.Get(),
 		},
 	}
 }

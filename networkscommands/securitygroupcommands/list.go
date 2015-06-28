@@ -1,21 +1,18 @@
-package portcommands
+package securitygroupcommands
 
 import (
-	"fmt"
-	"strconv"
-
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	osPorts "github.com/rackspace/gophercloud/openstack/networking/v2/ports"
+	osSecurityGroups "github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/groups"
 	"github.com/rackspace/gophercloud/pagination"
-	"github.com/rackspace/gophercloud/rackspace/networking/v2/ports"
+	securityGroups "github.com/rackspace/gophercloud/rackspace/networking/v2/security/groups"
 )
 
 var list = cli.Command{
 	Name:        "list",
 	Usage:       util.Usage(commandPrefix, "list", ""),
-	Description: "Lists existing ports",
+	Description: "Lists existing security groups",
 	Action:      actionList,
 	Flags:       util.CommandFlags(flagsList, keysList),
 	BashComplete: func(c *cli.Context) {
@@ -27,47 +24,31 @@ func flagsList() []cli.Flag {
 	return []cli.Flag{
 		cli.BoolFlag{
 			Name:  "all-pages",
-			Usage: "[optional] Return all ports. Default is to paginate.",
+			Usage: "[optional] Return all subnets. Default is to paginate.",
 		},
 		cli.StringFlag{
 			Name:  "name",
-			Usage: "[optional] Only list ports with this name.",
-		},
-		cli.StringFlag{
-			Name:  "up",
-			Usage: "[optional] Only list ports that are up or not. Options are: true, false.",
-		},
-		cli.StringFlag{
-			Name:  "network-id",
-			Usage: "[optional] Only list ports with this network ID.",
-		},
-		cli.IntFlag{
-			Name:  "status",
-			Usage: "[optional] Only list ports that have this status.",
+			Usage: "[optional] Only list subnets with this name.",
 		},
 		cli.StringFlag{
 			Name:  "tenant-id",
-			Usage: "[optional] Only list ports that are owned by the tenant with this tenant ID.",
-		},
-		cli.StringFlag{
-			Name:  "device-id",
-			Usage: "[optional] Only list ports with this device ID.",
+			Usage: "[optional] Only list subnets that are owned by the tenant with this tenant ID.",
 		},
 		cli.StringFlag{
 			Name:  "marker",
-			Usage: "[optional] Start listing ports at this ID.",
+			Usage: "[optional] Start listing subnets at this ID.",
 		},
 		cli.IntFlag{
 			Name:  "limit",
-			Usage: "[optional] Only return this many ports at most.",
+			Usage: "[optional] Only return this many subnets at most.",
 		},
 	}
 }
 
-var keysList = []string{"ID", "Name", "NetworkID", "Status", "MACAddress", "DeviceID"}
+var keysList = []string{"ID", "Name", "TenantID"}
 
 type paramsList struct {
-	opts     *osPorts.ListOpts
+	opts     *osSecurityGroups.ListOpts
 	allPages bool
 }
 
@@ -97,23 +78,11 @@ func (command *commandList) ServiceClientType() string {
 func (command *commandList) HandleFlags(resource *handler.Resource) error {
 	c := command.Ctx.CLIContext
 
-	opts := &osPorts.ListOpts{
-		Name:      c.String("name"),
-		NetworkID: c.String("network-id"),
-		DeviceID:  c.String("device-id"),
-		Status:    c.String("status"),
-		TenantID:  c.String("tenant-id"),
-		Marker:    c.String("marker"),
-		Limit:     c.Int("limit"),
-	}
-
-	if c.IsSet("up") {
-		upRaw := c.String("up")
-		up, err := strconv.ParseBool(upRaw)
-		if err != nil {
-			return fmt.Errorf("Invalid value for flag `up`: %s. Options are: true, false", upRaw)
-		}
-		opts.AdminStateUp = &up
+	opts := &osSecurityGroups.ListOpts{
+		Name:     c.String("name"),
+		TenantID: c.String("tenant-id"),
+		Marker:   c.String("marker"),
+		Limit:    c.Int("limit"),
 	}
 
 	resource.Params = &paramsList{
@@ -131,33 +100,33 @@ func (command *commandList) HandleSingle(resource *handler.Resource) error {
 func (command *commandList) Execute(resource *handler.Resource) {
 	opts := resource.Params.(*paramsList).opts
 	allPages := resource.Params.(*paramsList).allPages
-	pager := ports.List(command.Ctx.ServiceClient, opts)
+	pager := securityGroups.List(command.Ctx.ServiceClient, *opts)
 	if allPages {
 		pages, err := pager.AllPages()
 		if err != nil {
 			resource.Err = err
 			return
 		}
-		info, err := osPorts.ExtractPorts(pages)
+		info, err := osSecurityGroups.ExtractGroups(pages)
 		if err != nil {
 			resource.Err = err
 			return
 		}
 		result := make([]map[string]interface{}, len(info))
 		for j, subnet := range info {
-			result[j] = portSingle(&subnet)
+			result[j] = securityGroupSingle(&subnet)
 		}
 		resource.Result = result
 	} else {
 		limit := opts.Limit
 		err := pager.EachPage(func(page pagination.Page) (bool, error) {
-			info, err := osPorts.ExtractPorts(page)
+			info, err := osSecurityGroups.ExtractGroups(page)
 			if err != nil {
 				return false, err
 			}
 			result := make([]map[string]interface{}, len(info))
 			for j, subnet := range info {
-				result[j] = portSingle(&subnet)
+				result[j] = securityGroupSingle(&subnet)
 			}
 			resource.Result = result
 			if len(info) >= limit {
