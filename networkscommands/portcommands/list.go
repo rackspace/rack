@@ -64,7 +64,7 @@ func flagsList() []cli.Flag {
 	}
 }
 
-var keysList = []string{"ID", "Name", "Network ID", "Status", "MAC Address", "Device ID"}
+var keysList = []string{"ID", "Name", "NetworkID", "Status", "MACAddress", "DeviceID"}
 
 type paramsList struct {
 	opts     *osPorts.ListOpts

@@ -11,16 +11,14 @@ import (
 func portSingle(port *osPorts.Port) map[string]interface{} {
 	m := structs.Map(port)
 
-	m["Fixed IPs"] = m["FixedIPs"]
-	delete(m, "FixedIPs")
-	if fixedIPs, ok := m["Fixed IPs"].([]osPorts.IP); ok && len(fixedIPs) > 0 {
+	if fixedIPs, ok := m["FixedIPs"].([]osPorts.IP); ok && len(fixedIPs) > 0 {
 		out := []string{"Subnet ID\tIP Address"}
 		for _, ip := range fixedIPs {
 			out = append(out, fmt.Sprintf("%s\t%s", ip.SubnetID, ip.IPAddress))
 		}
-		m["Fixed IPs"] = strings.Join(out, "\n")
+		m["FixedIPs"] = strings.Join(out, "\n")
 	} else {
-		m["Fixed IPs"] = ""
+		m["FixedIPs"] = ""
 	}
 
 	if nameServers, ok := m["SecurityGroups"].([]string); ok && len(nameServers) > 0 {
@@ -28,11 +26,6 @@ func portSingle(port *osPorts.Port) map[string]interface{} {
 	} else {
 		m["SecurityGroups"] = ""
 	}
-
-	m["Tenant ID"] = m["TenantID"]
-	m["Network ID"] = m["NetworkID"]
-	m["MAC Address"] = m["MACAddress"]
-	m["Device ID"] = m["DeviceID"]
 
 	return m
 }
