@@ -64,15 +64,6 @@ func TestUploadHandleFlags(t *testing.T) {
 	th.AssertDeepEquals(t, *expected.Params.(*paramsUpload).opts, *actual.Params.(*paramsUpload).opts)
 }
 
-func TestUploadHandleSingle(t *testing.T) {
-	cmd := &commandUpload{}
-	expected := &handler.Resource{}
-	actual := &handler.Resource{}
-	err := cmd.HandleSingle(actual)
-	th.AssertNoErr(t, err)
-	th.AssertDeepEquals(t, expected, actual)
-}
-
 func TestUploadExecute(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()

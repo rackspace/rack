@@ -105,8 +105,13 @@ func TestGenerateExecute(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, `{"keypair":{}}`)
 	})
+	app := cli.NewApp()
+	flagset := flag.NewFlagSet("flags", 1)
+	flagset.Bool("json", false, "")
+	c := cli.NewContext(app, flagset, nil)
 	cmd := &commandGenerate{
 		Ctx: &handler.Context{
+			CLIContext:    c,
 			ServiceClient: client.ServiceClient(),
 		},
 	}

@@ -10,7 +10,7 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       util.Usage(commandPrefix, "get", util.IDOrNameUsage("instance")),
+	Usage:       util.Usage(commandPrefix, "get", "[--id <serverID> | --name <serverName> | --stdin id]"),
 	Description: "Retrieves an existing server",
 	Action:      actionGet,
 	Flags:       util.CommandFlags(flagsGet, keysGet),
@@ -20,13 +20,20 @@ var get = cli.Command{
 }
 
 func flagsGet() []cli.Flag {
-	cf := []cli.Flag{
+	return []cli.Flag{
+		cli.StringFlag{
+			Name:  "id",
+			Usage: "[optional; required if `stdin` or `name` isn't provided] The ID of the server.",
+		},
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "[optional; required if `id` or `stdin` isn't provided] The name of the server.",
+		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `id` or `name` isn't provided] The field being piped into STDIN. Valid values are: id",
+			Usage: "[optional; required if `id` or `name` isn't provided] The field being piped into STDIN. Valid values are: id.",
 		},
 	}
-	return append(cf, util.IDAndNameFlags...)
 }
 
 var keysGet = []string{"ID", "Name", "Status", "Created", "Updated", "Image", "Flavor", "Public IPv4", "Public IPv6", "Private IPv4", "KeyName"}

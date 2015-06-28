@@ -32,7 +32,7 @@ func flagsCreate() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "metadata",
-			Usage: "[optional] Comma-separated key-value pairs (key1=val1,key2=val2) for the container",
+			Usage: "[optional] Comma-separated key-value pairs for the container. Example: key1=val1,key2=val2",
 		},
 		cli.StringFlag{
 			Name:  "container-read",

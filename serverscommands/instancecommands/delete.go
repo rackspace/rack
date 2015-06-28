@@ -13,7 +13,7 @@ import (
 // delete is a reserved word in Go.
 var remove = cli.Command{
 	Name:        "delete",
-	Usage:       util.Usage(commandPrefix, "delete", util.IDOrNameUsage("instance")),
+	Usage:       util.Usage(commandPrefix, "delete", "[--id <serverID> | --name <serverName> | --stdin id]"),
 	Description: "Deletes an existing server",
 	Action:      actionDelete,
 	Flags:       util.CommandFlags(flagsDelete, keysDelete),
@@ -23,13 +23,20 @@ var remove = cli.Command{
 }
 
 func flagsDelete() []cli.Flag {
-	cf := []cli.Flag{
+	return []cli.Flag{
+		cli.StringFlag{
+			Name:  "id",
+			Usage: "[optional; required if `stdin` or `name` isn't provided] The ID of the server.",
+		},
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "[optional; required if `id` or `stdin` isn't provided] The name of the server.",
+		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `id` or `name` isn't provided] The field being piped into STDIN. Valid values are: id",
+			Usage: "[optional; required if `id` or `name` isn't provided] The field being piped into STDIN. Valid values are: id.",
 		},
 	}
-	return append(cf, util.IDAndNameFlags...)
 }
 
 var keysDelete = []string{}

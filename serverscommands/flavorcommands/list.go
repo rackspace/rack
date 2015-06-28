@@ -11,7 +11,7 @@ import (
 
 var list = cli.Command{
 	Name:        "list",
-	Usage:       util.Usage(commandPrefix, "list", util.IDOrNameUsage("flavor")),
+	Usage:       util.Usage(commandPrefix, "list", ""),
 	Description: "Lists flavors",
 	Action:      actionList,
 	Flags:       util.CommandFlags(flagsList, keysList),
@@ -87,10 +87,6 @@ func (command *commandList) HandleFlags(resource *handler.Resource) error {
 		opts:     opts,
 		allPages: c.Bool("all-pages"),
 	}
-	return nil
-}
-
-func (command *commandList) HandleSingle(resource *handler.Resource) error {
 	return nil
 }
 

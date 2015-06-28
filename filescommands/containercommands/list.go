@@ -93,10 +93,6 @@ func (command *commandList) HandleFlags(resource *handler.Resource) error {
 	return nil
 }
 
-func (command *commandList) HandleSingle(resource *handler.Resource) error {
-	return nil
-}
-
 func (command *commandList) Execute(resource *handler.Resource) {
 	opts := resource.Params.(*paramsList).opts
 	opts.Full = true

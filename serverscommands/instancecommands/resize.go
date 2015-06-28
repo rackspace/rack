@@ -2,7 +2,6 @@ package instancecommands
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
@@ -13,7 +12,7 @@ import (
 
 var resize = cli.Command{
 	Name:        "resize",
-	Usage:       util.Usage(commandPrefix, "resize", strings.Join([]string{util.IDOrNameUsage("instance"), "--flavor-id <flavor-id>"}, " ")),
+	Usage:       util.Usage(commandPrefix, "resize", "[--id <serverID>|--name <serverName>|--stdin id] --flavor-id <flavor-id>"),
 	Description: "Resizes an existing server",
 	Action:      actionResize,
 	Flags:       util.CommandFlags(flagsResize, keysResize),
@@ -23,17 +22,24 @@ var resize = cli.Command{
 }
 
 func flagsResize() []cli.Flag {
-	cf := []cli.Flag{
+	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "flavor-id",
 			Usage: "[required] The ID of the flavor that the resized server should have.",
+		},
+		cli.StringFlag{
+			Name:  "id",
+			Usage: "[optional; required if `stdin` or `name` isn't provided] The ID of the server.",
+		},
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "[optional; required if `id` or `stdin` isn't provided] The name of the server.",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
 			Usage: "[optional; required if `id` or `name` isn't provided] The field being piped into STDIN. Valid values are: id",
 		},
 	}
-	return append(cf, util.IDAndNameFlags...)
 }
 
 var keysResize = []string{}

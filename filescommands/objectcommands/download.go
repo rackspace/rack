@@ -77,10 +77,6 @@ func (command *commandDownload) HandleFlags(resource *handler.Resource) error {
 	return nil
 }
 
-func (command *commandDownload) HandleSingle(resource *handler.Resource) error {
-	return nil
-}
-
 func (command *commandDownload) Execute(resource *handler.Resource) {
 	containerName := resource.Params.(*paramsDownload).container
 	objectName := resource.Params.(*paramsDownload).object

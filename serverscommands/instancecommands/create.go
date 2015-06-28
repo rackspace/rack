@@ -13,7 +13,7 @@ import (
 
 var create = cli.Command{
 	Name:        "create",
-	Usage:       util.Usage(commandPrefix, "create", "[--name <instanceName> | --stdin name"),
+	Usage:       util.Usage(commandPrefix, "create", "[--name <instanceName> | --stdin name]"),
 	Description: "Creates a new server instance",
 	Action:      actionCreate,
 	Flags:       util.CommandFlags(flagsCreate, keysCreate),
@@ -159,8 +159,7 @@ func (command *commandCreate) HandleSingle(resource *handler.Resource) error {
 	if err != nil {
 		return err
 	}
-	serverName := command.Ctx.CLIContext.String("name")
-	resource.Params.(*paramsCreate).opts.Name = serverName
+	resource.Params.(*paramsCreate).opts.Name = command.Ctx.CLIContext.String("name")
 	return nil
 }
 

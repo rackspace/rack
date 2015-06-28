@@ -76,7 +76,17 @@ func (command *commandGet) HandleFlags(resource *handler.Resource) error {
 	return nil
 }
 
+func (command *commandGet) HandlePipe(resource *handler.Resource, item string) error {
+	resource.Params.(*paramsGet).object = item
+	return nil
+}
+
 func (command *commandGet) HandleSingle(resource *handler.Resource) error {
+	err := command.Ctx.CheckFlagsSet([]string{"name"})
+	if err != nil {
+		return err
+	}
+	resource.Params.(*paramsGet).object = command.Ctx.CLIContext.String("name")
 	return nil
 }
 
@@ -90,4 +100,8 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 	}
 	resource.Result = structs.Map(objectInfo)
 	resource.Result.(map[string]interface{})["Name"] = objectName
+}
+
+func (command *commandGet) StdinField() string {
+	return "name"
 }
