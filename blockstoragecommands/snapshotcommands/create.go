@@ -9,7 +9,7 @@ import (
 
 var create = cli.Command{
 	Name:        "create",
-	Usage:       util.Usage(commandPrefix, "create", ""),
+	Usage:       util.Usage(commandPrefix, "create", "--volume-id <volumeID>"),
 	Description: "Creates a volume",
 	Action:      actionCreate,
 	Flags:       util.CommandFlags(flagsCreate, keysCreate),

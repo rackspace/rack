@@ -11,6 +11,5 @@ func Get() []cli.Command {
 		list,
 		get,
 		create,
-		update,
 	}
 }

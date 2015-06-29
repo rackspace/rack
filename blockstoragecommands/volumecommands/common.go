@@ -7,5 +7,10 @@ import (
 
 func volumeSingle(volume *volumes.Volume) map[string]interface{} {
 	m := structs.Map(volume)
+	for k, v := range m {
+		if v == nil {
+			m[k] = ""
+		}
+	}
 	return m
 }
