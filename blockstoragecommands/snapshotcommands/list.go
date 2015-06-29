@@ -1,78 +1,105 @@
 package snapshotcommands
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
-	"github.com/jrperritt/rack/auth"
-	"github.com/jrperritt/rack/output"
+	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
 	osSnapshots "github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots"
-	"github.com/rackspace/gophercloud/rackspace/blockstorage/v1/snapshots"
+	"github.com/rackspace/gophercloud/pagination"
 )
 
 var list = cli.Command{
 	Name:        "list",
 	Usage:       util.Usage(commandPrefix, "list", ""),
-	Description: "Lists snapshots",
-	Action:      commandList,
+	Description: "Lists existing snapshots",
+	Action:      actionList,
+	Flags:       util.CommandFlags(flagsList, keysList),
+	BashComplete: func(c *cli.Context) {
+		util.CompleteFlags(util.CommandFlags(flagsList, keysList))
+	},
 }
 
-var keysList = []string{"ID", "Name", "Description", "Metadata", "Size", "Status", "Volume ID"}
+func flagsList() []cli.Flag {
+	return []cli.Flag{
+		cli.StringFlag{
+			Name:  "volume-id",
+			Usage: "Only list snapshots with this volume ID.",
+		},
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "Only list snapshots with this name.",
+		},
+		cli.StringFlag{
+			Name:  "status",
+			Usage: "Only list snapshots that have this status.",
+		},
+	}
+}
 
-func commandList(c *cli.Context) {
-	var err error
+var keysList = []string{"ID", "Name", "Size", "Status", "VolumeID", "VolumeType", "SnapshotID", "Bootable", "Attachments"}
 
-	outputParams := &output.Params{
-		Context: c,
-		Keys:    keysList,
+type paramsList struct {
+	opts *osSnapshots.ListOpts
+}
+
+type commandList handler.Command
+
+func actionList(c *cli.Context) {
+	command := &commandList{
+		Ctx: &handler.Context{
+			CLIContext: c,
+		},
+	}
+	handler.Handle(command)
+}
+
+func (command *commandList) Context() *handler.Context {
+	return command.Ctx
+}
+
+func (command *commandList) Keys() []string {
+	return keysList
+}
+
+func (command *commandList) ServiceClientType() string {
+	return serviceClientType
+}
+
+func (command *commandList) HandleFlags(resource *handler.Resource) error {
+	c := command.Ctx.CLIContext
+
+	opts := &osSnapshots.ListOpts{
+		VolumeID: c.String("volume-id"),
+		Name:     c.String("name"),
+		Status:   c.String("status"),
 	}
 
-	err = util.CheckArgNum(c, 0)
+	resource.Params = &paramsList{
+		opts: opts,
+	}
+
+	return nil
+}
+
+func (command *commandList) Execute(resource *handler.Resource) {
+	opts := resource.Params.(*paramsList).opts
+	pager := osSnapshots.List(command.Ctx.ServiceClient, opts)
+	var snapshots []map[string]interface{}
+	err := pager.EachPage(func(page pagination.Page) (bool, error) {
+		info, err := osSnapshots.ExtractSnapshots(page)
+		if err != nil {
+			return false, err
+		}
+		result := make([]map[string]interface{}, len(info))
+		for j, snapshot := range info {
+			result[j] = snapshotSingle(&snapshot)
+		}
+		snapshots = append(snapshots, result...)
+		return true, nil
+	})
 	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
+		resource.Err = err
 		return
 	}
-
-	outputParams.ServiceClientType = serviceClientType
-	client, err := auth.NewClient(c, outputParams.ServiceClientType)
-
-	allPages, err := snapshots.List(client).AllPages()
-	if err != nil {
-		fmt.Printf("Error listing snapshots: %s\n", err)
-		os.Exit(1)
-	}
-	o, err := osSnapshots.ExtractSnapshots(allPages)
-	if err != nil {
-		fmt.Printf("Error listing snapshots: %s\n", err)
-		os.Exit(1)
-	}
-
-	f := func() interface{} {
-		m := make([]map[string]interface{}, len(o))
-		for j, snapshot := range o {
-			m[j] = snapshotSingle(&snapshot)
-		}
-		return m
-	}
-
-	outputParams.F = &f
-	output.Print(outputParams)
-
-}
-
-func snapshotSingle(rawSnapshot interface{}) map[string]interface{} {
-	snapshot, ok := rawSnapshot.(osSnapshots.Snapshot)
-	if !ok {
-		return nil
-	}
-
-	m := structs.Map(rawSnapshot)
-	m["Volume ID"] = snapshot.VolumeID
-
-	return m
-
+	resource.Result = snapshots
 }

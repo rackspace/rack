@@ -1,68 +1,100 @@
 package volumecommands
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/codegangsta/cli"
-	"github.com/jrperritt/rack/auth"
-	"github.com/jrperritt/rack/output"
+	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
 	osVolumes "github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes"
-	"github.com/rackspace/gophercloud/rackspace/blockstorage/v1/volumes"
+	"github.com/rackspace/gophercloud/pagination"
 )
 
 var list = cli.Command{
 	Name:        "list",
 	Usage:       util.Usage(commandPrefix, "list", ""),
-	Description: "Lists volumes",
-	Action:      commandList,
+	Description: "Lists existing volumes",
+	Action:      actionList,
+	Flags:       util.CommandFlags(flagsList, keysList),
+	BashComplete: func(c *cli.Context) {
+		util.CompleteFlags(util.CommandFlags(flagsList, keysList))
+	},
+}
+
+func flagsList() []cli.Flag {
+	return []cli.Flag{
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "Only list volumes with this name.",
+		},
+		cli.StringFlag{
+			Name:  "status",
+			Usage: "Only list volumes that have this status.",
+		},
+	}
 }
 
 var keysList = []string{"ID", "Name", "Description", "Size", "Volume Type", "Snapshot ID", "Attachments", "Created"}
 
-func commandList(c *cli.Context) {
-	var err error
+type paramsList struct {
+	opts *osVolumes.ListOpts
+}
 
-	outputParams := &output.Params{
-		Context: c,
-		Keys:    keysList,
+type commandList handler.Command
+
+func actionList(c *cli.Context) {
+	command := &commandList{
+		Ctx: &handler.Context{
+			CLIContext: c,
+		},
+	}
+	handler.Handle(command)
+}
+
+func (command *commandList) Context() *handler.Context {
+	return command.Ctx
+}
+
+func (command *commandList) Keys() []string {
+	return keysList
+}
+
+func (command *commandList) ServiceClientType() string {
+	return serviceClientType
+}
+
+func (command *commandList) HandleFlags(resource *handler.Resource) error {
+	c := command.Ctx.CLIContext
+
+	opts := &osVolumes.ListOpts{
+		Name:   c.String("name"),
+		Status: c.String("status"),
 	}
 
-	err = util.CheckArgNum(c, 0)
-	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
+	resource.Params = &paramsList{
+		opts: opts,
 	}
 
-	outputParams.ServiceClientType = serviceClientType
-	client, err := auth.NewClient(c, outputParams.ServiceClientType)
-	if err != nil {
-		outputParams.Err = err
-		output.Print(outputParams)
-		return
-	}
+	return nil
+}
 
-	allPages, err := volumes.List(client).AllPages()
-	if err != nil {
-		fmt.Printf("Error listing volumes: %s\n", err)
-		os.Exit(1)
-	}
-	o, err := osVolumes.ExtractVolumes(allPages)
-	if err != nil {
-		fmt.Printf("Error listing volumes: %s\n", err)
-		os.Exit(1)
-	}
-
-	f := func() interface{} {
-		m := make([]map[string]interface{}, len(o))
-		for j, volume := range o {
-			m[j] = volumeSingle(&volume)
+func (command *commandList) Execute(resource *handler.Resource) {
+	opts := resource.Params.(*paramsList).opts
+	pager := osVolumes.List(command.Ctx.ServiceClient, opts)
+	var volumes []map[string]interface{}
+	err := pager.EachPage(func(page pagination.Page) (bool, error) {
+		info, err := osVolumes.ExtractVolumes(page)
+		if err != nil {
+			return false, err
 		}
-		return m
+		result := make([]map[string]interface{}, len(info))
+		for j, volume := range info {
+			result[j] = volumeSingle(&volume)
+		}
+		volumes = append(volumes, result...)
+		return true, nil
+	})
+	if err != nil {
+		resource.Err = err
+		return
 	}
-
-	outputParams.F = &f
-	output.Print(outputParams)
+	resource.Result = volumes
 }

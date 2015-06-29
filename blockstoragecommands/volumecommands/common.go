@@ -5,17 +5,7 @@ import (
 	"github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes"
 )
 
-func volumeSingle(rawVolume interface{}) map[string]interface{} {
-	volume, ok := rawVolume.(*volumes.Volume)
-	if !ok {
-		return nil
-	}
-
-	m := structs.Map(rawVolume)
-	m["Volume Type"] = volume.VolumeType
-	m["Snapshot ID"] = volume.SnapshotID
-	m["Created"] = volume.CreatedAt
-
+func volumeSingle(volume *volumes.Volume) map[string]interface{} {
+	m := structs.Map(volume)
 	return m
-
 }

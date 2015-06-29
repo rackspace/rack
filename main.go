@@ -8,6 +8,7 @@ import (
 	"text/tabwriter"
 	"text/template"
 
+	"github.com/jrperritt/rack/blockstoragecommands"
 	"github.com/jrperritt/rack/filescommands"
 	"github.com/jrperritt/rack/networkscommands"
 	"github.com/jrperritt/rack/serverscommands"
@@ -51,7 +52,7 @@ OPTIONS:
 			Usage:       "Used for the Networks service",
 			Subcommands: networkscommands.Get(),
 		},
-{
+		{
 			Name:        "blockstorage",
 			Usage:       "Used for the BlockStorage service",
 			Subcommands: blockstoragecommands.Get(),
