@@ -28,12 +28,12 @@ func Get() []cli.Command {
 			Subcommands: portcommands.Get(),
 		},
 		{
-			Name:        "securitygroup",
+			Name:        "security-group",
 			Usage:       "Used for Cloud Networks security group operations",
 			Subcommands: securitygroupcommands.Get(),
 		},
 		{
-			Name:        "securitygrouprule",
+			Name:        "security-group-rule",
 			Usage:       "Used for Cloud Networks security group rule operations",
 			Subcommands: securitygrouprulecommands.Get(),
 		},

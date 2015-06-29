@@ -2,7 +2,7 @@ package securitygrouprulecommands
 
 import "github.com/codegangsta/cli"
 
-var commandPrefix = "networks securitygrouprule"
+var commandPrefix = "networks security-group-rule"
 var serviceClientType = "network"
 
 // Get returns all the commands allowed for a `networks securitygrouprule` request.
