@@ -2,10 +2,10 @@ package serverscommands
 
 import (
 	"github.com/codegangsta/cli"
-	"github.com/jrperritt/rack/serverscommands/flavorcommands"
-	"github.com/jrperritt/rack/serverscommands/imagecommands"
-	"github.com/jrperritt/rack/serverscommands/instancecommands"
-	"github.com/jrperritt/rack/serverscommands/keypaircommands"
+	"github.com/jrperritt/rack/commands/serverscommands/flavorcommands"
+	"github.com/jrperritt/rack/commands/serverscommands/imagecommands"
+	"github.com/jrperritt/rack/commands/serverscommands/instancecommands"
+	"github.com/jrperritt/rack/commands/serverscommands/keypaircommands"
 )
 
 // Get returns all the commands allowed for a `servers` request.

@@ -2,11 +2,11 @@ package networkscommands
 
 import (
 	"github.com/codegangsta/cli"
-	"github.com/jrperritt/rack/networkscommands/networkcommands"
-	"github.com/jrperritt/rack/networkscommands/portcommands"
-	"github.com/jrperritt/rack/networkscommands/securitygroupcommands"
-	"github.com/jrperritt/rack/networkscommands/securitygrouprulecommands"
-	"github.com/jrperritt/rack/networkscommands/subnetcommands"
+	"github.com/jrperritt/rack/commands/networkscommands/networkcommands"
+	"github.com/jrperritt/rack/commands/networkscommands/portcommands"
+	"github.com/jrperritt/rack/commands/networkscommands/securitygroupcommands"
+	"github.com/jrperritt/rack/commands/networkscommands/securitygrouprulecommands"
+	"github.com/jrperritt/rack/commands/networkscommands/subnetcommands"
 )
 
 // Get returns all the commands allowed for a `networks` request.

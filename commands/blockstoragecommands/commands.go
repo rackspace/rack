@@ -2,8 +2,8 @@ package blockstoragecommands
 
 import (
 	"github.com/codegangsta/cli"
-	"github.com/jrperritt/rack/blockstoragecommands/snapshotcommands"
-	"github.com/jrperritt/rack/blockstoragecommands/volumecommands"
+	"github.com/jrperritt/rack/commands/blockstoragecommands/snapshotcommands"
+	"github.com/jrperritt/rack/commands/blockstoragecommands/volumecommands"
 )
 
 // Get returns all the commands allowed for a `blockstorage` request.
