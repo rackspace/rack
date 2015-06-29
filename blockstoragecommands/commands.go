@@ -6,16 +6,16 @@ import (
 	"github.com/jrperritt/rack/blockstoragecommands/volumecommands"
 )
 
-// Get returns all the commands allowed for a `compute` request.
+// Get returns all the commands allowed for a `blockstorage` request.
 func Get() []cli.Command {
 	return []cli.Command{
 		{
-			Name:        "snapshots",
+			Name:        "snapshot",
 			Usage:       "Used for BlockStorage Snapshot operations",
 			Subcommands: snapshotcommands.Get(),
 		},
 		{
-			Name:        "volumes",
+			Name:        "volume",
 			Usage:       "Used for BlockStorage Volume operations",
 			Subcommands: volumecommands.Get(),
 		},
