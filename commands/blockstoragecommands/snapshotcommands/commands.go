@@ -2,10 +2,10 @@ package snapshotcommands
 
 import "github.com/codegangsta/cli"
 
-var commandPrefix = "blockstorage snapshots"
+var commandPrefix = "block-storage snapshots"
 var serviceClientType = "blockstorage"
 
-// Get returns all the commands allowed for a `blockstorage snapshots` request.
+// Get returns all the commands allowed for a `block-storage snapshots` request.
 func Get() []cli.Command {
 	return []cli.Command{
 		list,

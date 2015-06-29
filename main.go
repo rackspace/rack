@@ -53,8 +53,8 @@ OPTIONS:
 			Subcommands: networkscommands.Get(),
 		},
 		{
-			Name:        "blockstorage",
-			Usage:       "Used for the BlockStorage service",
+			Name:        "block-storage",
+			Usage:       "Used for the Block Storage service",
 			Subcommands: blockstoragecommands.Get(),
 		},
 	}

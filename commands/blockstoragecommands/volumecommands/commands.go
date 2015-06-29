@@ -2,10 +2,10 @@ package volumecommands
 
 import "github.com/codegangsta/cli"
 
-var commandPrefix = "blockstorage volume"
+var commandPrefix = "block-storage volume"
 var serviceClientType = "blockstorage"
 
-// Get returns all the commands allowed for a `blockstorage volumes` request.
+// Get returns all the commands allowed for a `block-storage volumes` request.
 func Get() []cli.Command {
 	return []cli.Command{
 		list,

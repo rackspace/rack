@@ -6,7 +6,7 @@ import (
 	"github.com/jrperritt/rack/commands/blockstoragecommands/volumecommands"
 )
 
-// Get returns all the commands allowed for a `blockstorage` request.
+// Get returns all the commands allowed for a `block-storage` request.
 func Get() []cli.Command {
 	return []cli.Command{
 		{

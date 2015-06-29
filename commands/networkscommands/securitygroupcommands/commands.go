@@ -2,7 +2,7 @@ package securitygroupcommands
 
 import "github.com/codegangsta/cli"
 
-var commandPrefix = "networks securitygroup"
+var commandPrefix = "networks security-group"
 var serviceClientType = "network"
 
 // Get returns all the commands allowed for a `networks securitygroup` request.
