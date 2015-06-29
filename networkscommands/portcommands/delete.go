@@ -6,6 +6,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
+	osPorts "github.com/rackspace/gophercloud/openstack/networking/v2/ports"
 	"github.com/rackspace/gophercloud/rackspace/networking/v2/ports"
 )
 
@@ -77,11 +78,11 @@ func (command *commandDelete) HandlePipe(resource *handler.Resource, item string
 }
 
 func (command *commandDelete) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"id"})
+	portID, err := command.Ctx.IDOrName(osPorts.IDFromName)
 	if err != nil {
 		return err
 	}
-	resource.Params.(*paramsDelete).portID = command.Ctx.CLIContext.String("id")
+	resource.Params.(*paramsDelete).portID = portID
 	return nil
 }
 
@@ -93,4 +94,8 @@ func (command *commandDelete) Execute(resource *handler.Resource) {
 		return
 	}
 	resource.Result = fmt.Sprintf("Successfully deleted port [%s]\n", portID)
+}
+
+func (command *commandDelete) StdinField() string {
+	return "id"
 }

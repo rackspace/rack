@@ -91,6 +91,11 @@ func (command *commandUpdate) ServiceClientType() string {
 }
 
 func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
+	subnetID, err := command.Ctx.IDOrName(osSubnets.IDFromName)
+	if err != nil {
+		return err
+	}
+
 	c := command.Ctx.CLIContext
 
 	opts := &osSubnets.UpdateOpts{
@@ -132,18 +137,10 @@ func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
 	*/
 
 	resource.Params = &paramsUpdate{
-		opts: opts,
+		opts:     opts,
+		subnetID: subnetID,
 	}
 
-	return nil
-}
-
-func (command *commandUpdate) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"id"})
-	if err != nil {
-		return err
-	}
-	resource.Params.(*paramsUpdate).subnetID = command.Ctx.CLIContext.String("id")
 	return nil
 }
 

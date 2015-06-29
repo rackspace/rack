@@ -95,10 +95,6 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 	return nil
 }
 
-func (command *commandCreate) HandleSingle(resource *handler.Resource) error {
-	return nil
-}
-
 func (command *commandCreate) Execute(resource *handler.Resource) {
 	opts := resource.Params.(*paramsCreate).opts
 	port, err := ports.Create(command.Ctx.ServiceClient, opts).Extract()

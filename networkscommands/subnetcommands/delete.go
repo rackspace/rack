@@ -6,6 +6,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
+	osSubnets "github.com/rackspace/gophercloud/openstack/networking/v2/subnets"
 	"github.com/rackspace/gophercloud/rackspace/networking/v2/subnets"
 )
 
@@ -77,7 +78,10 @@ func (command *commandDelete) HandlePipe(resource *handler.Resource, subnetID st
 }
 
 func (command *commandDelete) HandleSingle(resource *handler.Resource) error {
-	subnetID := command.Ctx.CLIContext.String("id")
+	subnetID, err := command.Ctx.IDOrName(osSubnets.IDFromName)
+	if err != nil {
+		return err
+	}
 	resource.Params.(*paramsDelete).subnetID = subnetID
 	return nil
 }

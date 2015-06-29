@@ -4,6 +4,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
+	osPorts "github.com/rackspace/gophercloud/openstack/networking/v2/ports"
 	"github.com/rackspace/gophercloud/rackspace/networking/v2/ports"
 )
 
@@ -75,11 +76,11 @@ func (command *commandGet) HandlePipe(resource *handler.Resource, item string) e
 }
 
 func (command *commandGet) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"id"})
+	portID, err := command.Ctx.IDOrName(osPorts.IDFromName)
 	if err != nil {
 		return err
 	}
-	resource.Params.(*paramsGet).portID = command.Ctx.CLIContext.String("id")
+	resource.Params.(*paramsGet).portID = portID
 	return nil
 }
 
@@ -91,4 +92,8 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 		return
 	}
 	resource.Result = portSingle(port)
+}
+
+func (command *commandGet) StdinField() string {
+	return "id"
 }

@@ -75,8 +75,12 @@ func (command *commandUpdate) ServiceClientType() string {
 }
 
 func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
-	c := command.Ctx.CLIContext
+	portID, err := command.Ctx.IDOrName(osPorts.IDFromName)
+	if err != nil {
+		return err
+	}
 
+	c := command.Ctx.CLIContext
 	opts := &osPorts.UpdateOpts{
 		Name:     c.String("rename"),
 		DeviceID: c.String("device-id"),
@@ -96,18 +100,10 @@ func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
 	}
 
 	resource.Params = &paramsUpdate{
-		opts: opts,
+		portID: portID,
+		opts:   opts,
 	}
 
-	return nil
-}
-
-func (command *commandUpdate) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"id"})
-	if err != nil {
-		return err
-	}
-	resource.Params.(*paramsUpdate).portID = command.Ctx.CLIContext.String("id")
 	return nil
 }
 

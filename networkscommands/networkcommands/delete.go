@@ -6,6 +6,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
+	osNetworks "github.com/rackspace/gophercloud/openstack/networking/v2/networks"
 	"github.com/rackspace/gophercloud/rackspace/networking/v2/networks"
 )
 
@@ -77,8 +78,11 @@ func (command *commandDelete) HandlePipe(resource *handler.Resource, item string
 }
 
 func (command *commandDelete) HandleSingle(resource *handler.Resource) error {
-	id := command.Ctx.CLIContext.String("id")
-	resource.Params.(*paramsDelete).networkID = id
+	networkID, err := command.Ctx.IDOrName(osNetworks.IDFromName)
+	if err != nil {
+		return err
+	}
+	resource.Params.(*paramsDelete).networkID = networkID
 	return nil
 }
 

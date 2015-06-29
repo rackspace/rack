@@ -4,6 +4,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
+	osSecurityGroups "github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/groups"
 	securityGroups "github.com/rackspace/gophercloud/rackspace/networking/v2/security/groups"
 )
 
@@ -75,11 +76,11 @@ func (command *commandGet) HandlePipe(resource *handler.Resource, item string) e
 }
 
 func (command *commandGet) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"id"})
+	securityGroupID, err := command.Ctx.IDOrName(osSecurityGroups.IDFromName)
 	if err != nil {
 		return err
 	}
-	resource.Params.(*paramsGet).securityGroupID = command.Ctx.CLIContext.String("id")
+	resource.Params.(*paramsGet).securityGroupID = securityGroupID
 	return nil
 }
 

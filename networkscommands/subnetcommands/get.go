@@ -4,6 +4,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
+	osSubnets "github.com/rackspace/gophercloud/openstack/networking/v2/subnets"
 	"github.com/rackspace/gophercloud/rackspace/networking/v2/subnets"
 )
 
@@ -75,8 +76,11 @@ func (command *commandGet) HandlePipe(resource *handler.Resource, item string) e
 }
 
 func (command *commandGet) HandleSingle(resource *handler.Resource) error {
-	id := command.Ctx.CLIContext.String("id")
-	resource.Params.(*paramsGet).subnetID = id
+	subnetID, err := command.Ctx.IDOrName(osSubnets.IDFromName)
+	if err != nil {
+		return err
+	}
+	resource.Params.(*paramsGet).subnetID = subnetID
 	return nil
 }
 

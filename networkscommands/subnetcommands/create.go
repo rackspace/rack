@@ -102,11 +102,6 @@ func (command *commandCreate) ServiceClientType() string {
 }
 
 func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
-	resource.Params = &paramsCreate{}
-	return nil
-}
-
-func (command *commandCreate) HandleSingle(resource *handler.Resource) error {
 	err := command.Ctx.CheckFlagsSet([]string{"network-id", "cidr", "ip-version"})
 	if err != nil {
 		return err
@@ -149,24 +144,26 @@ func (command *commandCreate) HandleSingle(resource *handler.Resource) error {
 	}
 
 	/*
-		if c.IsSet("host-route") {
-			hostRoutesRaw := c.StringSlice("host-route")
-			hostRoutesRawSlice, err := command.Ctx.CheckStructFlag(hostRoutesRaw)
-			if err != nil {
+				if c.IsSet("host-route") {
+				hostRoutesRaw := c.StringSlice("host-route")
+				hostRoutesRawSlice, err := command.Ctx.CheckStructFlag(hostRoutesRaw)
+				if err != nil {
 				return err
 			}
 			hostRoutes := make([]osSubnets.HostRoute, len(hostRoutesRawSlice))
 			for i, hostRouteMap := range hostRoutesRawSlice {
-				hostRoutes[i] = osSubnets.HostRoute{
-					DestinationCIDR: hostRouteMap["dest"].(string),
-					NextHop:         hostRouteMap["next"].(string),
-				}
-			}
-			opts.HostRoutes = hostRoutes
+			hostRoutes[i] = osSubnets.HostRoute{
+			DestinationCIDR: hostRouteMap["dest"].(string),
+			NextHop:         hostRouteMap["next"].(string),
+		}
+		}
+		opts.HostRoutes = hostRoutes
 		}
 	*/
 
-	resource.Params.(*paramsCreate).opts = opts
+	resource.Params = &paramsCreate{
+		opts: opts,
+	}
 	return nil
 }
 
