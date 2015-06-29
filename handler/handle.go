@@ -44,6 +44,10 @@ type StreamPipeHandler interface {
 type PipeHandler interface {
 	// Commander is an interface that all commands will implement.
 	Commander
+	// HandleSingle contains logic for processing a single resource. This method
+	// will be used if input isn't sent to STDIN, so it will contain, for example,
+	// logic for handling flags that would be mandatory if otherwise not piped in.
+	HandleSingle(*Resource) error
 	// HandlePipe is a method that commands implement for processing piped input.
 	HandlePipe(*Resource, string) error
 	// StdinField is the field that the command accepts on STDIN.
@@ -61,10 +65,6 @@ type Commander interface {
 	// HandleFlags processes flags for the command that are relevant for both piped
 	// and non-piped commands.
 	HandleFlags(*Resource) error
-	// HandleSingle contains logic for processing a single resource. This method
-	// will be used if input isn't sent to STDIN, so it will contain, for example,
-	// logic for handling flags that would be mandatory if otherwise not piped in.
-	HandleSingle(*Resource) error
 	// Execute executes the command's HTTP request.
 	Execute(*Resource)
 }
@@ -101,11 +101,11 @@ func Handle(command Commander) {
 		ctx.ErrExit1(resource)
 	}
 
-	// should we expect something on STDIN?
-	if ctx.CLIContext.IsSet("stdin") {
-		stdinField := ctx.CLIContext.String("stdin")
-		// can the command accept input on STDIN?
-		if pipeableCommand, ok := command.(PipeHandler); ok {
+	// can the command accept input on STDIN?
+	if pipeableCommand, ok := command.(PipeHandler); ok {
+		// should we expect something on STDIN?
+		if ctx.CLIContext.IsSet("stdin") {
+			stdinField := ctx.CLIContext.String("stdin")
 			// if so, does the given field accept pipeable input?
 			if stdinField == pipeableCommand.StdinField() {
 				// if so, does the given command and field accept streaming input?
@@ -146,18 +146,23 @@ func Handle(command Commander) {
 				resource.Err = fmt.Errorf("Unknown STDIN field: %s\n", stdinField)
 				ctx.ErrExit1(resource)
 			}
+		} else {
+			ctx.WaitGroup.Add(1)
+			go func() {
+				err := pipeableCommand.HandleSingle(resource)
+				if err != nil {
+					resource.Err = err
+					ctx.ErrExit1(resource)
+				}
+				command.Execute(resource)
+				ctx.Results <- resource
+			}()
 		}
 	} else {
 		ctx.WaitGroup.Add(1)
 		go func() {
-			err = command.HandleSingle(resource)
-			if err != nil {
-				resource.Err = err
-				ctx.ErrExit1(resource)
-			} else {
-				command.Execute(resource)
-				ctx.Results <- resource
-			}
+			command.Execute(resource)
+			ctx.Results <- resource
 		}()
 	}
 	ctx.WaitGroup.Wait()

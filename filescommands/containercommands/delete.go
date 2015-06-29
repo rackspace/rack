@@ -132,7 +132,7 @@ func (command *commandDelete) Execute(resource *handler.Resource) {
 			}
 			numTimesChecked++
 			if numTimesChecked == 60 {
-				resource.Err = fmt.Errorf("Purging objects from container [%s] timed out. There are still %d object left.", containerName, len(objectNames))
+				resource.Err = fmt.Errorf("Purging objects from container [%s] timed out. There are still %d object left.\n", containerName, len(objectNames))
 			}
 			time.Sleep(5 * time.Second)
 		}

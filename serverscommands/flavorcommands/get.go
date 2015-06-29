@@ -11,7 +11,7 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       util.Usage(commandPrefix, "get", util.IDOrNameUsage("flavor")),
+	Usage:       util.Usage(commandPrefix, "get", "[--id <serverID> | --name <serverName> | --stdin id]"),
 	Description: "Retreives a flavor",
 	Action:      actionGet,
 	Flags:       util.CommandFlags(flagsGet, keysGet),
@@ -21,13 +21,20 @@ var get = cli.Command{
 }
 
 func flagsGet() []cli.Flag {
-	stdin := []cli.Flag{
+	return []cli.Flag{
+		cli.StringFlag{
+			Name:  "id",
+			Usage: "[optional; required if `stdin` or `name` isn't provided] The ID of the flavor.",
+		},
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "[optional; required if `id` or `stdin` isn't provided] The name of the flavor.",
+		},
 		cli.StringFlag{
 			Name:  "stdin",
 			Usage: "[optional; required if `id` or `name` isn't provided] The field being piped to STDIN. Valid values are: id",
 		},
 	}
-	return append(stdin, util.IDAndNameFlags...)
 }
 
 var keysGet = []string{"ID", "Name", "Disk", "RAM", "RxTxFactor", "Swap", "VCPUs"}

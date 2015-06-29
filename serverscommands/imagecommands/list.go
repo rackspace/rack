@@ -12,7 +12,7 @@ import (
 
 var list = cli.Command{
 	Name:        "list",
-	Usage:       util.Usage(commandPrefix, "list", util.IDOrNameUsage("image")),
+	Usage:       util.Usage(commandPrefix, "list", ""),
 	Description: "Lists images",
 	Action:      actionList,
 	Flags:       util.CommandFlags(flagsList, keysList),
@@ -29,15 +29,15 @@ func flagsList() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "name",
-			Usage: "Only list images that have this name.",
+			Usage: "[optional] Only list images that have this name.",
 		},
 		cli.StringFlag{
 			Name:  "status",
-			Usage: "Only list images that have this status.",
+			Usage: "[optional] Only list images that have this status.",
 		},
 		cli.StringFlag{
 			Name:  "marker",
-			Usage: "Start listing images at this image ID.",
+			Usage: "[optional] Start listing images at this image ID.",
 		},
 		cli.IntFlag{
 			Name:  "limit",
@@ -91,10 +91,6 @@ func (command *commandList) HandleFlags(resource *handler.Resource) error {
 	return nil
 }
 
-func (command *commandList) HandleSingle(resource *handler.Resource) error {
-	return nil
-}
-
 func (command *commandList) Execute(resource *handler.Resource) {
 	opts := resource.Params.(*paramsList).opts
 	allPages := resource.Params.(*paramsList).allPages
@@ -128,9 +124,9 @@ func (command *commandList) Execute(resource *handler.Resource) {
 			}
 			resource.Result = result
 			if len(info) >= limit {
-				limit -= len(info)
 				return false, nil
 			}
+			limit -= len(info)
 			command.Ctx.WaitGroup.Add(1)
 			command.Ctx.Results <- resource
 			return true, nil

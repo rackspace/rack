@@ -10,7 +10,7 @@ import (
 
 var update = cli.Command{
 	Name:        "update",
-	Usage:       util.Usage(commandPrefix, "update", util.IDOrNameUsage("instance")),
+	Usage:       util.Usage(commandPrefix, "update", "[--id <serverID>|--name <serverName>]"),
 	Description: "Updates an existing server",
 	Action:      actionUpdate,
 	Flags:       util.CommandFlags(flagsUpdate, keysUpdate),
@@ -20,21 +20,28 @@ var update = cli.Command{
 }
 
 func flagsUpdate() []cli.Flag {
-	cf := []cli.Flag{
+	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "new-name",
+			Name:  "id",
+			Usage: "[optional; required if `name` isn't provided] The ID of the server.",
+		},
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "[optional; required if `id` isn't provided] The name of the server.",
+		},
+		cli.StringFlag{
+			Name:  "rename",
 			Usage: "[optional] Update the server's name",
 		},
 		cli.StringFlag{
-			Name:  "new-ipv4",
+			Name:  "ipv4",
 			Usage: "[optional] Update the server's IPv4 address",
 		},
 		cli.StringFlag{
-			Name:  "new-ipv6",
+			Name:  "ipv6",
 			Usage: "[optional] Update the server's IPv6 address",
 		},
 	}
-	return append(cf, util.IDAndNameFlags...)
 }
 
 var keysUpdate = []string{"ID", "Name", "Public IPv4", "Public IPv6"}
@@ -68,22 +75,24 @@ func (command *commandUpdate) ServiceClientType() string {
 }
 
 func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
+	serverID, err := command.Ctx.IDOrName(osServers.IDFromName)
+	if err != nil {
+		return err
+	}
+
 	c := command.Ctx.CLIContext
 	opts := &osServers.UpdateOpts{
-		Name:       c.String("new-name"),
-		AccessIPv4: c.String("new-ipv4"),
-		AccessIPv6: c.String("new-ipv6"),
+		Name:       c.String("rename"),
+		AccessIPv4: c.String("ipv4"),
+		AccessIPv6: c.String("ipv6"),
 	}
-	resource.Params = &paramsUpdate{
-		opts: opts,
-	}
-	return nil
-}
 
-func (command *commandUpdate) HandleSingle(resource *handler.Resource) error {
-	id, err := command.Ctx.IDOrName(osServers.IDFromName)
-	resource.Params.(*paramsUpdate).serverID = id
-	return err
+	resource.Params = &paramsUpdate{
+		serverID: serverID,
+		opts:     opts,
+	}
+
+	return nil
 }
 
 func (command *commandUpdate) Execute(resource *handler.Resource) {

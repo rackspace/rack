@@ -11,7 +11,7 @@ import (
 
 var list = cli.Command{
 	Name:        "list",
-	Usage:       util.Usage(commandPrefix, "list", util.IDOrNameUsage("flavor")),
+	Usage:       util.Usage(commandPrefix, "list", ""),
 	Description: "Lists flavors",
 	Action:      actionList,
 	Flags:       util.CommandFlags(flagsList, keysList),
@@ -90,10 +90,6 @@ func (command *commandList) HandleFlags(resource *handler.Resource) error {
 	return nil
 }
 
-func (command *commandList) HandleSingle(resource *handler.Resource) error {
-	return nil
-}
-
 func (command *commandList) Execute(resource *handler.Resource) {
 	opts := resource.Params.(*paramsList).opts
 	allPages := resource.Params.(*paramsList).allPages
@@ -127,9 +123,9 @@ func (command *commandList) Execute(resource *handler.Resource) {
 			}
 			resource.Result = result
 			if len(info) >= opts.Limit {
-				limit -= len(info)
 				return false, nil
 			}
+			limit -= len(info)
 			command.Ctx.WaitGroup.Add(1)
 			command.Ctx.Results <- resource
 			return true, nil

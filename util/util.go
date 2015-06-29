@@ -6,8 +6,6 @@ import (
 	"os"
 	"path"
 	"runtime"
-
-	"github.com/codegangsta/cli"
 )
 
 // Name is the name of the CLI
@@ -52,22 +50,4 @@ func RackDir() (string, error) {
 	dirpath := path.Join(homeDir, ".rack")
 	err := os.MkdirAll(dirpath, 0744)
 	return dirpath, err
-}
-
-// IDAndNameFlags are flags for commands that allow either an ID or a name.
-var IDAndNameFlags = []cli.Flag{
-	cli.StringFlag{
-		Name:  "id",
-		Usage: "[optional; required if 'name' is not provided] The ID of the resource",
-	},
-	cli.StringFlag{
-		Name:  "name",
-		Usage: "[optional; required if 'id' is not provided] The name of the resource",
-	},
-}
-
-// IDOrNameUsage returns flag usage information for resources that allow either
-// an ID or a name.
-func IDOrNameUsage(resource string) string {
-	return fmt.Sprintf("[--id <%sID> | --name <%sName>]", resource, resource)
 }

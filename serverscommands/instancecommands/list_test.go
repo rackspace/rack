@@ -77,15 +77,6 @@ func TestListHandleFlags(t *testing.T) {
 	th.AssertDeepEquals(t, *expected.Params.(*paramsList).opts, *actual.Params.(*paramsList).opts)
 }
 
-func TestListHandleSingle(t *testing.T) {
-	cmd := &commandList{}
-	expected := &handler.Resource{}
-	actual := &handler.Resource{}
-	err := cmd.HandleSingle(actual)
-	th.AssertNoErr(t, err)
-	th.AssertDeepEquals(t, expected, actual)
-}
-
 func TestListExecute(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()

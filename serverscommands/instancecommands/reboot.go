@@ -2,7 +2,6 @@ package instancecommands
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
@@ -14,7 +13,7 @@ import (
 
 var reboot = cli.Command{
 	Name:        "reboot",
-	Usage:       util.Usage(commandPrefix, "reboot", strings.Join([]string{util.IDOrNameUsage("instance"), "[--soft | --hard]"}, " ")),
+	Usage:       util.Usage(commandPrefix, "reboot", "[--id <serverID> | --name <serverName> | --stdin id] [--soft | --hard]"),
 	Description: "Reboots an existing server",
 	Action:      actionReboot,
 	Flags:       util.CommandFlags(flagsReboot, keysReboot),
@@ -24,7 +23,7 @@ var reboot = cli.Command{
 }
 
 func flagsReboot() []cli.Flag {
-	cf := []cli.Flag{
+	return []cli.Flag{
 		cli.BoolFlag{
 			Name:  "soft",
 			Usage: "[optional; required if 'hard' is not provided] Ask the OS to restart under its own procedures.",
@@ -34,11 +33,18 @@ func flagsReboot() []cli.Flag {
 			Usage: "[optional; required if 'soft' is not provided] Physically cut power to the machine and then restore it after a brief while.",
 		},
 		cli.StringFlag{
+			Name:  "id",
+			Usage: "[optional; required if `stdin` or `name` isn't provided] The ID of the server.",
+		},
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "[optional; required if `id` or `stdin` isn't provided] The name of the server.",
+		},
+		cli.StringFlag{
 			Name:  "stdin",
 			Usage: "[optional; required if `id` or `name` isn't provided] The field being piped into STDIN. Valid values are: id",
 		},
 	}
-	return append(cf, util.IDAndNameFlags...)
 }
 
 var keysReboot = []string{}
@@ -105,7 +111,7 @@ func (command *commandReboot) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = fmt.Sprintf("Successfully rebooted instance [%s]", params.serverID)
+	resource.Result = fmt.Sprintf("Successfully rebooted instance [%s]\n", params.serverID)
 }
 
 func (command *commandReboot) StdinField() string {

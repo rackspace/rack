@@ -86,7 +86,7 @@ func authFromScratch(ao gophercloud.AuthOptions, region, serviceType string) (*g
 			Region: region,
 		})
 		break
-	case "networking":
+	case "network":
 		sc, err = rackspace.NewNetworkV2(pc, gophercloud.EndpointOpts{
 			Region: region,
 		})

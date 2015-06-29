@@ -54,6 +54,9 @@ func (ctx *Context) ListenAndReceive() {
 					resource.Result = map[string]interface{}{"error": resource.Err.Error()}
 					ctx.CLIContext.App.Writer = os.Stderr
 				}
+				if resource.Result == nil {
+					resource.Result = "Nothing to return\n"
+				}
 				ctx.Print(resource)
 				if resource.ErrExit1 {
 					os.Exit(1)
@@ -229,4 +232,22 @@ func (ctx *Context) CheckKVFlag(flagName string) (map[string]string, error) {
 		kv[temp[0]] = temp[1]
 	}
 	return kv, nil
+}
+
+// CheckStructFlag is a function used for verifying the format of a struct flag.
+func (ctx *Context) CheckStructFlag(flagValues []string) ([]map[string]interface{}, error) {
+	valSliceMap := make([]map[string]interface{}, len(flagValues))
+	for i, flagValue := range flagValues {
+		kvStrings := strings.Split(flagValue, ",")
+		m := make(map[string]interface{})
+		for _, kvString := range kvStrings {
+			temp := strings.Split(kvString, "=")
+			if len(temp) != 2 {
+				return nil, output.ErrFlagFormatting{fmt.Sprintf("Expected key1=value1,key2=value2 format but got %s.\n", kvString)}
+			}
+			m[temp[0]] = temp[1]
+		}
+		valSliceMap[i] = m
+	}
+	return valSliceMap, nil
 }

@@ -56,10 +56,6 @@ func (command *commandList) HandleFlags(resource *handler.Resource) error {
 	return nil
 }
 
-func (command *commandList) HandleSingle(resource *handler.Resource) error {
-	return nil
-}
-
 func (command *commandList) Execute(resource *handler.Resource) {
 	err := keypairs.List(command.Ctx.ServiceClient).EachPage(func(page pagination.Page) (bool, error) {
 		info, err := osKeypairs.ExtractKeyPairs(page)
@@ -76,8 +72,5 @@ func (command *commandList) Execute(resource *handler.Resource) {
 	if err != nil {
 		resource.Err = err
 		return
-	}
-	if resource.Result == nil {
-		resource.Result = []map[string]interface{}{}
 	}
 }

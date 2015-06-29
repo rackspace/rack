@@ -14,7 +14,7 @@ import (
 
 var upload = cli.Command{
 	Name:        "upload",
-	Usage:       util.Usage(commandPrefix, "upload", "--name <keypairName> [public-key <publicKey> | file <file>]"),
+	Usage:       util.Usage(commandPrefix, "upload", "--name <keypairName> [--public-key <publicKey> | --file <file>]"),
 	Description: "Uploads a keypair",
 	Action:      actionUpload,
 	Flags:       util.CommandFlags(flagsUpload, keysUpload),
@@ -74,6 +74,7 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 	if err != nil {
 		return err
 	}
+
 	opts := &osKeypairs.CreateOpts{
 		Name: command.Ctx.CLIContext.String("name"),
 	}
@@ -95,10 +96,7 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 	resource.Params = &paramsUpload{
 		opts: opts,
 	}
-	return nil
-}
 
-func (command *commandUpload) HandleSingle(resource *handler.Resource) error {
 	return nil
 }
 
