@@ -8,10 +8,10 @@ import (
 	"text/tabwriter"
 	"text/template"
 
-	"github.com/jrperritt/rack/blockstoragecommands"
-	"github.com/jrperritt/rack/filescommands"
-	"github.com/jrperritt/rack/networkscommands"
-	"github.com/jrperritt/rack/serverscommands"
+	"github.com/jrperritt/rack/commands/blockstoragecommands"
+	"github.com/jrperritt/rack/commands/filescommands"
+	"github.com/jrperritt/rack/commands/networkscommands"
+	"github.com/jrperritt/rack/commands/serverscommands"
 	"github.com/jrperritt/rack/util"
 
 	"github.com/codegangsta/cli"
