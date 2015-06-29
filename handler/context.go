@@ -54,6 +54,9 @@ func (ctx *Context) ListenAndReceive() {
 					resource.Result = map[string]interface{}{"error": resource.Err.Error()}
 					ctx.CLIContext.App.Writer = os.Stderr
 				}
+				if resource.Result == nil {
+					resource.Result = "Nothing to return\n"
+				}
 				ctx.Print(resource)
 				if resource.ErrExit1 {
 					os.Exit(1)
