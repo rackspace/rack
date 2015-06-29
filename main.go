@@ -60,6 +60,7 @@ OPTIONS:
 		//fmt.Printf("c.Args: %+v\n", c.Args())
 		return nil
 	}
+	app.CommandNotFound = commandNotFound
 	app.Run(os.Args)
 }
 
