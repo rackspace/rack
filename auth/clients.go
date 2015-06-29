@@ -24,14 +24,6 @@ func NewClient(c *cli.Context, serviceType string) (*gophercloud.ServiceClient, 
 	if err != nil {
 		return nil, err
 	}
-	// upper-case the region
-	region = strings.ToUpper(region)
-	// allow Gophercloud to re-authenticate
-	ao.AllowReauth = true
-	// if the user didn't provide an auth URL, default to the Rackspace US endpoint
-	if ao.IdentityEndpoint == "" {
-		ao.IdentityEndpoint = rackspace.RackspaceUSIdentity
-	}
 
 	if c.GlobalIsSet("no-cache") || c.IsSet("no-cache") {
 		return authFromScratch(*ao, region, serviceType)
@@ -67,7 +59,7 @@ func NewClient(c *cli.Context, serviceType string) (*gophercloud.ServiceClient, 
 func authFromScratch(ao gophercloud.AuthOptions, region, serviceType string) (*gophercloud.ServiceClient, error) {
 	pc, err := rackspace.AuthenticatedClient(ao)
 	if err != nil {
-		return nil, fmt.Errorf("Error creating ProviderClient: %s\n", err)
+		return nil, err
 	}
 	var sc *gophercloud.ServiceClient
 	switch serviceType {
@@ -93,13 +85,18 @@ func authFromScratch(ao gophercloud.AuthOptions, region, serviceType string) (*g
 		break
 	}
 	if err != nil {
-		return nil, fmt.Errorf("Error creating ServiceClient: %s\n", err)
+		return nil, err
 	}
 	if sc == nil {
 		return nil, fmt.Errorf("Unable to create service client: Unknown service type: %s", serviceType)
 	}
 	sc.UserAgent.Prepend(util.UserAgent)
 	return sc, nil
+}
+
+type authCred struct {
+	value string
+	from  string
 }
 
 // Credentials determines the appropriate authentication method for the user.
@@ -109,7 +106,7 @@ func authFromScratch(ao gophercloud.AuthOptions, region, serviceType string) (*g
 // look for any unset parameters in the config file, and then finally in
 // environment variables.
 func Credentials(c *cli.Context) (*gophercloud.AuthOptions, string, error) {
-	have := make(map[string]string)
+	have := make(map[string]authCred)
 	need := map[string]string{
 		"username": "",
 		"apikey":   "",
@@ -133,10 +130,49 @@ func Credentials(c *cli.Context) (*gophercloud.AuthOptions, string, error) {
 		}
 	}
 
-	ao := &gophercloud.AuthOptions{
-		Username:         have["username"],
-		APIKey:           have["apikey"],
-		IdentityEndpoint: have["authurl"],
+	// if the user didn't provide an auth URL, default to the Rackspace US endpoint
+	if _, ok := have["authurl"]; !ok || have["authurl"].value == "" {
+		have["authurl"] = authCred{value: rackspace.RackspaceUSIdentity, from: "default value"}
+		delete(need, "authurl")
 	}
-	return ao, have["region"], nil
+
+	if len(need) > 0 {
+		haveString := ""
+		for k, v := range have {
+			haveString += fmt.Sprintf("%s: %s (from %s)\n", k, v.value, v.from)
+		}
+
+		needString := ""
+		for k := range need {
+			needString += fmt.Sprintf("%s\n", k)
+		}
+
+		authErrSlice := []string{"There are some required Rackspace Cloud credentials that we couldn't find.",
+			"Here's what we have:",
+			fmt.Sprintf("%s", haveString),
+			"and here's what we we're missing:",
+			fmt.Sprintf("%s", needString),
+			"",
+			"You can set any of these credentials in the following ways:",
+			"- Run 'rack config' to create a configuration file,",
+			"- Specify it in the command using --username, --apikey and --region, or",
+			"- Export it as an environment variable.",
+			"",
+		}
+
+		return nil, "", fmt.Errorf(strings.Join(authErrSlice, "\n"))
+	}
+
+	ao := &gophercloud.AuthOptions{
+		Username:         have["username"].value,
+		APIKey:           have["apikey"].value,
+		IdentityEndpoint: have["authurl"].value,
+	}
+
+	// upper-case the region
+	region := strings.ToUpper(have["region"].value)
+	// allow Gophercloud to re-authenticate
+	ao.AllowReauth = true
+
+	return ao, region, nil
 }

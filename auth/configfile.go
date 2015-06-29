@@ -9,7 +9,7 @@ import (
 	"gopkg.in/ini.v1"
 )
 
-func configfile(c *cli.Context, have map[string]string, need map[string]string) error {
+func configfile(c *cli.Context, have map[string]authCred, need map[string]string) error {
 	dir, err := util.RackDir()
 	if err != nil {
 		// return fmt.Errorf("Error retrieving rack directory: %s\n", err)
@@ -35,7 +35,7 @@ func configfile(c *cli.Context, have map[string]string, need map[string]string) 
 
 	for opt := range need {
 		if val := section.Key(opt).String(); val != "" {
-			have[opt] = val
+			have[opt] = authCred{value: val, from: fmt.Sprintf("config file (profile: %s)", section.Name())}
 			delete(need, opt)
 		}
 	}
