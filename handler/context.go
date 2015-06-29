@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -50,9 +51,27 @@ func (ctx *Context) ListenAndReceive() {
 					continue
 				}
 				if resource.Err != nil {
-					resource.Keys = []string{"error"}
-					resource.Result = map[string]interface{}{"error": resource.Err.Error()}
 					ctx.CLIContext.App.Writer = os.Stderr
+					resource.Keys = []string{"error"}
+					var errorBody string
+					switch resource.Err.(type) {
+					case *gophercloud.UnexpectedResponseCodeError:
+						errBodyRaw := resource.Err.(*gophercloud.UnexpectedResponseCodeError).Body
+						errMap := make(map[string]map[string]interface{})
+						err := json.Unmarshal(errBodyRaw, &errMap)
+						if err != nil {
+							errorBody = string(errBodyRaw)
+							break
+						}
+						for _, v := range errMap {
+							errorBody = v["message"].(string)
+							break
+						}
+					default:
+						errorBody = resource.Err.Error()
+					}
+
+					resource.Result = map[string]interface{}{"error": errorBody}
 				}
 				if resource.Result == nil {
 					resource.Result = "Nothing to return\n"
