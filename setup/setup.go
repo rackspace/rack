@@ -61,7 +61,7 @@ func Init(c *cli.Context) {
 		}
 
 		bashPath := path.Join(homeDir, bashName)
-		fmt.Fprintf(w, "Looking for .bashrc in %s\n", bashPath)
+		fmt.Fprintf(w, "Looking for %s in %s\n", bashName, bashPath)
 		if _, err := os.Stat(bashPath); os.IsNotExist(err) {
 			fmt.Fprintf(w, "%s doesn't exist. You should create it and/or install your operating system's `bash_completion` package.", bashPath)
 		} else {
@@ -74,8 +74,8 @@ func Init(c *cli.Context) {
 
 			sourceContent := fmt.Sprintf("source %s\n", rackCompletionPath)
 
-			bashrcContentsBytes, err := ioutil.ReadAll(bashFile)
-			if strings.Contains(string(bashrcContentsBytes), sourceContent) {
+			bashContentsBytes, err := ioutil.ReadAll(bashFile)
+			if strings.Contains(string(bashContentsBytes), sourceContent) {
 				fmt.Fprintf(w, "Command completion enabled in %s\n", bashPath)
 				return
 			}
