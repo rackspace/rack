@@ -9,7 +9,7 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       util.Usage(commandPrefix, "get", "[--id <volumeID> | --stdin id]"),
+	Usage:       util.Usage(commandPrefix, "get", "[--id <volumeID> | --name <volumeName> | --stdin id]"),
 	Description: "Gets a volume",
 	Action:      actionGet,
 	Flags:       util.CommandFlags(flagsGet, keysGet),
@@ -22,11 +22,15 @@ func flagsGet() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "id",
-			Usage: "[optional; required if `stdin` isn't provided] The ID of the volume.",
+			Usage: "[optional; required if `stdin` or `name` isn't provided] The ID of the volume.",
+		},
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "[optional; required if `stdin` or `id` isn't provided] The name of the volume.",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `id` isn't provided] The field being piped into STDIN. Valid values are: id",
+			Usage: "[optional; required if `id` or `name` isn't provided] The field being piped into STDIN. Valid values are: id",
 		},
 	}
 }
@@ -71,11 +75,11 @@ func (command *commandGet) HandlePipe(resource *handler.Resource, item string) e
 }
 
 func (command *commandGet) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"id"})
+	volumeID, err := command.Ctx.IDOrName(osVolumes.IDFromName)
 	if err != nil {
 		return err
 	}
-	resource.Params.(*paramsGet).volumeID = command.Ctx.CLIContext.String("id")
+	resource.Params.(*paramsGet).volumeID = volumeID
 	return nil
 }
 
