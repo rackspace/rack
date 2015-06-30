@@ -101,5 +101,9 @@ func (command *commandList) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = snapshots
+	if len(snapshots) == 0 {
+		resource.Result = nil
+	} else {
+		resource.Result = snapshots
+	}
 }
