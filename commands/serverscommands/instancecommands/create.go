@@ -34,19 +34,19 @@ func flagsCreate() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "image-id",
-			Usage: "[optional; required if imageName and bootFromVolume flags are not provided] The image ID from which to create the server.",
+			Usage: "[optional; required if `image-name` and bootFromVolume flags are not provided] The image ID from which to create the server.",
 		},
 		cli.StringFlag{
 			Name:  "image-name",
-			Usage: "[optional; required if imageRef and bootFromVolume flags are not provided] The name of the image from which to create the server.",
+			Usage: "[optional; required if `image-id` and bootFromVolume flags are not provided] The name of the image from which to create the server.",
 		},
 		cli.StringFlag{
 			Name:  "flavor-id",
-			Usage: "[optional; required if flavorName is not provided] The flavor ID that the server should have.",
+			Usage: "[optional; required if `flavor-name` is not provided] The flavor ID that the server should have.",
 		},
 		cli.StringFlag{
 			Name:  "flavor-name",
-			Usage: "[optional; required if flavorRef is not provided] The name of the flavor that the server should have.",
+			Usage: "[optional; required if `flavor-id` is not provided] The name of the flavor that the server should have.",
 		},
 		cli.StringFlag{
 			Name:  "security-groups",
