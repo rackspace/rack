@@ -1,6 +1,6 @@
 package securitygrouprulecommands
 
-import "github.com/codegangsta/cli"
+import "github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 
 var commandPrefix = "networks security-group-rule"
 var serviceClientType = "network"

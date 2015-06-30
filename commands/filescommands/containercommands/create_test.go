@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
-	"github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers"
-	th "github.com/rackspace/gophercloud/testhelper"
-	"github.com/rackspace/gophercloud/testhelper/client"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers"
+	th "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
 )
 
 func TestCreateContext(t *testing.T) {

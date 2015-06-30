@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/fatih/structs"
-	osPorts "github.com/rackspace/gophercloud/openstack/networking/v2/ports"
+	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
+	osPorts "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/ports"
 )
 
 func portSingle(port *osPorts.Port) map[string]interface{} {

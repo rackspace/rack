@@ -14,7 +14,7 @@ import (
 	"github.com/jrperritt/rack/commands/serverscommands"
 	"github.com/jrperritt/rack/util"
 
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 )
 
 func main() {

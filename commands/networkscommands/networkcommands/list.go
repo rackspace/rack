@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	osNetworks "github.com/rackspace/gophercloud/openstack/networking/v2/networks"
-	"github.com/rackspace/gophercloud/pagination"
-	"github.com/rackspace/gophercloud/rackspace/networking/v2/networks"
+	osNetworks "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/networks"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/pagination"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/networks"
 )
 
 var list = cli.Command{

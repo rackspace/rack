@@ -1,6 +1,6 @@
 package portcommands
 
-import "github.com/codegangsta/cli"
+import "github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 
 var commandPrefix = "networks port"
 var serviceClientType = "network"

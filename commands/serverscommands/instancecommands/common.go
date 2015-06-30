@@ -1,8 +1,8 @@
 package instancecommands
 
 import (
-	"github.com/fatih/structs"
-	osServers "github.com/rackspace/gophercloud/openstack/compute/v2/servers"
+	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
+	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 )
 
 func serverSingle(rawServer interface{}) map[string]interface{} {

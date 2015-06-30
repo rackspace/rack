@@ -1,6 +1,6 @@
 package util
 
-import "github.com/codegangsta/cli"
+import "github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 
 // OutputFlags are global flags (i.e. flags that all commands can use) that let
 // users specify the format of the output from a command.

@@ -1,7 +1,7 @@
 package serverscommands
 
 import (
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/commands/serverscommands/flavorcommands"
 	"github.com/jrperritt/rack/commands/serverscommands/imagecommands"
 	"github.com/jrperritt/rack/commands/serverscommands/instancecommands"

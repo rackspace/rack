@@ -3,10 +3,10 @@ package securitygrouprulecommands
 import (
 	"fmt"
 
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	securityGroupRules "github.com/rackspace/gophercloud/rackspace/networking/v2/security/rules"
+	securityGroupRules "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/security/rules"
 )
 
 var remove = cli.Command{

@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
-	th "github.com/rackspace/gophercloud/testhelper"
-	"github.com/rackspace/gophercloud/testhelper/client"
+	th "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
 )
 
 func TestDeleteContext(t *testing.T) {

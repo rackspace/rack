@@ -3,12 +3,12 @@ package securitygrouprulecommands
 import (
 	"fmt"
 
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	osSecurityGroupRules "github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/rules"
-	"github.com/rackspace/gophercloud/pagination"
-	securityGroupRules "github.com/rackspace/gophercloud/rackspace/networking/v2/security/rules"
+	osSecurityGroupRules "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/rules"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/pagination"
+	securityGroupRules "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/security/rules"
 )
 
 var list = cli.Command{

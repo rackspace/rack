@@ -3,8 +3,8 @@ package networkcommands
 import (
 	"strings"
 
-	"github.com/fatih/structs"
-	osNetworks "github.com/rackspace/gophercloud/openstack/networking/v2/networks"
+	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
+	osNetworks "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/networks"
 )
 
 func networkSingle(network *osNetworks.Network) map[string]interface{} {

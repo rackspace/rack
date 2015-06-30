@@ -1,13 +1,13 @@
 package containercommands
 
 import (
-	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	osContainers "github.com/rackspace/gophercloud/openstack/objectstorage/v1/containers"
-	"github.com/rackspace/gophercloud/pagination"
-	"github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers"
+	osContainers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/containers"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/pagination"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers"
 )
 
 var list = cli.Command{

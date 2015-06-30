@@ -8,11 +8,11 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
-	"github.com/rackspace/gophercloud"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
 )
 
 // Command is the type that commands have.
