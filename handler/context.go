@@ -46,15 +46,20 @@ func (ctx *Context) ListenAndReceive() {
 		for {
 			select {
 			case resource, ok := <-ctx.Results:
+
 				if !ok {
 					ctx.Results = nil
 					continue
 				}
+
 				if resource.Err != nil {
+
 					ctx.CLIContext.App.Writer = os.Stderr
 					resource.Keys = []string{"error"}
 					var errorBody string
+
 					switch resource.Err.(type) {
+
 					case *gophercloud.UnexpectedResponseCodeError:
 						errBodyRaw := resource.Err.(*gophercloud.UnexpectedResponseCodeError).Body
 						errMap := make(map[string]map[string]interface{})
@@ -67,12 +72,14 @@ func (ctx *Context) ListenAndReceive() {
 							errorBody = v["message"].(string)
 							break
 						}
+
 					default:
 						errorBody = resource.Err.Error()
 					}
 
 					resource.Result = map[string]interface{}{"error": errorBody}
 				}
+
 				if resource.Result == nil {
 					if args := ctx.CLIContext.Parent().Parent().Args(); len(args) > 0 {
 						resource.Result = fmt.Sprintf("Nothing to show. Maybe you'd like to set up some %ss?\n",
@@ -81,6 +88,7 @@ func (ctx *Context) ListenAndReceive() {
 						resource.Result = fmt.Sprintf("Nothing to show.\n")
 					}
 				}
+
 				ctx.Print(resource)
 				if resource.ErrExit1 {
 					os.Exit(1)

@@ -12,6 +12,7 @@ import (
 	"github.com/jrperritt/rack/commands/filescommands"
 	"github.com/jrperritt/rack/commands/networkscommands"
 	"github.com/jrperritt/rack/commands/serverscommands"
+	"github.com/jrperritt/rack/setup"
 	"github.com/jrperritt/rack/util"
 
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
@@ -32,6 +33,11 @@ OPTIONS:
 	app.Usage = "An opinionated CLI for the Rackspace cloud"
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
+		{
+			Name:   "init",
+			Usage:  "Used to setup a user's environment with amenities like command completion for the Bash shell.",
+			Action: setup.Init,
+		},
 		{
 			Name:   "configure",
 			Usage:  "Used to interactively create a config file for Rackspace authentication.",
