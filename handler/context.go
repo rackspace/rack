@@ -74,7 +74,12 @@ func (ctx *Context) ListenAndReceive() {
 					resource.Result = map[string]interface{}{"error": errorBody}
 				}
 				if resource.Result == nil {
-					resource.Result = "Nothing to return\n"
+					if args := ctx.CLIContext.Parent().Parent().Args(); len(args) > 0 {
+						resource.Result = fmt.Sprintf("Nothing to show. Maybe you'd like to set up some %ss?\n",
+							strings.Replace(args[0], "-", " ", -1))
+					} else {
+						resource.Result = fmt.Sprintf("Nothing to show.\n")
+					}
 				}
 				ctx.Print(resource)
 				if resource.ErrExit1 {
