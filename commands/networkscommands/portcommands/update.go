@@ -5,11 +5,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	osPorts "github.com/rackspace/gophercloud/openstack/networking/v2/ports"
-	"github.com/rackspace/gophercloud/rackspace/networking/v2/ports"
+	osPorts "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/ports"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/ports"
 )
 
 var update = cli.Command{

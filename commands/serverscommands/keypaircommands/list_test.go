@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/jrperritt/rack/handler"
-	th "github.com/rackspace/gophercloud/testhelper"
-	"github.com/rackspace/gophercloud/testhelper/client"
+	th "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
 )
 
 func TestListContext(t *testing.T) {

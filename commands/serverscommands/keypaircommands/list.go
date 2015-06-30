@@ -1,13 +1,13 @@
 package keypaircommands
 
 import (
-	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	osKeypairs "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs"
-	"github.com/rackspace/gophercloud/pagination"
-	"github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs"
+	osKeypairs "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/pagination"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs"
 )
 
 var list = cli.Command{

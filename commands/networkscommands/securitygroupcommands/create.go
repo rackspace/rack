@@ -1,11 +1,11 @@
 package securitygroupcommands
 
 import (
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	osSecurityGroups "github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/groups"
-	securityGroups "github.com/rackspace/gophercloud/rackspace/networking/v2/security/groups"
+	osSecurityGroups "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/groups"
+	securityGroups "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/security/groups"
 )
 
 var create = cli.Command{

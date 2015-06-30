@@ -1,12 +1,12 @@
 package flavorcommands
 
 import (
-	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	"github.com/rackspace/gophercloud/openstack/compute/v2/flavors"
-	osFlavors "github.com/rackspace/gophercloud/openstack/compute/v2/flavors"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/flavors"
+	osFlavors "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/flavors"
 )
 
 var get = cli.Command{

@@ -1,11 +1,11 @@
 package containercommands
 
 import (
-	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	"github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers"
 )
 
 var create = cli.Command{

@@ -7,9 +7,9 @@ import (
 	"path"
 	"strings"
 
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/util"
-	"gopkg.in/ini.v1"
+	"github.com/jrperritt/rack/internal/gopkg.in/ini.v1"
 )
 
 func configure(c *cli.Context) {
@@ -89,9 +89,9 @@ func configure(c *cli.Context) {
 	}
 
 	if profile == "DEFAULT" {
-	    fmt.Printf("\nCreated new default profile for username %s", username)
+		fmt.Printf("\nCreated new default profile for username %s", username)
 	} else {
-	    fmt.Printf("\nCreated profile %s with username %s", profile, username)
+		fmt.Printf("\nCreated profile %s with username %s", profile, username)
 	}
 
 }

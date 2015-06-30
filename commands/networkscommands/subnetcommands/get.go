@@ -1,11 +1,11 @@
 package subnetcommands
 
 import (
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	osSubnets "github.com/rackspace/gophercloud/openstack/networking/v2/subnets"
-	"github.com/rackspace/gophercloud/rackspace/networking/v2/subnets"
+	osSubnets "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/subnets"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/subnets"
 )
 
 var get = cli.Command{

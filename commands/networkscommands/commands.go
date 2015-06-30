@@ -1,7 +1,7 @@
 package networkscommands
 
 import (
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/commands/networkscommands/networkcommands"
 	"github.com/jrperritt/rack/commands/networkscommands/portcommands"
 	"github.com/jrperritt/rack/commands/networkscommands/securitygroupcommands"

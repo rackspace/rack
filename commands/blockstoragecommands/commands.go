@@ -1,7 +1,7 @@
 package blockstoragecommands
 
 import (
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/commands/blockstoragecommands/snapshotcommands"
 	"github.com/jrperritt/rack/commands/blockstoragecommands/volumecommands"
 )

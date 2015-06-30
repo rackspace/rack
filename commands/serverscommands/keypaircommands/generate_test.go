@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
-	osKeypairs "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs"
-	th "github.com/rackspace/gophercloud/testhelper"
-	"github.com/rackspace/gophercloud/testhelper/client"
+	osKeypairs "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs"
+	th "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
 )
 
 func TestGenerateContext(t *testing.T) {

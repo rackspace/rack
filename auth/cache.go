@@ -9,7 +9,7 @@ import (
 	"sync"
 
 	"github.com/jrperritt/rack/util"
-	"github.com/rackspace/gophercloud"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
 )
 
 // Cache represents a place to store user authentication credentials.

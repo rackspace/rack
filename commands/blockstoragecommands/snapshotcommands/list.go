@@ -1,11 +1,11 @@
 package snapshotcommands
 
 import (
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	osSnapshots "github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots"
-	"github.com/rackspace/gophercloud/pagination"
+	osSnapshots "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/pagination"
 )
 
 var list = cli.Command{

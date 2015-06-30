@@ -1,7 +1,7 @@
 package filescommands
 
 import (
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/commands/filescommands/containercommands"
 	"github.com/jrperritt/rack/commands/filescommands/objectcommands"
 )

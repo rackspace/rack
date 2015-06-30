@@ -3,10 +3,10 @@ package snapshotcommands
 import (
 	"fmt"
 
-	"github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/util"
-	osSnapshots "github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots"
+	osSnapshots "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots"
 )
 
 var remove = cli.Command{

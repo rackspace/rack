@@ -1,6 +1,6 @@
 package snapshotcommands
 
-import "github.com/codegangsta/cli"
+import "github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 
 var commandPrefix = "block-storage snapshots"
 var serviceClientType = "blockstorage"
