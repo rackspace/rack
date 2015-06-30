@@ -10,7 +10,7 @@ import (
 
 var create = cli.Command{
 	Name:        "create",
-	Usage:       util.Usage(commandPrefix, "create", ""),
+	Usage:       util.Usage(commandPrefix, "create", "--name <securityGroupName>"),
 	Description: "Creates a security group",
 	Action:      actionCreate,
 	Flags:       util.CommandFlags(flagsCreate, keysCreate),

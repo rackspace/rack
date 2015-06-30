@@ -14,7 +14,7 @@ import (
 
 var update = cli.Command{
 	Name:        "update",
-	Usage:       util.Usage(commandPrefix, "update", "--network-id <network-id>"),
+	Usage:       util.Usage(commandPrefix, "update", ""),
 	Description: "Updates a ports",
 	Action:      actionUpdate,
 	Flags:       util.CommandFlags(flagsUpdate, keysUpdate),
@@ -25,6 +25,14 @@ var update = cli.Command{
 
 func flagsUpdate() []cli.Flag {
 	return []cli.Flag{
+		cli.StringFlag{
+			Name:  "id",
+			Usage: "[optional; required if `name` or `stdin` isn't provided] The ID of the port to update.",
+		},
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "[optional; required if `stdin` or `id` isn't provided] The name of the port to update.",
+		},
 		cli.StringFlag{
 			Name:  "rename",
 			Usage: "[optional] A new name for the port.",

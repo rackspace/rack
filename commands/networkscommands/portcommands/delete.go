@@ -25,11 +25,11 @@ func flagsDelete() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "id",
-			Usage: "[optional; required if `name` or `stdin` isn't provided] The ID of the port.",
+			Usage: "[optional; required if `name` or `stdin` isn't provided] The ID of the port to delete.",
 		},
 		cli.StringFlag{
 			Name:  "name",
-			Usage: "[optional; required if `stdin` or `id` isn't provided] The name of the port.",
+			Usage: "[optional; required if `stdin` or `id` isn't provided] The name of the port to delete.",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
