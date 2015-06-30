@@ -170,7 +170,7 @@ Usage::
     (echo securityGroupID1 && echo securityGroupID2) | rack networks security-group delete --stdin id [optional flags]
 
 ``security-group-rule``
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
   Networks Security Group Rule operations
 
