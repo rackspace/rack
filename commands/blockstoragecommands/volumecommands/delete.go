@@ -11,7 +11,7 @@ import (
 
 var remove = cli.Command{
 	Name:        "delete",
-	Usage:       util.Usage(commandPrefix, "delete", "[--id <volumeID> | --stdin id]"),
+	Usage:       util.Usage(commandPrefix, "delete", "[--id <volumeID> | | --name <volumeName> | --stdin id]"),
 	Description: "Deletes a volume",
 	Action:      actionDelete,
 	Flags:       util.CommandFlags(flagsDelete, keysDelete),
@@ -24,11 +24,15 @@ func flagsDelete() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "id",
-			Usage: "[optional; required if `stdin` isn't provided] The ID of the volume.",
+			Usage: "[optional; required if `stdin` or `name` isn't provided] The ID of the volume.",
+		},
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "[optional; required if `stdin` or `id` isn't provided] The name of the volume.",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `id` isn't provided] The field being piped into STDIN. Valid values are: id",
+			Usage: "[optional; required if `id` or `name` isn't provided] The field being piped into STDIN. Valid values are: id",
 		},
 	}
 }
@@ -73,11 +77,11 @@ func (command *commandDelete) HandlePipe(resource *handler.Resource, item string
 }
 
 func (command *commandDelete) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"id"})
+	volumeID, err := command.Ctx.IDOrName(osVolumes.IDFromName)
 	if err != nil {
 		return err
 	}
-	resource.Params.(*paramsDelete).volumeID = command.Ctx.CLIContext.String("id")
+	resource.Params.(*paramsDelete).volumeID = volumeID
 	return nil
 }
 
