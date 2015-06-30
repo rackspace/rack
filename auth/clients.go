@@ -154,7 +154,7 @@ func Credentials(c *cli.Context) (*gophercloud.AuthOptions, string, error) {
 			fmt.Sprintf("%s", needString),
 			"",
 			"You can set any of these credentials in the following ways:",
-			"- Run `rack config` to interactively create a configuration file,",
+			"- Run `rack configure` to interactively create a configuration file,",
 			"- Specify it in the command as a flag (--username, --apikey, --region), or",
 			"- Export it as an environment variable (RS_USERNAME, RS_API_KEY, RS_REGION_NAME).",
 			"",
