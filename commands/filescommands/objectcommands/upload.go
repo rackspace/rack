@@ -46,6 +46,18 @@ func flagsUpload() []cli.Flag {
 			Name:  "stdin",
 			Usage: "[optional; required if `file` or `content` isn't provided] The field being piped to STDIN, if any. Valid values are: content",
 		},
+		cli.StringFlag{
+			Name:  "content-type",
+			Usage: "[optional] The Content-Type header.",
+		},
+		cli.IntFlag{
+			Name:  "content-length",
+			Usage: "[optional] The Content-Length header.",
+		},
+		cli.StringFlag{
+			Name:  "content-encoding",
+			Usage: "[optional] The Content-Encoding header.",
+		},
 	}
 }
 
@@ -89,12 +101,20 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 		return err
 	}
 
-	container := command.Ctx.CLIContext.String("container")
-	object := command.Ctx.CLIContext.String("name")
-	resource.Params = &paramsUpload{
-		container: container,
-		object:    object,
+	c := command.Ctx.CLIContext
+
+	opts := osObjects.CreateOpts{
+		ContentEncoding: c.String("content-encoding"),
+		ContentLength:   int64(c.Int("content-length")),
+		ContentType:     c.String("content-type"),
 	}
+
+	resource.Params = &paramsUpload{
+		container: c.String("container"),
+		object:    c.String("name"),
+		opts:      opts,
+	}
+
 	return nil
 }
 
