@@ -10,5 +10,5 @@ Contents:
 
    servers.rst
    files.rst
-   block_storage.rst
+   blockstorage.rst
    networks.rst

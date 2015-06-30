@@ -1,7 +1,7 @@
 .. _block_storage:
 
 block storage
-=======
+=============
 
 Commands for Rackspace Cloud Block Storage.
 
@@ -16,7 +16,7 @@ Commands
 --------
 
 ``volume``
-~~~~~~~~~~~~
+~~~~~~~~~~
 
   Block Storage Volume operations
 
@@ -56,7 +56,7 @@ Usage::
     (echo volumeID1 && echo volumeID2) | rack block-storage volume delete --stdin id [optional flags]
 
 ``snapshot``
-~~~~~~~~~
+~~~~~~~~~~~~
 
   Block Storage Snapshot operations
 
@@ -67,13 +67,13 @@ Usage::
     rack block-storage snapshot list [optional flags]
 
 ``create``
-^^^^^^^^
+^^^^^^^^^^
 Usage::
 
     rack block-storage snapshot create --volume-id <volumeID> [optional flags]
 
 ``get``
-^^^^^^^^
+^^^^^^^
 Usage::
 
     rack block-storage snapshot get --id <snapshotID> [optional flags]
