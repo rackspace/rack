@@ -9,7 +9,7 @@ import (
 
 var update = cli.Command{
 	Name:        "update",
-	Usage:       util.Usage(commandPrefix, "update", "--volume-id <volumeID>"),
+	Usage:       util.Usage(commandPrefix, "update", "--id <volumeID>"),
 	Description: "Updates a volume",
 	Action:      actionUpdate,
 	Flags:       util.CommandFlags(flagsUpdate, keysUpdate),
@@ -21,7 +21,7 @@ var update = cli.Command{
 func flagsUpdate() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "volume-id",
+			Name:  "id",
 			Usage: "[required] The ID of the volume to update.",
 		},
 		cli.StringFlag{
