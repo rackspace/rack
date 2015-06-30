@@ -220,7 +220,7 @@ func (ctx *Context) IDOrName(idFromNameFunc func(*gophercloud.ServiceClient, str
 		}
 		return id, nil
 	} else {
-		return "", output.ErrMissingFlag{"One of either --id or --name must be provided."}
+		return "", output.ErrMissingFlag{Msg: "One of either --id or --name must be provided."}
 	}
 }
 
@@ -238,7 +238,7 @@ func (ctx *Context) CheckArgNum(expected int) error {
 func (ctx *Context) CheckFlagsSet(flagNames []string) error {
 	for _, flagName := range flagNames {
 		if !ctx.CLIContext.IsSet(flagName) {
-			return output.ErrMissingFlag{fmt.Sprintf("--%s is required.", flagName)}
+			return output.ErrMissingFlag{Msg: fmt.Sprintf("--%s is required.", flagName)}
 		}
 	}
 	return nil
@@ -251,7 +251,7 @@ func (ctx *Context) CheckKVFlag(flagName string) (map[string]string, error) {
 	for _, kvString := range kvStrings {
 		temp := strings.Split(kvString, "=")
 		if len(temp) != 2 {
-			return nil, output.ErrFlagFormatting{fmt.Sprintf("Expected key1=value1,key2=value2 format but got %s for --%s.\n", kvString, flagName)}
+			return nil, output.ErrFlagFormatting{Msg: fmt.Sprintf("Expected key1=value1,key2=value2 format but got %s for --%s.\n", kvString, flagName)}
 		}
 		kv[temp[0]] = temp[1]
 	}
@@ -267,7 +267,7 @@ func (ctx *Context) CheckStructFlag(flagValues []string) ([]map[string]interface
 		for _, kvString := range kvStrings {
 			temp := strings.Split(kvString, "=")
 			if len(temp) != 2 {
-				return nil, output.ErrFlagFormatting{fmt.Sprintf("Expected key1=value1,key2=value2 format but got %s.\n", kvString)}
+				return nil, output.ErrFlagFormatting{Msg: fmt.Sprintf("Expected key1=value1,key2=value2 format but got %s.\n", kvString)}
 			}
 			m[temp[0]] = temp[1]
 		}
