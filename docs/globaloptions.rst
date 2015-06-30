@@ -191,24 +191,6 @@ And again, per command:
        delete	rack servers keypair delete [--name <keypairName>] [flags]
        help, h	Shows a list of commands or help for one command
 
-This is useful if you are using tab-completion within a shell, or working to build
-a command.
-
-``--generate-bash-completion``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    Generate bash completion directives for tab-completion of commands.
-
-**Advanced Usage Only**: (Requires golang development environment)
-This allows you to set up tab completion of commands for the ``rack`` utility. To
-set this up add the following line to your .bash_profile or .bashrc::
-
-    PROG=rack source $GOPATH/src/github.com/codegangsta/cli/autocomplete/bash_autocomplete
-
-Then source it::
-
-    source ~/.bashrc or source ~/.bash_profile
-
 ``--version, -v``
 ~~~~~~~~~~~~~~~~~
 
