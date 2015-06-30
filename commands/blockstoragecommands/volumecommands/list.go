@@ -96,5 +96,9 @@ func (command *commandList) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = volumes
+	if len(volumes) == 0 {
+		resource.Result = nil
+	} else {
+		resource.Result = volumes
+	}
 }
