@@ -87,7 +87,7 @@ func (command *commandReboot) HandleFlags(resource *handler.Resource) error {
 		how = osServers.PowerCycle
 	}
 	if how == "" {
-		return output.ErrMissingFlag{"One of either --soft or --hard must be provided."}
+		return output.ErrMissingFlag{Msg: "One of either --soft or --hard must be provided."}
 	}
 	resource.Params = &paramsReboot{how: how}
 	return nil
