@@ -56,7 +56,7 @@ func flagsUpload() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "content-encoding",
-			Usage: "[optional] The Content-Encoding header.",
+			Usage: "[optional] The Content-Encoding header. By default, the uploaded content will be gzipped.",
 		},
 	}
 }
