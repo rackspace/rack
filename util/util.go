@@ -35,6 +35,16 @@ func Contains(s []string, e string) bool {
 // RackDir returns the location of the `rack` directory. This directory is for
 // storing `rack`-specific information such as the cache or a config file.
 func RackDir() (string, error) {
+	homeDir, err := HomeDir()
+	if err != nil {
+		return "", err
+	}
+	dirpath := path.Join(homeDir, ".rack")
+	err = os.MkdirAll(dirpath, 0744)
+	return dirpath, err
+}
+
+func HomeDir() (string, error) {
 	var homeDir string
 	if runtime.GOOS == "windows" {
 		homeDir = os.Getenv("HOMEDRIVE") + os.Getenv("HOMEPATH") // Windows
@@ -47,7 +57,5 @@ func RackDir() (string, error) {
 	if homeDir == "" {
 		return "", errors.New("User home directory not found.")
 	}
-	dirpath := path.Join(homeDir, ".rack")
-	err := os.MkdirAll(dirpath, 0744)
-	return dirpath, err
+	return homeDir, nil
 }

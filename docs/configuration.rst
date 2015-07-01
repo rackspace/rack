@@ -150,6 +150,17 @@ You can get your API key by logging into the `Cloud Control panel`_ and clicking
 on *account -> account settings* and clicking "show" next to "API Key". Be careful;
 this key is special. Don't share it!
 
+Command Completion
+------------------
+Run ``rack init`` to set up Bash command completion. Currently, this is only
+available for the Bash shell. If you're using a Linux OS, ``rack init`` will look for,
+and, if found, amend ``$HOME/.bashrc`` to enable Bash completion. If you're on a
+Darwin OS (like Mac), it will look for ``$HOME/.bash_profile``.
+
+If you'd like to set up command completion yourself (or if you're on a Windows OS and using a Bash shell),
+you can copy file in the location below to the appropriate directory and source it:
+github.com/jrperritt/rack/setup/commandcompletion_bash.sh
+
 Advanced Configuration Values
 -----------------------------
 
