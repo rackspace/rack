@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ -n "$GOPATH" ]; then
+  echo "Building rack!"
+  go build -o $GOPATH/bin/rack
+else
+  echo '$GOPATH must be defined. Do you have go setup?'
+fi
