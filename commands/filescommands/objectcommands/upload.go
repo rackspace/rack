@@ -66,9 +66,7 @@ var keysUpload = []string{}
 type paramsUpload struct {
 	container string
 	object    string
-	content   string
-	fileName  string
-	stream    bool
+	stream    io.ReadSeeker
 	opts      osObjects.CreateOpts
 }
 
@@ -127,9 +125,14 @@ func (command *commandUpload) HandlePipe(resource *handler.Resource, item string
 
 func (command *commandUpload) HandleSingle(resource *handler.Resource) error {
 	if command.Ctx.CLIContext.IsSet("file") {
-		resource.Params.(*paramsUpload).fileName = command.Ctx.CLIContext.String("file")
+		readSeeker, err := os.Open(command.Ctx.CLIContext.String("file"))
+		if err != nil {
+			return err
+		}
+		resource.Params.(*paramsUpload).stream = readSeeker
 	} else if command.Ctx.CLIContext.IsSet("content") {
-		resource.Params.(*paramsUpload).content = command.Ctx.CLIContext.String("content")
+		readSeeker := strings.NewReader(command.Ctx.CLIContext.String("content"))
+		resource.Params.(*paramsUpload).stream = readSeeker
 	} else {
 		return fmt.Errorf("One of `--file` and `--content` must be provided if not piping to STDIN.")
 	}
@@ -140,23 +143,10 @@ func (command *commandUpload) Execute(resource *handler.Resource) {
 	params := resource.Params.(*paramsUpload)
 	containerName := params.container
 	objectName := params.object
+	stream := params.stream
 	opts := params.opts
-	var readSeeker io.ReadSeeker
-	var err error
-	if stream := params.stream; stream {
-		readSeeker = os.Stdin
-	} else if fileName := params.fileName; fileName != "" {
-		// this file will be closed by Gophercloud, if not closed before then
-		readSeeker, err = os.Open(fileName)
-		if err != nil {
-			resource.Err = err
-			return
-		}
-	} else {
-		content := params.content
-		readSeeker = strings.NewReader(content)
-	}
-	rawResponse := objects.Create(command.Ctx.ServiceClient, containerName, objectName, readSeeker, opts)
+
+	rawResponse := objects.Create(command.Ctx.ServiceClient, containerName, objectName, stream, opts)
 	if rawResponse.Err != nil {
 		resource.Err = rawResponse.Err
 		return
@@ -169,6 +159,6 @@ func (command *commandUpload) StdinField() string {
 }
 
 func (command *commandUpload) HandleStreamPipe(resource *handler.Resource) error {
-	resource.Params.(*paramsUpload).stream = true
+	resource.Params.(*paramsUpload).stream = os.Stdin
 	return nil
 }
