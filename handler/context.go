@@ -8,11 +8,11 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/auth"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
 	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
 )
 
 // Command is the type that commands have.
@@ -105,60 +105,47 @@ func (ctx *Context) Print(resource *Resource) {
 	// limit the returned fields if any were given in the `fields` flag
 	keys := ctx.limitFields(resource)
 	w := ctx.CLIContext.App.Writer
+
+	var format string
 	if ctx.CLIContext.GlobalIsSet("json") || ctx.CLIContext.IsSet("json") {
-		switch resource.Result.(type) {
-		case map[string]interface{}:
-			m := resource.Result.(map[string]interface{})
-			output.MetadataJSON(w, m, keys)
-		case []map[string]interface{}:
-			m := resource.Result.([]map[string]interface{})
-			output.ListJSON(w, m, keys)
-		case io.Reader:
-			if _, ok := resource.Result.(io.ReadCloser); ok {
-				defer resource.Result.(io.ReadCloser).Close()
-			}
-			_, err := io.Copy(w, resource.Result.(io.Reader))
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "Error copying (io.Reader) result: %s\n", err)
-			}
-		default:
-			output.DefaultJSON(w, resource.Result)
-		}
+		format = "json"
 	} else if ctx.CLIContext.GlobalIsSet("csv") || ctx.CLIContext.IsSet("csv") {
-		switch resource.Result.(type) {
-		case map[string]interface{}:
-			m := resource.Result.(map[string]interface{})
+		format = "csv"
+	}
+
+	switch resource.Result.(type) {
+	case map[string]interface{}:
+		m := resource.Result.(map[string]interface{})
+		switch format {
+		case "json":
+			output.MetadataJSON(w, m, keys)
+		case "csv":
 			output.MetadataCSV(w, m, keys)
-		case []map[string]interface{}:
-			m := resource.Result.([]map[string]interface{})
-			output.ListCSV(w, m, keys)
-		case io.Reader:
-			if _, ok := resource.Result.(io.ReadCloser); ok {
-				defer resource.Result.(io.ReadCloser).Close()
-			}
-			_, err := io.Copy(w, resource.Result.(io.Reader))
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "Error copying (io.Reader) result: %s\n", err)
-			}
 		default:
-			fmt.Fprintf(w, "%v", resource.Result)
-		}
-	} else {
-		switch resource.Result.(type) {
-		case map[string]interface{}:
-			m := resource.Result.(map[string]interface{})
 			output.MetadataTable(w, m, keys)
-		case []map[string]interface{}:
-			m := resource.Result.([]map[string]interface{})
+		}
+	case []map[string]interface{}:
+		m := resource.Result.([]map[string]interface{})
+		switch format {
+		case "json":
+			output.ListJSON(w, m, keys)
+		case "csv":
+			output.ListCSV(w, m, keys)
+		default:
 			output.ListTable(w, m, keys)
-		case io.Reader:
-			if _, ok := resource.Result.(io.ReadCloser); ok {
-				defer resource.Result.(io.ReadCloser).Close()
-			}
-			_, err := io.Copy(w, resource.Result.(io.Reader))
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "Error copying (io.Reader) result: %s\n", err)
-			}
+		}
+	case io.Reader:
+		if _, ok := resource.Result.(io.ReadCloser); ok {
+			defer resource.Result.(io.ReadCloser).Close()
+		}
+		_, err := io.Copy(w, resource.Result.(io.Reader))
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error copying (io.Reader) result: %s\n", err)
+		}
+	default:
+		switch format {
+		case "json":
+			output.DefaultJSON(w, resource.Result)
 		default:
 			fmt.Fprintf(w, "%v", resource.Result)
 		}
