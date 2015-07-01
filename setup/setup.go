@@ -34,13 +34,13 @@ func Init(c *cli.Context) {
 	w := c.App.Writer
 	switch runtime.GOOS {
 	case "linux", "darwin":
-		homeDir, err := util.HomeDir()
+		rackDir, err := util.RackDir()
 		if err != nil {
 			fmt.Fprintf(w, "Error running `rack init`: %s\n", err)
 			return
 		}
 
-		rackCompletionPath := path.Join(homeDir, "rack_bash_autocomplete")
+		rackCompletionPath := path.Join(rackDir, "bash_autocomplete")
 		rackCompletionFile, err := os.Create(rackCompletionPath)
 		if err != nil {
 			fmt.Fprintf(w, "Error creating `rack` bash completion file: %s\n", err)
@@ -58,6 +58,11 @@ func Init(c *cli.Context) {
 			bashName = ".bashrc"
 		} else {
 			bashName = ".bash_profile"
+		}
+
+		homeDir, err := util.HomeDir()
+		if err != nil {
+			fmt.Fprintf(w, "Unable to access home directory: %s\n", err)
 		}
 
 		bashPath := path.Join(homeDir, bashName)
