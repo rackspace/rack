@@ -3,10 +3,10 @@ package objectcommands
 import (
 	"io/ioutil"
 
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
-	"github.com/jrperritt/rack/util"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/objects"
+	"github.com/jrperritt/rack/util"
 )
 
 var download = cli.Command{
@@ -85,7 +85,7 @@ func (command *commandDownload) Execute(resource *handler.Resource) {
 		resource.Err = rawResponse.Err
 		return
 	}
-	if command.Ctx.CLIContext.IsSet("json") {
+	if command.Ctx.CLIContext.IsSet("json") || command.Ctx.CLIContext.GlobalIsSet("json") {
 		bytes, err := ioutil.ReadAll(rawResponse.Body)
 		if err != nil {
 			resource.Err = err

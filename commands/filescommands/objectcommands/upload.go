@@ -6,11 +6,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
-	"github.com/jrperritt/rack/util"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osObjects "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/objects"
+	"github.com/jrperritt/rack/util"
 )
 
 var upload = cli.Command{
@@ -104,9 +104,12 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 	c := command.Ctx.CLIContext
 
 	opts := osObjects.CreateOpts{
-		ContentEncoding: c.String("content-encoding"),
-		ContentLength:   int64(c.Int("content-length")),
-		ContentType:     c.String("content-type"),
+		ContentLength: int64(c.Int("content-length")),
+		ContentType:   c.String("content-type"),
+	}
+
+	if c.IsSet("content-encoding") && c.String("content-encoding") != "gzip" {
+		opts.ContentEncoding = c.String("content-encoding")
 	}
 
 	resource.Params = &paramsUpload{
