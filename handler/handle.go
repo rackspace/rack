@@ -88,6 +88,12 @@ func Handle(command Commander) {
 		ctx.ErrExit1(resource)
 	}
 
+	err = ctx.checkOutputFormat()
+	if err != nil {
+		resource.Err = err
+		ctx.ErrExit1(resource)
+	}
+
 	client, err := auth.NewClient(ctx.CLIContext, ctx.ServiceClientType)
 	if err != nil {
 		resource.Err = err

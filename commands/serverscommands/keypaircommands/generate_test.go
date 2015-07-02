@@ -107,7 +107,7 @@ func TestGenerateExecute(t *testing.T) {
 	})
 	app := cli.NewApp()
 	flagset := flag.NewFlagSet("flags", 1)
-	flagset.Bool("json", false, "")
+	flagset.String("output", "json", "")
 	c := cli.NewContext(app, flagset, nil)
 	cmd := &commandGenerate{
 		Ctx: &handler.Context{

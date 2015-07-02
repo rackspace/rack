@@ -85,7 +85,7 @@ func (command *commandDownload) Execute(resource *handler.Resource) {
 		resource.Err = rawResponse.Err
 		return
 	}
-	if command.Ctx.CLIContext.IsSet("json") || command.Ctx.CLIContext.GlobalIsSet("json") {
+	if command.Ctx.OutputFormat == "json" {
 		bytes, err := ioutil.ReadAll(rawResponse.Body)
 		if err != nil {
 			resource.Err = err
