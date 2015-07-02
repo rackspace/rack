@@ -55,12 +55,12 @@ OPTIONS:
 		},
 		{
 			Name:        "networks",
-			Usage:       "Software defined networking.",
+			Usage:       "Software-defined networking.",
 			Subcommands: networkscommands.Get(),
 		},
 		{
 			Name:        "block-storage",
-			Usage:       "Block level storage, exposed as volumes to mount to host servers. Work with volumes and their associated snapshots.",
+			Usage:       "Block-level storage, exposed as volumes to mount to host servers. Work with volumes and their associated snapshots.",
 			Subcommands: blockstoragecommands.Get(),
 		},
 	}
