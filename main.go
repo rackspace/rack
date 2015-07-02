@@ -60,7 +60,7 @@ OPTIONS:
 		},
 		{
 			Name:        "block-storage",
-			Usage:       "Used for the Block Storage service",
+			Usage:       "Block level storage, exposed as volumes to mount to host servers. Work with volumes and their associated snapshots.",
 			Subcommands: blockstoragecommands.Get(),
 		},
 	}
