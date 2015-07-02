@@ -6,7 +6,7 @@ Please familiarize yourself with the Contribution Guidelines and Project Roadmap
 
 There are many ways to help `rack` besides contributing code:
 
- - Fix bugs or file issues
+ - Find bugs or file issues
  - Improve the [documentation](https://github.com/jrperritt/rack/tree/master/docs)
 
 ## Contributing Code
