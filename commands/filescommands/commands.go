@@ -11,12 +11,12 @@ func Get() []cli.Command {
 	return []cli.Command{
 		{
 			Name:        "container",
-			Usage:       "Used for Cloud Files container operations",
+			Usage:       "Storage compartments for your objects/files.",
 			Subcommands: containercommands.Get(),
 		},
 		{
 			Name:        "object",
-			Usage:       "Used for Cloud Files object operations",
+			Usage:       "Data storage for objects/files/media.",
 			Subcommands: objectcommands.Get(),
 		},
 	}

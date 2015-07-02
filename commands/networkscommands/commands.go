@@ -14,27 +14,27 @@ func Get() []cli.Command {
 	return []cli.Command{
 		{
 			Name:        "network",
-			Usage:       "Used for Cloud Networks network operations",
+			Usage:       "Software-defined networks used by servers.",
 			Subcommands: networkcommands.Get(),
 		},
 		{
 			Name:        "subnet",
-			Usage:       "Used for Cloud Networks subnet operations",
+			Usage:       "Allocate IP address blocks, gateways, DNS servers, and host routes to networks.",
 			Subcommands: subnetcommands.Get(),
 		},
 		{
 			Name:        "port",
-			Usage:       "Used for Cloud Networks port operations",
+			Usage:       "Virtual switch ports on logical network switches.",
 			Subcommands: portcommands.Get(),
 		},
 		{
 			Name:        "security-group",
-			Usage:       "Used for Cloud Networks security group operations",
+			Usage:       "Collections of rules for network traffic.",
 			Subcommands: securitygroupcommands.Get(),
 		},
 		{
 			Name:        "security-group-rule",
-			Usage:       "Used for Cloud Networks security group rule operations",
+			Usage:       "Define network ingress and egress rules.",
 			Subcommands: securitygrouprulecommands.Get(),
 		},
 	}
