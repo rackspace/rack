@@ -35,27 +35,27 @@ OPTIONS:
 	app.Commands = []cli.Command{
 		{
 			Name:   "init",
-			Usage:  "Used to setup a user's environment with amenities like command completion for the Bash shell.",
+			Usage:  "[Linux/OS X only] Setup environment with command completion for the Bash shell.",
 			Action: setup.Init,
 		},
 		{
 			Name:   "configure",
-			Usage:  "Used to interactively create a config file for Rackspace authentication.",
+			Usage:  "Interactively create a config file for Rackspace authentication.",
 			Action: configure,
 		},
 		{
 			Name:        "servers",
-			Usage:       "Used for the Servers service",
+			Usage:       "Operations on raw compute.",
 			Subcommands: serverscommands.Get(),
 		},
 		{
 			Name:        "files",
-			Usage:       "Used for the Files service",
+			Usage:       "Object storage for files and media.",
 			Subcommands: filescommands.Get(),
 		},
 		{
 			Name:        "networks",
-			Usage:       "Used for the Networks service",
+			Usage:       "Software defined networking.",
 			Subcommands: networkscommands.Get(),
 		},
 		{
