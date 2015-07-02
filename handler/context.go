@@ -115,6 +115,7 @@ func (ctx *Context) Print(resource *Resource) {
 	switch resource.Result.(type) {
 	case map[string]interface{}:
 		m := resource.Result.(map[string]interface{})
+		m = onlyNonNil(m)
 		switch ctx.OutputFormat {
 		case "json":
 			output.MetadataJSON(w, m, keys)
@@ -124,14 +125,17 @@ func (ctx *Context) Print(resource *Resource) {
 			output.MetadataTable(w, m, keys)
 		}
 	case []map[string]interface{}:
-		m := resource.Result.([]map[string]interface{})
+		ms := resource.Result.([]map[string]interface{})
+		for i, m := range ms {
+			ms[i] = onlyNonNil(m)
+		}
 		switch ctx.OutputFormat {
 		case "json":
-			output.ListJSON(w, m, keys)
+			output.ListJSON(w, ms, keys)
 		case "csv":
-			output.ListCSV(w, m, keys)
+			output.ListCSV(w, ms, keys)
 		default:
-			output.ListTable(w, m, keys)
+			output.ListTable(w, ms, keys)
 		}
 	case io.Reader:
 		if _, ok := resource.Result.(io.ReadCloser); ok {
