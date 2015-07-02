@@ -11,6 +11,9 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+declare -xr CDN="https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com"
+declare -xr BUILDDIR="build"
+
 
 ################################################################################
 # Disable strict temporarily to accept global environment variables that come
@@ -19,7 +22,7 @@ IFS=$'\n\t'
 set +u
 
 if [[ -z "$GIMME_OS" && -z "$GIMME_ARCH" ]]; then
-  echo "GIMME_OS and GIMME_ARCH must be defined"
+  >&2 echo "GIMME_OS and GIMME_ARCH must be defined"
   exit 2
 fi
 
@@ -56,7 +59,7 @@ case $os in
     os="FreeBSD"
     ;;
   *)
-    echo "Unknown OS ${os}. Assuming it's a valid OS for gimme/go and charging ahead."
+    >&2 echo "Unknown OS ${os}. Assuming it's a valid OS for gimme/go and charging ahead."
 esac
 
 case $arch in
@@ -75,12 +78,9 @@ fi
 # Set up the build and deploy layout
 ################################################################################
 
-BUILDDIR="build"
 BASEDIR="${os}/${arch}"
 # Mirror the github layout for branches, tags, commits
 TREEDIR="${os}/${arch}/tree"
-
-CDN="https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com"
 
 mkdir -p $BUILDDIR
 mkdir -p $BUILDDIR/$BASEDIR
