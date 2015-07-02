@@ -1,13 +1,13 @@
 package objectcommands
 
 import (
+	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
-	"github.com/jrperritt/rack/handler"
-	"github.com/jrperritt/rack/util"
 	osObjects "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/pagination"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/objects"
+	"github.com/jrperritt/rack/util"
 )
 
 var list = cli.Command{

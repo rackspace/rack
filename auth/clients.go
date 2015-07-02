@@ -5,9 +5,9 @@ import (
 	"strings"
 
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
-	"github.com/jrperritt/rack/util"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace"
+	"github.com/jrperritt/rack/util"
 )
 
 // reauthFunc is what the ServiceClient uses to re-authenticate.

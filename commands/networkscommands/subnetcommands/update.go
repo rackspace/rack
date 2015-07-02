@@ -3,11 +3,11 @@ package subnetcommands
 import (
 	"strings"
 
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
-	"github.com/jrperritt/rack/util"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osSubnets "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/subnets"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/subnets"
+	"github.com/jrperritt/rack/util"
 )
 
 var update = cli.Command{

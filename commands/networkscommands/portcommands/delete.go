@@ -3,11 +3,11 @@ package portcommands
 import (
 	"fmt"
 
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
-	"github.com/jrperritt/rack/util"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osPorts "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/ports"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/ports"
+	"github.com/jrperritt/rack/util"
 )
 
 var remove = cli.Command{
