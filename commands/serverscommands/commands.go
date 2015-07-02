@@ -13,7 +13,7 @@ func Get() []cli.Command {
 	return []cli.Command{
 		{
 			Name:        "instance",
-			Usage:       "Servers.",
+			Usage:       "Virtual and bare metal servers.",
 			Subcommands: instancecommands.Get(),
 		},
 		{
