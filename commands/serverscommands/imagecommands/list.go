@@ -1,13 +1,13 @@
 package imagecommands
 
 import (
+	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
-	"github.com/jrperritt/rack/handler"
-	"github.com/jrperritt/rack/util"
 	osImages "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/images"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/pagination"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/images"
+	"github.com/jrperritt/rack/util"
 )
 
 var list = cli.Command{

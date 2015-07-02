@@ -1,11 +1,11 @@
 package objectcommands
 
 import (
+	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
-	"github.com/jrperritt/rack/handler"
-	"github.com/jrperritt/rack/util"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
+	"github.com/jrperritt/rack/util"
 )
 
 var get = cli.Command{

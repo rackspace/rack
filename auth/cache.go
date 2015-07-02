@@ -8,8 +8,8 @@ import (
 	"path"
 	"sync"
 
-	"github.com/jrperritt/rack/util"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
+	"github.com/jrperritt/rack/util"
 )
 
 // Cache represents a place to store user authentication credentials.

@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	th "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper/client"

@@ -3,11 +3,11 @@ package securitygrouprulecommands
 import (
 	"fmt"
 
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
-	"github.com/jrperritt/rack/util"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osSecurityGroupRules "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/rules"
 	securityGroupRules "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/security/rules"
+	"github.com/jrperritt/rack/util"
 )
 
 var create = cli.Command{

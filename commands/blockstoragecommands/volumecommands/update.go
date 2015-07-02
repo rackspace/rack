@@ -1,10 +1,10 @@
 package volumecommands
 
 import (
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
-	"github.com/jrperritt/rack/util"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osVolumes "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes"
+	"github.com/jrperritt/rack/util"
 )
 
 var update = cli.Command{

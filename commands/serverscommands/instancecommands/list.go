@@ -1,12 +1,12 @@
 package instancecommands
 
 import (
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/handler"
-	"github.com/jrperritt/rack/util"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/pagination"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
+	"github.com/jrperritt/rack/util"
 )
 
 var list = cli.Command{
