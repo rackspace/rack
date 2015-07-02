@@ -78,6 +78,7 @@ func Handle(command Commander) {
 	ctx.WaitGroup = &sync.WaitGroup{}
 	ctx.Logger = &logrus.Logger{
 		Formatter: &logrus.TextFormatter{},
+		Out:       ctx.CLIContext.App.Writer,
 	}
 
 	ctx.ListenAndReceive()

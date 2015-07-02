@@ -151,6 +151,15 @@ func (ctx *Context) Print(resource *Resource) {
 	}
 }
 
+func onlyNonNil(m map[string]interface{}) map[string]interface{} {
+	for k, v := range m {
+		if v == nil {
+			m[k] = ""
+		}
+	}
+	return m
+}
+
 // limitFields returns only the fields the user specified in the `fields` flag. If
 // the flag wasn't provided, all fields are returned.
 func (ctx *Context) limitFields(resource *Resource) []string {

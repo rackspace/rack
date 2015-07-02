@@ -26,281 +26,281 @@
 			"canonical": "github.com/rackspace/gophercloud",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud",
-			"revision": "bb76a2b6796be256b24002dd450c0aa0953d8bef",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/bootfromvolume",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/bootfromvolume",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/diskconfig",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/diskconfig",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/compute/v2/flavors",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/flavors",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/compute/v2/images",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/images",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/compute/v2/servers",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/identity/v2/tenants",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/identity/v2/tenants",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/identity/v2/tokens",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/identity/v2/tokens",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/identity/v3/tokens",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/identity/v3/tokens",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/networking/v2/common",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/common",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/groups",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/groups",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/rules",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/rules",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/networking/v2/networks",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/networks",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/networking/v2/ports",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/ports",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/networking/v2/subnets",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/subnets",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/objectstorage/v1/accounts",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/accounts",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/objectstorage/v1/containers",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/containers",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/utils",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/utils",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/pagination",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/pagination",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace/compute/v2/flavors",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/flavors",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace/compute/v2/images",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/images",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace/compute/v2/servers",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/servers",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace/identity/v2/tokens",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/identity/v2/tokens",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace/networking/v2/common",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/common",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace/networking/v2/networks",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/networks",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace/networking/v2/ports",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/ports",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace/networking/v2/security/groups",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/security/groups",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace/networking/v2/security/rules",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/security/rules",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace/networking/v2/subnets",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/subnets",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace/objectstorage/v1/objects",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/objects",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/testhelper",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/testhelper/client",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper/client",
-			"revision": "513a1c4bfa23ae5398e1a79836a45c7d4ea6b422",
-			"revisionTime": "2015-07-01T18:45:07-06:00"
+			"revision": "37293f06c434414bf36e0df21b98b9d1619cc7fa",
+			"revisionTime": "2015-07-02T11:48:46-06:00"
 		},
 		{
 			"canonical": "gopkg.in/ini.v1",
