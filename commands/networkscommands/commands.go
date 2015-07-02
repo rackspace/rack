@@ -34,7 +34,7 @@ func Get() []cli.Command {
 		},
 		{
 			Name:        "security-group-rule",
-			Usage:       "Rules for network traffic.",
+			Usage:       "Define network ingress and egress rules.",
 			Subcommands: securitygrouprulecommands.Get(),
 		},
 	}
