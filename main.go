@@ -45,7 +45,7 @@ OPTIONS:
 		},
 		{
 			Name:        "servers",
-			Usage:       "Operations on raw compute.",
+			Usage:       "Operations on cloud servers, both virtual and bare metal.",
 			Subcommands: serverscommands.Get(),
 		},
 		{
