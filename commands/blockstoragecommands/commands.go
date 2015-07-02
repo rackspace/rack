@@ -16,7 +16,7 @@ func Get() []cli.Command {
 		},
 		{
 			Name:        "volume",
-			Usage:       "Block level volumes to expand storage on your servers.",
+			Usage:       "Block level volumes to add storage capacity to your servers.",
 			Subcommands: volumecommands.Get(),
 		},
 	}
