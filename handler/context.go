@@ -35,6 +35,9 @@ type Context struct {
 	// Results is a channel into which commands send results. It allows for streaming
 	// output.
 	Results chan *Resource
+	// OutputFormat is the format in which the user wants the output. This is obtained
+	// from the `output` flag and will default to "table" if not provided.
+	OutputFormat string
 }
 
 // ListenAndReceive creates the Results channel and processes the results that
@@ -106,17 +109,10 @@ func (ctx *Context) Print(resource *Resource) {
 	keys := ctx.limitFields(resource)
 	w := ctx.CLIContext.App.Writer
 
-	var format string
-	if ctx.CLIContext.GlobalIsSet("json") || ctx.CLIContext.IsSet("json") {
-		format = "json"
-	} else if ctx.CLIContext.GlobalIsSet("csv") || ctx.CLIContext.IsSet("csv") {
-		format = "csv"
-	}
-
 	switch resource.Result.(type) {
 	case map[string]interface{}:
 		m := resource.Result.(map[string]interface{})
-		switch format {
+		switch ctx.OutputFormat {
 		case "json":
 			output.MetadataJSON(w, m, keys)
 		case "csv":
@@ -126,7 +122,7 @@ func (ctx *Context) Print(resource *Resource) {
 		}
 	case []map[string]interface{}:
 		m := resource.Result.([]map[string]interface{})
-		switch format {
+		switch ctx.OutputFormat {
 		case "json":
 			output.ListJSON(w, m, keys)
 		case "csv":
@@ -143,7 +139,7 @@ func (ctx *Context) Print(resource *Resource) {
 			fmt.Fprintf(os.Stderr, "Error copying (io.Reader) result: %s\n", err)
 		}
 	default:
-		switch format {
+		switch ctx.OutputFormat {
 		case "json":
 			output.DefaultJSON(w, resource.Result)
 		default:
@@ -226,6 +222,26 @@ func (ctx *Context) CheckArgNum(expected int) error {
 	if argsLen != expected {
 		return fmt.Errorf("Expected %d args but got %d\nUsage: %s", expected, argsLen, ctx.CLIContext.Command.Usage)
 	}
+	return nil
+}
+
+func (ctx *Context) checkOutputFormat() error {
+	var outputFormat string
+	if ctx.CLIContext.GlobalIsSet("output") {
+		outputFormat = ctx.CLIContext.GlobalString("output")
+	} else if ctx.CLIContext.IsSet("output") {
+		outputFormat = ctx.CLIContext.String("output")
+	} else {
+		return nil
+	}
+
+	switch outputFormat {
+	case "json", "csv", "table":
+		break
+	default:
+		return fmt.Errorf("Invalid value for `output` flag: '%s'. Options are: json, csv, table.", outputFormat)
+	}
+	ctx.OutputFormat = outputFormat
 	return nil
 }
 

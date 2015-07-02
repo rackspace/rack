@@ -93,8 +93,8 @@ func (command *commandGenerate) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	c := command.Ctx.CLIContext
-	if c.IsSet("json") || c.IsSet("csv") || c.GlobalIsSet("json") || c.GlobalIsSet("csv") {
+
+	if command.Ctx.OutputFormat == "json" || command.Ctx.OutputFormat == "csv" {
 		resource.Result = structs.Map(keypair)
 	} else {
 		resource.Result = printGenerate(keypair)

@@ -6,17 +6,9 @@ import "github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 // users specify the format of the output from a command.
 func OutputFlags() []cli.Flag {
 	return []cli.Flag{
-		cli.BoolFlag{
-			Name:  "json",
-			Usage: "Return output in JSON format.",
-		},
-		cli.BoolFlag{
-			Name:  "table",
-			Usage: "Return output in tabular format. This is the default output format.",
-		},
-		cli.BoolFlag{
-			Name:  "csv",
-			Usage: "Return output in csv format.",
+		cli.StringFlag{
+			Name:  "output",
+			Usage: "Format in which to return output. Options: json, csv, table. Default is 'table'.",
 		},
 	}
 }
