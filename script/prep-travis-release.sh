@@ -11,6 +11,9 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+declare -xr CDN="https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com"
+declare -xr BUILDDIR="build"
+
 
 ################################################################################
 # Disable strict temporarily to accept global environment variables that come
@@ -75,12 +78,9 @@ fi
 # Set up the build and deploy layout
 ################################################################################
 
-BUILDDIR="build"
 BASEDIR="${os}/${arch}"
 # Mirror the github layout for branches, tags, commits
 TREEDIR="${os}/${arch}/tree"
-
-CDN="https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com"
 
 mkdir -p $BUILDDIR
 mkdir -p $BUILDDIR/$BASEDIR
