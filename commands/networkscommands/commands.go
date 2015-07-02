@@ -14,7 +14,7 @@ func Get() []cli.Command {
 	return []cli.Command{
 		{
 			Name:        "network",
-			Usage:       "Set up new networks to use by servers.",
+			Usage:       "Software defined networks used by servers.",
 			Subcommands: networkcommands.Get(),
 		},
 		{
