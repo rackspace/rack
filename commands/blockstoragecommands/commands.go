@@ -11,7 +11,7 @@ func Get() []cli.Command {
 	return []cli.Command{
 		{
 			Name:        "snapshot",
-			Usage:       "Copies of block storage volumes at a specific moment in time. Use for backups, restores, and long term storage.",
+			Usage:       "Copies of block storage volumes at a specific moment in time. Used for backup, restoration, and other long term storage.",
 			Subcommands: snapshotcommands.Get(),
 		},
 		{
