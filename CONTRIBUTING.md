@@ -11,7 +11,7 @@ There are many ways to help `rack` besides contributing code:
 
 ## Contributing Code
 
-Unless you are fixing a known bug, we **strongly** recommend discussing it with the core team via a GitHub issue or on [Freenode IRC](irc://chat.freenode.net/rackspace) before getting started to ensure your work is consistent with `rack`'s roadmap and architecture.
+Unless you are fixing a known bug, we **strongly** recommend discussing it with the core team via a GitHub issue before getting started to ensure your work is consistent with `rack`'s roadmap and architecture.
 
 All contributions are made via pull request. Note that **all patches from all contributors get reviewed**. After a pull request is made other contributors will offer feedback, and if the patch passes review a maintainer will accept it with a comment. When pull requests fail testing, authors are expected to update their pull requests to address the failures until the tests pass and the pull request merges successfully.
 
@@ -91,10 +91,6 @@ To make a pull request, you will need a GitHub account; if you are unclear on th
 Pull requests will be treated as "review requests," and maintainers will give feedback on the style and substance of the patch.
 
 Normally, all pull requests must include tests that test your change. Occasionally, a change will be very difficult to test for. In those cases, please include a note in your commit message explaining why.
-
-## Communication
-
-We use the #rackspace IRC channel on [Freenode](irc://chat.freenode.net/rackspace). You are welcome to drop in and ask questions, discuss bugs, etc. You can [connect using webchat](https://webchat.freenode.net/?channels=rackspace) if you do not have an IRC client.
 
 ## Conduct
 
