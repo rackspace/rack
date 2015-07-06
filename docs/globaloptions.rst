@@ -19,16 +19,19 @@ Would result in all commands returning a JSON_ formatted output.
 Options
 -------
 
-``--json``
-~~~~~~~~~~
+``--output``
+~~~~~~~~~~~~
 
-  (boolean) Return output in JSON format.
+  (string) The format in which to return the output. Options are: table, json, csv.
+           Default is 'table'.
+
+``json``
+^^^^^^^^
 
 When added to the arguments; output changes from the default table-based output
 to JSON.
 
 Given::
-
 
     rack servers instance list
     ID	        Name		Status	Public IPv4	Private IPv4	Image	Flavor
@@ -53,8 +56,9 @@ When the output pipe is **not** a tty; the JSON is no longer "pretty printed" an
 can be used when passing straight into other commands that require a JSON_
 payload or argument or another service.
 
-``--table``
-~~~~~~~~~~~
+``table``
+^^^^^^^^^
+
   (boolean) Return output in tabular format.
 
 Default output format for ``rack``.
@@ -70,8 +74,8 @@ This presents a well formatted table with headers.
 You can add the ``--table`` option if you have set defaults to JSON, CSV, etc
 elsewhere.
 
-``--csv``
-~~~~~~~~~
+``csv``
+^^^^^^^
 
   (boolean) Return output in csv format.
 
