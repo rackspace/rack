@@ -191,7 +191,7 @@ func (ctx *Context) StoreCredentials() {
 			ServiceEndpoint: ctx.ServiceClient.Endpoint,
 		}
 		// get auth credentials
-		ao, region, err := auth.Credentials(ctx.CLIContext)
+		ao, region, err := auth.Credentials(ctx.CLIContext, ctx.Logger)
 		if err == nil {
 			// form the cache key
 			cacheKey := auth.CacheKey(*ao, region, ctx.ServiceClientType)
@@ -210,16 +210,21 @@ func (ctx *Context) handleLogging() error {
 	} else if ctx.CLIContext.IsSet("log") {
 		opt = ctx.CLIContext.String("log")
 	}
+	var level logrus.Level
 	if opt != "" {
 		switch strings.ToLower(opt) {
 		case "debug":
-			ctx.ServiceClient.Logger.Level = logrus.DebugLevel
+			level = logrus.DebugLevel
 		case "info":
-			ctx.ServiceClient.Logger.Level = logrus.InfoLevel
+			level = logrus.InfoLevel
 		default:
 			return fmt.Errorf("Invalid value for `log` flag: %s. Valid options are: debug, info", opt)
 		}
-		ctx.ServiceClient.Logger.Out = ctx.CLIContext.App.Writer
+	}
+	ctx.Logger = &logrus.Logger{
+		Out:       ctx.CLIContext.App.Writer,
+		Formatter: &logrus.TextFormatter{},
+		Level:     level,
 	}
 	return nil
 }

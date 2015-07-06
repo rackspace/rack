@@ -6,7 +6,6 @@ import (
 	"os"
 	"sync"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/jrperritt/rack/auth"
 )
 
@@ -76,10 +75,6 @@ func Handle(command Commander) {
 	ctx := command.Context()
 	ctx.ServiceClientType = command.ServiceClientType()
 	ctx.WaitGroup = &sync.WaitGroup{}
-	ctx.Logger = &logrus.Logger{
-		Formatter: &logrus.TextFormatter{},
-		Out:       ctx.CLIContext.App.Writer,
-	}
 
 	ctx.ListenAndReceive()
 
@@ -99,18 +94,19 @@ func Handle(command Commander) {
 		ctx.ErrExit1(resource)
 	}
 
-	client, err := auth.NewClient(ctx.CLIContext, ctx.ServiceClientType)
-	if err != nil {
-		resource.Err = err
-		ctx.ErrExit1(resource)
-	}
-	ctx.ServiceClient = client
-
 	err = ctx.handleLogging()
 	if err != nil {
 		resource.Err = err
 		ctx.ErrExit1(resource)
 	}
+
+	client, err := auth.NewClient(ctx.CLIContext, ctx.ServiceClientType, ctx.Logger)
+	if err != nil {
+		resource.Err = err
+		ctx.ErrExit1(resource)
+	}
+	client.HTTPClient.Transport.(*auth.LogRoundTripper).Logger = ctx.Logger
+	ctx.ServiceClient = client
 
 	err = command.HandleFlags(resource)
 	if err != nil {
