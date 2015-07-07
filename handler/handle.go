@@ -94,11 +94,18 @@ func Handle(command Commander) {
 		ctx.ErrExit1(resource)
 	}
 
-	client, err := auth.NewClient(ctx.CLIContext, ctx.ServiceClientType)
+	err = ctx.handleLogging()
 	if err != nil {
 		resource.Err = err
 		ctx.ErrExit1(resource)
 	}
+
+	client, err := auth.NewClient(ctx.CLIContext, ctx.ServiceClientType, ctx.Logger)
+	if err != nil {
+		resource.Err = err
+		ctx.ErrExit1(resource)
+	}
+	client.HTTPClient.Transport.(*auth.LogRoundTripper).Logger = ctx.Logger
 	ctx.ServiceClient = client
 
 	err = command.HandleFlags(resource)

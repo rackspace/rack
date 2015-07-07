@@ -9,6 +9,7 @@ import (
 	"sync"
 
 	"github.com/jrperritt/rack/auth"
+	"github.com/jrperritt/rack/internal/github.com/Sirupsen/logrus"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
 	"github.com/jrperritt/rack/output"
@@ -38,6 +39,8 @@ type Context struct {
 	// OutputFormat is the format in which the user wants the output. This is obtained
 	// from the `output` flag and will default to "table" if not provided.
 	OutputFormat string
+	// Logger is used to log information acquired while processing the command.
+	Logger *logrus.Logger
 }
 
 // ListenAndReceive creates the Results channel and processes the results that
@@ -112,6 +115,7 @@ func (ctx *Context) Print(resource *Resource) {
 	switch resource.Result.(type) {
 	case map[string]interface{}:
 		m := resource.Result.(map[string]interface{})
+		m = onlyNonNil(m)
 		switch ctx.OutputFormat {
 		case "json":
 			output.MetadataJSON(w, m, keys)
@@ -121,14 +125,17 @@ func (ctx *Context) Print(resource *Resource) {
 			output.MetadataTable(w, m, keys)
 		}
 	case []map[string]interface{}:
-		m := resource.Result.([]map[string]interface{})
+		ms := resource.Result.([]map[string]interface{})
+		for i, m := range ms {
+			ms[i] = onlyNonNil(m)
+		}
 		switch ctx.OutputFormat {
 		case "json":
-			output.ListJSON(w, m, keys)
+			output.ListJSON(w, ms, keys)
 		case "csv":
-			output.ListCSV(w, m, keys)
+			output.ListCSV(w, ms, keys)
 		default:
-			output.ListTable(w, m, keys)
+			output.ListTable(w, ms, keys)
 		}
 	case io.Reader:
 		if _, ok := resource.Result.(io.ReadCloser); ok {
@@ -146,6 +153,15 @@ func (ctx *Context) Print(resource *Resource) {
 			fmt.Fprintf(w, "%v", resource.Result)
 		}
 	}
+}
+
+func onlyNonNil(m map[string]interface{}) map[string]interface{} {
+	for k, v := range m {
+		if v == nil {
+			m[k] = ""
+		}
+	}
+	return m
 }
 
 // limitFields returns only the fields the user specified in the `fields` flag. If
@@ -175,7 +191,7 @@ func (ctx *Context) StoreCredentials() {
 			ServiceEndpoint: ctx.ServiceClient.Endpoint,
 		}
 		// get auth credentials
-		ao, region, err := auth.Credentials(ctx.CLIContext)
+		ao, region, err := auth.Credentials(ctx.CLIContext, nil)
 		if err == nil {
 			// form the cache key
 			cacheKey := auth.CacheKey(*ao, region, ctx.ServiceClientType)
@@ -185,6 +201,32 @@ func (ctx *Context) StoreCredentials() {
 			_ = cache.SetValue(cacheKey, newCacheValue)
 		}
 	}
+}
+
+func (ctx *Context) handleLogging() error {
+	var opt string
+	if ctx.CLIContext.GlobalIsSet("log") {
+		opt = ctx.CLIContext.GlobalString("log")
+	} else if ctx.CLIContext.IsSet("log") {
+		opt = ctx.CLIContext.String("log")
+	}
+	var level logrus.Level
+	if opt != "" {
+		switch strings.ToLower(opt) {
+		case "debug":
+			level = logrus.DebugLevel
+		case "info":
+			level = logrus.InfoLevel
+		default:
+			return fmt.Errorf("Invalid value for `log` flag: %s. Valid options are: debug, info", opt)
+		}
+	}
+	ctx.Logger = &logrus.Logger{
+		Out:       ctx.CLIContext.App.Writer,
+		Formatter: &logrus.TextFormatter{},
+		Level:     level,
+	}
+	return nil
 }
 
 // ErrExit1 tells `rack` to print the error and exit.
