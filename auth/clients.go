@@ -173,7 +173,9 @@ func Credentials(c *cli.Context, logger *logrus.Logger) (*gophercloud.AuthOption
 		return nil, "", fmt.Errorf(strings.Join(authErrSlice, "\n"))
 	}
 
-	logger.Infof("Authentication Credentials:\n%s\n", haveString)
+	if logger != nil {
+		logger.Infof("Authentication Credentials:\n%s\n", haveString)
+	}
 
 	ao := &gophercloud.AuthOptions{
 		Username:         have["username"].value,

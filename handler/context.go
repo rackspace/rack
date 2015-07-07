@@ -8,8 +8,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/jrperritt/rack/internal/github.com/Sirupsen/logrus"
 	"github.com/jrperritt/rack/auth"
+	"github.com/jrperritt/rack/internal/github.com/Sirupsen/logrus"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
 	"github.com/jrperritt/rack/output"
@@ -191,7 +191,7 @@ func (ctx *Context) StoreCredentials() {
 			ServiceEndpoint: ctx.ServiceClient.Endpoint,
 		}
 		// get auth credentials
-		ao, region, err := auth.Credentials(ctx.CLIContext, ctx.Logger)
+		ao, region, err := auth.Credentials(ctx.CLIContext, nil)
 		if err == nil {
 			// form the cache key
 			cacheKey := auth.CacheKey(*ao, region, ctx.ServiceClientType)
