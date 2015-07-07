@@ -228,7 +228,7 @@ func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, er
 	if err != nil {
 		lrt.Logger.Debugf(fmt.Sprintf("Error logging request: %s\n", err))
 	}
-	lrt.Logger.Infof("Response Headers: %+v\n", string(info))
+	lrt.Logger.Debugf("Response Headers: %+v\n", string(info))
 
 	return response, nil
 }
