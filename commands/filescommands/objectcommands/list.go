@@ -86,6 +86,11 @@ func (command *commandList) ServiceClientType() string {
 }
 
 func (command *commandList) HandleFlags(resource *handler.Resource) error {
+	err := command.Ctx.CheckFlagsSet([]string{"container"})
+	if err != nil {
+		return err
+	}
+
 	c := command.Ctx.CLIContext
 	opts := &osObjects.ListOpts{
 		Full:      c.Bool("full"),
