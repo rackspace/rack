@@ -3,7 +3,9 @@ package objectcommands
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"strings"
 	"testing"
 
 	"github.com/jrperritt/rack/handler"
@@ -13,38 +15,25 @@ import (
 	"github.com/jrperritt/rack/output"
 )
 
-func newUpCmd(fs *flag.FlagSet) *commandGet {
-	return &commandGet{Ctx: &handler.Context{
+func newUpCmd(fs *flag.FlagSet) *commandUpload {
+	return &commandUpload{Ctx: &handler.Context{
 		CLIContext: cli.NewContext(cli.NewApp(), fs, nil),
 	}}
 }
 
 func TestUploadContext(t *testing.T) {
-	app := cli.NewApp()
-	flagset := flag.NewFlagSet("flags", 1)
-	c := cli.NewContext(app, flagset, nil)
-	cmd := &commandGet{
-		Ctx: &handler.Context{
-			CLIContext: c,
-		},
-	}
-	expected := cmd.Ctx
-	actual := cmd.Context()
-	th.AssertDeepEquals(t, expected, actual)
+	cmd := newUpCmd(flag.NewFlagSet("flags", 1))
+	th.AssertDeepEquals(t, cmd.Ctx, cmd.Context())
 }
 
 func TestUploadKeys(t *testing.T) {
-	cmd := &commandGet{}
-	expected := keysGet
-	actual := cmd.Keys()
-	th.AssertDeepEquals(t, expected, actual)
+	cmd := &commandUpload{}
+	th.AssertDeepEquals(t, keysUpload, cmd.Keys())
 }
 
 func TestUploadServiceClientType(t *testing.T) {
-	cmd := &commandGet{}
-	expected := serviceClientType
-	actual := cmd.ServiceClientType()
-	th.AssertEquals(t, expected, actual)
+	cmd := &commandUpload{}
+	th.AssertEquals(t, serviceClientType, cmd.ServiceClientType())
 }
 
 func TestUploadErrWhenCtnrMissing(t *testing.T) {
@@ -68,18 +57,15 @@ func TestUploadErrWhenNameMissing(t *testing.T) {
 }
 
 func TestUploadHandlePipe(t *testing.T) {
-	cmd := &commandGet{}
-	expected := &handler.Resource{
-		Params: &paramsGet{object: "bar"},
-	}
+	cmd := &commandUpload{}
+
 	actual := &handler.Resource{
-		Params: &paramsGet{},
+		Params: &paramsUpload{},
 	}
 
 	err := cmd.HandlePipe(actual, "bar")
 
 	th.AssertNoErr(t, err)
-	th.AssertEquals(t, expected.Params.(*paramsGet).object, actual.Params.(*paramsGet).object)
 }
 
 func TestUploadHandleSingle(t *testing.T) {
@@ -88,32 +74,42 @@ func TestUploadHandleSingle(t *testing.T) {
 
 	th.Mux.HandleFunc("/foo/bar", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "text/plain")
+		th.TestBody(t, r, "body")
 		fmt.Fprintf(w, `hodor`)
 	})
 
 	fs := flag.NewFlagSet("flags", 1)
 	fs.String("container", "", "")
 	fs.String("name", "", "")
+	fs.String("content", "", "")
+
 	fs.Set("container", "foo")
 	fs.Set("name", "bar")
+	fs.Set("content", "baz")
 
 	cmd := newUpCmd(fs)
 	cmd.Ctx.ServiceClient = client.ServiceClient()
 
 	expected := &handler.Resource{
-		Params: &paramsGet{
-			object: "bar",
+		Params: &paramsUpload{
+			stream: strings.NewReader("baz"),
 		},
 	}
 
 	actual := &handler.Resource{
-		Params: &paramsGet{},
+		Params: &paramsUpload{},
 	}
 
 	err := cmd.HandleSingle(actual)
-
 	th.AssertNoErr(t, err)
-	th.AssertEquals(t, expected.Params.(*paramsGet).object, actual.Params.(*paramsGet).object)
+
+	expectedBytes, _ := ioutil.ReadAll(expected.Params.(*paramsUpload).stream)
+	th.AssertNoErr(t, err)
+
+	actualBytes, _ := ioutil.ReadAll(actual.Params.(*paramsUpload).stream)
+	th.AssertNoErr(t, err)
+
+	th.AssertDeepEquals(t, expectedBytes, actualBytes)
 }
 
 func TestUploadExecute(t *testing.T) {
@@ -121,6 +117,8 @@ func TestUploadExecute(t *testing.T) {
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/foo/bar", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(201)
+		th.TestMethod(t, r, "PUT")
 		w.Header().Add("Content-Type", "text/plain")
 		fmt.Fprintf(w, `hodor`)
 	})
@@ -135,11 +133,11 @@ func TestUploadExecute(t *testing.T) {
 	cmd.Ctx.ServiceClient = client.ServiceClient()
 
 	res := &handler.Resource{
-		Params: &paramsGet{container: "foo", object: "bar"},
+		Params: &paramsUpload{container: "foo", object: "bar"},
 	}
 
 	cmd.Execute(res)
 
 	th.AssertNoErr(t, res.Err)
-	th.AssertEquals(t, "text/plain", res.Result.(map[string]interface{})["ContentType"])
+	th.AssertEquals(t, "Successfully uploaded object [bar] to container [foo]\n", res.Result)
 }
