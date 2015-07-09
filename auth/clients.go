@@ -160,7 +160,7 @@ func Credentials(c *cli.Context, logger *logrus.Logger) (*gophercloud.AuthOption
 		authErrSlice := []string{"There are some required Rackspace Cloud credentials that we couldn't find.",
 			"Here's what we have:",
 			fmt.Sprintf("%s", haveString),
-			"and here's what we we're missing:",
+			"and here's what we're missing:",
 			fmt.Sprintf("%s", needString),
 			"",
 			"You can set any of these credentials in the following ways:",
