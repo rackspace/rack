@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"sync"
 	"time"
@@ -146,6 +147,9 @@ func (command *commandUploadDir) HandleSingle(resource *handler.Resource) error 
 }
 
 func (command *commandUploadDir) Execute(resource *handler.Resource) {
+	// bump thread count to number of available CPUs
+	runtime.GOMAXPROCS(runtime.NumCPU())
+
 	params := resource.Params.(*paramsUploadDir)
 	jobs := make(chan string)
 	results := make(chan *handler.Resource)
