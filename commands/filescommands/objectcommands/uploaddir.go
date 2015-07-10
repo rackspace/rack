@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/cenkalti/backoff"
 	"github.com/jrperritt/rack/handler"
+	"github.com/jrperritt/rack/internal/github.com/cenkalti/backoff"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/dustin/go-humanize"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
