@@ -10,6 +10,7 @@ func Get() []cli.Command {
 	return []cli.Command{
 		list,
 		upload,
+		uploadDir,
 		download,
 		get,
 		remove,
