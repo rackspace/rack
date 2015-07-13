@@ -51,6 +51,10 @@ func flagsUploadDir() []cli.Flag {
 			Name:  "content-encoding",
 			Usage: "[optional] The Content-Encoding header that will be set on all objects. By default, the uploaded content will be gzipped.",
 		},
+		cli.StringFlag{
+			Name:  "stdin",
+			Usage: "[optional; required if `dir` isn't provided] The field being piped to STDIN. Valid values are: dir",
+		},
 		cli.IntFlag{
 			Name:  "concurrency",
 			Usage: "[optional] The amount of concurrent workers that will upload the directory.",
