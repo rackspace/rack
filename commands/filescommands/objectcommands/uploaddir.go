@@ -223,7 +223,7 @@ func (command *commandUploadDir) handle(p string, params *paramsUploadDir) *hand
 		return re
 	}
 
-	on := strings.TrimPrefix(p, params.dir+"/")
+	on := strings.TrimPrefix(p, params.dir+string(os.PathSeparator))
 	res := objects.Create(command.Ctx.ServiceClient, params.container, on, file, params.opts)
 	re.Err = res.Err
 
