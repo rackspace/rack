@@ -315,6 +315,20 @@
 			"local": "github.com/jrperritt/rack/internal/gopkg.in/ini.v1",
 			"revision": "177219109c97e7920c933e21c9b25f874357b237",
 			"revisionTime": "2015-03-19T00:52:36-04:00"
+		},
+		{
+			"canonical": "github.com/cenkalti/backoff",
+			"comment": "",
+			"local": "github.com/jrperritt/rack/internal/github.com/cenkalti/backoff",
+			"revision": "6c45d6bc1e78d94431dff8fc28a99f20bafa355a",
+			"revisionTime": "2015-08-13T10:09:15Z"
+		},
+		{
+			"canonical": "github.com/dustin/go-humanize",
+			"comment": "",
+			"local": "github.com/jrperritt/rack/internal/github.com/dustin/go-humanize",
+			"revision": "c128122e0b9b93799aef8181a537e5d8fd7081d6",
+			"revisionTime": "2015-08-13T10:09:15Z"
 		}
 	]
 }
