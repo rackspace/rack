@@ -58,6 +58,10 @@ func flagsUpload() []cli.Flag {
 			Name:  "content-encoding",
 			Usage: "[optional] The Content-Encoding header. By default, the uploaded content will be gzipped.",
 		},
+		cli.StringFlag{
+			Name:  "metadata",
+			Usage: "[optional] A comma-separated string a key=value pairs.",
+		},
 	}
 }
 
@@ -108,6 +112,14 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 
 	if c.IsSet("content-encoding") && c.String("content-encoding") != "gzip" {
 		opts.ContentEncoding = c.String("content-encoding")
+	}
+
+	if c.IsSet("metadata") {
+		metadata, err := command.Ctx.CheckKVFlag("metadata")
+		if err != nil {
+			return err
+		}
+		opts.Metadata = metadata
 	}
 
 	resource.Params = &paramsUpload{
