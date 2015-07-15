@@ -22,6 +22,17 @@ func Usage(commandPrefix, action, mandatoryFlags string) string {
 	return fmt.Sprintf("%s [GLOBALS] %s %s %s [OPTIONS]", Name, commandPrefix, action, mandatoryFlags)
 }
 
+// RemoveFromList removes an element from a slice and returns the slice.
+func RemoveFromList(list []string, item string) []string {
+	for i, element := range list {
+		if element == item {
+			list = append(list[:i], list[i+1:]...)
+			break
+		}
+	}
+	return list
+}
+
 // Contains checks whether a given string is in a provided slice of strings.
 func Contains(s []string, e string) bool {
 	for _, a := range s {
@@ -44,6 +55,7 @@ func RackDir() (string, error) {
 	return dirpath, err
 }
 
+// HomeDir returns the user's home directory, which is platform-dependent.
 func HomeDir() (string, error) {
 	var homeDir string
 	if runtime.GOOS == "windows" {
