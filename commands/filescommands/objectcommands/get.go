@@ -111,16 +111,7 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 }
 
 func (command *commandGet) CSV(resource *handler.Resource) {
-	keys := resource.Keys
-	res := resource.Result.(map[string]interface{})
-	if metadata, ok := res["Metadata"]; ok && util.Contains(keys, "Metadata") {
-		for k, v := range metadata.(map[string]string) {
-			res[k] = v
-			keys = append(keys, k)
-		}
-	}
-	delete(res, "Metadata")
-	resource.Keys = util.RemoveFromList(keys, "Metadata")
+	command.Context().HandleMetadata(resource)
 }
 
 func (command *commandGet) Table(resource *handler.Resource) {
