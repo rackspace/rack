@@ -125,7 +125,7 @@ func (command *commandUploadDir) HandleFlags(resource *handler.Resource) error {
 		container:   c.String("container"),
 		dir:         c.String("dir"),
 		opts:        opts,
-		concurrency: c.Int("concurrency"),
+		concurrency: conc,
 		quiet:       c.Bool("quiet"),
 	}
 
@@ -160,11 +160,12 @@ func (command *commandUploadDir) Execute(resource *handler.Resource) {
 
 	var wg sync.WaitGroup
 	var totalSize uint64
+	var totalFiles int64
 	start := time.Now()
 
 	for i := 0; i < params.concurrency; i++ {
 		wg.Add(1)
-		go func(totalSize *uint64) {
+		go func(totalSize *uint64, totalFiles *int64) {
 			for p := range jobs {
 				var re *handler.Resource
 
@@ -182,12 +183,15 @@ func (command *commandUploadDir) Execute(resource *handler.Resource) {
 				fi, err := os.Stat(p)
 				if err == nil {
 					*totalSize += uint64(fi.Size())
+					*totalFiles++
 				}
 
-				command.Ctx.Results <- re
+				if !params.quiet {
+					command.Ctx.Results <- re
+				}
 			}
 			wg.Done()
-		}(&totalSize)
+		}(&totalSize, &totalFiles)
 	}
 
 	filepath.Walk(params.dir, func(path string, info os.FileInfo, err error) error {
@@ -201,7 +205,7 @@ func (command *commandUploadDir) Execute(resource *handler.Resource) {
 	wg.Wait()
 	close(results)
 
-	resource.Result = fmt.Sprintf("Finished! %s uploaded in %s\n", humanize.Bytes(totalSize), humanize.RelTime(start, time.Now(), "", ""))
+	resource.Result = fmt.Sprintf("Finished! Uploaded %s files totaling %s in %s\n", humanize.Comma(totalFiles), humanize.Bytes(totalSize), humanize.RelTime(start, time.Now(), "", ""))
 }
 
 func (command *commandUploadDir) handle(p string, params *paramsUploadDir) *handler.Resource {
