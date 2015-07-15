@@ -164,7 +164,6 @@ func (command *commandList) Execute(resource *handler.Resource) {
 				return false, nil
 			}
 			limit -= len(info)
-			command.Ctx.WaitGroup.Add(1)
 			command.Ctx.Results <- resource
 			return true, nil
 		})

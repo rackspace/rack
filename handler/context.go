@@ -1,12 +1,8 @@
 package handler
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
-	"os"
 	"strings"
-	"sync"
 
 	"github.com/jrperritt/rack/auth"
 	"github.com/jrperritt/rack/internal/github.com/Sirupsen/logrus"
@@ -18,6 +14,7 @@ import (
 
 // Command is the type that commands have.
 type Command struct {
+	// See `Context`
 	Ctx *Context
 }
 
@@ -31,128 +28,14 @@ type Context struct {
 	ServiceClient *gophercloud.ServiceClient
 	// ServiceClientType is the type of Rackspace service client used (e.g. compute).
 	ServiceClientType string
-	// WaitGroup is used for synchronizing output.
-	WaitGroup *sync.WaitGroup
 	// Results is a channel into which commands send results. It allows for streaming
 	// output.
 	Results chan *Resource
-	// OutputFormat is the format in which the user wants the output. This is obtained
+	// outputFormat is the format in which the user wants the output. This is obtained
 	// from the `output` flag and will default to "table" if not provided.
-	OutputFormat string
-	// Logger is used to log information acquired while processing the command.
-	Logger *logrus.Logger
-}
-
-// ListenAndReceive creates the Results channel and processes the results that
-// come through it before sending them on to `Print`. It is run in a separate
-// goroutine from `main`.
-func (ctx *Context) ListenAndReceive() {
-	ctx.Results = make(chan *Resource)
-	go func() {
-		for {
-			select {
-			case resource, ok := <-ctx.Results:
-
-				if !ok {
-					ctx.Results = nil
-					continue
-				}
-
-				if resource.Err != nil {
-
-					ctx.CLIContext.App.Writer = os.Stderr
-					resource.Keys = []string{"error"}
-					var errorBody string
-
-					switch resource.Err.(type) {
-
-					case *gophercloud.UnexpectedResponseCodeError:
-						errBodyRaw := resource.Err.(*gophercloud.UnexpectedResponseCodeError).Body
-						errMap := make(map[string]map[string]interface{})
-						err := json.Unmarshal(errBodyRaw, &errMap)
-						if err != nil {
-							errorBody = string(errBodyRaw)
-							break
-						}
-						for _, v := range errMap {
-							errorBody = v["message"].(string)
-							break
-						}
-
-					default:
-						errorBody = resource.Err.Error()
-					}
-
-					resource.Result = map[string]interface{}{"error": errorBody}
-				}
-
-				if resource.Result == nil {
-					if args := ctx.CLIContext.Parent().Parent().Args(); len(args) > 0 {
-						resource.Result = fmt.Sprintf("Nothing to show. Maybe you'd like to set up some %ss?\n",
-							strings.Replace(args[0], "-", " ", -1))
-					} else {
-						resource.Result = fmt.Sprintf("Nothing to show.\n")
-					}
-				}
-
-				ctx.Print(resource)
-				if resource.ErrExit1 {
-					os.Exit(1)
-				}
-			}
-		}
-	}()
-}
-
-// Print returns the output to the user
-func (ctx *Context) Print(resource *Resource) {
-	defer ctx.WaitGroup.Done()
-
-	// limit the returned fields if any were given in the `fields` flag
-	keys := ctx.limitFields(resource)
-	w := ctx.CLIContext.App.Writer
-
-	switch resource.Result.(type) {
-	case map[string]interface{}:
-		m := resource.Result.(map[string]interface{})
-		m = onlyNonNil(m)
-		switch ctx.OutputFormat {
-		case "json":
-			output.MetadataJSON(w, m, keys)
-		case "csv":
-			output.MetadataCSV(w, m, keys)
-		default:
-			output.MetadataTable(w, m, keys)
-		}
-	case []map[string]interface{}:
-		ms := resource.Result.([]map[string]interface{})
-		for i, m := range ms {
-			ms[i] = onlyNonNil(m)
-		}
-		switch ctx.OutputFormat {
-		case "json":
-			output.ListJSON(w, ms, keys)
-		case "csv":
-			output.ListCSV(w, ms, keys)
-		default:
-			output.ListTable(w, ms, keys)
-		}
-	case io.Reader:
-		if _, ok := resource.Result.(io.ReadCloser); ok {
-			defer resource.Result.(io.ReadCloser).Close()
-		}
-		_, err := io.Copy(w, resource.Result.(io.Reader))
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error copying (io.Reader) result: %s\n", err)
-		}
-	default:
-		switch ctx.OutputFormat {
-		case "json":
-			output.DefaultJSON(w, resource.Result)
-		default:
-			fmt.Fprintf(w, "%v", resource.Result)
-		}
-	}
+	outputFormat string
+	// logger is used to log information acquired while processing the command.
+	logger *logrus.Logger
 }
 
 func onlyNonNil(m map[string]interface{}) map[string]interface{} {
@@ -166,7 +49,7 @@ func onlyNonNil(m map[string]interface{}) map[string]interface{} {
 
 // limitFields returns only the fields the user specified in the `fields` flag. If
 // the flag wasn't provided, all fields are returned.
-func (ctx *Context) limitFields(resource *Resource) []string {
+func (ctx *Context) limitFields(resource *Resource) {
 	if ctx.CLIContext.IsSet("fields") {
 		fields := strings.Split(strings.ToLower(ctx.CLIContext.String("fields")), ",")
 		newKeys := []string{}
@@ -175,14 +58,13 @@ func (ctx *Context) limitFields(resource *Resource) []string {
 				newKeys = append(newKeys, key)
 			}
 		}
-		return newKeys
+		resource.Keys = newKeys
 	}
-	return resource.Keys
 }
 
 // StoreCredentials caches the users auth credentials if available and the `no-cache`
 // flag was not provided.
-func (ctx *Context) StoreCredentials() {
+func (ctx *Context) storeCredentials() {
 	// if serviceClient is nil, the HTTP request for the command didn't get sent.
 	// don't set cache if the `no-cache` flag is provided
 	if ctx.ServiceClient != nil && !ctx.CLIContext.GlobalIsSet("no-cache") && !ctx.CLIContext.IsSet("no-cache") {
@@ -221,7 +103,7 @@ func (ctx *Context) handleLogging() error {
 			return fmt.Errorf("Invalid value for `log` flag: %s. Valid options are: debug, info", opt)
 		}
 	}
-	ctx.Logger = &logrus.Logger{
+	ctx.logger = &logrus.Logger{
 		Out:       ctx.CLIContext.App.Writer,
 		Formatter: &logrus.TextFormatter{},
 		Level:     level,
@@ -229,12 +111,11 @@ func (ctx *Context) handleLogging() error {
 	return nil
 }
 
-// ErrExit1 tells `rack` to print the error and exit.
-func (ctx *Context) ErrExit1(resource *Resource) {
-	resource.ErrExit1 = true
-	ctx.WaitGroup.Add(1)
+// errExit1 tells `rack` to print the error and exit.
+func (ctx *Context) errExit1(resource *Resource) {
+	resource.errExit1 = true
 	ctx.Results <- resource
-	ctx.WaitGroup.Wait()
+	close(ctx.Results)
 }
 
 // IDOrName is a function for retrieving a resources unique identifier based on
@@ -262,7 +143,7 @@ func (ctx *Context) IDOrName(idFromNameFunc func(*gophercloud.ServiceClient, str
 func (ctx *Context) CheckArgNum(expected int) error {
 	argsLen := len(ctx.CLIContext.Args())
 	if argsLen != expected {
-		return fmt.Errorf("Expected %d args but got %d\nUsage: %s", expected, argsLen, ctx.CLIContext.Command.Usage)
+		return fmt.Errorf("Expected %d args but got %d\nUsage: %s\n", expected, argsLen, ctx.CLIContext.Command.Usage)
 	}
 	return nil
 }
@@ -283,7 +164,7 @@ func (ctx *Context) checkOutputFormat() error {
 	default:
 		return fmt.Errorf("Invalid value for `output` flag: '%s'. Options are: json, csv, table.", outputFormat)
 	}
-	ctx.OutputFormat = outputFormat
+	ctx.outputFormat = outputFormat
 	return nil
 }
 
@@ -327,4 +208,18 @@ func (ctx *Context) CheckStructFlag(flagValues []string) ([]map[string]interface
 		valSliceMap[i] = m
 	}
 	return valSliceMap, nil
+}
+
+// HandleMetadata is used to flatten out a `map["metadata"]map[string]string`
+func (ctx *Context) HandleMetadata(resource *Resource) {
+	keys := resource.Keys
+	res := resource.Result.(map[string]interface{})
+	if metadata, ok := res["Metadata"]; ok && util.Contains(keys, "Metadata") {
+		for k, v := range metadata.(map[string]string) {
+			res[k] = v
+			keys = append(keys, k)
+		}
+	}
+	delete(res, "Metadata")
+	resource.Keys = util.RemoveFromList(keys, "Metadata")
 }

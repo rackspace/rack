@@ -87,15 +87,17 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	result := structs.Map(keypair)
-	if command.Ctx.OutputFormat == "json" {
-		resource.Result = result
-	} else {
-		// Assume they want the key directly
-		resource.Result = result["PublicKey"]
-	}
+	resource.Result = structs.Map(keypair)
 }
 
 func (command *commandGet) StdinField() string {
 	return "name"
+}
+
+func (command *commandGet) CSV(resource *handler.Resource) {
+	resource.Result = resource.Result.(map[string]interface{})["PublicKey"]
+}
+
+func (command *commandGet) Table(resource *handler.Resource) {
+	command.CSV(resource)
 }
