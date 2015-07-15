@@ -250,6 +250,9 @@ func processResult(command Commander, resource *Resource) {
 			resource.Result = fmt.Sprintf("Nothing to show.\n")
 		}
 	} else {
+		// limit the returned fields if any were given in the `fields` flag
+		ctx.limitFields(resource)
+
 		// apply any output-specific transformations on the result
 		switch ctx.outputFormat {
 		case "json":
@@ -265,9 +268,6 @@ func processResult(command Commander, resource *Resource) {
 				tabler.Table(resource)
 			}
 		}
-
-		// limit the returned fields if any were given in the `fields` flag
-		ctx.limitFields(resource)
 	}
 }
 
