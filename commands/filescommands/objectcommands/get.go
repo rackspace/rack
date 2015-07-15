@@ -32,7 +32,7 @@ func flagsGet() []cli.Flag {
 	}
 }
 
-var keysGet = []string{"Name", "ContentLength", "ContentType", "StaticLargeObject"}
+var keysGet = []string{"Name", "ContentLength", "ContentType", "StaticLargeObject", "Metadata"}
 
 type paramsGet struct {
 	container string
@@ -99,9 +99,12 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 		return
 	}
 	resource.Result = structs.Map(objectInfo)
+	//res := resource.Result.(map[string]interface{})
+	if metadata, ok := resource.Result.(map[string]interface{})["Metadata"]; ok {
+		for k, v := range metadata.(map[string]string) {
+			resource.Result.(map[string]interface{})[k] = v
+		}
+	}
+	delete(resource.Result.(map[string]interface{}), "Metadata")
 	resource.Result.(map[string]interface{})["Name"] = objectName
-}
-
-func (command *commandGet) StdinField() string {
-	return "name"
 }

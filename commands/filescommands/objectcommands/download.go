@@ -1,6 +1,7 @@
 package objectcommands
 
 import (
+	"io"
 	"io/ioutil"
 
 	"github.com/jrperritt/rack/handler"
@@ -85,14 +86,14 @@ func (command *commandDownload) Execute(resource *handler.Resource) {
 		resource.Err = rawResponse.Err
 		return
 	}
-	if command.Ctx.OutputFormat == "json" {
-		bytes, err := ioutil.ReadAll(rawResponse.Body)
-		if err != nil {
-			resource.Err = err
-			return
-		}
-		resource.Result = string(bytes)
-	} else {
-		resource.Result = rawResponse.Body
+	resource.Result = rawResponse.Body
+}
+
+func (command *commandDownload) JSON(resource *handler.Resource) {
+	bytes, err := ioutil.ReadAll(resource.Result.(io.Reader))
+	if err != nil {
+		resource.Err = err
+		return
 	}
+	resource.Result = string(bytes)
 }

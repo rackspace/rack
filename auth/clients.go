@@ -51,7 +51,7 @@ func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger) (*goph
 			pc.TokenID = creds.TokenID
 			pc.ReauthFunc = reauthFunc(pc, *ao)
 			pc.UserAgent.Prepend(util.UserAgent)
-			pc.HTTPClient = NewHTTPClient()
+			pc.HTTPClient = newHTTPClient()
 			return &gophercloud.ServiceClient{
 				ProviderClient: pc,
 				Endpoint:       creds.ServiceEndpoint,
@@ -70,7 +70,7 @@ func authFromScratch(ao gophercloud.AuthOptions, region, serviceType string, log
 	if err != nil {
 		return nil, err
 	}
-	pc.HTTPClient = NewHTTPClient()
+	pc.HTTPClient = newHTTPClient()
 	var sc *gophercloud.ServiceClient
 	switch serviceType {
 	case "compute":
@@ -198,9 +198,9 @@ type LogRoundTripper struct {
 	rt     http.RoundTripper
 }
 
-// NewHTTPClient return a custom HTTP client that allows for logging relevant
+// newHTTPClient return a custom HTTP client that allows for logging relevant
 // information before and after the HTTP request.
-func NewHTTPClient() http.Client {
+func newHTTPClient() http.Client {
 	return http.Client{
 		Transport: &LogRoundTripper{
 			rt: http.DefaultTransport,
@@ -225,6 +225,8 @@ func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, er
 	if err != nil {
 		return response, err
 	}
+
+	lrt.Logger.Debugf("Response Status: %s\n", response.Status)
 
 	info, err := json.MarshalIndent(response.Header, "", "  ")
 	if err != nil {

@@ -93,24 +93,20 @@ func (command *commandGenerate) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-
-	if command.Ctx.OutputFormat == "json" || command.Ctx.OutputFormat == "csv" {
-		resource.Result = structs.Map(keypair)
-	} else {
-		resource.Result = printGenerate(keypair)
-	}
+	resource.Result = structs.Map(keypair)
 }
 
 func (command *commandGenerate) StdinField() string {
 	return "name"
 }
 
-func printGenerate(kp *osKeypairs.KeyPair) string {
+func (command *commandGenerate) Table(resource *handler.Resource) {
 	output := []string{"PROPERTY\tVALUE",
 		"Name\t\t%s",
 		"Fingerprint\t%s",
 		"PublicKey\t%s",
 		"PrivateKey:\n%s",
 	}
-	return fmt.Sprintf(strings.Join(output, "\n"), kp.Name, kp.Fingerprint, kp.PublicKey, kp.PrivateKey)
+	kp := resource.Result.(map[string]interface{})
+	resource.Result = fmt.Sprintf(strings.Join(output, "\n"), kp["Name"], kp["Fingerprint"], kp["PublicKey"], kp["PrivateKey"])
 }
