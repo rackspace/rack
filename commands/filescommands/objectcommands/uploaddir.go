@@ -20,7 +20,7 @@ import (
 
 var uploadDir = cli.Command{
 	Name:        "upload-dir",
-	Usage:       util.Usage(commandPrefix, "upload-dir", "--container <containerName> --dir <dirName>"),
+	Usage:       util.Usage(commandPrefix, "upload-dir", "--container <containerName> [--dir <dirName> | --stdin dir]"),
 	Description: "Uploads the contents of a local directory to a container",
 	Action:      actionUploadDir,
 	Flags:       util.CommandFlags(flagsUploadDir, keysUploadDir),
@@ -33,11 +33,15 @@ func flagsUploadDir() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "container",
-			Usage: "[required] The name of the container to upload the object upload",
+			Usage: "[required] The name of the container to upload the objects.",
 		},
 		cli.StringFlag{
 			Name:  "dir",
-			Usage: "[required] The name the local directory which will be uploaded",
+			Usage: "[optional; required if `stdin` isn't provided] The name the local directory which will be uploaded.",
+		},
+		cli.StringFlag{
+			Name:  "stdin",
+			Usage: "[optional; required if `dir` isn't provided] The field being piped to STDIN. Valid values are: dir.",
 		},
 		cli.StringFlag{
 			Name:  "content-type",
@@ -51,17 +55,13 @@ func flagsUploadDir() []cli.Flag {
 			Name:  "content-encoding",
 			Usage: "[optional] The Content-Encoding header that will be set on all objects. By default, the uploaded content will be gzipped.",
 		},
-		cli.StringFlag{
-			Name:  "stdin",
-			Usage: "[optional; required if `dir` isn't provided] The field being piped to STDIN. Valid values are: dir",
-		},
 		cli.IntFlag{
 			Name:  "concurrency",
 			Usage: "[optional] The amount of concurrent workers that will upload the directory.",
 		},
 		cli.BoolFlag{
 			Name:  "quiet",
-			Usage: "[optional] By default every file upload will be outputted. If --quiet is provided, only a final summary will be outputted.",
+			Usage: "[optional] By default, every file upload will be outputted. If --quiet is provided, only a final summary will be outputted.",
 		},
 	}
 }
@@ -118,7 +118,7 @@ func (command *commandUploadDir) HandleFlags(resource *handler.Resource) error {
 
 	conc := c.Int("concurrency")
 	if conc <= 0 {
-		conc = 5
+		conc = 100
 	}
 
 	resource.Params = &paramsUploadDir{
@@ -162,14 +162,6 @@ func (command *commandUploadDir) Execute(resource *handler.Resource) {
 	var totalSize uint64
 	start := time.Now()
 
-	go func() {
-		for r := range results {
-			command.Ctx.WaitGroup.Add(1)
-			command.Ctx.Results <- r
-		}
-		command.Ctx.WaitGroup.Wait()
-	}()
-
 	for i := 0; i < params.concurrency; i++ {
 		wg.Add(1)
 		go func(totalSize *uint64) {
@@ -192,7 +184,7 @@ func (command *commandUploadDir) Execute(resource *handler.Resource) {
 					*totalSize += uint64(fi.Size())
 				}
 
-				results <- re
+				command.Ctx.Results <- re
 			}
 			wg.Done()
 		}(&totalSize)
