@@ -90,8 +90,6 @@ func Handle(command Commander) {
 	ctx := command.Context()
 	ctx.ServiceClientType = command.ServiceClientType()
 	ctx.Results = make(chan *Resource)
-	//go func() {
-	//}()
 
 	resource := &Resource{
 		Keys: command.Keys(),
