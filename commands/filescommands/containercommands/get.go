@@ -32,7 +32,8 @@ func flagsGet() []cli.Flag {
 	}
 }
 
-var keysGet = []string{"Name", "ObjectCount", "BytesUsed", "ContentLength"}
+var keysGet = []string{"Name", "ObjectCount", "BytesUsed", "ContentLength", "AcceptRanges",
+	"ContentType", "Read", "Write", "TransID", "VersionsLocation", "Metadata"}
 
 type paramsGet struct {
 	container string
@@ -83,15 +84,30 @@ func (command *commandGet) HandleSingle(resource *handler.Resource) error {
 
 func (command *commandGet) Execute(resource *handler.Resource) {
 	containerName := resource.Params.(*paramsGet).container
-	containerInfo, err := containers.Get(command.Ctx.ServiceClient, containerName).Extract()
+	containerRaw := containers.Get(command.Ctx.ServiceClient, containerName)
+	containerInfo, err := containerRaw.Extract()
+	if err != nil {
+		resource.Err = err
+		return
+	}
+	containerMetadata, err := containerRaw.ExtractMetadata()
 	if err != nil {
 		resource.Err = err
 		return
 	}
 	resource.Result = structs.Map(containerInfo)
 	resource.Result.(map[string]interface{})["Name"] = containerName
+	resource.Result.(map[string]interface{})["Metadata"] = containerMetadata
 }
 
 func (command *commandGet) StdinField() string {
 	return "name"
+}
+
+func (command *commandGet) CSV(resource *handler.Resource) {
+	command.Context().HandleMetadata(resource)
+}
+
+func (command *commandGet) Table(resource *handler.Resource) {
+	command.CSV(resource)
 }
