@@ -111,13 +111,6 @@ func (ctx *Context) handleLogging() error {
 	return nil
 }
 
-// errExit1 tells `rack` to print the error and exit.
-func (ctx *Context) errExit1(resource *Resource) {
-	resource.errExit1 = true
-	ctx.Results <- resource
-	close(ctx.Results)
-}
-
 // IDOrName is a function for retrieving a resources unique identifier based on
 // whether he or she passed an `id` or a `name` flag.
 func (ctx *Context) IDOrName(idFromNameFunc func(*gophercloud.ServiceClient, string) (string, error)) (string, error) {

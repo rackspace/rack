@@ -25,9 +25,6 @@ type Resource struct {
 	Params interface{}
 	// Result will store the result of a single command.
 	Result interface{}
-	// errExit1 will be true if an error was encountered for which the program should
-	// exit.
-	errExit1 bool
 	// Err will store any error encountered while processing the command.
 	Err error
 }
@@ -101,25 +98,25 @@ func Handle(command Commander) {
 	err := ctx.CheckArgNum(0)
 	if err != nil {
 		resource.Err = err
-		ctx.errExit1(resource)
+		errExit1(command, resource)
 	}
 
 	err = ctx.checkOutputFormat()
 	if err != nil {
 		resource.Err = err
-		ctx.errExit1(resource)
+		errExit1(command, resource)
 	}
 
 	err = ctx.handleLogging()
 	if err != nil {
 		resource.Err = err
-		ctx.errExit1(resource)
+		errExit1(command, resource)
 	}
 
 	client, err := auth.NewClient(ctx.CLIContext, ctx.ServiceClientType, ctx.logger)
 	if err != nil {
 		resource.Err = err
-		ctx.errExit1(resource)
+		errExit1(command, resource)
 	}
 	client.HTTPClient.Transport.(*auth.LogRoundTripper).Logger = ctx.logger
 	ctx.ServiceClient = client
@@ -127,7 +124,7 @@ func Handle(command Commander) {
 	err = command.HandleFlags(resource)
 	if err != nil {
 		resource.Err = err
-		ctx.errExit1(resource)
+		errExit1(command, resource)
 	}
 
 	go handleExecute(command, resource)
@@ -135,9 +132,6 @@ func Handle(command Commander) {
 	for resource := range ctx.Results {
 		processResult(command, resource)
 		printResult(command, resource)
-		if resource.errExit1 {
-			os.Exit(1)
-		}
 	}
 
 	ctx.storeCredentials()
@@ -184,21 +178,21 @@ func handleExecute(command Commander, resource *Resource) {
 					}
 					if scanner.Err() != nil {
 						resource.Err = scanner.Err()
-						ctx.errExit1(resource)
+						errExit1(command, resource)
 					}
 					wg.Wait()
 					close(ctx.Results)
 				}
 			} else {
 				resource.Err = fmt.Errorf("Unknown STDIN field: %s\n", stdinField)
-				ctx.errExit1(resource)
+				errExit1(command, resource)
 			}
 		} else {
 			go func() {
 				err := pipeableCommand.HandleSingle(resource)
 				if err != nil {
 					resource.Err = err
-					ctx.errExit1(resource)
+					errExit1(command, resource)
 				}
 				command.Execute(resource)
 				ctx.Results <- resource
@@ -316,4 +310,11 @@ func printResult(command Commander, resource *Resource) {
 			fmt.Fprintf(w, "%v\n", resource.Result)
 		}
 	}
+}
+
+// errExit1 tells `rack` to print the error and exit.
+func errExit1(command Commander, resource *Resource) {
+	processResult(command, resource)
+	printResult(command, resource)
+	os.Exit(1)
 }
