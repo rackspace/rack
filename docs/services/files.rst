@@ -40,6 +40,12 @@ Usage::
     rack files container get --name <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files container get --stdin name [optional flags]
 
+``update``
+^^^^^^^^^^
+Usage::
+
+    rack files container update --name <containerName> [optional flags]
+
 ``delete``
 ^^^^^^^^^^
 Usage::
