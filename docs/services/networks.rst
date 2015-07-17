@@ -30,7 +30,7 @@ Usage::
 ^^^^^^^^^^
 Usage::
 
-    rack networks network create [optional flags]
+    rack networks network create --name <networkName> [optional flags]
     (echo networkName1 && echo networkName2) | rack networks network create --stdin name [optional flags]
 
 ``get``
