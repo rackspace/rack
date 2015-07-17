@@ -100,6 +100,13 @@ func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
 func (command *commandUpdate) Execute(resource *handler.Resource) {
 	params := resource.Params.(*paramsUpdate)
 	containerName := params.container
+
+	containerRaw := containers.Get(command.Ctx.ServiceClient, containerName)
+	if containerRaw.Err != nil {
+		resource.Err = containerRaw.Err
+		return
+	}
+
 	opts := params.opts
 	rawResponse := containers.Update(command.Ctx.ServiceClient, containerName, opts)
 	if rawResponse.Err != nil {
