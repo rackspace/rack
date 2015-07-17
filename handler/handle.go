@@ -39,17 +39,17 @@ type PipeHandler interface {
 	StdinField() string
 }
 
-// PreJSONer is an interface that commands will satisfy if they have a `JSON` method.
+// PreJSONer is an interface that commands will satisfy if they have a `PreJSON` method.
 type PreJSONer interface {
 	PreJSON(*Resource)
 }
 
-// PreCSVer is an interface that commands will satisfy if they have a `CSV` method.
+// PreCSVer is an interface that commands will satisfy if they have a `PreCSV` method.
 type PreCSVer interface {
 	PreCSV(*Resource)
 }
 
-// PreTabler is an interface that commands will satisfy if they have a `Table` method.
+// PreTabler is an interface that commands will satisfy if they have a `PreTable` method.
 type PreTabler interface {
 	PreTable(*Resource)
 }
@@ -254,6 +254,10 @@ func printResult(command Commander, resource *Resource) {
 	ctx := command.Context()
 	w := ctx.CLIContext.App.Writer
 	keys := resource.Keys
+	noHeader := false
+	if command.Context().CLIContext.IsSet("no-header") {
+		noHeader = true
+	}
 	switch resource.Result.(type) {
 	case map[string]interface{}:
 		m := resource.Result.(map[string]interface{})
@@ -262,7 +266,7 @@ func printResult(command Commander, resource *Resource) {
 		case "json":
 			output.MetadataJSON(w, m, keys)
 		case "csv":
-			output.MetadataCSV(w, m, keys)
+			output.MetadataCSV(w, m, keys, noHeader)
 		default:
 			output.MetadataTable(w, m, keys)
 		}
@@ -275,9 +279,9 @@ func printResult(command Commander, resource *Resource) {
 		case "json":
 			output.ListJSON(w, ms, keys)
 		case "csv":
-			output.ListCSV(w, ms, keys)
+			output.ListCSV(w, ms, keys, noHeader)
 		default:
-			output.ListTable(w, ms, keys)
+			output.ListTable(w, ms, keys, noHeader)
 		}
 	case io.Reader:
 		if _, ok := resource.Result.(io.ReadCloser); ok {
