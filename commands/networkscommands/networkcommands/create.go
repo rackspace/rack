@@ -10,7 +10,7 @@ import (
 
 var create = cli.Command{
 	Name:        "create",
-	Usage:       util.Usage(commandPrefix, "create", ""),
+	Usage:       util.Usage(commandPrefix, "create", "--name <networkName>"),
 	Description: "Creates a new networks instance",
 	Action:      actionCreate,
 	Flags:       util.CommandFlags(flagsCreate, keysCreate),
@@ -23,7 +23,7 @@ func flagsCreate() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "name",
-			Usage: "[optional] The name that the network should have.",
+			Usage: "[required] The name that the network should have.",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
@@ -98,8 +98,11 @@ func (command *commandCreate) HandlePipe(resource *handler.Resource, item string
 }
 
 func (command *commandCreate) HandleSingle(resource *handler.Resource) error {
-	name := command.Ctx.CLIContext.String("name")
-	resource.Params.(*paramsCreate).opts.Name = name
+	err := command.Ctx.CheckFlagsSet([]string{"name"})
+	if err != nil {
+		return err
+	}
+	resource.Params.(*paramsCreate).opts.Name = command.Ctx.CLIContext.String("name")
 	return nil
 }
 
