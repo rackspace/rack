@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-	"sync"
 	"testing"
 
 	"github.com/jrperritt/rack/handler"
@@ -22,7 +21,6 @@ import (
 func newUpDirCmd(fs *flag.FlagSet) *commandUploadDir {
 	return &commandUploadDir{Ctx: &handler.Context{
 		CLIContext: cli.NewContext(cli.NewApp(), fs, nil),
-		WaitGroup:  &sync.WaitGroup{},
 	}}
 }
 
@@ -88,16 +86,17 @@ func TestUploadDirExecute(t *testing.T) {
 
 	fs.String("container", "", "")
 	fs.String("dir", "", "")
+	fs.String("quiet", "", "")
 
 	fs.Set("container", "foo")
 	fs.Set("dir", rootDirFix)
+	fs.Set("quiet", "true")
 
 	cmd := newUpDirCmd(fs)
 	cmd.Ctx.ServiceClient = client.ServiceClient()
 
-	res := &handler.Resource{
-		Params: &paramsUploadDir{container: "foo", dir: rootDirFix},
-	}
+	res := &handler.Resource{}
+	cmd.HandleFlags(res)
 
 	cmd.Execute(res)
 
