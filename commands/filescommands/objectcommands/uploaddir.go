@@ -63,6 +63,10 @@ func flagsUploadDir() []cli.Flag {
 			Name:  "quiet",
 			Usage: "[optional] By default, every file upload will be outputted. If --quiet is provided, only a final summary will be outputted.",
 		},
+		cli.BoolFlag{
+			Name:  "recurse",
+			Usage: "[optional] By default, only files at the root level of the specified directory are uploaded. If --recurse is provided, the upload will be fully recursive and the entire subtree uploaded.",
+		},
 	}
 }
 
@@ -75,6 +79,7 @@ type paramsUploadDir struct {
 	opts        objects.CreateOpts
 	concurrency int
 	quiet       bool
+	recurse     bool
 }
 
 type commandUploadDir handler.Command
@@ -127,6 +132,7 @@ func (command *commandUploadDir) HandleFlags(resource *handler.Resource) error {
 		opts:        opts,
 		concurrency: conc,
 		quiet:       c.Bool("quiet"),
+		recurse:     c.Bool("recurse"),
 	}
 
 	return nil
@@ -206,6 +212,9 @@ func (command *commandUploadDir) Execute(resource *handler.Resource) {
 	}
 
 	filepath.Walk(params.dir, func(path string, info os.FileInfo, err error) error {
+		if !params.recurse && strings.Contains(strings.TrimPrefix(path, params.dir+"/"), string(os.PathSeparator)) {
+			return nil
+		}
 		if !info.IsDir() {
 			jobs <- path
 		}
@@ -216,7 +225,7 @@ func (command *commandUploadDir) Execute(resource *handler.Resource) {
 	wg.Wait()
 	close(results)
 
-	resource.Result = fmt.Sprintf("Finished! Uploaded %s files totaling %s in %s\n", humanize.Comma(totalFiles), humanize.Bytes(totalSize), humanize.RelTime(start, time.Now(), "", ""))
+	resource.Result = fmt.Sprintf("Finished! Uploaded %s %s totaling %s in %s\n", humanize.Comma(totalFiles), util.Pluralize("object", totalFiles), humanize.Bytes(totalSize), humanize.RelTime(start, time.Now(), "", ""))
 }
 
 func (command *commandUploadDir) handle(p string, params *paramsUploadDir) *handler.Resource {
