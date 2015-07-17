@@ -14,21 +14,6 @@ import (
 	"github.com/jrperritt/rack/output"
 )
 
-// Resource is a general resource from Rackspace. This object stores information
-// about a single request and response from Rackspace.
-type Resource struct {
-	// Keys are the fields available to output. These may be limited by the `fields`
-	// flag.
-	Keys []string
-	// Params will be the command-specific parameters, such as an instance ID or
-	// list options.
-	Params interface{}
-	// Result will store the result of a single command.
-	Result interface{}
-	// Err will store any error encountered while processing the command.
-	Err error
-}
-
 // StreamPipeHandler is an interface that commands implement if they can stream input
 // from STDIN.
 type StreamPipeHandler interface {
@@ -54,19 +39,19 @@ type PipeHandler interface {
 	StdinField() string
 }
 
-// JSONer is an interface that commands will satisfy if they have a `JSON` method.
-type JSONer interface {
-	JSON(*Resource)
+// PreJSONer is an interface that commands will satisfy if they have a `JSON` method.
+type PreJSONer interface {
+	PreJSON(*Resource)
 }
 
-// CSVer is an interface that commands will satisfy if they have a `CSV` method.
-type CSVer interface {
-	CSV(*Resource)
+// PreCSVer is an interface that commands will satisfy if they have a `CSV` method.
+type PreCSVer interface {
+	PreCSV(*Resource)
 }
 
-// Tabler is an interface that commands will satisfy if they have a `Table` method.
-type Tabler interface {
-	Table(*Resource)
+// PreTabler is an interface that commands will satisfy if they have a `Table` method.
+type PreTabler interface {
+	PreTable(*Resource)
 }
 
 // Commander is an interface that all commands implement.
@@ -250,16 +235,16 @@ func processResult(command Commander, resource *Resource) {
 		// apply any output-specific transformations on the result
 		switch ctx.outputFormat {
 		case "json":
-			if jsoner, ok := command.(JSONer); ok {
-				jsoner.JSON(resource)
+			if jsoner, ok := command.(PreJSONer); ok {
+				jsoner.PreJSON(resource)
 			}
 		case "csv":
-			if csver, ok := command.(CSVer); ok {
-				csver.CSV(resource)
+			if csver, ok := command.(PreCSVer); ok {
+				csver.PreCSV(resource)
 			}
 		default:
-			if tabler, ok := command.(Tabler); ok {
-				tabler.Table(resource)
+			if tabler, ok := command.(PreTabler); ok {
+				tabler.PreTable(resource)
 			}
 		}
 	}
