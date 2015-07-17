@@ -17,14 +17,22 @@ type Resource struct {
 	Err error
 }
 
-// FlattenMap is used to flatten out a `map[string]map[string]interface{}`
+// FlattenMap is used to flatten out a `map[string]map[string]*`
 func (resource *Resource) FlattenMap(key string) {
 	keys := resource.Keys
 	res := resource.Result.(map[string]interface{})
 	if m, ok := res[key]; ok && util.Contains(keys, key) {
-		for k, v := range m.(map[string]interface{}) {
-			res[k] = v
-			keys = append(keys, k)
+		switch m.(type) {
+		case map[string]interface{}:
+			for k, v := range m.(map[string]interface{}) {
+				res[k] = v
+				keys = append(keys, k)
+			}
+		case map[string]string:
+			for k, v := range m.(map[string]string) {
+				res[k] = v
+				keys = append(keys, k)
+			}
 		}
 	}
 	delete(res, key)
