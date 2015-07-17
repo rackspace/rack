@@ -151,10 +151,21 @@ func (command *commandUploadDir) HandleSingle(resource *handler.Resource) error 
 }
 
 func (command *commandUploadDir) Execute(resource *handler.Resource) {
+	params := resource.Params.(*paramsUploadDir)
+
+	stat, err := os.Stat(params.dir)
+	if err != nil {
+		resource.Err = err
+		return
+	}
+	if !stat.IsDir() {
+		resource.Err = fmt.Errorf("%s is not a directory, ignoring", params.dir)
+		return
+	}
+
 	// bump thread count to number of available CPUs
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	params := resource.Params.(*paramsUploadDir)
 	jobs := make(chan string)
 	results := make(chan *handler.Resource)
 

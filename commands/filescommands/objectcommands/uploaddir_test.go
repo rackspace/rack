@@ -2,6 +2,7 @@ package objectcommands
 
 import (
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -59,6 +60,32 @@ func TestUploadDirErrWhenDirMissing(t *testing.T) {
 	th.AssertDeepEquals(t, expected, err)
 }
 
+func TestWarningEmittedForNonDirs(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+
+	fs := flag.NewFlagSet("flags", 1)
+
+	_, filename, _, _ := runtime.Caller(0)
+
+	fs.String("container", "", "")
+	fs.String("dir", "", "")
+	fs.Set("container", "foo")
+	fs.Set("dir", filename)
+
+	cmd := newUpDirCmd(fs)
+	cmd.Ctx.ServiceClient = client.ServiceClient()
+
+	res := &handler.Resource{}
+	cmd.HandleFlags(res)
+	cmd.Execute(res)
+
+	fmt.Println(filename)
+
+	err := fmt.Errorf("%s is not a directory, ignoring", filename)
+	th.AssertDeepEquals(t, err, res.Err)
+}
+
 func TestUploadDirExecute(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
@@ -97,7 +124,6 @@ func TestUploadDirExecute(t *testing.T) {
 
 	res := &handler.Resource{}
 	cmd.HandleFlags(res)
-
 	cmd.Execute(res)
 
 	th.AssertNoErr(t, res.Err)
