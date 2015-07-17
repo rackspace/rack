@@ -106,7 +106,7 @@ func (command *commandUploadDir) ServiceClientType() string {
 }
 
 func (command *commandUploadDir) HandleFlags(resource *handler.Resource) error {
-	if err := command.Ctx.CheckFlagsSet([]string{"container", "dir"}); err != nil {
+	if err := command.Ctx.CheckFlagsSet([]string{"container"}); err != nil {
 		return err
 	}
 
@@ -212,7 +212,9 @@ func (command *commandUploadDir) Execute(resource *handler.Resource) {
 	}
 
 	filepath.Walk(params.dir, func(path string, info os.FileInfo, err error) error {
-		if !params.recurse && strings.Contains(strings.TrimPrefix(path, params.dir+"/"), string(os.PathSeparator)) {
+		pathSep := string(os.PathSeparator)
+		parent := filepath.Clean(params.dir)
+		if !params.recurse && strings.Contains(strings.TrimPrefix(path, parent+pathSep), pathSep) {
 			return nil
 		}
 		if !info.IsDir() {
@@ -225,7 +227,7 @@ func (command *commandUploadDir) Execute(resource *handler.Resource) {
 	wg.Wait()
 	close(results)
 
-	resource.Result = fmt.Sprintf("Finished! Uploaded %s %s totaling %s in %s\n", humanize.Comma(totalFiles), util.Pluralize("object", totalFiles), humanize.Bytes(totalSize), humanize.RelTime(start, time.Now(), "", ""))
+	resource.Result = fmt.Sprintf("Finished! Uploaded %s %s totaling %s in %s", humanize.Comma(totalFiles), util.Pluralize("object", totalFiles), humanize.Bytes(totalSize), humanize.RelTime(start, time.Now(), "", ""))
 }
 
 func (command *commandUploadDir) handle(p string, params *paramsUploadDir) *handler.Resource {
@@ -247,7 +249,7 @@ func (command *commandUploadDir) handle(p string, params *paramsUploadDir) *hand
 		if params.quiet == true {
 			re.Result = ""
 		} else {
-			re.Result = fmt.Sprintf("Uploaded %s to %s\n", on, params.container)
+			re.Result = fmt.Sprintf("Uploaded %s to %s", on, params.container)
 		}
 	}
 
