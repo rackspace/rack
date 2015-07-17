@@ -73,6 +73,12 @@ func (command *commandUpdate) ServiceClientType() string {
 
 func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
 	c := command.Ctx.CLIContext
+
+	err := command.Ctx.CheckFlagsSet([]string{"name"})
+	if err != nil {
+		return err
+	}
+
 	opts := containers.UpdateOpts{
 		ContainerRead:  c.String("container-read"),
 		ContainerWrite: c.String("container-write"),
@@ -85,17 +91,9 @@ func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
 		opts.Metadata = metadata
 	}
 	resource.Params = &paramsUpdate{
-		opts: opts,
+		container: c.String("name"),
+		opts:      opts,
 	}
-	return nil
-}
-
-func (command *commandUpdate) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"name"})
-	if err != nil {
-		return err
-	}
-	resource.Params.(*paramsCreate).container = command.Ctx.CLIContext.String("name")
 	return nil
 }
 
