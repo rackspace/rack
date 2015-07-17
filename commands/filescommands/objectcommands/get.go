@@ -110,10 +110,10 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 	resource.Result.(map[string]interface{})["Metadata"] = objectMetadata
 }
 
-func (command *commandGet) CSV(resource *handler.Resource) {
-	command.Context().HandleMetadata(resource)
+func (command *commandGet) PreCSV(resource *handler.Resource) {
+	resource.FlattenMap("Metadata")
 }
 
-func (command *commandGet) Table(resource *handler.Resource) {
-	command.CSV(resource)
+func (command *commandGet) PreTable(resource *handler.Resource) {
+	command.PreCSV(resource)
 }

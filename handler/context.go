@@ -202,17 +202,3 @@ func (ctx *Context) CheckStructFlag(flagValues []string) ([]map[string]interface
 	}
 	return valSliceMap, nil
 }
-
-// HandleMetadata is used to flatten out a `map["metadata"]map[string]string`
-func (ctx *Context) HandleMetadata(resource *Resource) {
-	keys := resource.Keys
-	res := resource.Result.(map[string]interface{})
-	if metadata, ok := res["Metadata"]; ok && util.Contains(keys, "Metadata") {
-		for k, v := range metadata.(map[string]string) {
-			res[k] = v
-			keys = append(keys, k)
-		}
-	}
-	delete(res, "Metadata")
-	resource.Keys = util.RemoveFromList(keys, "Metadata")
-}
