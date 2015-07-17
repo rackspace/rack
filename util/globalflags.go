@@ -38,5 +38,9 @@ func GlobalFlags() []cli.Flag {
 			Name:  "log",
 			Usage: "Print debug information from the command. Options are: debug, info",
 		},
+		cli.BoolFlag{
+			Name:  "no-header",
+			Usage: "Don't return a header for CSV nor tabular output.",
+		},
 	}
 }

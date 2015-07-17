@@ -8,10 +8,12 @@ import (
 )
 
 // ListTable writes a table composed of keys as the header with values from many
-func ListTable(writer io.Writer, many []map[string]interface{}, keys []string) {
+func ListTable(writer io.Writer, many []map[string]interface{}, keys []string, noHeader bool) {
 	w := tabwriter.NewWriter(writer, 0, 8, 1, '\t', 0)
-	// Write the header
-	fmt.Fprintln(w, strings.Join(keys, "\t"))
+	if !noHeader {
+		// Write the header
+		fmt.Fprintln(w, strings.Join(keys, "\t"))
+	}
 	for _, m := range many {
 		f := []string{}
 		for _, key := range keys {
