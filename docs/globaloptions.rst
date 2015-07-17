@@ -134,6 +134,11 @@ This presents a compact format with appropriate CSV headers.
 
   (boolean) Don't get or set authentication credentials in the rack cache.
 
+``--no-header``
+~~~~~~~~~~~~~~~
+
+  (boolean) Don't set the header for CSV nor tabular output.
+
 ``--help, -h``
 ~~~~~~~~~~~~~~
 
