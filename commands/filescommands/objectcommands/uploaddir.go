@@ -48,14 +48,6 @@ func flagsUploadDir() []cli.Flag {
 			Usage: "[optional] The Content-Type header that will be set on all objects.",
 		},
 		cli.IntFlag{
-			Name:  "content-length",
-			Usage: "[optional] The Content-Length header that will be set on all objects.",
-		},
-		cli.StringFlag{
-			Name:  "content-encoding",
-			Usage: "[optional] The Content-Encoding header that will be set on all objects. By default, the uploaded content will be gzipped.",
-		},
-		cli.IntFlag{
 			Name:  "concurrency",
 			Usage: "[optional] The amount of concurrent workers that will upload the directory.",
 		},
@@ -113,12 +105,7 @@ func (command *commandUploadDir) HandleFlags(resource *handler.Resource) error {
 	c := command.Ctx.CLIContext
 
 	opts := objects.CreateOpts{
-		ContentLength: int64(c.Int("content-length")),
-		ContentType:   c.String("content-type"),
-	}
-
-	if c.IsSet("content-encoding") && c.String("content-encoding") != "gzip" {
-		opts.ContentEncoding = c.String("content-encoding")
+		ContentType: c.String("content-type"),
 	}
 
 	conc := c.Int("concurrency")
