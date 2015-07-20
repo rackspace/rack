@@ -73,6 +73,14 @@ Usage::
     rack files object upload --container <containerName> --name <objectName> --file <fileToUpload> [optional flags]
     cat fileToUpload.txt | rack files object upload --container <containerName> --name <objectName> --stdin content [optional flags]
 
+``upload-dir``
+^^^^^^^^^^^^^^
+
+Usage::
+
+    rack files object upload-dir --container <containerName> --dir <dirPath> [optional flags]
+    find . -type d -name "something*" | rack files object upload-dir --container <containerName> --stdin dir [optional flags]
+
 ``download``
 ^^^^^^^^
 Usage::

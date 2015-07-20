@@ -71,3 +71,12 @@ func HomeDir() (string, error) {
 	}
 	return homeDir, nil
 }
+
+// Pluralize will plurarize a given noun according to its number. For example,
+// 0 servers were deleted; 1 account updated.
+func Pluralize(noun string, count int64) string {
+	if count != 1 {
+		noun += "s"
+	}
+	return noun
+}
