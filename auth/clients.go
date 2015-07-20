@@ -23,6 +23,14 @@ func reauthFunc(pc *gophercloud.ProviderClient, ao gophercloud.AuthOptions) func
 	}
 }
 
+func URLTypeFromCtx(c *cli.Context) gophercloud.Availability {
+	urlType := gophercloud.AvailabilityPublic
+	if c.GlobalIsSet("internal") {
+		urlType = gophercloud.AvailabilityInternal
+	}
+	return urlType
+}
+
 // NewClient creates and returns a Rackspace client for the given service.
 func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger) (*gophercloud.ServiceClient, error) {
 	// get the user's authentication credentials
@@ -31,12 +39,14 @@ func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger) (*goph
 		return nil, err
 	}
 
+	urlType := URLTypeFromCtx(c)
+
 	if c.GlobalIsSet("no-cache") || c.IsSet("no-cache") {
-		return authFromScratch(*ao, region, serviceType, logger)
+		return authFromScratch(*ao, region, serviceType, urlType, logger)
 	}
 
 	// form the cache key
-	cacheKey := CacheKey(*ao, region, serviceType)
+	cacheKey := CacheKey(*ao, region, serviceType, urlType)
 	// initialize cache
 	cache := &Cache{}
 	// get the value from the cache
@@ -58,13 +68,13 @@ func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger) (*goph
 			}, nil
 		}
 	} else {
-		return authFromScratch(*ao, region, serviceType, logger)
+		return authFromScratch(*ao, region, serviceType, urlType, logger)
 	}
 
 	return nil, nil
 }
 
-func authFromScratch(ao gophercloud.AuthOptions, region, serviceType string, logger *logrus.Logger) (*gophercloud.ServiceClient, error) {
+func authFromScratch(ao gophercloud.AuthOptions, region, serviceType string, urlType gophercloud.Availability, logger *logrus.Logger) (*gophercloud.ServiceClient, error) {
 	logger.Info("Not using cache; Authenticating from scratch.\n")
 	pc, err := rackspace.AuthenticatedClient(ao)
 	if err != nil {
@@ -75,22 +85,26 @@ func authFromScratch(ao gophercloud.AuthOptions, region, serviceType string, log
 	switch serviceType {
 	case "compute":
 		sc, err = rackspace.NewComputeV2(pc, gophercloud.EndpointOpts{
-			Region: region,
+			Region:       region,
+			Availability: urlType,
 		})
 		break
 	case "object-store":
 		sc, err = rackspace.NewObjectStorageV1(pc, gophercloud.EndpointOpts{
-			Region: region,
+			Region:       region,
+			Availability: urlType,
 		})
 		break
 	case "blockstorage":
 		sc, err = rackspace.NewBlockStorageV1(pc, gophercloud.EndpointOpts{
-			Region: region,
+			Region:       region,
+			Availability: urlType,
 		})
 		break
 	case "network":
 		sc, err = rackspace.NewNetworkV2(pc, gophercloud.EndpointOpts{
-			Region: region,
+			Region:       region,
+			Availability: urlType,
 		})
 		break
 	}

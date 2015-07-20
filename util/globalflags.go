@@ -22,6 +22,10 @@ func GlobalFlags() []cli.Flag {
 			Name:  "region",
 			Usage: "The region to which authenticate.",
 		},
+		cli.BoolFlag{
+			Name:  "internal",
+			Usage: "Whether or not to use the internal Rackspace network",
+		},
 		cli.StringFlag{
 			Name:  "profile",
 			Usage: "The config file profile to use for authentication.",
