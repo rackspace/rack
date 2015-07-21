@@ -87,11 +87,16 @@ mkdir -p $BUILDDIR/$BASEDIR
 mkdir -p $BUILDDIR/$TREEDIR
 
 BASENAME="rack"
+MANFILE="rack.1"
 
 # Base build not in build dir to prevent accidental upload on failure
 RACKBUILD="${BASENAME}${SUFFIX}"
 
 go build -o $RACKBUILD
+
+# Generate man page
+go run script/man.go
+cp $MANFILE ${BUILDDIR}/${TREEDIR}/${BASENAME}-${BRANCH}".1"
 
 # Ship /tree/rack-branchname
 cp $RACKBUILD ${BUILDDIR}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}
@@ -101,9 +106,11 @@ echo "${CDN}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}"
 if [ "$BRANCH" == "master" ]; then
   # Only when we're on master do we spit out the official ones.
   cp $RACKBUILD ${BUILDDIR}/${BASEDIR}/${BASENAME}${SUFFIX}
+  cp $MANFILE ${BUILDDIR}/${BASEDIR}/${BASENAME}".1"
   echo "Get it while it's hot at"
   echo "${CDN}/${BASEDIR}/${BASENAME}${SUFFIX}"
 fi
 
 # Clean up after build
 rm $RACKBUILD
+rm $MANFILE

@@ -30,9 +30,37 @@ OPTIONS:
 `
 	app := cli.NewApp()
 	app.Name = "rack"
-	app.Usage = "An opinionated CLI for the Rackspace cloud"
+	app.Usage = Usage()
 	app.EnableBashCompletion = true
-	app.Commands = []cli.Command{
+	app.Commands = Cmds()
+	app.Flags = util.GlobalFlags()
+	app.BashComplete = func(c *cli.Context) {
+		completeGlobals(globalOptions(app))
+	}
+	app.Before = func(c *cli.Context) error {
+		//fmt.Printf("c.Args: %+v\n", c.Args())
+		return nil
+	}
+	app.CommandNotFound = commandNotFound
+	app.Run(os.Args)
+}
+
+// Usage returns, you guessed it, the usage information
+func Usage() string {
+	return "An opinionated CLI for the Rackspace cloud"
+}
+
+// Desc returns, you guessed it, the description
+func Desc() string {
+	return `Rack is an opinionated command-line tool that allows Rackspace users 
+to accomplish tasks in a simple, idiomatic way. It seeks to provide
+flexibility through common Unix practices like piping and composability. All
+commands have been tested against Rackspace's live API.`
+}
+
+// Cmds returns a list of commands supported by the tool
+func Cmds() []cli.Command {
+	return []cli.Command{
 		{
 			Name:   "init",
 			Usage:  "[Linux/OS X only] Setup environment with command completion for the Bash shell.",
@@ -64,16 +92,6 @@ OPTIONS:
 			Subcommands: blockstoragecommands.Get(),
 		},
 	}
-	app.Flags = util.GlobalFlags()
-	app.BashComplete = func(c *cli.Context) {
-		completeGlobals(globalOptions(app))
-	}
-	app.Before = func(c *cli.Context) error {
-		//fmt.Printf("c.Args: %+v\n", c.Args())
-		return nil
-	}
-	app.CommandNotFound = commandNotFound
-	app.Run(os.Args)
 }
 
 // completeGlobals returns the options for completing global flags.
