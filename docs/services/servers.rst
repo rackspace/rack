@@ -98,6 +98,10 @@ Usage::
     rack servers image get --name <imageName>] [optional flags]
     (echo imageID1 && echo imageID2) | rack servers image get --stdin id [optional flags]
 
+Note: To guarantee usage of the same image every time, use the `id` flag. Images often
+are updated with security patches, and the updated images will have a different ID but
+the same name.
+
 
 ``flavor``
 ~~~~~~~~~~
