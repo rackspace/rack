@@ -31,6 +31,13 @@ type Context struct {
 	// Results is a channel into which commands send results. It allows for streaming
 	// output.
 	Results chan *Resource
+
+	GlobalOptions struct {
+		output   string
+		noCache  bool
+		noHeader bool
+	}
+
 	// outputFormat is the format in which the user wants the output. This is obtained
 	// from the `output` flag and will default to "table" if not provided.
 	outputFormat string
@@ -85,22 +92,57 @@ func (ctx *Context) storeCredentials() {
 	}
 }
 
-func (ctx *Context) handleLogging() error {
-	var opt string
+func (ctx *Context) handleGlobalOptions() error {
+	section, err := auth.Section("")
+	if err != nil {
+		return err
+	}
+	keysHash := section.KeysHash()
+
+	var outputFormat string
+	if ctx.CLIContext.GlobalIsSet("output") {
+		outputFormat = ctx.CLIContext.GlobalString("output")
+	} else if ctx.CLIContext.IsSet("output") {
+		outputFormat = ctx.CLIContext.String("output")
+	} else if value, ok := keysHash["output"]; ok {
+		outputFormat = value
+	}
+	switch outputFormat {
+	case "json", "csv", "table":
+		ctx.GlobalOptions.output = outputFormat
+	default:
+		return fmt.Errorf("Invalid value for `output` flag: '%s'. Options are: json, csv, table.", outputFormat)
+	}
+
+	if ctx.CLIContext.IsSet("no-header") || ctx.CLIContext.GlobalIsSet("no-header") {
+		ctx.GlobalOptions.noHeader = true
+	} else if _, ok := keysHash["no-header"]; ok {
+		ctx.GlobalOptions.noHeader = true
+	}
+
+	if ctx.CLIContext.IsSet("no-cache") || ctx.CLIContext.GlobalIsSet("no-cache") {
+		ctx.GlobalOptions.noCache = true
+	} else if _, ok := keysHash["no-cache"]; ok {
+		ctx.GlobalOptions.noCache = true
+	}
+
+	var logLevel string
 	if ctx.CLIContext.GlobalIsSet("log") {
-		opt = ctx.CLIContext.GlobalString("log")
+		logLevel = ctx.CLIContext.GlobalString("log")
 	} else if ctx.CLIContext.IsSet("log") {
-		opt = ctx.CLIContext.String("log")
+		logLevel = ctx.CLIContext.String("log")
+	} else if value, ok := keysHash["log"]; ok {
+		logLevel = value
 	}
 	var level logrus.Level
-	if opt != "" {
-		switch strings.ToLower(opt) {
+	if logLevel != "" {
+		switch strings.ToLower(logLevel) {
 		case "debug":
 			level = logrus.DebugLevel
 		case "info":
 			level = logrus.InfoLevel
 		default:
-			return fmt.Errorf("Invalid value for `log` flag: %s. Valid options are: debug, info", opt)
+			return fmt.Errorf("Invalid value for `log` flag: %s. Valid options are: debug, info", logLevel)
 		}
 	}
 	ctx.logger = &logrus.Logger{
@@ -108,6 +150,7 @@ func (ctx *Context) handleLogging() error {
 		Formatter: &logrus.TextFormatter{},
 		Level:     level,
 	}
+
 	return nil
 }
 
@@ -138,26 +181,6 @@ func (ctx *Context) CheckArgNum(expected int) error {
 	if argsLen != expected {
 		return fmt.Errorf("Expected %d args but got %d\nUsage: %s\n", expected, argsLen, ctx.CLIContext.Command.Usage)
 	}
-	return nil
-}
-
-func (ctx *Context) checkOutputFormat() error {
-	var outputFormat string
-	if ctx.CLIContext.GlobalIsSet("output") {
-		outputFormat = ctx.CLIContext.GlobalString("output")
-	} else if ctx.CLIContext.IsSet("output") {
-		outputFormat = ctx.CLIContext.String("output")
-	} else {
-		return nil
-	}
-
-	switch outputFormat {
-	case "json", "csv", "table":
-		break
-	default:
-		return fmt.Errorf("Invalid value for `output` flag: '%s'. Options are: json, csv, table.", outputFormat)
-	}
-	ctx.outputFormat = outputFormat
 	return nil
 }
 

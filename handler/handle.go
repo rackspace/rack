@@ -86,13 +86,7 @@ func Handle(command Commander) {
 		errExit1(command, resource)
 	}
 
-	err = ctx.checkOutputFormat()
-	if err != nil {
-		resource.Err = err
-		errExit1(command, resource)
-	}
-
-	err = ctx.handleLogging()
+	err = ctx.handleGlobalOptions()
 	if err != nil {
 		resource.Err = err
 		errExit1(command, resource)
@@ -255,7 +249,7 @@ func printResult(command Commander, resource *Resource) {
 	w := ctx.CLIContext.App.Writer
 	keys := resource.Keys
 	noHeader := false
-	if command.Context().CLIContext.IsSet("no-header") {
+	if ctx.GlobalOptions.noHeader {
 		noHeader = true
 	}
 	switch resource.Result.(type) {
