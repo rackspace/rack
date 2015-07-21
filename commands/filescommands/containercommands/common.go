@@ -30,6 +30,10 @@ func handleEmpty(command handler.Commander, resource *handler.Resource, params *
 	var totalFiles int64
 	start := time.Now()
 
+	if params.concurrency == 0 {
+		params.concurrency = 100
+	}
+
 	for i := 0; i < params.concurrency; i++ {
 		wg.Add(1)
 		go func(totalFiles *int64) {
