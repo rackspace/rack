@@ -16,16 +16,33 @@ func configfile(c *cli.Context, have map[string]authCred, need map[string]string
 	} else if c.IsSet("profile") {
 		profile = c.String("profile")
 	}
+
 	section, err := Section(profile)
 	if err != nil {
 		return err
 	}
+
 	for opt := range need {
 		if val := section.Key(opt).String(); val != "" {
 			have[opt] = authCred{value: val, from: fmt.Sprintf("config file (profile: %s)", section.Name())}
 			delete(need, opt)
 		}
 	}
+
+	if profile != "" {
+		section, err := Section("")
+		if err != nil {
+			return err
+		}
+
+		for opt := range need {
+			if val := section.Key(opt).String(); val != "" {
+				have[opt] = authCred{value: val, from: fmt.Sprintf("config file (profile: default)")}
+				delete(need, opt)
+			}
+		}
+	}
+
 	return nil
 }
 
