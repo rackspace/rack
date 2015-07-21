@@ -64,8 +64,9 @@ To authenticate against the Rackspace API, there are 4 required paramaters:
 * Authentication Endpoint (URL): (Optional/Advanced) A URL to send the authentication request.
 
 
-By default, if this is your first time using the ``rack`` CLI, we recommend you
-run the interactive ``configure`` command::
+If this is your first time using the ``rack`` CLI, we recommend you
+run the interactive ``configure`` command. Note: Windows users should use PowerShell,
+not PowerShell ISE to run this command::
 
     rack configure
 

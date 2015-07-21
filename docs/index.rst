@@ -103,6 +103,9 @@ pass in other required **global** information into the tool, these are:
 ``--no-cache``
   Don't get or set authentication credentials in the rack cache.
 
+``--no-header``
+  Don't set the header for CSV nor tabular output.
+
 ``--help, -h``
   Show help
 
