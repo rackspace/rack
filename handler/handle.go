@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strings"
 	"sync"
 
 	"github.com/jrperritt/rack/auth"
@@ -216,11 +215,11 @@ func processResult(command Commander, resource *Resource) {
 
 		resource.Result = map[string]interface{}{"error": errorBody}
 	} else if resource.Result == nil {
-		if args := ctx.CLIContext.Parent().Parent().Args(); len(args) > 0 {
-			resource.Result = fmt.Sprintf("Nothing to show. Maybe you'd like to set up some %ss?\n",
-				strings.Replace(args[0], "-", " ", -1))
-		} else {
-			resource.Result = fmt.Sprintf("Nothing to show.\n")
+		switch resource.Result.(type) {
+		case map[string]interface{}:
+			resource.Result = fmt.Sprintf("No results found\n")
+		default:
+			resource.Result = fmt.Sprintf("No result found.\n")
 		}
 	} else {
 		// limit the returned fields if any were given in the `fields` flag
