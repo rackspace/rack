@@ -111,6 +111,8 @@ func (command *commandDelete) Execute(resource *handler.Resource) {
 		}
 		handleEmpty(command, resource, emptyParams)
 	}
+
+	fmt.Println("Running containers.Delete")
 	rawResponse := containers.Delete(command.Ctx.ServiceClient, containerName)
 	if rawResponse.Err != nil {
 		resource.Err = rawResponse.Err
