@@ -13,5 +13,6 @@ func Get() []cli.Command {
 		get,
 		remove,
 		update,
+		empty,
 	}
 }

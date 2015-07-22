@@ -2,12 +2,9 @@ package containercommands
 
 import (
 	"fmt"
-	"sync"
-	"time"
 
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers"
 	"github.com/jrperritt/rack/util"
 )
@@ -37,13 +34,24 @@ func flagsDelete() []cli.Flag {
 			Name:  "stdin",
 			Usage: "[optional; required if `name` isn't provided] The field being piped into STDIN. Valid values are: name",
 		},
+		cli.IntFlag{
+			Name:  "concurrency",
+			Usage: "[optional] If `purge` is provided, the amount of concurrent workers that will empty the container.",
+		},
+		cli.BoolFlag{
+			Name:  "quiet",
+			Usage: "[optional] By default, every object deleted will be outputted. If --quiet is provided, only a final summary will be outputted.",
+		},
 	}
 }
 
 var keysDelete = []string{}
 
 type paramsDelete struct {
-	container string
+	container   string
+	purge       bool
+	quiet       bool
+	concurrency int
 }
 
 type commandDelete handler.Command
@@ -70,7 +78,11 @@ func (command *commandDelete) ServiceClientType() string {
 }
 
 func (command *commandDelete) HandleFlags(resource *handler.Resource) error {
-	resource.Params = &paramsDelete{}
+	resource.Params = &paramsDelete{
+		purge:       command.Ctx.CLIContext.Bool("purge"),
+		quiet:       command.Ctx.CLIContext.Bool("quiet"),
+		concurrency: command.Ctx.CLIContext.Int("concurrency"),
+	}
 	return nil
 }
 
@@ -91,52 +103,16 @@ func (command *commandDelete) HandleSingle(resource *handler.Resource) error {
 func (command *commandDelete) Execute(resource *handler.Resource) {
 	params := resource.Params.(*paramsDelete)
 	containerName := params.container
-	if command.Ctx.CLIContext.IsSet("purge") {
-		allPages, err := objects.List(command.Ctx.ServiceClient, containerName, nil).AllPages()
-		if err != nil {
-			resource.Err = err
-			return
+	if params.purge {
+		emptyParams := &handleEmptyParams{
+			container:   containerName,
+			quiet:       params.quiet,
+			concurrency: params.concurrency,
 		}
-		objectNames, err := objects.ExtractNames(allPages)
-		if err != nil {
-			resource.Err = err
-			return
-		}
-		wg := &sync.WaitGroup{}
-		for _, objectName := range objectNames {
-			wg.Add(1)
-			go func(objectName string) {
-				defer wg.Done()
-				rawResponse := objects.Delete(command.Ctx.ServiceClient, containerName, objectName, nil)
-				if rawResponse.Err != nil {
-					resource.Err = rawResponse.Err
-					return
-				}
-			}(objectName)
-		}
-		wg.Wait()
-		numTimesChecked := 0
-		for {
-			allPages, err := objects.List(command.Ctx.ServiceClient, containerName, nil).AllPages()
-			if err != nil {
-				resource.Err = err
-				return
-			}
-			objectNames, err := objects.ExtractNames(allPages)
-			if err != nil {
-				resource.Err = err
-				return
-			}
-			if len(objectNames) == 0 {
-				break
-			}
-			numTimesChecked++
-			if numTimesChecked == 60 {
-				resource.Err = fmt.Errorf("Purging objects from container [%s] timed out. There are still %d object left.\n", containerName, len(objectNames))
-			}
-			time.Sleep(5 * time.Second)
-		}
+		handleEmpty(command, resource, emptyParams)
 	}
+
+	fmt.Println("Running containers.Delete")
 	rawResponse := containers.Delete(command.Ctx.ServiceClient, containerName)
 	if rawResponse.Err != nil {
 		resource.Err = rawResponse.Err
