@@ -38,9 +38,6 @@ type Context struct {
 		noHeader bool
 	}
 
-	// outputFormat is the format in which the user wants the output. This is obtained
-	// from the `output` flag and will default to "table" if not provided.
-	outputFormat string
 	// logger is used to log information acquired while processing the command.
 	logger *logrus.Logger
 }
@@ -74,7 +71,7 @@ func (ctx *Context) limitFields(resource *Resource) {
 func (ctx *Context) storeCredentials() {
 	// if serviceClient is nil, the HTTP request for the command didn't get sent.
 	// don't set cache if the `no-cache` flag is provided
-	if ctx.ServiceClient != nil && !ctx.CLIContext.GlobalIsSet("no-cache") && !ctx.CLIContext.IsSet("no-cache") {
+	if ctx.ServiceClient != nil && !ctx.GlobalOptions.noCache {
 		newCacheValue := &auth.CacheItem{
 			TokenID:         ctx.ServiceClient.TokenID,
 			ServiceEndpoint: ctx.ServiceClient.Endpoint,

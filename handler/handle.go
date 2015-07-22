@@ -91,7 +91,7 @@ func Handle(command Commander) {
 		errExit1(command, resource)
 	}
 
-	client, err := auth.NewClient(ctx.CLIContext, ctx.ServiceClientType, ctx.logger)
+	client, err := auth.NewClient(ctx.CLIContext, ctx.ServiceClientType, ctx.logger, ctx.GlobalOptions.noCache)
 	if err != nil {
 		resource.Err = err
 		errExit1(command, resource)
@@ -226,7 +226,7 @@ func processResult(command Commander, resource *Resource) {
 		ctx.limitFields(resource)
 
 		// apply any output-specific transformations on the result
-		switch ctx.outputFormat {
+		switch ctx.GlobalOptions.output {
 		case "json":
 			if jsoner, ok := command.(PreJSONer); ok {
 				jsoner.PreJSON(resource)
@@ -255,7 +255,7 @@ func printResult(command Commander, resource *Resource) {
 	case map[string]interface{}:
 		m := resource.Result.(map[string]interface{})
 		m = onlyNonNil(m)
-		switch ctx.outputFormat {
+		switch ctx.GlobalOptions.output {
 		case "json":
 			output.MetadataJSON(w, m, keys)
 		case "csv":
@@ -268,7 +268,7 @@ func printResult(command Commander, resource *Resource) {
 		for i, m := range ms {
 			ms[i] = onlyNonNil(m)
 		}
-		switch ctx.outputFormat {
+		switch ctx.GlobalOptions.output {
 		case "json":
 			output.ListJSON(w, ms, keys)
 		case "csv":
@@ -285,7 +285,7 @@ func printResult(command Commander, resource *Resource) {
 			fmt.Fprintf(os.Stderr, "Error copying (io.Reader) result: %s\n", err)
 		}
 	default:
-		switch ctx.outputFormat {
+		switch ctx.GlobalOptions.output {
 		case "json":
 			output.DefaultJSON(w, resource.Result)
 		default:

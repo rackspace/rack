@@ -24,14 +24,14 @@ func reauthFunc(pc *gophercloud.ProviderClient, ao gophercloud.AuthOptions) func
 }
 
 // NewClient creates and returns a Rackspace client for the given service.
-func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger) (*gophercloud.ServiceClient, error) {
+func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger, noCache bool) (*gophercloud.ServiceClient, error) {
 	// get the user's authentication credentials
 	ao, region, err := Credentials(c, logger)
 	if err != nil {
 		return nil, err
 	}
 
-	if c.GlobalIsSet("no-cache") || c.IsSet("no-cache") {
+	if noCache {
 		return authFromScratch(*ao, region, serviceType, logger)
 	}
 
