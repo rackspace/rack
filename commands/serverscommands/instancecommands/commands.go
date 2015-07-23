@@ -17,5 +17,6 @@ func Get() []cli.Command {
 		rebuild,
 		resize,
 		listAddresses,
+		listAddressesByNetwork,
 	}
 }
