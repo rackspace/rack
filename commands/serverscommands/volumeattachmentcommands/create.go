@@ -5,7 +5,7 @@ import (
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
-	osVolumes "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes"
+	"github.com/jrperritt/rack/internal/github.com/jrperritt/gophercloud/rackspace/compute/v2/volumeattach"
 	osVolumeAttach "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/volumeattach"
 	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/jrperritt/rack/util"
@@ -26,15 +26,19 @@ func flagsCreate() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "id",
-			Usage: "[optional; required if `name` or `stdin` isn't provided] The ID of the volume to attach.",
-		},
-		cli.StringFlag{
-			Name:  "name",
-			Usage: "[optional; required if `name` or `stdin` isn't provided] The name of the volume to attach.",
+			Usage: "[optional; required if `stdin` isn't provided] The ID of the volume to attach.",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `name` or `stdin` isn't provided] The field being piped into STDIN. Valid values are: id",
+			Usage: "[optional; required if `id` isn't provided] The field being piped into STDIN. Valid values are: id",
+		},
+		cli.StringFlag{
+			Name:  "server-id",
+			Usage: "[optional; required if `server-name` isn't provided] The server ID to which attach the volume.",
+		},
+		cli.StringFlag{
+			Name:  "server-name",
+			Usage: "[optional; required if 1server-id` isn't provided] The server name to which attach the volume.",
 		},
 		cli.StringFlag{
 			Name:  "device",
@@ -97,18 +101,18 @@ func (command *commandCreate) HandlePipe(resource *handler.Resource, item string
 }
 
 func (command *commandCreate) HandleSingle(resource *handler.Resource) error {
-	volumeID, err := command.Ctx.IDOrName(osVolumes.IDFromName)
+	err := command.Ctx.CheckFlagsSet([]string{"id"})
 	if err != nil {
 		return err
 	}
 
-	resource.Params.(*paramsCreate).opts.VolumeID = volumeID
+	resource.Params.(*paramsCreate).opts.VolumeID = command.Ctx.CLIContext.String("id")
 	return nil
 }
 
 func (command *commandCreate) Execute(resource *handler.Resource) {
 	params := resource.Params.(*paramsCreate)
-	volumeAttachment, err := osVolumeAttach.Create(command.Ctx.ServiceClient, params.serverID, params.opts).Extract()
+	volumeAttachment, err := volumeattach.Create(command.Ctx.ServiceClient, params.serverID, params.opts).Extract()
 	if err != nil {
 		resource.Err = err
 		return

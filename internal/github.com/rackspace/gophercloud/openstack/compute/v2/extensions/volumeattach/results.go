@@ -1,9 +1,9 @@
 package volumeattach
 
 import (
-	"github.com/mitchellh/mapstructure"
-	"github.com/rackspace/gophercloud"
-	"github.com/rackspace/gophercloud/pagination"
+	"github.com/jrperritt/rack/internal/github.com/mitchellh/mapstructure"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/pagination"
 )
 
 // VolumeAttach controls the attachment of a volume to an instance.

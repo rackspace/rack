@@ -3,6 +3,7 @@ package volumeattach
 import (
 	"testing"
 
+	os "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/volumeattach"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/pagination"
 	th "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
@@ -11,15 +12,15 @@ import (
 func TestList(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
-	HandleListSuccessfully(t)
+	os.HandleListSuccessfully(t)
 	serverId := "4d8c3732-a248-40ed-bebc-539a6ffd25c0"
 
 	count := 0
 	err := List(client.ServiceClient(), serverId).EachPage(func(page pagination.Page) (bool, error) {
 		count++
-		actual, err := ExtractVolumeAttachments(page)
+		actual, err := os.ExtractVolumeAttachments(page)
 		th.AssertNoErr(t, err)
-		th.CheckDeepEquals(t, ExpectedVolumeAttachmentSlice, actual)
+		th.CheckDeepEquals(t, os.ExpectedVolumeAttachmentSlice, actual)
 
 		return true, nil
 	})
@@ -30,33 +31,33 @@ func TestList(t *testing.T) {
 func TestCreate(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
-	HandleCreateSuccessfully(t)
+	os.HandleCreateSuccessfully(t)
 	serverId := "4d8c3732-a248-40ed-bebc-539a6ffd25c0"
 
-	actual, err := Create(client.ServiceClient(), serverId, CreateOpts{
+	actual, err := Create(client.ServiceClient(), serverId, os.CreateOpts{
 		Device:   "/dev/vdc",
 		VolumeID: "a26887c6-c47b-4654-abb5-dfadf7d3f804",
 	}).Extract()
 	th.AssertNoErr(t, err)
-	th.CheckDeepEquals(t, &CreatedVolumeAttachment, actual)
+	th.CheckDeepEquals(t, &os.CreatedVolumeAttachment, actual)
 }
 
 func TestGet(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
-	HandleGetSuccessfully(t)
+	os.HandleGetSuccessfully(t)
 	aId := "a26887c6-c47b-4654-abb5-dfadf7d3f804"
 	serverId := "4d8c3732-a248-40ed-bebc-539a6ffd25c0"
 
 	actual, err := Get(client.ServiceClient(), serverId, aId).Extract()
 	th.AssertNoErr(t, err)
-	th.CheckDeepEquals(t, &SecondVolumeAttachment, actual)
+	th.CheckDeepEquals(t, &os.SecondVolumeAttachment, actual)
 }
 
 func TestDelete(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
-	HandleDeleteSuccessfully(t)
+	os.HandleDeleteSuccessfully(t)
 	aId := "a26887c6-c47b-4654-abb5-dfadf7d3f804"
 	serverId := "4d8c3732-a248-40ed-bebc-539a6ffd25c0"
 

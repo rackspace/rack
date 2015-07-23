@@ -33,7 +33,7 @@ func flagsListAddresses() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `name` or `id` isn't provided] The field being piped into STDIN. Valid values are: id..",
+			Usage: "[optional; required if `name` or `id` isn't provided] The field being piped into STDIN. Valid values are: id.",
 		},
 	}
 }

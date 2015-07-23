@@ -254,6 +254,13 @@
 			"revisionTime": "2015-06-30T10:09:15-06:00"
 		},
 		{
+			"canonical": "github.com/rackspace/gophercloud/rackspace/compute/v2/volumeattach",
+			"comment": "",
+			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/volumeattach",
+			"revision": "52e6adaa7282e298ae76b7973158316b41513795",
+			"revisionTime": "2015-07-16T17:58:04-06:00"
+		},
+		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace/identity/v2/tokens",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/identity/v2/tokens",

@@ -38,7 +38,7 @@ func flagsGet() []cli.Flag {
 	}
 }
 
-var keysGet = []string{"ID", "Name", "Status", "Progress", "MinDisk", "MinRAM", "Created", "Updated"}
+var keysGet = []string{"ID", "Name", "Status", "Progress", "MinDisk", "MinRAM", "Created", "Updated", "Metadata"}
 
 type paramsGet struct {
 	image string
@@ -68,6 +68,7 @@ func (command *commandGet) ServiceClientType() string {
 }
 
 func (command *commandGet) HandleFlags(resource *handler.Resource) error {
+	resource.Params = &paramsGet{}
 	return nil
 }
 
@@ -94,4 +95,12 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 
 func (command *commandGet) StdinField() string {
 	return "id"
+}
+
+func (command *commandGet) PreCSV(resource *handler.Resource) {
+	resource.FlattenMap("Metadata")
+}
+
+func (command *commandGet) PreTable(resource *handler.Resource) {
+	command.PreCSV(resource)
 }
