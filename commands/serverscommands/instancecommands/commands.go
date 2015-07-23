@@ -16,5 +16,6 @@ func Get() []cli.Command {
 		reboot,
 		rebuild,
 		resize,
+		listAddresses,
 	}
 }
