@@ -5,7 +5,6 @@ import (
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
-	"github.com/jrperritt/rack/internal/github.com/jrperritt/gophercloud/rackspace/compute/v2/volumeattach"
 	osVolumeAttach "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/volumeattach"
 	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/jrperritt/rack/util"
@@ -38,7 +37,7 @@ func flagsCreate() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "server-name",
-			Usage: "[optional; required if 1server-id` isn't provided] The server name to which attach the volume.",
+			Usage: "[optional; required if `server-id` isn't provided] The server name to which attach the volume.",
 		},
 		cli.StringFlag{
 			Name:  "device",
@@ -112,7 +111,7 @@ func (command *commandCreate) HandleSingle(resource *handler.Resource) error {
 
 func (command *commandCreate) Execute(resource *handler.Resource) {
 	params := resource.Params.(*paramsCreate)
-	volumeAttachment, err := volumeattach.Create(command.Ctx.ServiceClient, params.serverID, params.opts).Extract()
+	volumeAttachment, err := osVolumeAttach.Create(command.Ctx.ServiceClient, params.serverID, params.opts).Extract()
 	if err != nil {
 		resource.Err = err
 		return
