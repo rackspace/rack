@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/internal/github.com/Sirupsen/logrus"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
@@ -24,14 +25,14 @@ func reauthFunc(pc *gophercloud.ProviderClient, ao gophercloud.AuthOptions) func
 }
 
 // NewClient creates and returns a Rackspace client for the given service.
-func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger) (*gophercloud.ServiceClient, error) {
+func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger, noCache bool) (*gophercloud.ServiceClient, error) {
 	// get the user's authentication credentials
 	ao, region, err := Credentials(c, logger)
 	if err != nil {
 		return nil, err
 	}
 
-	if c.GlobalIsSet("no-cache") || c.IsSet("no-cache") {
+	if noCache {
 		return authFromScratch(*ao, region, serviceType, logger)
 	}
 
@@ -104,11 +105,6 @@ func authFromScratch(ao gophercloud.AuthOptions, region, serviceType string, log
 	return sc, nil
 }
 
-type authCred struct {
-	value string
-	from  string
-}
-
 // Credentials determines the appropriate authentication method for the user.
 // It returns a gophercloud.AuthOptions object and a region.
 //
@@ -116,7 +112,7 @@ type authCred struct {
 // look for any unset parameters in the config file, and then finally in
 // environment variables.
 func Credentials(c *cli.Context, logger *logrus.Logger) (*gophercloud.AuthOptions, string, error) {
-	have := make(map[string]authCred)
+	have := make(map[string]commandoptions.Cred)
 	need := map[string]string{
 		"username": "",
 		"apikey":   "",
@@ -125,11 +121,11 @@ func Credentials(c *cli.Context, logger *logrus.Logger) (*gophercloud.AuthOption
 	}
 
 	// use command-line options if available
-	cliopts(c, have, need)
+	commandoptions.CLIopts(c, have, need)
 	// are there any unset auth variables?
 	if len(need) != 0 {
 		// if so, look in config file
-		err := configfile(c, have, need)
+		err := commandoptions.ConfigFile(c, have, need)
 		if err != nil {
 			return nil, "", err
 		}
@@ -141,14 +137,14 @@ func Credentials(c *cli.Context, logger *logrus.Logger) (*gophercloud.AuthOption
 	}
 
 	// if the user didn't provide an auth URL, default to the Rackspace US endpoint
-	if _, ok := have["authurl"]; !ok || have["authurl"].value == "" {
-		have["authurl"] = authCred{value: rackspace.RackspaceUSIdentity, from: "default value"}
+	if _, ok := have["authurl"]; !ok || have["authurl"].Value == "" {
+		have["authurl"] = commandoptions.Cred{Value: rackspace.RackspaceUSIdentity, From: "default value"}
 		delete(need, "authurl")
 	}
 
 	haveString := ""
 	for k, v := range have {
-		haveString += fmt.Sprintf("%s: %s (from %s)\n", k, v.value, v.from)
+		haveString += fmt.Sprintf("%s: %s (from %s)\n", k, v.Value, v.From)
 	}
 
 	if len(need) > 0 {
@@ -178,13 +174,13 @@ func Credentials(c *cli.Context, logger *logrus.Logger) (*gophercloud.AuthOption
 	}
 
 	ao := &gophercloud.AuthOptions{
-		Username:         have["username"].value,
-		APIKey:           have["apikey"].value,
-		IdentityEndpoint: have["authurl"].value,
+		Username:         have["username"].Value,
+		APIKey:           have["apikey"].Value,
+		IdentityEndpoint: have["authurl"].Value,
 	}
 
 	// upper-case the region
-	region := strings.ToUpper(have["region"].value)
+	region := strings.ToUpper(have["region"].Value)
 	// allow Gophercloud to re-authenticate
 	ao.AllowReauth = true
 

@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osObjects "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
@@ -18,9 +19,9 @@ var upload = cli.Command{
 	Usage:       util.Usage(commandPrefix, "upload", "--container <containerName> --name <objectName>"),
 	Description: "Uploads an object",
 	Action:      actionUpload,
-	Flags:       util.CommandFlags(flagsUpload, keysUpload),
+	Flags:       commandoptions.CommandFlags(flagsUpload, keysUpload),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsUpload, keysUpload))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsUpload, keysUpload))
 	},
 }
 

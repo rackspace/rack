@@ -53,8 +53,15 @@ Usage::
     rack files container delete --name <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files container delete --stdin name [optional flags]
 
+``empty``
+^^^^^^^^^^
+Usage::
+
+    rack files container empty --name <containerName> [optional flags]
+    (echo containerName1 && echo containerName2) | rack files container empty --stdin name [optional flags]
+
 ``object``
-~~~~~~~~~
+~~~~~~~~~~
 
   Files Object operations
 

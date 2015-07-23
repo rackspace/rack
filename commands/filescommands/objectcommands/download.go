@@ -4,6 +4,7 @@ import (
 	"io"
 	"io/ioutil"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/objects"
@@ -15,9 +16,9 @@ var download = cli.Command{
 	Usage:       util.Usage(commandPrefix, "download", "--container <containerName> --name <objectName>"),
 	Description: "Downloads an object",
 	Action:      actionDownload,
-	Flags:       util.CommandFlags(flagsDownload, keysDownload),
+	Flags:       commandoptions.CommandFlags(flagsDownload, keysDownload),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsDownload, keysDownload))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsDownload, keysDownload))
 	},
 }
 

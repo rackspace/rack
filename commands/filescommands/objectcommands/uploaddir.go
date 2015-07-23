@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/cenkalti/backoff"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
@@ -23,9 +24,9 @@ var uploadDir = cli.Command{
 	Usage:       util.Usage(commandPrefix, "upload-dir", "--container <containerName> [--dir <dirName> | --stdin dir]"),
 	Description: "Uploads the contents of a local directory to a container",
 	Action:      actionUploadDir,
-	Flags:       util.CommandFlags(flagsUploadDir, keysUploadDir),
+	Flags:       commandoptions.CommandFlags(flagsUploadDir, keysUploadDir),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsUploadDir, keysUploadDir))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsUploadDir, keysUploadDir))
 	},
 }
 

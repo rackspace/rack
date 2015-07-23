@@ -3,6 +3,7 @@ package subnetcommands
 import (
 	"fmt"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osSubnets "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/subnets"
@@ -15,9 +16,9 @@ var remove = cli.Command{
 	Usage:       util.Usage(commandPrefix, "delete", ""),
 	Description: "Deletes an existing subnet",
 	Action:      actionDelete,
-	Flags:       util.CommandFlags(flagsDelete, keysDelete),
+	Flags:       commandoptions.CommandFlags(flagsDelete, keysDelete),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsDelete, keysDelete))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsDelete, keysDelete))
 	},
 }
 

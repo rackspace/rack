@@ -3,6 +3,7 @@ package instancecommands
 import (
 	"fmt"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
@@ -16,9 +17,9 @@ var reboot = cli.Command{
 	Usage:       util.Usage(commandPrefix, "reboot", "[--id <serverID> | --name <serverName> | --stdin id] [--soft | --hard]"),
 	Description: "Reboots an existing server",
 	Action:      actionReboot,
-	Flags:       util.CommandFlags(flagsReboot, keysReboot),
+	Flags:       commandoptions.CommandFlags(flagsReboot, keysReboot),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsReboot, keysReboot))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsReboot, keysReboot))
 	},
 }
 

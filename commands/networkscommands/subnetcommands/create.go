@@ -3,6 +3,7 @@ package subnetcommands
 import (
 	"strings"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osSubnets "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/subnets"
@@ -15,9 +16,9 @@ var create = cli.Command{
 	Usage:       util.Usage(commandPrefix, "create", "--network-id <networkID> --cidr <CIDR> --ip-version <4|6>"),
 	Description: "Creates a subnet",
 	Action:      actionCreate,
-	Flags:       util.CommandFlags(flagsCreate, keysCreate),
+	Flags:       commandoptions.CommandFlags(flagsCreate, keysCreate),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsCreate, keysCreate))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsCreate, keysCreate))
 	},
 }
 

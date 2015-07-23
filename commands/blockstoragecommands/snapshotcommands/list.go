@@ -1,6 +1,7 @@
 package snapshotcommands
 
 import (
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osSnapshots "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots"
@@ -13,9 +14,9 @@ var list = cli.Command{
 	Usage:       util.Usage(commandPrefix, "list", ""),
 	Description: "Lists existing snapshots",
 	Action:      actionList,
-	Flags:       util.CommandFlags(flagsList, keysList),
+	Flags:       commandoptions.CommandFlags(flagsList, keysList),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsList, keysList))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsList, keysList))
 	},
 }
 

@@ -8,12 +8,12 @@ import (
 	"text/tabwriter"
 	"text/template"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/commands/blockstoragecommands"
 	"github.com/jrperritt/rack/commands/filescommands"
 	"github.com/jrperritt/rack/commands/networkscommands"
 	"github.com/jrperritt/rack/commands/serverscommands"
 	"github.com/jrperritt/rack/setup"
-	"github.com/jrperritt/rack/util"
 
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 )
@@ -33,7 +33,7 @@ OPTIONS:
 	app.Usage = Usage()
 	app.EnableBashCompletion = true
 	app.Commands = Cmds()
-	app.Flags = util.GlobalFlags()
+	app.Flags = commandoptions.GlobalFlags()
 	app.BashComplete = func(c *cli.Context) {
 		completeGlobals(globalOptions(app))
 	}
@@ -52,7 +52,7 @@ func Usage() string {
 
 // Desc returns, you guessed it, the description
 func Desc() string {
-	return `Rack is an opinionated command-line tool that allows Rackspace users 
+	return `Rack is an opinionated command-line tool that allows Rackspace users
 to accomplish tasks in a simple, idiomatic way. It seeks to provide
 flexibility through common Unix practices like piping and composability. All
 commands have been tested against Rackspace's live API.`
@@ -117,7 +117,7 @@ func completeGlobals(vals []interface{}) {
 // `rack --json servers` are all legitimate command prefixes.
 func globalOptions(app *cli.App) []interface{} {
 	var i []interface{}
-	globalFlags := util.GlobalFlags()
+	globalFlags := commandoptions.GlobalFlags()
 	for _, globalFlag := range globalFlags {
 		i = append(i, globalFlag)
 	}

@@ -3,6 +3,7 @@ package securitygrouprulecommands
 import (
 	"fmt"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osSecurityGroupRules "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/rules"
@@ -15,9 +16,9 @@ var create = cli.Command{
 	Usage:       util.Usage(commandPrefix, "create", "--security-group-id <securityGroupID> --direction <ingress|egress> --ether-type <ipv4|ipv6>"),
 	Description: "Creates a security group rule",
 	Action:      actionCreate,
-	Flags:       util.CommandFlags(flagsCreate, keysCreate),
+	Flags:       commandoptions.CommandFlags(flagsCreate, keysCreate),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsCreate, keysCreate))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsCreate, keysCreate))
 	},
 }
 

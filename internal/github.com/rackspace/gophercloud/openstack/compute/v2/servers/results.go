@@ -1,10 +1,10 @@
 package servers
 
 import (
-	"reflect"
 	"fmt"
-	"path"
 	"net/url"
+	"path"
+	"reflect"
 
 	"github.com/jrperritt/rack/internal/github.com/mitchellh/mapstructure"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"

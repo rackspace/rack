@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/jrperritt/rack/auth"
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/internal/github.com/Sirupsen/logrus"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
@@ -31,9 +32,13 @@ type Context struct {
 	// Results is a channel into which commands send results. It allows for streaming
 	// output.
 	Results chan *Resource
-	// outputFormat is the format in which the user wants the output. This is obtained
-	// from the `output` flag and will default to "table" if not provided.
-	outputFormat string
+
+	GlobalOptions struct {
+		output   string
+		noCache  bool
+		noHeader bool
+	}
+
 	// logger is used to log information acquired while processing the command.
 	logger *logrus.Logger
 }
@@ -67,7 +72,7 @@ func (ctx *Context) limitFields(resource *Resource) {
 func (ctx *Context) storeCredentials() {
 	// if serviceClient is nil, the HTTP request for the command didn't get sent.
 	// don't set cache if the `no-cache` flag is provided
-	if ctx.ServiceClient != nil && !ctx.CLIContext.GlobalIsSet("no-cache") && !ctx.CLIContext.IsSet("no-cache") {
+	if ctx.ServiceClient != nil && !ctx.GlobalOptions.noCache {
 		newCacheValue := &auth.CacheItem{
 			TokenID:         ctx.ServiceClient.TokenID,
 			ServiceEndpoint: ctx.ServiceClient.Endpoint,
@@ -85,22 +90,82 @@ func (ctx *Context) storeCredentials() {
 	}
 }
 
-func (ctx *Context) handleLogging() error {
-	var opt string
+func (ctx *Context) handleGlobalOptions() error {
+	defaultSection, err := commandoptions.ProfileSection("")
+	if err != nil {
+		return err
+	}
+	defaultKeysHash := defaultSection.KeysHash()
+
+	have := make(map[string]commandoptions.Cred)
+	want := map[string]string{
+		"output":    "",
+		"no-cache":  "",
+		"no-header": "",
+		"log":       "",
+	}
+
+	// use command-line options if available
+	commandoptions.CLIopts(ctx.CLIContext, have, want)
+	// are there any unset auth variables?
+	if len(want) != 0 {
+		// if so, look in config file
+		err := commandoptions.ConfigFile(ctx.CLIContext, have, want)
+		if err != nil {
+			return err
+		}
+	}
+
+	var outputFormat string
+	if ctx.CLIContext.GlobalIsSet("output") {
+		outputFormat = ctx.CLIContext.GlobalString("output")
+	} else if ctx.CLIContext.IsSet("output") {
+		outputFormat = ctx.CLIContext.String("output")
+	} else if value, ok := defaultKeysHash["output"]; ok && value != "" {
+		outputFormat = value
+	} else {
+		have["output"] = commandoptions.Cred{
+			Value: "table",
+			From:  "default value",
+		}
+		outputFormat = "table"
+	}
+	switch outputFormat {
+	case "json", "csv", "table":
+		ctx.GlobalOptions.output = outputFormat
+	default:
+		return fmt.Errorf("Invalid value for `output` flag: '%s'. Options are: json, csv, table.", outputFormat)
+	}
+
+	if ctx.CLIContext.IsSet("no-header") || ctx.CLIContext.GlobalIsSet("no-header") {
+		ctx.GlobalOptions.noHeader = true
+	} else if value, ok := defaultKeysHash["no-header"]; ok && value != "" {
+		ctx.GlobalOptions.noHeader = true
+	}
+
+	if ctx.CLIContext.IsSet("no-cache") || ctx.CLIContext.GlobalIsSet("no-cache") {
+		ctx.GlobalOptions.noCache = true
+	} else if value, ok := defaultKeysHash["no-cache"]; ok && value != "" {
+		ctx.GlobalOptions.noCache = true
+	}
+
+	var logLevel string
 	if ctx.CLIContext.GlobalIsSet("log") {
-		opt = ctx.CLIContext.GlobalString("log")
+		logLevel = ctx.CLIContext.GlobalString("log")
 	} else if ctx.CLIContext.IsSet("log") {
-		opt = ctx.CLIContext.String("log")
+		logLevel = ctx.CLIContext.String("log")
+	} else if value, ok := defaultKeysHash["log"]; ok && value != "" {
+		logLevel = value
 	}
 	var level logrus.Level
-	if opt != "" {
-		switch strings.ToLower(opt) {
+	if logLevel != "" {
+		switch strings.ToLower(logLevel) {
 		case "debug":
 			level = logrus.DebugLevel
 		case "info":
 			level = logrus.InfoLevel
 		default:
-			return fmt.Errorf("Invalid value for `log` flag: %s. Valid options are: debug, info", opt)
+			return fmt.Errorf("Invalid value for `log` flag: %s. Valid options are: debug, info", logLevel)
 		}
 	}
 	ctx.logger = &logrus.Logger{
@@ -108,6 +173,13 @@ func (ctx *Context) handleLogging() error {
 		Formatter: &logrus.TextFormatter{},
 		Level:     level,
 	}
+
+	haveString := ""
+	for k, v := range have {
+		haveString += fmt.Sprintf("%s: %s (from %s)\n", k, v.Value, v.From)
+	}
+	ctx.logger.Infof("Global Options:\n%s\n", haveString)
+
 	return nil
 }
 
@@ -138,26 +210,6 @@ func (ctx *Context) CheckArgNum(expected int) error {
 	if argsLen != expected {
 		return fmt.Errorf("Expected %d args but got %d\nUsage: %s\n", expected, argsLen, ctx.CLIContext.Command.Usage)
 	}
-	return nil
-}
-
-func (ctx *Context) checkOutputFormat() error {
-	var outputFormat string
-	if ctx.CLIContext.GlobalIsSet("output") {
-		outputFormat = ctx.CLIContext.GlobalString("output")
-	} else if ctx.CLIContext.IsSet("output") {
-		outputFormat = ctx.CLIContext.String("output")
-	} else {
-		return nil
-	}
-
-	switch outputFormat {
-	case "json", "csv", "table":
-		break
-	default:
-		return fmt.Errorf("Invalid value for `output` flag: '%s'. Options are: json, csv, table.", outputFormat)
-	}
-	ctx.outputFormat = outputFormat
 	return nil
 }
 

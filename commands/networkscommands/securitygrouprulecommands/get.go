@@ -1,6 +1,7 @@
 package securitygrouprulecommands
 
 import (
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	securityGroupRules "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/security/rules"
@@ -12,9 +13,9 @@ var get = cli.Command{
 	Usage:       util.Usage(commandPrefix, "get", ""),
 	Description: "Gets an existing security group rule",
 	Action:      actionGet,
-	Flags:       util.CommandFlags(flagsGet, keysGet),
+	Flags:       commandoptions.CommandFlags(flagsGet, keysGet),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsGet, keysGet))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsGet, keysGet))
 	},
 }
 

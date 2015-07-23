@@ -3,6 +3,7 @@ package instancecommands
 import (
 	"fmt"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
@@ -15,9 +16,9 @@ var resize = cli.Command{
 	Usage:       util.Usage(commandPrefix, "resize", "[--id <serverID>|--name <serverName>|--stdin id] --flavor-id <flavor-id>"),
 	Description: "Resizes an existing server",
 	Action:      actionResize,
-	Flags:       util.CommandFlags(flagsResize, keysResize),
+	Flags:       commandoptions.CommandFlags(flagsResize, keysResize),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsResize, keysResize))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsResize, keysResize))
 	},
 }
 

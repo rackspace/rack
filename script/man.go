@@ -7,6 +7,7 @@ import (
 	"time"
 
 	r "github.com/jrperritt/rack"
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/util"
 )
@@ -24,7 +25,7 @@ func main() {
 	content += fmt.Sprintf("%s\n\n\n", r.Desc())
 
 	content += fmt.Sprintln("The following global options are available:")
-	for _, flag := range util.GlobalFlags() {
+	for _, flag := range commandoptions.GlobalFlags() {
 		content += fmt.Sprintln(".TP")
 		name, usage := parseFlag(flag)
 		if name != "" && usage != "" {

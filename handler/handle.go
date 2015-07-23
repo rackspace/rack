@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strings"
 	"sync"
 
 	"github.com/jrperritt/rack/auth"
@@ -86,19 +85,13 @@ func Handle(command Commander) {
 		errExit1(command, resource)
 	}
 
-	err = ctx.checkOutputFormat()
+	err = ctx.handleGlobalOptions()
 	if err != nil {
 		resource.Err = err
 		errExit1(command, resource)
 	}
 
-	err = ctx.handleLogging()
-	if err != nil {
-		resource.Err = err
-		errExit1(command, resource)
-	}
-
-	client, err := auth.NewClient(ctx.CLIContext, ctx.ServiceClientType, ctx.logger)
+	client, err := auth.NewClient(ctx.CLIContext, ctx.ServiceClientType, ctx.logger, ctx.GlobalOptions.noCache)
 	if err != nil {
 		resource.Err = err
 		errExit1(command, resource)
@@ -222,18 +215,18 @@ func processResult(command Commander, resource *Resource) {
 
 		resource.Result = map[string]interface{}{"error": errorBody}
 	} else if resource.Result == nil {
-		if args := ctx.CLIContext.Parent().Parent().Args(); len(args) > 0 {
-			resource.Result = fmt.Sprintf("Nothing to show. Maybe you'd like to set up some %ss?\n",
-				strings.Replace(args[0], "-", " ", -1))
-		} else {
-			resource.Result = fmt.Sprintf("Nothing to show.\n")
+		switch resource.Result.(type) {
+		case map[string]interface{}:
+			resource.Result = fmt.Sprintf("No results found\n")
+		default:
+			resource.Result = fmt.Sprintf("No result found.\n")
 		}
 	} else {
 		// limit the returned fields if any were given in the `fields` flag
 		ctx.limitFields(resource)
 
 		// apply any output-specific transformations on the result
-		switch ctx.outputFormat {
+		switch ctx.GlobalOptions.output {
 		case "json":
 			if jsoner, ok := command.(PreJSONer); ok {
 				jsoner.PreJSON(resource)
@@ -255,14 +248,14 @@ func printResult(command Commander, resource *Resource) {
 	w := ctx.CLIContext.App.Writer
 	keys := resource.Keys
 	noHeader := false
-	if command.Context().CLIContext.IsSet("no-header") {
+	if ctx.GlobalOptions.noHeader {
 		noHeader = true
 	}
 	switch resource.Result.(type) {
 	case map[string]interface{}:
 		m := resource.Result.(map[string]interface{})
 		m = onlyNonNil(m)
-		switch ctx.outputFormat {
+		switch ctx.GlobalOptions.output {
 		case "json":
 			output.MetadataJSON(w, m, keys)
 		case "csv":
@@ -275,7 +268,7 @@ func printResult(command Commander, resource *Resource) {
 		for i, m := range ms {
 			ms[i] = onlyNonNil(m)
 		}
-		switch ctx.outputFormat {
+		switch ctx.GlobalOptions.output {
 		case "json":
 			output.ListJSON(w, ms, keys)
 		case "csv":
@@ -292,7 +285,7 @@ func printResult(command Commander, resource *Resource) {
 			fmt.Fprintf(os.Stderr, "Error copying (io.Reader) result: %s\n", err)
 		}
 	default:
-		switch ctx.outputFormat {
+		switch ctx.GlobalOptions.output {
 		case "json":
 			output.DefaultJSON(w, resource.Result)
 		default:
