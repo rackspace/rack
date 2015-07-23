@@ -3,6 +3,7 @@ package instancecommands
 import (
 	"fmt"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
@@ -16,9 +17,9 @@ var remove = cli.Command{
 	Usage:       util.Usage(commandPrefix, "delete", "[--id <serverID> | --name <serverName> | --stdin id]"),
 	Description: "Deletes an existing server",
 	Action:      actionDelete,
-	Flags:       util.CommandFlags(flagsDelete, keysDelete),
+	Flags:       commandoptions.CommandFlags(flagsDelete, keysDelete),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsDelete, keysDelete))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsDelete, keysDelete))
 	},
 }
 

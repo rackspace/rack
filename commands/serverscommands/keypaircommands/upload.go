@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
@@ -17,9 +18,9 @@ var upload = cli.Command{
 	Usage:       util.Usage(commandPrefix, "upload", "--name <keypairName> [--public-key <publicKey> | --file <file>]"),
 	Description: "Uploads a keypair",
 	Action:      actionUpload,
-	Flags:       util.CommandFlags(flagsUpload, keysUpload),
+	Flags:       commandoptions.CommandFlags(flagsUpload, keysUpload),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsUpload, keysUpload))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsUpload, keysUpload))
 	},
 }
 

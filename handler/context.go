@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/jrperritt/rack/auth"
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/internal/github.com/Sirupsen/logrus"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
@@ -90,19 +91,44 @@ func (ctx *Context) storeCredentials() {
 }
 
 func (ctx *Context) handleGlobalOptions() error {
-	section, err := auth.Section("")
+	defaultSection, err := commandoptions.ProfileSection("")
 	if err != nil {
 		return err
 	}
-	keysHash := section.KeysHash()
+	defaultKeysHash := defaultSection.KeysHash()
+
+	have := make(map[string]commandoptions.Cred)
+	want := map[string]string{
+		"output":    "",
+		"no-cache":  "",
+		"no-header": "",
+		"log":       "",
+	}
+
+	// use command-line options if available
+	commandoptions.CLIopts(ctx.CLIContext, have, want)
+	// are there any unset auth variables?
+	if len(want) != 0 {
+		// if so, look in config file
+		err := commandoptions.ConfigFile(ctx.CLIContext, have, want)
+		if err != nil {
+			return err
+		}
+	}
 
 	var outputFormat string
 	if ctx.CLIContext.GlobalIsSet("output") {
 		outputFormat = ctx.CLIContext.GlobalString("output")
 	} else if ctx.CLIContext.IsSet("output") {
 		outputFormat = ctx.CLIContext.String("output")
-	} else if value, ok := keysHash["output"]; ok {
+	} else if value, ok := defaultKeysHash["output"]; ok && value != "" {
 		outputFormat = value
+	} else {
+		have["output"] = commandoptions.Cred{
+			Value: "table",
+			From:  "default value",
+		}
+		outputFormat = "table"
 	}
 	switch outputFormat {
 	case "json", "csv", "table":
@@ -113,13 +139,13 @@ func (ctx *Context) handleGlobalOptions() error {
 
 	if ctx.CLIContext.IsSet("no-header") || ctx.CLIContext.GlobalIsSet("no-header") {
 		ctx.GlobalOptions.noHeader = true
-	} else if _, ok := keysHash["no-header"]; ok {
+	} else if value, ok := defaultKeysHash["no-header"]; ok && value != "" {
 		ctx.GlobalOptions.noHeader = true
 	}
 
 	if ctx.CLIContext.IsSet("no-cache") || ctx.CLIContext.GlobalIsSet("no-cache") {
 		ctx.GlobalOptions.noCache = true
-	} else if _, ok := keysHash["no-cache"]; ok {
+	} else if value, ok := defaultKeysHash["no-cache"]; ok && value != "" {
 		ctx.GlobalOptions.noCache = true
 	}
 
@@ -128,7 +154,7 @@ func (ctx *Context) handleGlobalOptions() error {
 		logLevel = ctx.CLIContext.GlobalString("log")
 	} else if ctx.CLIContext.IsSet("log") {
 		logLevel = ctx.CLIContext.String("log")
-	} else if value, ok := keysHash["log"]; ok {
+	} else if value, ok := defaultKeysHash["log"]; ok && value != "" {
 		logLevel = value
 	}
 	var level logrus.Level
@@ -147,6 +173,12 @@ func (ctx *Context) handleGlobalOptions() error {
 		Formatter: &logrus.TextFormatter{},
 		Level:     level,
 	}
+
+	haveString := ""
+	for k, v := range have {
+		haveString += fmt.Sprintf("%s: %s (from %s)\n", k, v.Value, v.From)
+	}
+	ctx.logger.Infof("Global Options:\n%s\n", haveString)
 
 	return nil
 }

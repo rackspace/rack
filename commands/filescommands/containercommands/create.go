@@ -3,6 +3,7 @@ package containercommands
 import (
 	"fmt"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers"
@@ -14,9 +15,9 @@ var get = cli.Command{
 	Usage:       util.Usage(commandPrefix, "create", "[--name <containerName> | --stdin name]"),
 	Description: "Creates a container",
 	Action:      actionCreate,
-	Flags:       util.CommandFlags(flagsCreate, keysCreate),
+	Flags:       commandoptions.CommandFlags(flagsCreate, keysCreate),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsCreate, keysCreate))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsCreate, keysCreate))
 	},
 }
 

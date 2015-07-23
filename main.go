@@ -8,12 +8,12 @@ import (
 	"text/tabwriter"
 	"text/template"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/commands/blockstoragecommands"
 	"github.com/jrperritt/rack/commands/filescommands"
 	"github.com/jrperritt/rack/commands/networkscommands"
 	"github.com/jrperritt/rack/commands/serverscommands"
 	"github.com/jrperritt/rack/setup"
-	"github.com/jrperritt/rack/util"
 
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 )
@@ -117,7 +117,7 @@ func completeGlobals(vals []interface{}) {
 // `rack --json servers` are all legitimate command prefixes.
 func globalOptions(app *cli.App) []interface{} {
 	var i []interface{}
-	globalFlags := util.GlobalFlags()
+	globalFlags := commandoptions.GlobalFlags()
 	for _, globalFlag := range globalFlags {
 		i = append(i, globalFlag)
 	}

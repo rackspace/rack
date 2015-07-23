@@ -1,6 +1,7 @@
 package volumecommands
 
 import (
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osVolumes "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes"
@@ -12,9 +13,9 @@ var get = cli.Command{
 	Usage:       util.Usage(commandPrefix, "get", "[--id <volumeID> | --name <volumeName> | --stdin id]"),
 	Description: "Gets a volume",
 	Action:      actionGet,
-	Flags:       util.CommandFlags(flagsGet, keysGet),
+	Flags:       commandoptions.CommandFlags(flagsGet, keysGet),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsGet, keysGet))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsGet, keysGet))
 	},
 }
 

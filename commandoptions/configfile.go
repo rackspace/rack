@@ -1,4 +1,4 @@
-package auth
+package commandoptions
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"github.com/jrperritt/rack/util"
 )
 
-func configfile(c *cli.Context, have map[string]authCred, need map[string]string) error {
+func ConfigFile(c *cli.Context, have map[string]Cred, need map[string]string) error {
 	var profile string
 	if c.GlobalIsSet("profile") {
 		profile = c.GlobalString("profile")
@@ -17,27 +17,27 @@ func configfile(c *cli.Context, have map[string]authCred, need map[string]string
 		profile = c.String("profile")
 	}
 
-	section, err := Section(profile)
+	section, err := ProfileSection(profile)
 	if err != nil {
 		return err
 	}
 
 	for opt := range need {
 		if val := section.Key(opt).String(); val != "" {
-			have[opt] = authCred{value: val, from: fmt.Sprintf("config file (profile: %s)", section.Name())}
+			have[opt] = Cred{Value: val, From: fmt.Sprintf("config file (profile: %s)", section.Name())}
 			delete(need, opt)
 		}
 	}
 
 	if profile != "" {
-		section, err := Section("")
+		section, err := ProfileSection("")
 		if err != nil {
 			return err
 		}
 
 		for opt := range need {
 			if val := section.Key(opt).String(); val != "" {
-				have[opt] = authCred{value: val, from: fmt.Sprintf("config file (profile: default)")}
+				have[opt] = Cred{Value: val, From: fmt.Sprintf("config file (profile: default)")}
 				delete(need, opt)
 			}
 		}
@@ -46,7 +46,7 @@ func configfile(c *cli.Context, have map[string]authCred, need map[string]string
 	return nil
 }
 
-func Section(profile string) (*ini.Section, error) {
+func ProfileSection(profile string) (*ini.Section, error) {
 	dir, err := util.RackDir()
 	if err != nil {
 		// return fmt.Errorf("Error retrieving rack directory: %s\n", err)

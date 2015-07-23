@@ -1,4 +1,4 @@
-package util
+package commandoptions
 
 import "github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 

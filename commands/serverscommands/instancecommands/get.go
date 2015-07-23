@@ -1,6 +1,7 @@
 package instancecommands
 
 import (
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
@@ -13,9 +14,9 @@ var get = cli.Command{
 	Usage:       util.Usage(commandPrefix, "get", "[--id <serverID> | --name <serverName> | --stdin id]"),
 	Description: "Retrieves an existing server",
 	Action:      actionGet,
-	Flags:       util.CommandFlags(flagsGet, keysGet),
+	Flags:       commandoptions.CommandFlags(flagsGet, keysGet),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsGet, keysGet))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsGet, keysGet))
 	},
 }
 

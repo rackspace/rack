@@ -1,6 +1,7 @@
 package objectcommands
 
 import (
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
@@ -15,9 +16,9 @@ var list = cli.Command{
 	Usage:       util.Usage(commandPrefix, "list", "[--container <containerName> | --stdin container]"),
 	Description: "Lists objects in a container",
 	Action:      actionList,
-	Flags:       util.CommandFlags(flagsList, keysList),
+	Flags:       commandoptions.CommandFlags(flagsList, keysList),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsList, keysList))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsList, keysList))
 	},
 }
 

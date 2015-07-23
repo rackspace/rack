@@ -1,6 +1,7 @@
 package keypaircommands
 
 import (
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
@@ -13,9 +14,9 @@ var get = cli.Command{
 	Usage:       util.Usage(commandPrefix, "get", "[--name <keypairName> | stdin name]"),
 	Description: "Retreives a keypair",
 	Action:      actionGet,
-	Flags:       util.CommandFlags(flagsGet, keysGet),
+	Flags:       commandoptions.CommandFlags(flagsGet, keysGet),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsGet, keysGet))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsGet, keysGet))
 	},
 }
 

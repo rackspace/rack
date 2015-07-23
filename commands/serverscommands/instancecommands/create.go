@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"strings"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
@@ -16,9 +17,9 @@ var create = cli.Command{
 	Usage:       util.Usage(commandPrefix, "create", "[--name <instanceName> | --stdin name]"),
 	Description: "Creates a new server instance",
 	Action:      actionCreate,
-	Flags:       util.CommandFlags(flagsCreate, keysCreate),
+	Flags:       commandoptions.CommandFlags(flagsCreate, keysCreate),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsCreate, keysCreate))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsCreate, keysCreate))
 	},
 }
 

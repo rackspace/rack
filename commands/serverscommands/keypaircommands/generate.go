@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
@@ -17,9 +18,9 @@ var generate = cli.Command{
 	Usage:       util.Usage(commandPrefix, "generate", "[--name <keypairName> | --stdin name]"),
 	Description: "Generates a keypair",
 	Action:      actionGenerate,
-	Flags:       util.CommandFlags(flagsGenerate, keysGenerate),
+	Flags:       commandoptions.CommandFlags(flagsGenerate, keysGenerate),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsGenerate, keysGenerate))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsGenerate, keysGenerate))
 	},
 }
 

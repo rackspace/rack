@@ -1,6 +1,7 @@
 package networkcommands
 
 import (
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osNetworks "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/networks"
@@ -13,9 +14,9 @@ var get = cli.Command{
 	Usage:       util.Usage(commandPrefix, "get", ""),
 	Description: "Gets an existing network",
 	Action:      actionGet,
-	Flags:       util.CommandFlags(flagsGet, keysGet),
+	Flags:       commandoptions.CommandFlags(flagsGet, keysGet),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsGet, keysGet))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsGet, keysGet))
 	},
 }
 

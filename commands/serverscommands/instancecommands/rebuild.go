@@ -1,6 +1,7 @@
 package instancecommands
 
 import (
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
@@ -13,9 +14,9 @@ var rebuild = cli.Command{
 	Usage:       util.Usage(commandPrefix, "rebuild", "[--id <serverID>|--name <serverName>] --image-id <image-id> --admin-pass <admin-pass>"),
 	Description: "Rebuilds an existing server",
 	Action:      actionRebuild,
-	Flags:       util.CommandFlags(flagsRebuild, keysGet),
+	Flags:       commandoptions.CommandFlags(flagsRebuild, keysGet),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsRebuild, keysGet))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsRebuild, keysGet))
 	},
 }
 

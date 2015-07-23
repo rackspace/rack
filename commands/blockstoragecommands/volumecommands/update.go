@@ -1,6 +1,7 @@
 package volumecommands
 
 import (
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osVolumes "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes"
@@ -12,9 +13,9 @@ var update = cli.Command{
 	Usage:       util.Usage(commandPrefix, "update", "--id <volumeID>"),
 	Description: "Updates a volume",
 	Action:      actionUpdate,
-	Flags:       util.CommandFlags(flagsUpdate, keysUpdate),
+	Flags:       commandoptions.CommandFlags(flagsUpdate, keysUpdate),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsUpdate, keysUpdate))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsUpdate, keysUpdate))
 	},
 }
 

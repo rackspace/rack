@@ -3,6 +3,7 @@ package keypaircommands
 import (
 	"fmt"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs"
@@ -14,9 +15,9 @@ var remove = cli.Command{
 	Usage:       util.Usage(commandPrefix, "delete", "[--name <keypairName> | --stdin name]"),
 	Description: "Deletes a keypair",
 	Action:      actionDelete,
-	Flags:       util.CommandFlags(flagsDelete, keysDelete),
+	Flags:       commandoptions.CommandFlags(flagsDelete, keysDelete),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsDelete, keysDelete))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsDelete, keysDelete))
 	},
 }
 

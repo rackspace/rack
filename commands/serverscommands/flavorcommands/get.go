@@ -1,6 +1,7 @@
 package flavorcommands
 
 import (
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
@@ -14,9 +15,9 @@ var get = cli.Command{
 	Usage:       util.Usage(commandPrefix, "get", "[--id <serverID> | --name <serverName> | --stdin id]"),
 	Description: "Retreives a flavor",
 	Action:      actionGet,
-	Flags:       util.CommandFlags(flagsGet, keysGet),
+	Flags:       commandoptions.CommandFlags(flagsGet, keysGet),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsGet, keysGet))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsGet, keysGet))
 	},
 }
 

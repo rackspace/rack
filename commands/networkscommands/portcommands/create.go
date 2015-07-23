@@ -1,6 +1,7 @@
 package portcommands
 
 import (
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osPorts "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/ports"
@@ -13,9 +14,9 @@ var create = cli.Command{
 	Usage:       util.Usage(commandPrefix, "create", "--network-id <network-id>"),
 	Description: "Creates a ports",
 	Action:      actionCreate,
-	Flags:       util.CommandFlags(flagsCreate, keysCreate),
+	Flags:       commandoptions.CommandFlags(flagsCreate, keysCreate),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsCreate, keysCreate))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsCreate, keysCreate))
 	},
 }
 

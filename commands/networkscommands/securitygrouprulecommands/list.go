@@ -3,6 +3,7 @@ package securitygrouprulecommands
 import (
 	"fmt"
 
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osSecurityGroupRules "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/rules"
@@ -16,9 +17,9 @@ var list = cli.Command{
 	Usage:       util.Usage(commandPrefix, "list", ""),
 	Description: "Lists existing security group rules",
 	Action:      actionList,
-	Flags:       util.CommandFlags(flagsList, keysList),
+	Flags:       commandoptions.CommandFlags(flagsList, keysList),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsList, keysList))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsList, keysList))
 	},
 }
 

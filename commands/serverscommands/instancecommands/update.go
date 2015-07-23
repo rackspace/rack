@@ -1,6 +1,7 @@
 package instancecommands
 
 import (
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
@@ -13,9 +14,9 @@ var update = cli.Command{
 	Usage:       util.Usage(commandPrefix, "update", "[--id <serverID>|--name <serverName>]"),
 	Description: "Updates an existing server",
 	Action:      actionUpdate,
-	Flags:       util.CommandFlags(flagsUpdate, keysUpdate),
+	Flags:       commandoptions.CommandFlags(flagsUpdate, keysUpdate),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsUpdate, keysUpdate))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsUpdate, keysUpdate))
 	},
 }
 
