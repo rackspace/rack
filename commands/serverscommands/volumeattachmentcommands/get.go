@@ -12,7 +12,7 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       util.Usage(commandPrefix, "get", "[--server-id <serverID> | --server-name <serverName>] [--id <volumeID> | --name <volumeName> | --stdin id]"),
+	Usage:       util.Usage(commandPrefix, "get", "[--server-id <serverID> | --server-name <serverName>] --id <attachmentID> "),
 	Description: "Gets a new volume attachment on the server",
 	Action:      actionGet,
 	Flags:       commandoptions.CommandFlags(flagsGet, keysGet),
