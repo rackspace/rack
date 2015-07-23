@@ -10,7 +10,6 @@ import (
 	"github.com/jrperritt/rack/internal/github.com/cenkalti/backoff"
 	"github.com/jrperritt/rack/internal/github.com/dustin/go-humanize"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers"
 	"github.com/jrperritt/rack/util"
 )
 
@@ -45,6 +44,7 @@ func handleEmpty(command handler.Commander, resource *handler.Resource, params *
 		wg.Add(1)
 		jobs <- names[i]
 	}
+	close(jobs)
 
 	// default the number of goroutines to spawn if the `concurrency` flag
 	// wasn't provided
@@ -61,7 +61,6 @@ func handleEmpty(command handler.Commander, resource *handler.Resource, params *
 				for _ = range ticker.C {
 					rawResponse := objects.Delete(command.Context().ServiceClient, params.container, objectName, nil)
 					if rawResponse.Err != nil {
-						jobs <- objectName
 						continue
 					}
 					ticker.Stop()
@@ -81,16 +80,7 @@ func handleEmpty(command handler.Commander, resource *handler.Resource, params *
 		}(&totalFiles)
 	}
 
-	fmt.Println("Waiting for wait group to be done")
 	wg.Wait()
-
-	getResult, err := containers.Get(command.Context().ServiceClient, params.container).Extract()
-	fmt.Printf("getResult: %+v\n", getResult)
-	if err == nil && getResult.ObjectCount != 0 {
-		fmt.Printf("Re-running handleEmpty because not all objects were deleted. Still have %d\n", getResult.ObjectCount)
-		params.concurrency = 1
-		handleEmpty(command, resource, params)
-	}
 
 	resource.Result = fmt.Sprintf("Finished! Deleted %s %s in %s", humanize.Comma(totalFiles), util.Pluralize("object", totalFiles), humanize.RelTime(start, time.Now(), "", ""))
 }
