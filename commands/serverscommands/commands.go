@@ -5,6 +5,7 @@ import (
 	"github.com/jrperritt/rack/commands/serverscommands/imagecommands"
 	"github.com/jrperritt/rack/commands/serverscommands/instancecommands"
 	"github.com/jrperritt/rack/commands/serverscommands/keypaircommands"
+	"github.com/jrperritt/rack/commands/serverscommands/volumeattachmentcommands"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 )
 
@@ -30,6 +31,11 @@ func Get() []cli.Command {
 			Name:        "keypair",
 			Usage:       "SSH keypairs for accessing servers.",
 			Subcommands: keypaircommands.Get(),
+		},
+		{
+			Name:        "volume-attach",
+			Usage:       "Volumes attached to servers.",
+			Subcommands: volumeattachmentcommands.Get(),
 		},
 	}
 }

@@ -10,7 +10,7 @@ func Get() []cli.Command {
 	return []cli.Command{
 		//list,
 		create,
-		//get,
+		get,
 		//remove,
 	}
 }
