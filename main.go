@@ -33,7 +33,7 @@ OPTIONS:
 	app.Usage = Usage()
 	app.EnableBashCompletion = true
 	app.Commands = Cmds()
-	app.Flags = util.GlobalFlags()
+	app.Flags = commandoptions.GlobalFlags()
 	app.BashComplete = func(c *cli.Context) {
 		completeGlobals(globalOptions(app))
 	}
@@ -52,7 +52,7 @@ func Usage() string {
 
 // Desc returns, you guessed it, the description
 func Desc() string {
-	return `Rack is an opinionated command-line tool that allows Rackspace users 
+	return `Rack is an opinionated command-line tool that allows Rackspace users
 to accomplish tasks in a simple, idiomatic way. It seeks to provide
 flexibility through common Unix practices like piping and composability. All
 commands have been tested against Rackspace's live API.`

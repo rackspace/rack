@@ -1,6 +1,7 @@
 package containercommands
 
 import (
+	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/util"
@@ -11,9 +12,9 @@ var empty = cli.Command{
 	Usage:       util.Usage(commandPrefix, "empty", "[--name <containerName> | --stdin name]"),
 	Description: "Deletes all objects in a container, but not the container itself.",
 	Action:      actionEmpty,
-	Flags:       util.CommandFlags(flagsEmpty, keysEmpty),
+	Flags:       commandoptions.CommandFlags(flagsEmpty, keysEmpty),
 	BashComplete: func(c *cli.Context) {
-		util.CompleteFlags(util.CommandFlags(flagsEmpty, keysEmpty))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsEmpty, keysEmpty))
 	},
 }
 
