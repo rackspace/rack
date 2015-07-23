@@ -13,7 +13,7 @@ import (
 var get = cli.Command{
 	Name:        "get",
 	Usage:       util.Usage(commandPrefix, "get", "[--server-id <serverID> | --server-name <serverName>] --id <attachmentID> "),
-	Description: "Gets a new volume attachment on the server",
+	Description: "Gets an existing volume attachment",
 	Action:      actionGet,
 	Flags:       commandoptions.CommandFlags(flagsGet, keysGet),
 	BashComplete: func(c *cli.Context) {
