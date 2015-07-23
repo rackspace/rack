@@ -9,11 +9,25 @@
 			"revisionTime": "2015-06-26T11:42:49-04:00"
 		},
 		{
+			"canonical": "github.com/cenkalti/backoff",
+			"comment": "",
+			"local": "github.com/jrperritt/rack/internal/github.com/cenkalti/backoff",
+			"revision": "6c45d6bc1e78d94431dff8fc28a99f20bafa355a",
+			"revisionTime": "2015-08-13T10:09:15Z"
+		},
+		{
 			"canonical": "github.com/codegangsta/cli",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/codegangsta/cli",
 			"revision": "b6d983e02c46cb7b979ec35d11b8d0b0c9574a9e",
 			"revisionTime": "2015-06-29T21:01:06-07:00"
+		},
+		{
+			"canonical": "github.com/dustin/go-humanize",
+			"comment": "",
+			"local": "github.com/jrperritt/rack/internal/github.com/dustin/go-humanize",
+			"revision": "c128122e0b9b93799aef8181a537e5d8fd7081d6",
+			"revisionTime": "2015-08-13T10:09:15Z"
 		},
 		{
 			"canonical": "github.com/fatih/structs",
@@ -77,6 +91,13 @@
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs",
 			"revision": "f956c6c6c0c55844eff4b153b5071ef6e3ab4ab4",
 			"revisionTime": "2015-06-30T10:09:15-06:00"
+		},
+		{
+			"canonical": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/volumeattach",
+			"comment": "",
+			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/volumeattach",
+			"revision": "52e6adaa7282e298ae76b7973158316b41513795",
+			"revisionTime": "2015-07-16T17:58:04-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/compute/v2/flavors",
@@ -315,20 +336,6 @@
 			"local": "github.com/jrperritt/rack/internal/gopkg.in/ini.v1",
 			"revision": "177219109c97e7920c933e21c9b25f874357b237",
 			"revisionTime": "2015-03-19T00:52:36-04:00"
-		},
-		{
-			"canonical": "github.com/cenkalti/backoff",
-			"comment": "",
-			"local": "github.com/jrperritt/rack/internal/github.com/cenkalti/backoff",
-			"revision": "6c45d6bc1e78d94431dff8fc28a99f20bafa355a",
-			"revisionTime": "2015-08-13T10:09:15Z"
-		},
-		{
-			"canonical": "github.com/dustin/go-humanize",
-			"comment": "",
-			"local": "github.com/jrperritt/rack/internal/github.com/dustin/go-humanize",
-			"revision": "c128122e0b9b93799aef8181a537e5d8fd7081d6",
-			"revisionTime": "2015-08-13T10:09:15Z"
 		}
 	]
 }
