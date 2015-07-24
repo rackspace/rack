@@ -11,7 +11,7 @@ import (
 
 var create = cli.Command{
 	Name:        "create",
-	Usage:       util.Usage(commandPrefix, "create", "[--server-id <serverID> | --server-name <serverName>] [--id <volumeID> | --name <volumeName> | --stdin id]"),
+	Usage:       util.Usage(commandPrefix, "create", "[--server-id <serverID> | --server-name <serverName>] [--volume-id <volumeID> | --volume-name <volumeName> | --stdin volume-id]"),
 	Description: "Creates a new volume attachment on the server",
 	Action:      actionCreate,
 	Flags:       commandoptions.CommandFlags(flagsCreate, keysCreate),
@@ -23,12 +23,16 @@ var create = cli.Command{
 func flagsCreate() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "id",
-			Usage: "[optional; required if `stdin` isn't provided] The ID of the volume to attach.",
+			Name:  "volume-id",
+			Usage: "[optional; required if `stdin` or volume-name isn't provided] The ID of the volume to attach.",
+		},
+		cli.StringFlag{
+			Name:  "volume-name",
+			Usage: "[optional; required if `stdin` or `volume-id` isn't provided] The ID of the volume to attach.",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `id` isn't provided] The field being piped into STDIN. Valid values are: id",
+			Usage: "[optional; required if `volume-id` or `volume-name` isn't provided] The field being piped into STDIN. Valid values are: volume-id",
 		},
 		cli.StringFlag{
 			Name:  "server-id",
@@ -99,12 +103,12 @@ func (command *commandCreate) HandlePipe(resource *handler.Resource, item string
 }
 
 func (command *commandCreate) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"id"})
+	volumeID, err := volumeIDorName(command.Ctx)
 	if err != nil {
 		return err
 	}
 
-	resource.Params.(*paramsCreate).opts.VolumeID = command.Ctx.CLIContext.String("id")
+	resource.Params.(*paramsCreate).opts.VolumeID = volumeID
 	return nil
 }
 
@@ -119,5 +123,5 @@ func (command *commandCreate) Execute(resource *handler.Resource) {
 }
 
 func (command *commandCreate) StdinField() string {
-	return "id"
+	return "volume-id"
 }
