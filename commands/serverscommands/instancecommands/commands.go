@@ -21,5 +21,6 @@ func Get() []cli.Command {
 		getMetadata,
 		setMetadata,
 		updateMetadata,
+		deleteMetadata,
 	}
 }
