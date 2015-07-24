@@ -16,5 +16,11 @@ func Get() []cli.Command {
 		reboot,
 		rebuild,
 		resize,
+		listAddresses,
+		listAddressesByNetwork,
+		getMetadata,
+		setMetadata,
+		updateMetadata,
+		deleteMetadata,
 	}
 }

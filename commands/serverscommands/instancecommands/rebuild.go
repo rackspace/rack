@@ -57,7 +57,7 @@ func flagsRebuild() []cli.Flag {
 	}
 }
 
-var keysRebuild = []string{"ID", "Name", "Status", "Created", "Updated", "Image", "Flavor", "Public IPv4", "Public IPv6", "Private IPv4", "KeyName"}
+var keysRebuild = []string{"ID", "Name", "Status", "Created", "Updated", "Image", "Flavor", "PublicIPv4", "PublicIPv6", "PrivateIPv4", "KeyName"}
 
 type paramsRebuild struct {
 	serverID string

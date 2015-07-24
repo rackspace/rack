@@ -11,14 +11,14 @@ func serverSingle(rawServer interface{}) map[string]interface{} {
 		return nil
 	}
 	m := structs.Map(rawServer)
-	m["Public IPv4"] = server.AccessIPv4
-	m["Public IPv6"] = server.AccessIPv6
-	m["Private IPv4"] = ""
+	m["PublicIPv4"] = server.AccessIPv4
+	m["PublicIPv6"] = server.AccessIPv6
+	m["PrivateIPv4"] = ""
 	ips, ok := server.Addresses["private"].([]interface{})
 	if ok || len(ips) > 0 {
 		priv, ok := ips[0].(map[string]interface{})
 		if ok {
-			m["Private IPv4"] = priv["addr"]
+			m["PrivateIPv4"] = priv["addr"]
 		}
 	}
 	m["Flavor"] = server.Flavor["id"]

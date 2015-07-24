@@ -45,7 +45,7 @@ func flagsUpdate() []cli.Flag {
 	}
 }
 
-var keysUpdate = []string{"ID", "Name", "Public IPv4", "Public IPv6"}
+var keysUpdate = []string{"ID", "Name", "PublicIPv4", "PublicIPv6"}
 
 type paramsUpdate struct {
 	serverID string
