@@ -7,7 +7,6 @@ import (
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	osVolumeAttach "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/volumeattach"
-	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/jrperritt/rack/util"
 )
 
@@ -70,7 +69,7 @@ func (command *commandDelete) ServiceClientType() string {
 }
 
 func (command *commandDelete) HandleFlags(resource *handler.Resource) error {
-	serverID, err := command.Ctx.IDOrName(osServers.IDFromName)
+	serverID, err := serverIDorName(command.Ctx)
 	if err != nil {
 		return err
 	}

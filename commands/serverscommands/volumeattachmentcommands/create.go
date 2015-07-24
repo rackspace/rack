@@ -6,7 +6,6 @@ import (
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
 	osVolumeAttach "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/volumeattach"
-	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/jrperritt/rack/util"
 )
 
@@ -77,7 +76,7 @@ func (command *commandCreate) ServiceClientType() string {
 }
 
 func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
-	serverID, err := command.Ctx.IDOrName(osServers.IDFromName)
+	serverID, err := serverIDorName(command.Ctx)
 	if err != nil {
 		return err
 	}

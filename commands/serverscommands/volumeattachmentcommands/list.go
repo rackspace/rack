@@ -1,16 +1,12 @@
 package volumeattachmentcommands
 
 import (
-	"fmt"
-
 	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
 	osVolumeAttach "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/volumeattach"
-	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/pagination"
-	"github.com/jrperritt/rack/output"
 	"github.com/jrperritt/rack/util"
 )
 
@@ -82,22 +78,9 @@ func (command *commandList) HandlePipe(resource *handler.Resource, item string) 
 }
 
 func (command *commandList) HandleSingle(resource *handler.Resource) error {
-	ctx := command.Ctx
-	var serverID string
-	if ctx.CLIContext.IsSet("server-id") {
-		if ctx.CLIContext.IsSet("server-name") {
-			return fmt.Errorf("Only one of either --server-id or --server-name may be provided.")
-		}
-		serverID = ctx.CLIContext.String("server-id")
-	} else if ctx.CLIContext.IsSet("server-name") {
-		name := ctx.CLIContext.String("server-name")
-		id, err := osServers.IDFromName(ctx.ServiceClient, name)
-		if err != nil {
-			return fmt.Errorf("Error converting name [%s] to ID: %s", name, err)
-		}
-		serverID = id
-	} else {
-		return output.ErrMissingFlag{Msg: "One of either --server-id or --server-name must be provided."}
+	serverID, err := serverIDorName(command.Ctx)
+	if err != nil {
+		return err
 	}
 
 	resource.Params.(*paramsList).serverID = serverID
