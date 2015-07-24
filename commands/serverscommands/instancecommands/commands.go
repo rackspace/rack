@@ -18,5 +18,6 @@ func Get() []cli.Command {
 		resize,
 		listAddresses,
 		listAddressesByNetwork,
+		getMetadata,
 	}
 }
