@@ -88,6 +88,7 @@ func (command *commandGetMetadata) PreCSV(resource *handler.Resource) {
 	resource.Result = map[string]interface{}{
 		"Metadata": resource.Result,
 	}
+	resource.Keys = []string{"Metadata"}
 	resource.FlattenMap("Metadata")
 }
 

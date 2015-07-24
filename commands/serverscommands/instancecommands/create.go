@@ -63,7 +63,7 @@ func flagsCreate() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "metadata",
-			Usage: "[optional] A comma-separated string a key=value pairs.",
+			Usage: "[optional] A comma-separated string of key=value pairs.",
 		},
 		cli.StringFlag{
 			Name:  "admin-pass",
