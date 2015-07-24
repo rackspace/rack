@@ -37,7 +37,7 @@ func flagsList() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `server-id` or `server-name` isn't provided] The field being piped into STDIN. Valid values are: id",
+			Usage: "[optional; required if `server-id` or `server-name` isn't provided] The field being piped into STDIN. Valid values are: server-id",
 		},
 	}
 }
@@ -125,5 +125,5 @@ func (command *commandList) Execute(resource *handler.Resource) {
 }
 
 func (command *commandList) StdinField() string {
-	return "id"
+	return "server-id"
 }
