@@ -79,6 +79,35 @@ Usage::
     rack servers instance resize --name <serverName> --flavor-id <flavorID> [optional flags]
     (echo serverID1 && echo serverID2) | rack servers instance resize --stdin id --flavor-id <flavorID> [optional flags]
 
+``set-metadata``
+^^^^^^^^^^^^^^^^
+Usage::
+
+    rack servers instance set-metadata --id <serverID> --metadata <key1=val1,key2=val2,...> [optional flags]
+    rack servers instance set-metadata --name <serverName> --metadata <key1=val1,key2=val2,...> [optional flags]
+
+``get-metadata``
+^^^^^^^^^^^^^^^^
+Usage::
+
+    rack servers instance get-metadata --id <serverID> [optional flags]
+    rack servers instance get-metadata --name <serverName> [optional flags]
+
+``update-metadata``
+^^^^^^^^^^^^^^^^
+Usage::
+
+    rack servers instance update-metadata --id <serverID> --metadata <key1=val1,key2=val2,...> [optional flags]
+    rack servers instance update-metadata --name <serverName> --metadata <key1=val1,key2=val2,...> [optional flags]
+
+``delete-metadata``
+^^^^^^^^^^^^^^^^
+Usage::
+
+    rack servers instance delete-metadata --id <serverID> --metadata <key1=val1,key2=val2,...> [optional flags]
+    rack servers instance delete-metadata --name <serverName> --metadata <key1=val1,key2=val2,...> [optional flags]
+
+
 ``image``
 ~~~~~~~~~
 
@@ -160,3 +189,42 @@ Usage::
 
     rack servers keypair delete --name <keypairName> [optional flags]
     (echo keypairName1 && echo keypairName2) | rack servers keypair delete --stdin name [optional flags]
+
+
+``volume-attachment``
+~~~~~~~~~~~~~~~~~~~~~
+
+  Volume Attachment operations
+
+``list``
+^^^^^^^^
+Usage::
+
+    rack servers volume-attachment list --server-id <serverID> [optional flags]
+    rack servers volume-attachment list --server-name <serverName> [optional flags]
+    rack servers volume-attachment list --stdin server-id [optional flags]
+
+``create``
+^^^^^^^^^^
+Usage::
+
+    rack servers volume-attachment create --server-id <serverID> --volume-id <volumeID> [optional flags]
+    rack servers volume-attachment create --server-name <serverName> --volume-id <volumeID> [optional flags]
+    rack servers volume-attachment create --server-id <serverID> --volume-name <volumeName> [optional flags]
+    rack servers volume-attachment create --server-name <serverName> --volume-name <volumeName> [optional flags]
+    (echo volumeID1 && echo volumeID2) | rack servers volume-attachment create --server-id <serverID> --stdin volume-id [optional flags]
+    (echo volumeID1 && echo volumeID2) | rack servers volume-attachment create --server-name <serverName> --stdin volume-id [optional flags]
+
+``get``
+^^^^^^^
+Usage::
+
+    rack servers volume-attachment get --server-id <serverID> --id <attachmentID> [optional flags]
+    rack servers volume-attachment get --server-name <serverName> --id <attachmentID> [optional flags]
+
+``delete``
+^^^^^^^^^^
+Usage::
+
+    rack servers volume-attachment delete --server-id <serverID> --id <attachmentID> [optional flags]
+    rack servers volume-attachment delete --server-name <serverName> --id <attachmentID> [optional flags]
