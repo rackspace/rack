@@ -8,7 +8,7 @@ var serviceClientType = "compute"
 // Get returns all the commands allowed for a `servers volumeattachment` request.
 func Get() []cli.Command {
 	return []cli.Command{
-		//list,
+		list,
 		create,
 		get,
 		//remove,
