@@ -95,7 +95,11 @@ func (ctx *Context) handleGlobalOptions() error {
 	if err != nil {
 		return err
 	}
-	defaultKeysHash := defaultSection.KeysHash()
+
+	defaultKeysHash := map[string]string{}
+	if defaultSection != nil {
+		defaultKeysHash = defaultSection.KeysHash()
+	}
 
 	have := make(map[string]commandoptions.Cred)
 	want := map[string]string{

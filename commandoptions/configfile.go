@@ -22,6 +22,10 @@ func ConfigFile(c *cli.Context, have map[string]Cred, need map[string]string) er
 		return err
 	}
 
+	if section == nil {
+		return nil
+	}
+
 	for opt := range need {
 		if val := section.Key(opt).String(); val != "" {
 			have[opt] = Cred{Value: val, From: fmt.Sprintf("config file (profile: %s)", section.Name())}
