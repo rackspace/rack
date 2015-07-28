@@ -11,9 +11,7 @@ import (
 
 func ConfigFile(c *cli.Context, have map[string]Cred, need map[string]string) error {
 	var profile string
-	if c.GlobalIsSet("profile") {
-		profile = c.GlobalString("profile")
-	} else if c.IsSet("profile") {
+	if c.IsSet("profile") {
 		profile = c.String("profile")
 	}
 

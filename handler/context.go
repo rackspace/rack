@@ -121,9 +121,7 @@ func (ctx *Context) handleGlobalOptions() error {
 	}
 
 	var outputFormat string
-	if ctx.CLIContext.GlobalIsSet("output") {
-		outputFormat = ctx.CLIContext.GlobalString("output")
-	} else if ctx.CLIContext.IsSet("output") {
+	if ctx.CLIContext.IsSet("output") {
 		outputFormat = ctx.CLIContext.String("output")
 	} else if value, ok := defaultKeysHash["output"]; ok && value != "" {
 		outputFormat = value
@@ -141,22 +139,20 @@ func (ctx *Context) handleGlobalOptions() error {
 		return fmt.Errorf("Invalid value for `output` flag: '%s'. Options are: json, csv, table.", outputFormat)
 	}
 
-	if ctx.CLIContext.IsSet("no-header") || ctx.CLIContext.GlobalIsSet("no-header") {
+	if ctx.CLIContext.IsSet("no-header") {
 		ctx.GlobalOptions.noHeader = true
 	} else if value, ok := defaultKeysHash["no-header"]; ok && value != "" {
 		ctx.GlobalOptions.noHeader = true
 	}
 
-	if ctx.CLIContext.IsSet("no-cache") || ctx.CLIContext.GlobalIsSet("no-cache") {
+	if ctx.CLIContext.IsSet("no-cache") {
 		ctx.GlobalOptions.noCache = true
 	} else if value, ok := defaultKeysHash["no-cache"]; ok && value != "" {
 		ctx.GlobalOptions.noCache = true
 	}
 
 	var logLevel string
-	if ctx.CLIContext.GlobalIsSet("log") {
-		logLevel = ctx.CLIContext.GlobalString("log")
-	} else if ctx.CLIContext.IsSet("log") {
+	if ctx.CLIContext.IsSet("log") {
 		logLevel = ctx.CLIContext.String("log")
 	} else if value, ok := defaultKeysHash["log"]; ok && value != "" {
 		logLevel = value
