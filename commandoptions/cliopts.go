@@ -9,10 +9,7 @@ type Cred struct {
 
 func CLIopts(c *cli.Context, have map[string]Cred, need map[string]string) {
 	for opt := range need {
-		if c.GlobalIsSet(opt) {
-			have[opt] = Cred{Value: c.GlobalString(opt), From: "command-line"}
-			delete(need, opt)
-		} else if c.IsSet(opt) {
+		if c.IsSet(opt) {
 			have[opt] = Cred{Value: c.String(opt), From: "command-line"}
 			delete(need, opt)
 		}
