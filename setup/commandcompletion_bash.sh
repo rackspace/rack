@@ -13,7 +13,6 @@ _cli_bash_autocomplete() {
   fi
 
   if [[ "${#COMP_WORDS[@]}" > 4 ]] && [[ ${cur} != -* ]]; then
-    compopt -o default
     COMPREPLY=()
     return 0
   fi
@@ -23,4 +22,4 @@ _cli_bash_autocomplete() {
   return 0
 }
 
-complete -F _cli_bash_autocomplete rack
+complete -o default -F _cli_bash_autocomplete rack

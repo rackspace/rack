@@ -39,7 +39,7 @@ _cli_bash_autocomplete() {
   return 0
 }
 
-complete -F _cli_bash_autocomplete rack
+complete -o default -F _cli_bash_autocomplete rack
 `
 
 // Init runs logic for setting up amenities such as command completion.
