@@ -113,57 +113,61 @@ func authFromScratch(ao gophercloud.AuthOptions, region, serviceType string, log
 // environment variables.
 func Credentials(c *cli.Context, logger *logrus.Logger) (*gophercloud.AuthOptions, string, error) {
 	have := make(map[string]commandoptions.Cred)
-	need := map[string]string{
-		"username": "",
-		"apikey":   "",
-		"authurl":  "",
-		"region":   "",
+	want := map[string]string{
+		"username":   "",
+		"apikey":     "",
+		"authurl":    "",
+		"region":     "",
+		"tenant-id":  "",
+		"auth-token": "",
 	}
 
 	// use command-line options if available
-	commandoptions.CLIopts(c, have, need)
+	commandoptions.CLIopts(c, have, want)
 	// are there any unset auth variables?
-	if len(need) != 0 {
+	if len(want) != 0 {
 		// if so, look in config file
-		err := commandoptions.ConfigFile(c, have, need)
+		err := commandoptions.ConfigFile(c, have, want)
 		if err != nil {
 			return nil, "", err
 		}
 		// still unset auth variables?
-		if len(need) != 0 {
+		if len(want) != 0 {
 			// if so, look in environment variables
-			envvars(have, need)
+			envvars(have, want)
 		}
 	}
 
 	var ao *gophercloud.AuthOptions
 
-	if _, ok := have["username"]; !ok {
-		need := map[string]string{
-			"tenant-id":  "",
-			"auth-token": "",
+	if _, ok := have["username"]; ok {
+		if _, ok := have["apikey"]; ok {
+			delete(want, "tenant-id")
+			delete(want, "auth-token")
+			ao = &gophercloud.AuthOptions{
+				Username: have["username"].Value,
+				APIKey:   have["apikey"].Value,
+			}
+		} else {
+			return nil, "", fmt.Errorf("You must provide the `apikey` flag with the `username` flag.")
 		}
-		commandoptions.CLIopts(c, have, need)
-		if len(need) != 0 {
-			return nil, "", fmt.Errorf("You must provide either username/api-key or tenant-id/auth-token values.")
-		}
-		delete(have, "username")
-		delete(have, "api-key")
-		ao = &gophercloud.AuthOptions{
-			TenantID: have["tenant-id"].Value,
-			Token:    have["auth-token"].Value,
-		}
-	} else {
-		ao = &gophercloud.AuthOptions{
-			Username: have["username"].Value,
-			APIKey:   have["apikey"].Value,
+	} else if _, ok := have["tenant-id"]; ok {
+		if _, ok := have["auth-token"]; ok {
+			delete(want, "username")
+			delete(want, "api-key")
+			ao = &gophercloud.AuthOptions{
+				TenantID: have["tenant-id"].Value,
+				Token:    have["auth-token"].Value,
+			}
+		} else {
+			return nil, "", fmt.Errorf("You must provide the `auth-token` flag with the `tenant-id` flag.")
 		}
 	}
 
 	// if the user didn't provide an auth URL, default to the Rackspace US endpoint
 	if _, ok := have["authurl"]; !ok || have["authurl"].Value == "" {
 		have["authurl"] = commandoptions.Cred{Value: rackspace.RackspaceUSIdentity, From: "default value"}
-		delete(need, "authurl")
+		delete(want, "authurl")
 	}
 
 	haveString := ""
@@ -171,17 +175,17 @@ func Credentials(c *cli.Context, logger *logrus.Logger) (*gophercloud.AuthOption
 		haveString += fmt.Sprintf("%s: %s (from %s)\n", k, v.Value, v.From)
 	}
 
-	if len(need) > 0 {
-		needString := ""
-		for k := range need {
-			needString += fmt.Sprintf("%s\n", k)
+	if len(want) > 0 {
+		wantString := ""
+		for k := range want {
+			wantString += fmt.Sprintf("%s\n", k)
 		}
 
 		authErrSlice := []string{"There are some required Rackspace Cloud credentials that we couldn't find.",
 			"Here's what we have:",
 			fmt.Sprintf("%s", haveString),
 			"and here's what we're missing:",
-			fmt.Sprintf("%s", needString),
+			fmt.Sprintf("%s", wantString),
 			"",
 			"You can set any of these credentials in the following ways:",
 			"- Run `rack configure` to interactively create a configuration file,",
