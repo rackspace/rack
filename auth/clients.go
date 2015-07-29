@@ -32,7 +32,7 @@ func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger, noCach
 		return nil, err
 	}
 
-	if noCache {
+	if noCache || ao.TokenID != "" {
 		return authFromScratch(*ao, region, serviceType, logger)
 	}
 
@@ -140,27 +140,31 @@ func Credentials(c *cli.Context, logger *logrus.Logger) (*gophercloud.AuthOption
 
 	var ao *gophercloud.AuthOptions
 
-	if _, ok := have["username"]; ok {
+	if _, ok := have["auth-token"]; ok {
+		if _, ok := have["tenant-id"]; ok {
+			delete(want, "username")
+			delete(want, "apikey")
+			delete(have, "username")
+			delete(have, "apikey")
+			ao = &gophercloud.AuthOptions{
+				TenantID: have["tenant-id"].Value,
+				TokenID:  have["auth-token"].Value,
+			}
+		} else {
+			return nil, "", fmt.Errorf("You must provide the `tenant-id` flag with the `auth-token` flag.")
+		}
+	} else if _, ok := have["username"]; ok {
 		if _, ok := have["apikey"]; ok {
 			delete(want, "tenant-id")
 			delete(want, "auth-token")
+			delete(have, "tenant-id")
+			delete(have, "auth-token")
 			ao = &gophercloud.AuthOptions{
 				Username: have["username"].Value,
 				APIKey:   have["apikey"].Value,
 			}
 		} else {
 			return nil, "", fmt.Errorf("You must provide the `apikey` flag with the `username` flag.")
-		}
-	} else if _, ok := have["tenant-id"]; ok {
-		if _, ok := have["auth-token"]; ok {
-			delete(want, "username")
-			delete(want, "api-key")
-			ao = &gophercloud.AuthOptions{
-				TenantID: have["tenant-id"].Value,
-				Token:    have["auth-token"].Value,
-			}
-		} else {
-			return nil, "", fmt.Errorf("You must provide the `auth-token` flag with the `tenant-id` flag.")
 		}
 	}
 
@@ -232,7 +236,10 @@ func newHTTPClient() http.Client {
 func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, error) {
 	var err error
 
+	//fmt.Printf("request body: %+v\n", request.Body)
+
 	if lrt.Logger.Level == logrus.DebugLevel && request.Body != nil {
+		fmt.Println("logging request body")
 		request.Body, err = lrt.logRequestBody(request.Body, request.Header)
 		if err != nil {
 			return nil, err
