@@ -57,9 +57,12 @@ commands have been tested against Rackspace's live API.`
 func Cmds() []cli.Command {
 	return []cli.Command{
 		{
-			Name:   "init",
-			Usage:  "[Linux/OS X only] Setup environment with command completion for the Bash shell.",
-			Action: setup.Init,
+			Name:  "init",
+			Usage: "[Linux/OS X only] Creates the rack man page and sets up command completion for the Bash shell.",
+			Action: func(c *cli.Context) {
+				setup.Init(c)
+				man()
+			},
 		},
 		{
 			Name:   "configure",
