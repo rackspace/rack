@@ -2,6 +2,7 @@ package instancecommands
 
 import (
 	"io/ioutil"
+	"path/filepath"
 	"strings"
 
 	"github.com/jrperritt/rack/commandoptions"
@@ -115,18 +116,24 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 		AdminPass:  c.String("admin-pass"),
 		KeyPair:    c.String("keypair"),
 	}
+
 	if c.IsSet("security-groups") {
 		opts.SecurityGroups = strings.Split(c.String("security-groups"), ",")
 	}
+
 	if c.IsSet("user-data") {
-		s := c.String("user-data")
-		userData, err := ioutil.ReadFile(s)
+		abs, err := filepath.Abs(c.String("user-data"))
 		if err != nil {
-			opts.UserData = userData
-		} else {
-			opts.UserData = []byte(s)
+			return err
 		}
+		userData, err := ioutil.ReadFile(abs)
+		if err != nil {
+			return err
+		}
+		opts.UserData = userData
+		opts.ConfigDrive = true
 	}
+
 	if c.IsSet("networks") {
 		netIDs := strings.Split(c.String("networks"), ",")
 		networks := make([]osServers.Network, len(netIDs))
@@ -137,6 +144,7 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 		}
 		opts.Networks = networks
 	}
+
 	if c.IsSet("metadata") {
 		metadata, err := command.Ctx.CheckKVFlag("metadata")
 		if err != nil {

@@ -190,8 +190,9 @@ func Credentials(c *cli.Context, logger *logrus.Logger) (*gophercloud.AuthOption
 // LogRoundTripper satisfies the http.RoundTripper interface and is used to
 // customize the default Gophercloud RoundTripper to allow for logging.
 type LogRoundTripper struct {
-	Logger *logrus.Logger
-	rt     http.RoundTripper
+	Logger            *logrus.Logger
+	rt                http.RoundTripper
+	numReauthAttempts int
 }
 
 // newHTTPClient return a custom HTTP client that allows for logging relevant
@@ -218,6 +219,12 @@ func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, er
 	lrt.Logger.Infof("Request URL: %s\n", request.URL)
 
 	response, err := lrt.rt.RoundTrip(request)
+	if response.StatusCode == http.StatusUnauthorized {
+		if lrt.numReauthAttempts == 3 {
+			return response, fmt.Errorf("Tried to re-authenticate 3 times with no success.")
+		}
+		lrt.numReauthAttempts++
+	}
 	if err != nil {
 		return response, err
 	}
