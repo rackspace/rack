@@ -6,23 +6,21 @@ import (
 	"strings"
 	"time"
 
-	r "github.com/jrperritt/rack"
 	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/util"
 )
 
-func main() {
-
+func man() {
 	content := fmt.Sprintln(`.\" Manpage for rack`)
 	content += fmt.Sprintln(`.\" Contact sdk-support@rackspace.com to correct errors or typos`)
 	content += fmt.Sprintf(`.TH man 1 "%s" "%s" "rack man page"`+"\n", time.Now().Format("06 May 2010"), util.Version)
 	content += fmt.Sprintln(`.SH NAME`)
-	content += fmt.Sprintf(`rack \- %s`+"\n", r.Usage())
+	content += fmt.Sprintf(`rack \- %s`+"\n", Usage())
 	content += fmt.Sprintln(`.SH SYNOPSIS`)
 	content += fmt.Sprintln("rack [GLOBALS] command subcommand [OPTIONS]")
 	content += fmt.Sprintln(`.SH DESCRIPTION`)
-	content += fmt.Sprintf("%s\n\n\n", r.Desc())
+	content += fmt.Sprintf("%s\n\n\n", Desc())
 
 	content += fmt.Sprintln("The following global options are available:")
 	for _, flag := range commandoptions.GlobalFlags() {
@@ -37,7 +35,7 @@ func main() {
 	}
 
 	content += fmt.Sprintln(`.SH TOP-LEVEL COMMANDS`)
-	for _, cmd := range r.Cmds() {
+	for _, cmd := range Cmds() {
 		if len(cmd.Subcommands) > 0 {
 			continue
 		}
@@ -46,7 +44,7 @@ func main() {
 		content += fmt.Sprintln(cmd.Usage)
 	}
 
-	for _, cmd := range r.Cmds() {
+	for _, cmd := range Cmds() {
 		if len(cmd.Subcommands) == 0 {
 			continue
 		}
