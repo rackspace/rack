@@ -15,6 +15,14 @@ func GlobalFlags() []cli.Flag {
 			Usage: "The API key with which to authenticate.",
 		},
 		cli.StringFlag{
+			Name:  "tenant-id",
+			Usage: "The tenant ID of the user to authenticate as.",
+		},
+		cli.StringFlag{
+			Name:  "auth-token",
+			Usage: "The authentication token of the user to authenticate as. This must be used with the `tenant-id` flag.",
+		},
+		cli.StringFlag{
 			Name:  "authurl",
 			Usage: "The endpoint to which authenticate.",
 		},

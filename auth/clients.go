@@ -136,6 +136,30 @@ func Credentials(c *cli.Context, logger *logrus.Logger) (*gophercloud.AuthOption
 		}
 	}
 
+	var ao *gophercloud.AuthOptions
+
+	if _, ok := have["username"]; !ok {
+		need := map[string]string{
+			"tenant-id":  "",
+			"auth-token": "",
+		}
+		commandoptions.CLIopts(c, have, need)
+		if len(need) != 0 {
+			return nil, "", fmt.Errorf("You must provide either username/api-key or tenant-id/auth-token values.")
+		}
+		delete(have, "username")
+		delete(have, "api-key")
+		ao = &gophercloud.AuthOptions{
+			TenantID: have["tenant-id"].Value,
+			Token:    have["auth-token"].Value,
+		}
+	} else {
+		ao = &gophercloud.AuthOptions{
+			Username: have["username"].Value,
+			APIKey:   have["apikey"].Value,
+		}
+	}
+
 	// if the user didn't provide an auth URL, default to the Rackspace US endpoint
 	if _, ok := have["authurl"]; !ok || have["authurl"].Value == "" {
 		have["authurl"] = commandoptions.Cred{Value: rackspace.RackspaceUSIdentity, From: "default value"}
@@ -173,16 +197,11 @@ func Credentials(c *cli.Context, logger *logrus.Logger) (*gophercloud.AuthOption
 		logger.Infof("Authentication Credentials:\n%s\n", haveString)
 	}
 
-	ao := &gophercloud.AuthOptions{
-		Username:         have["username"].Value,
-		APIKey:           have["apikey"].Value,
-		IdentityEndpoint: have["authurl"].Value,
-	}
-
 	// upper-case the region
 	region := strings.ToUpper(have["region"].Value)
 	// allow Gophercloud to re-authenticate
 	ao.AllowReauth = true
+	ao.IdentityEndpoint = have["authurl"].Value
 
 	return ao, region, nil
 }
