@@ -32,7 +32,7 @@ func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger, noCach
 		return nil, err
 	}
 
-	if noCache {
+	if noCache || ao.TokenID != "" {
 		return authFromScratch(*ao, region, serviceType, logger)
 	}
 
@@ -113,33 +113,65 @@ func authFromScratch(ao gophercloud.AuthOptions, region, serviceType string, log
 // environment variables.
 func Credentials(c *cli.Context, logger *logrus.Logger) (*gophercloud.AuthOptions, string, error) {
 	have := make(map[string]commandoptions.Cred)
-	need := map[string]string{
-		"username": "",
-		"apikey":   "",
-		"authurl":  "",
-		"region":   "",
+	want := map[string]string{
+		"username":   "",
+		"apikey":     "",
+		"authurl":    "",
+		"region":     "",
+		"tenant-id":  "",
+		"auth-token": "",
 	}
 
 	// use command-line options if available
-	commandoptions.CLIopts(c, have, need)
+	commandoptions.CLIopts(c, have, want)
 	// are there any unset auth variables?
-	if len(need) != 0 {
+	if len(want) != 0 {
 		// if so, look in config file
-		err := commandoptions.ConfigFile(c, have, need)
+		err := commandoptions.ConfigFile(c, have, want)
 		if err != nil {
 			return nil, "", err
 		}
 		// still unset auth variables?
-		if len(need) != 0 {
+		if len(want) != 0 {
 			// if so, look in environment variables
-			envvars(have, need)
+			envvars(have, want)
+		}
+	}
+
+	var ao *gophercloud.AuthOptions
+
+	if _, ok := have["auth-token"]; ok {
+		if _, ok := have["tenant-id"]; ok {
+			delete(want, "username")
+			delete(want, "apikey")
+			delete(have, "username")
+			delete(have, "apikey")
+			ao = &gophercloud.AuthOptions{
+				TenantID: have["tenant-id"].Value,
+				TokenID:  have["auth-token"].Value,
+			}
+		} else {
+			return nil, "", fmt.Errorf("You must provide the `tenant-id` flag with the `auth-token` flag.")
+		}
+	} else if _, ok := have["username"]; ok {
+		if _, ok := have["apikey"]; ok {
+			delete(want, "tenant-id")
+			delete(want, "auth-token")
+			delete(have, "tenant-id")
+			delete(have, "auth-token")
+			ao = &gophercloud.AuthOptions{
+				Username: have["username"].Value,
+				APIKey:   have["apikey"].Value,
+			}
+		} else {
+			return nil, "", fmt.Errorf("You must provide the `apikey` flag with the `username` flag.")
 		}
 	}
 
 	// if the user didn't provide an auth URL, default to the Rackspace US endpoint
 	if _, ok := have["authurl"]; !ok || have["authurl"].Value == "" {
 		have["authurl"] = commandoptions.Cred{Value: rackspace.RackspaceUSIdentity, From: "default value"}
-		delete(need, "authurl")
+		delete(want, "authurl")
 	}
 
 	haveString := ""
@@ -147,17 +179,17 @@ func Credentials(c *cli.Context, logger *logrus.Logger) (*gophercloud.AuthOption
 		haveString += fmt.Sprintf("%s: %s (from %s)\n", k, v.Value, v.From)
 	}
 
-	if len(need) > 0 {
-		needString := ""
-		for k := range need {
-			needString += fmt.Sprintf("%s\n", k)
+	if len(want) > 0 {
+		wantString := ""
+		for k := range want {
+			wantString += fmt.Sprintf("%s\n", k)
 		}
 
 		authErrSlice := []string{"There are some required Rackspace Cloud credentials that we couldn't find.",
 			"Here's what we have:",
 			fmt.Sprintf("%s", haveString),
 			"and here's what we're missing:",
-			fmt.Sprintf("%s", needString),
+			fmt.Sprintf("%s", wantString),
 			"",
 			"You can set any of these credentials in the following ways:",
 			"- Run `rack configure` to interactively create a configuration file,",
@@ -173,16 +205,11 @@ func Credentials(c *cli.Context, logger *logrus.Logger) (*gophercloud.AuthOption
 		logger.Infof("Authentication Credentials:\n%s\n", haveString)
 	}
 
-	ao := &gophercloud.AuthOptions{
-		Username:         have["username"].Value,
-		APIKey:           have["apikey"].Value,
-		IdentityEndpoint: have["authurl"].Value,
-	}
-
 	// upper-case the region
 	region := strings.ToUpper(have["region"].Value)
 	// allow Gophercloud to re-authenticate
 	ao.AllowReauth = true
+	ao.IdentityEndpoint = have["authurl"].Value
 
 	return ao, region, nil
 }
@@ -209,7 +236,10 @@ func newHTTPClient() http.Client {
 func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, error) {
 	var err error
 
+	//fmt.Printf("request body: %+v\n", request.Body)
+
 	if lrt.Logger.Level == logrus.DebugLevel && request.Body != nil {
+		fmt.Println("logging request body")
 		request.Body, err = lrt.logRequestBody(request.Body, request.Header)
 		if err != nil {
 			return nil, err
