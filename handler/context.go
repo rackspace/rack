@@ -78,10 +78,10 @@ func (ctx *Context) storeCredentials() {
 			ServiceEndpoint: ctx.ServiceClient.Endpoint,
 		}
 		// get auth credentials
-		ao, region, err := auth.Credentials(ctx.CLIContext, nil)
+		credsResult, err := auth.Credentials(ctx.CLIContext, nil)
 		if err == nil {
 			// form the cache key
-			cacheKey := auth.CacheKey(*ao, region, ctx.ServiceClientType)
+			cacheKey := auth.CacheKey(*credsResult.AuthOpts, credsResult.Region, ctx.ServiceClientType)
 			// initialize the cache
 			cache := &auth.Cache{}
 			// set the cache value to the current values

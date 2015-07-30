@@ -22,19 +22,19 @@ _cli_bash_autocomplete() {
   cur="${COMP_WORDS[COMP_CWORD]}"
   prev="${COMP_WORDS[COMP_CWORD-1]}"
 
-  if [[ ${prev} != -* ]]; then
+  # The first 5 words should always be completed by rack
+  if [[ ${#COMP_WORDS[@]} -lt 5 ]]; then
     opts=$( ${COMP_WORDS[@]:0:$COMP_CWORD} --generate-bash-completion )
     COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
-    return 0
+  # All flags should be completed by rack
+  elif [[ ${cur} == -* ]]; then
+    opts=$( ${COMP_WORDS[@]:0:$COMP_CWORD} --generate-bash-completion )
+    COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+  # If the previous word wasn't a flag, then the next on has to be, given the 2 conditions above
+  elif [[ ${prev} != -* ]]; then
+    opts=$( ${COMP_WORDS[@]:0:$COMP_CWORD} --generate-bash-completion )
+    COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
   fi
-
-  if [[ "${#COMP_WORDS[@]}" > 4 ]] && [[ ${cur} != -* ]]; then
-    COMPREPLY=()
-    return 0
-  fi
-
-  opts=$( ${COMP_WORDS[@]:0:$COMP_CWORD} --generate-bash-completion )
-  COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
   return 0
 }
 
