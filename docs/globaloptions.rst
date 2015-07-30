@@ -108,7 +108,7 @@ This presents a compact format with appropriate CSV headers.
 
   (string) The Rackspace username to use for authentication.
 
-``--apikey``
+``--api-key``
 ~~~~~~~~~~~~
 
   (string) The Rackspace API key to use for authentication.
@@ -118,7 +118,7 @@ This presents a compact format with appropriate CSV headers.
 
   (string) The Rackspace region to use for authentication.
 
-``--authurl``
+``--auth-url``
 ~~~~~~~~~~~~~
 
   (string) The Rackspace URL to use for authentication. If not provided, this

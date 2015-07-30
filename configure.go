@@ -20,7 +20,7 @@ func configure(c *cli.Context) {
 	reader := bufio.NewReader(os.Stdin)
 	m := map[string]string{
 		"username": "",
-		"apikey":   "",
+		"api-key":  "",
 		"region":   "",
 	}
 	fmt.Print("Rackspace Username: ")
@@ -29,7 +29,7 @@ func configure(c *cli.Context) {
 
 	fmt.Print("Rackspace API key: ")
 	apiKey, _ := reader.ReadString('\n')
-	m["apikey"] = strings.TrimSpace(apiKey)
+	m["api-key"] = strings.TrimSpace(apiKey)
 
 	fmt.Print("Rackspace Region : ")
 	region, _ := reader.ReadString('\n')

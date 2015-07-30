@@ -28,7 +28,7 @@ Export the following environment variables:
 
 ### Command-line
 You can set auth parameters on the command-line using global flags:
-`rack --username user1 --apikey 123456789 --region DFW servers instance list`
+`rack --username user1 --api-key 123456789 --region DFW servers instance list`
 
 ### Config file
 You can create a config file in ` ~/.rack/config`:
@@ -36,12 +36,12 @@ You can create a config file in ` ~/.rack/config`:
 ```
 [DEFAULT]
 username=user1
-apikey=123456789
+api-key=123456789
 region=DFW
 
 [PROFILE2]
 username=user2
-apikey=987654321
+api-key=987654321
 region=IAD
 ```
 

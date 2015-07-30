@@ -10,8 +10,8 @@ import (
 func envvars(have map[string]commandoptions.Cred, need map[string]string) {
 	vars := map[string]string{
 		"username": "RS_USERNAME",
-		"apikey":   "RS_API_KEY",
-		"authurl":  "RS_AUTH_URL",
+		"api-key":  "RS_API_KEY",
+		"aut-hurl": "RS_AUTH_URL",
 		"region":   "RS_REGION_NAME",
 	}
 	for opt := range need {
