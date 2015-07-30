@@ -133,5 +133,5 @@ func flag(flag cli.Flag) string {
 }
 
 func version(c *cli.Context) {
-	fmt.Fprintf(c.App.Writer, "%v version %v\ncommit: %v", c.App.Name, util.Version, util.Commit)
+	fmt.Fprintf(c.App.Writer, "%v version %v\ncommit: %v\n", c.App.Name, util.Version, util.Commit)
 }

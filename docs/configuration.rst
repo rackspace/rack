@@ -99,7 +99,7 @@ other parameters located in any other forms of authentication (config file and
 environment variables).
 
 * ``--username``
-* ``--apikey``
+* ``--api-key``
 * ``--region``
 
 Config File
@@ -110,12 +110,12 @@ looked for in a config file. The config file should be located in ``$HOME/.rack/
 The config file format is like the following::
 
     username=<your rackspace username>
-    apikey=<your rackspace api key>
+    api-key=<your rackspace api key>
     region=<the rackspace region>
 
     [another-profile]
     username=<another rackspace username>
-    apikey=<another rackspace api key>
+    api-key=<another rackspace api key>
 
 In the example above there is a default profile that doesn't have a named section. "another-profile" is a different profile in the config file. When using the default profile, you don't need to supply a flag when executing ``rack``. A specific profile can be specified on the command-line with the ``profile`` flag.
 
@@ -178,7 +178,7 @@ For example::
     export RS_AUTH_URL=https://identity.api.rackspacecloud.com/v2.0
 
 In addition, you may provide it as a flag on the command-line or as a value in a
-config file profile. In either case, the parameter name will be ``authurl``.
+config file profile. In either case, the parameter name will be ``auth-url``.
 
 
 

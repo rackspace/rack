@@ -87,13 +87,13 @@ pass in other required **global** information into the tool, these are:
 ``--username``
   The Rackspace username to use for authentication.
 
-``--apikey``
+``--api-key``
   The Rackspace API key to use for authentication.
 
 ``--region``
   The Rackspace region to use for authentication.
 
-``--authurl``
+``--auth-url``
   The Rackspace URL to use for authentication. If not provided, this
   will default to the public U.S. Rackspace endpoint.
 
@@ -108,12 +108,6 @@ pass in other required **global** information into the tool, these are:
 
 ``--help, -h``
   Show help
-
-``--generate-bash-completion``
-  Generate bash completion directives for tab-completion of commands.
-
-``--version, -v``
-  Print the version
 
 For more on options, see :ref:`global_options`.
 
