@@ -113,6 +113,18 @@ This presents a compact format with appropriate CSV headers.
 
   (string) The Rackspace API key to use for authentication.
 
+``--auth-tenant-id``
+~~~~~~~~~~~~~~~~~~~~
+
+  (string) The tenant ID to use for authentication. May only be provided as a command-line flag.
+  (Prefixed with 'auth-' so as to not collide with the `tenant-id` command flags.
+
+``--auth-token``
+~~~~~~~~~~~~~~~~
+
+  (string) The token to use for authentication. May only be provided as a command-line flag.
+  Must be used with the `auth-tenant-id` flag.
+
 ``--region``
 ~~~~~~~~~~~~
 
@@ -206,15 +218,6 @@ And again, per command:
        get		rack [globals] servers keypair get [--name <keypairName>] [flags]
        delete	rack servers keypair delete [--name <keypairName>] [flags]
        help, h	Shows a list of commands or help for one command
-
-``--version, -v``
-~~~~~~~~~~~~~~~~~
-
-  Print the version of the ``rack`` CLI.
-
-The version number of the CLI will be important when opening tickets, filing
-issues on the issue tracker or in any other debugging session. Please include
-this any time you are having issues.
 
 
 .. JSON: http://json.org/

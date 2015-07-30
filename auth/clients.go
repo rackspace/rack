@@ -36,7 +36,7 @@ var tenantIDAuthErrSlice = []string{"There are some required Rackspace Cloud cre
 	"and here's what we're missing:",
 	"%s",
 	"",
-	"You can set the missing credentials with command-line flags (--auth-token, --tenant-id)",
+	"You can set the missing credentials with command-line flags (--auth-token, --auth-tenant-id)",
 	"",
 }
 
@@ -217,14 +217,14 @@ func Credentials(c *cli.Context, logger *logrus.Logger) (*CredentialsResult, err
 	delete(want, "region")
 
 	// now we check for token authentication (only allowed via the command-line)
-	want["tenant-id"] = ""
+	want["auth-tenant-id"] = ""
 	want["auth-token"] = ""
 	commandoptions.CLIopts(c, have, want)
 
 	// if a tenant ID was provided on the command-line, we don't bother checking for a
 	// username or api key
-	if have["tenant-id"].Value != "" || have["auth-token"].Value != "" {
-		if tenantID, ok := have["tenant-id"]; ok {
+	if have["auth-tenant-id"].Value != "" || have["auth-token"].Value != "" {
+		if tenantID, ok := have["auth-tenant-id"]; ok {
 			ao.TenantID = tenantID.Value
 			ao.TokenID = have["auth-token"].Value
 			delete(want, "auth-token")
