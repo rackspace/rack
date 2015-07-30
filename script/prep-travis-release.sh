@@ -91,6 +91,9 @@ BASENAME="rack"
 # Base build not in build dir to prevent accidental upload on failure
 RACKBUILD="${BASENAME}${SUFFIX}"
 
+COMMIT=$(git rev-parse --verify HEAD)
+sed -i "s/var Commit =.*/var Commit = \"$COMMIT\"/" util/util.go
+
 go build -o $RACKBUILD
 
 # Ship /tree/rack-branchname

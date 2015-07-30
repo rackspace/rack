@@ -13,6 +13,7 @@ import (
 	"github.com/jrperritt/rack/commands/networkscommands"
 	"github.com/jrperritt/rack/commands/serverscommands"
 	"github.com/jrperritt/rack/setup"
+	"github.com/jrperritt/rack/util"
 
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 )
@@ -30,6 +31,7 @@ OPTIONS:
 	app := cli.NewApp()
 	app.Name = "rack"
 	app.Usage = Usage()
+	app.HideVersion = true
 	app.EnableBashCompletion = true
 	app.Commands = Cmds()
 	app.Before = func(c *cli.Context) error {
@@ -68,6 +70,11 @@ func Cmds() []cli.Command {
 			Name:   "configure",
 			Usage:  "Interactively create a config file for Rackspace authentication.",
 			Action: configure,
+		},
+		{
+			Name:   "version",
+			Usage:  "Print the version of this binary.",
+			Action: version,
 		},
 		{
 			Name:        "servers",
@@ -123,4 +130,8 @@ func flag(flag cli.Flag) string {
 		return fmt.Sprintf("%s\t%s", flagType.Name, flagType.Usage)
 	}
 	return ""
+}
+
+func version(c *cli.Context) {
+	fmt.Fprintf(c.App.Writer, "%v version %v\ncommit: %v", c.App.Name, util.Version, util.Commit)
 }

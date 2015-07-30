@@ -2,6 +2,8 @@
 
 if [ -n "$GOPATH" ]; then
   echo "Building rack!"
+  COMMIT=$(git rev-parse --verify HEAD)
+  sed -i "s/var Commit =.*/var Commit = \"$COMMIT\"/" util/util.go
   go build -o $GOPATH/bin/rack
 else
   echo '$GOPATH must be defined. Do you have go setup?'
