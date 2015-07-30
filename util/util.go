@@ -80,4 +80,4 @@ func Pluralize(noun string, count int64) string {
 
 // Version is the current CLI version
 var Version = "0.0.0-dev"
-var Commit = ""
+var Commit = "f595fdf7f3eefc4be35f6ef7ac80d7ead7e47e7c"
