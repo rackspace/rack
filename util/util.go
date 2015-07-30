@@ -11,9 +11,6 @@ import (
 // Name is the name of the CLI
 var Name = "rack"
 
-// Version is the current CLI version
-var Version = "0.0.0-dev"
-
 // UserAgent is the user-agent used for each HTTP request
 var UserAgent = fmt.Sprintf("%s-%s/%s", "rackcli", runtime.GOOS, Version)
 
@@ -80,3 +77,7 @@ func Pluralize(noun string, count int64) string {
 	}
 	return noun
 }
+
+// Version is the current CLI version
+var Version = "0.0.0-dev"
+var Commit = ""
