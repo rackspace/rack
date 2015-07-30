@@ -17,6 +17,74 @@ import (
 	"github.com/jrperritt/rack/util"
 )
 
+var usernameAuthErrSlice = []string{"There are some required Rackspace Cloud credentials that we couldn't find.",
+	"Here's what we have:",
+	"%s",
+	"and here's what we're missing:",
+	"%s",
+	"",
+	"You can set any of these credentials in the following ways:",
+	"- Run `rack configure` to interactively create a configuration file,",
+	"- Specify it in the command as a flag (--username, --api-key), or",
+	"- Export it as an environment variable (RS_USERNAME, RS_API_KEY).",
+	"",
+}
+
+var tenantIDAuthErrSlice = []string{"There are some required Rackspace Cloud credentials that we couldn't find.",
+	"Here's what we have:",
+	"%s",
+	"and here's what we're missing:",
+	"%s",
+	"",
+	"You can set the missing credentials with command-line flags (--auth-token, --tenant-id)",
+	"",
+}
+
+func Err(have map[string]commandoptions.Cred, want map[string]string, errMsg []string) error {
+	haveString := ""
+	for k, v := range have {
+		haveString += fmt.Sprintf("%s: %s (from %s)\n", k, v.Value, v.From)
+	}
+
+	if len(want) > 0 {
+		wantString := ""
+		for k := range want {
+			wantString += fmt.Sprintf("%s\n", k)
+		}
+
+		return fmt.Errorf(fmt.Sprintf(strings.Join(errMsg, "\n"), haveString, wantString))
+	}
+
+	return nil
+}
+
+type CredentialsResult struct {
+	AuthOpts *gophercloud.AuthOptions
+	Region   string
+	Have     map[string]commandoptions.Cred
+	Want     map[string]string
+}
+
+func findAuthOpts(c *cli.Context, have map[string]commandoptions.Cred, want map[string]string) error {
+	// use command-line options if available
+	commandoptions.CLIopts(c, have, want)
+	// are there any unset auth variables?
+	if len(want) != 0 {
+		// if so, look in config file
+		err := commandoptions.ConfigFile(c, have, want)
+		if err != nil {
+			return err
+		}
+		// still unset auth variables?
+		if len(want) != 0 {
+			// if so, look in environment variables
+			envvars(have, want)
+		}
+	}
+
+	return nil
+}
+
 // reauthFunc is what the ServiceClient uses to re-authenticate.
 func reauthFunc(pc *gophercloud.ProviderClient, ao gophercloud.AuthOptions) func() error {
 	return func() error {
@@ -27,19 +95,23 @@ func reauthFunc(pc *gophercloud.ProviderClient, ao gophercloud.AuthOptions) func
 // NewClient creates and returns a Rackspace client for the given service.
 func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger, noCache bool) (*gophercloud.ServiceClient, error) {
 	// get the user's authentication credentials
-	ao, region, err := Credentials(c, logger)
+	credsResult, err := Credentials(c, logger)
 	if err != nil {
 		return nil, err
 	}
 
 	if noCache {
-		return authFromScratch(*ao, region, serviceType, logger)
+		return authFromScratch(credsResult, serviceType, logger)
 	}
+
+	ao := credsResult.AuthOpts
+	region := credsResult.Region
 
 	// form the cache key
 	cacheKey := CacheKey(*ao, region, serviceType)
 	// initialize cache
 	cache := &Cache{}
+	logger.Infof("Looking in the cache for cache key: %s\n", cacheKey)
 	// get the value from the cache
 	creds, err := cache.Value(cacheKey)
 	// if there was an error accessing the cache or there was nothing in the cache,
@@ -59,15 +131,19 @@ func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger, noCach
 			}, nil
 		}
 	} else {
-		return authFromScratch(*ao, region, serviceType, logger)
+		return authFromScratch(credsResult, serviceType, logger)
 	}
 
 	return nil, nil
 }
 
-func authFromScratch(ao gophercloud.AuthOptions, region, serviceType string, logger *logrus.Logger) (*gophercloud.ServiceClient, error) {
+func authFromScratch(credsResult *CredentialsResult, serviceType string, logger *logrus.Logger) (*gophercloud.ServiceClient, error) {
 	logger.Info("Not using cache; Authenticating from scratch.\n")
-	pc, err := rackspace.AuthenticatedClient(ao)
+
+	ao := credsResult.AuthOpts
+	region := credsResult.Region
+
+	pc, err := rackspace.AuthenticatedClient(*ao)
 	if err != nil {
 		return nil, err
 	}
@@ -111,61 +187,22 @@ func authFromScratch(ao gophercloud.AuthOptions, region, serviceType string, log
 // It will use command-line authentication parameters if available, then it will
 // look for any unset parameters in the config file, and then finally in
 // environment variables.
-func Credentials(c *cli.Context, logger *logrus.Logger) (*gophercloud.AuthOptions, string, error) {
+func Credentials(c *cli.Context, logger *logrus.Logger) (*CredentialsResult, error) {
+	ao := &gophercloud.AuthOptions{
+		AllowReauth: true,
+	}
+
 	have := make(map[string]commandoptions.Cred)
+
+	// let's looks for a region and identity endpoint
 	want := map[string]string{
-		"username":   "",
-		"api-key":    "",
-		"auth-url":   "",
-		"region":     "",
-		"tenant-id":  "",
-		"auth-token": "",
+		"auth-url": "",
+		"region":   "",
 	}
 
-	// use command-line options if available
-	commandoptions.CLIopts(c, have, want)
-	// are there any unset auth variables?
-	if len(want) != 0 {
-		// if so, look in config file
-		err := commandoptions.ConfigFile(c, have, want)
-		if err != nil {
-			return nil, "", err
-		}
-		// still unset auth variables?
-		if len(want) != 0 {
-			// if so, look in environment variables
-			envvars(have, want)
-		}
-	}
-
-	var ao *gophercloud.AuthOptions
-
-	if _, ok := have["auth-token"]; ok {
-		if _, ok := have["tenant-id"]; ok {
-			delete(want, "username")
-			delete(want, "api-key")
-			delete(have, "username")
-			delete(have, "api-key")
-			ao = &gophercloud.AuthOptions{
-				TenantID: have["tenant-id"].Value,
-				TokenID:  have["auth-token"].Value,
-			}
-		} else {
-			return nil, "", fmt.Errorf("You must provide the `tenant-id` flag with the `auth-token` flag.")
-		}
-	} else if _, ok := have["username"]; ok {
-		if _, ok := have["api-key"]; ok {
-			delete(want, "tenant-id")
-			delete(want, "auth-token")
-			delete(have, "tenant-id")
-			delete(have, "auth-token")
-			ao = &gophercloud.AuthOptions{
-				Username: have["username"].Value,
-				APIKey:   have["api-key"].Value,
-			}
-		} else {
-			return nil, "", fmt.Errorf("You must provide the `api-key` flag with the `username` flag.")
-		}
+	err := findAuthOpts(c, have, want)
+	if err != nil {
+		return nil, err
 	}
 
 	// if the user didn't provide an auth URL, default to the Rackspace US endpoint
@@ -173,45 +210,66 @@ func Credentials(c *cli.Context, logger *logrus.Logger) (*gophercloud.AuthOption
 		have["auth-url"] = commandoptions.Cred{Value: rackspace.RackspaceUSIdentity, From: "default value"}
 		delete(want, "auth-url")
 	}
-
-	haveString := ""
-	for k, v := range have {
-		haveString += fmt.Sprintf("%s: %s (from %s)\n", k, v.Value, v.From)
-	}
-
-	if len(want) > 0 {
-		wantString := ""
-		for k := range want {
-			wantString += fmt.Sprintf("%s\n", k)
-		}
-
-		authErrSlice := []string{"There are some required Rackspace Cloud credentials that we couldn't find.",
-			"Here's what we have:",
-			fmt.Sprintf("%s", haveString),
-			"and here's what we're missing:",
-			fmt.Sprintf("%s", wantString),
-			"",
-			"You can set any of these credentials in the following ways:",
-			"- Run `rack configure` to interactively create a configuration file,",
-			"- Specify it in the command as a flag (--username, --api-key, --region), or",
-			"- Export it as an environment variable (RS_USERNAME, RS_API_KEY, RS_REGION_NAME).",
-			"",
-		}
-
-		return nil, "", fmt.Errorf(strings.Join(authErrSlice, "\n"))
-	}
-
-	if logger != nil {
-		logger.Infof("Authentication Credentials:\n%s\n", haveString)
-	}
+	ao.IdentityEndpoint = have["auth-url"].Value
 
 	// upper-case the region
 	region := strings.ToUpper(have["region"].Value)
-	// allow Gophercloud to re-authenticate
-	ao.AllowReauth = true
-	ao.IdentityEndpoint = have["auth-url"].Value
+	delete(want, "region")
 
-	return ao, region, nil
+	// now we check for token authentication (only allowed via the command-line)
+	want["tenant-id"] = ""
+	want["auth-token"] = ""
+	commandoptions.CLIopts(c, have, want)
+
+	// if a tenant ID was provided on the command-line, we don't bother checking for a
+	// username or api key
+	if have["tenant-id"].Value != "" || have["auth-token"].Value != "" {
+		if tenantID, ok := have["tenant-id"]; ok {
+			ao.TenantID = tenantID.Value
+			ao.TokenID = have["auth-token"].Value
+			delete(want, "auth-token")
+		} else {
+			return nil, Err(have, want, tenantIDAuthErrSlice)
+		}
+	} else {
+		// otherwise, let's look for a username and API key
+		want = map[string]string{
+			"username": "",
+			"api-key":  "",
+		}
+		err = findAuthOpts(c, have, want)
+		if err != nil {
+			return nil, err
+		}
+		if have["username"].Value != "" || have["api-key"].Value != "" {
+			if username, ok := have["username"]; ok {
+				ao.Username = username.Value
+				ao.APIKey = have["api-key"].Value
+				delete(want, "api-key")
+			} else {
+				return nil, Err(have, want, usernameAuthErrSlice)
+			}
+		} else {
+			return nil, Err(have, want, usernameAuthErrSlice)
+		}
+	}
+
+	if logger != nil {
+		haveString := ""
+		for k, v := range have {
+			haveString += fmt.Sprintf("%s: %s (from %s)\n", k, v.Value, v.From)
+		}
+		logger.Infof("Authentication Credentials:\n%s\n", haveString)
+	}
+
+	credsResult := &CredentialsResult{
+		AuthOpts: ao,
+		Region:   region,
+		Have:     have,
+		Want:     want,
+	}
+
+	return credsResult, nil
 }
 
 // LogRoundTripper satisfies the http.RoundTripper interface and is used to
