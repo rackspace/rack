@@ -32,7 +32,7 @@ func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger, noCach
 		return nil, err
 	}
 
-	if noCache || ao.TokenID != "" {
+	if noCache {
 		return authFromScratch(*ao, region, serviceType, logger)
 	}
 
