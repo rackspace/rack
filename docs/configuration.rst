@@ -3,17 +3,17 @@
 Installation and Configuration
 ==============================
 
-.. warning:: The installation / configuration instructions here are to be considered
-             buyer-beware. As development continues a range of configuration options
-             will be supported; as such what works today may not work tomorrow, but
-             it works right now so that's ok.
+.. warning:: The installation / configuration instructions here must be
+considered buyer-beware. As development continues, a range of configuration
+options will be supported; as such what works today may not work tomorrow, but
+it works right now so that's ok.
 
 Installation
 ------------
 
 The Rackspace CLI ``rack`` is a self-contained binary writted in go_ this means
-that installation is as simple as downloading the relevant binary for your operating
-system and ensuring it is on your path.
+that installation is as simple as downloading the relevant binary for your
+operating system and ensuring it is on your path.
 
 Binary Downloads:
 
@@ -65,8 +65,11 @@ To authenticate against the Rackspace API, there are 4 required paramaters:
 
 
 If this is your first time using the ``rack`` CLI, we recommend you
-run the interactive ``configure`` command. Note: Windows users should use PowerShell,
-not PowerShell ISE to run this command::
+run the interactive ``configure`` command.
+
+.. note::
+   Windows users should use PowerShell, not PowerShell ISE to run this
+   command.
 
     rack configure
 
@@ -162,6 +165,16 @@ If you'd like to set up command completion yourself (or if you're on a Windows O
 you can copy file in the location below to the appropriate directory and source it:
 github.com/jrperritt/rack/setup/commandcompletion_bash.sh
 
+Check the version
+-----------------
+
+To see the current version, run::
+
+    rack version
+
+    rack version 0.0.0-dev
+commit: d69f4d2030b307076ad0a10f4b5addf440493aec
+
 Advanced Configuration Values
 -----------------------------
 
@@ -188,3 +201,4 @@ config file profile. In either case, the parameter name will be ``auth-url``.
 .. _Linux (64 bit): https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com/Linux/amd64/rack
 .. _Windows (64 bit): https://ba7db30ac3f206168dbb-7f12cbe7f0a328a153fa25953cbec5f2.ssl.cf5.rackcdn.com/Windows/amd64/rack.exe
 .. _Cloud Control panel: https://mycloud.rackspace.com/
+

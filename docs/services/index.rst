@@ -3,7 +3,19 @@
 Services
 ========
 
-Contents:
+The services supported so far are documented here.
+
+Examples for services
+---------------------
+
+.. toctree::
+   maxdepth: 2
+
+   cloudfilesexamples.rst
+
+
+Reference for commands
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. toctree::
    :maxdepth: 3
