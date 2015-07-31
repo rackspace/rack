@@ -294,8 +294,6 @@ func newHTTPClient() http.Client {
 func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, error) {
 	var err error
 
-	//fmt.Printf("request body: %+v\n", request.Body)
-
 	if lrt.Logger.Level == logrus.DebugLevel && request.Body != nil {
 		fmt.Println("logging request body")
 		request.Body, err = lrt.logRequestBody(request.Body, request.Header)
