@@ -51,10 +51,10 @@ need to use the volume's `attachment id`, which can be found with the
     ID					                          Device		VolumeID				                      ServerID
     81c7a7e5-01a5-44bb-9b43-0cc9f7c4e423	/dev/xvdc	81c7a7e5-01a5-44bb-9b43-0cc9f7c4e423	8a254ea3-77b5-4f74-a893-8d2d51ae2cca
 
-Use the command `rack servers volume-attach delete` followed by the `attachment id` and
+Use the command `rack servers volume-attachment delete` followed by the `attachment id` and
 the server name::
 
-    $ rack servers volume-attach delete --server-name RACK --id 81c7a7e5-01a5-44bb-9b43-0cc9f7c4e423
+    $ rack servers volume-attachment delete --server-name RACK --id 81c7a7e5-01a5-44bb-9b43-0cc9f7c4e423
 
 Once the server is detached, you can now create a snapshot using the command
 `rack block-storage snapshot create`, followed by `volume-id` and the name
