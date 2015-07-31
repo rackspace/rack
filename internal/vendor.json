@@ -187,22 +187,22 @@
 			"canonical": "github.com/rackspace/gophercloud/openstack/objectstorage/v1/accounts",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/accounts",
-			"revision": "24c6ec47a5042cabc915eeec2cec8a00b7fa91fb",
-			"revisionTime": "2015-07-30T12:27:28-06:00"
+			"revision": "85eff9a39ad3e2c210dcc4824e8a56fb66f6ef86",
+			"revisionTime": "2015-07-31T16:32:57-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/objectstorage/v1/containers",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/containers",
-			"revision": "24c6ec47a5042cabc915eeec2cec8a00b7fa91fb",
-			"revisionTime": "2015-07-30T12:27:28-06:00"
+			"revision": "85eff9a39ad3e2c210dcc4824e8a56fb66f6ef86",
+			"revisionTime": "2015-07-31T16:32:57-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects",
-			"revision": "24c6ec47a5042cabc915eeec2cec8a00b7fa91fb",
-			"revisionTime": "2015-07-30T12:27:28-06:00"
+			"revision": "85eff9a39ad3e2c210dcc4824e8a56fb66f6ef86",
+			"revisionTime": "2015-07-31T16:32:57-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/utils",
