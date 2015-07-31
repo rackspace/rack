@@ -317,9 +317,6 @@ func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, er
 		}
 		lrt.numReauthAttempts++
 	}
-	if err != nil {
-		return response, err
-	}
 
 	lrt.Logger.Debugf("Response Status: %s\n", response.Status)
 
@@ -329,7 +326,7 @@ func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, er
 	}
 	lrt.Logger.Debugf("Response Headers: %+v\n", string(info))
 
-	return response, nil
+	return response, err
 }
 
 func (lrt *LogRoundTripper) logRequestBody(original io.ReadCloser, headers http.Header) (io.ReadCloser, error) {
