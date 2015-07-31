@@ -192,5 +192,5 @@ ab95d1d6-27d1-42bb-8cdc-800efcb5fc1f    devserver    ACTIVE    23.253.50.105    
 
 To connect to the server with SSH using your public key, use this command::
 
-    $ ssh -i ~/.ssh/id_rsa.pub root@23.253.50.104
+    $ ssh root@23.253.50.104
 
