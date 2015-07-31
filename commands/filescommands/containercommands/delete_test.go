@@ -35,8 +35,13 @@ func TestDeleteServiceClientType(t *testing.T) {
 }
 
 func TestDeleteHandleFlags(t *testing.T) {
+	app := cli.NewApp()
+	flagset := flag.NewFlagSet("flags", 1)
+	c := cli.NewContext(app, flagset, nil)
 	cmd := &commandDelete{
-		Ctx: &handler.Context{},
+		Ctx: &handler.Context{
+			CLIContext: c,
+		},
 	}
 	expected := &handler.Resource{
 		Params: &paramsDelete{},

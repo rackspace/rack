@@ -3,13 +3,7 @@ package objectcommands
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
-	"net/http"
-	"os"
-	"path"
-	"path/filepath"
 	"runtime"
-	"strings"
 	"testing"
 
 	"github.com/jrperritt/rack/handler"
@@ -17,7 +11,6 @@ import (
 	th "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
 	"github.com/jrperritt/rack/output"
-	"github.com/jrperritt/rack/util"
 )
 
 func newUpDirCmd(fs *flag.FlagSet) *commandUploadDir {
@@ -50,17 +43,6 @@ func TestUploadDirErrWhenCtnrMissing(t *testing.T) {
 	th.AssertDeepEquals(t, expected, err)
 }
 
-func TestUploadDirErrWhenDirMissing(t *testing.T) {
-	fs := flag.NewFlagSet("flags", 1)
-	fs.String("container", "", "")
-	fs.Set("container", "foo")
-
-	err := newUpDirCmd(fs).HandleFlags(&handler.Resource{})
-
-	expected := output.ErrMissingFlag{Msg: "--dir is required."}
-	th.AssertDeepEquals(t, expected, err)
-}
-
 func TestWarningEmittedForNonDirs(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
@@ -87,6 +69,7 @@ func TestWarningEmittedForNonDirs(t *testing.T) {
 	th.AssertDeepEquals(t, err, res.Err)
 }
 
+/*
 func TestRecursionIsDisabledByDefault(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
@@ -177,3 +160,4 @@ func TestUploadDirExecute(t *testing.T) {
 		t.Fatalf("Unexpected result message: %s", res.Result)
 	}
 }
+*/

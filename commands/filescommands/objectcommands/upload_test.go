@@ -1,15 +1,17 @@
 package objectcommands
 
 import (
+	"crypto/md5"
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"testing"
 
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
+	osObjects "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
 	th "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
 	"github.com/jrperritt/rack/output"
@@ -68,72 +70,32 @@ func TestUploadHandlePipe(t *testing.T) {
 	th.AssertNoErr(t, err)
 }
 
-func TestUploadHandleSingle(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-
-	th.Mux.HandleFunc("/foo/bar", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Content-Type", "text/plain")
-		th.TestBody(t, r, "body")
-		fmt.Fprintf(w, `hodor`)
-	})
-
-	fs := flag.NewFlagSet("flags", 1)
-	fs.String("container", "", "")
-	fs.String("name", "", "")
-	fs.String("content", "", "")
-
-	fs.Set("container", "foo")
-	fs.Set("name", "bar")
-	fs.Set("content", "baz")
-
-	cmd := newUpCmd(fs)
-	cmd.Ctx.ServiceClient = client.ServiceClient()
-
-	expected := &handler.Resource{
-		Params: &paramsUpload{
-			stream: strings.NewReader("baz"),
-		},
-	}
-
-	actual := &handler.Resource{
-		Params: &paramsUpload{},
-	}
-
-	err := cmd.HandleSingle(actual)
-	th.AssertNoErr(t, err)
-
-	expectedBytes, _ := ioutil.ReadAll(expected.Params.(*paramsUpload).stream)
-	th.AssertNoErr(t, err)
-
-	actualBytes, _ := ioutil.ReadAll(actual.Params.(*paramsUpload).stream)
-	th.AssertNoErr(t, err)
-
-	th.AssertDeepEquals(t, expectedBytes, actualBytes)
-}
-
 func TestUploadExecute(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 
 	th.Mux.HandleFunc("/foo/bar", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(201)
 		th.TestMethod(t, r, "PUT")
 		w.Header().Add("Content-Type", "text/plain")
+		hash := md5.New()
+		io.WriteString(hash, "hodor")
+		localChecksum := hash.Sum(nil)
+		w.Header().Set("ETag", fmt.Sprintf("%x", localChecksum))
+		w.WriteHeader(201)
 		fmt.Fprintf(w, `hodor`)
 	})
 
 	fs := flag.NewFlagSet("flags", 1)
-	fs.String("container", "", "")
-	fs.String("name", "", "")
-	fs.Set("container", "foo")
-	fs.Set("name", "bar")
-
 	cmd := newUpCmd(fs)
 	cmd.Ctx.ServiceClient = client.ServiceClient()
 
 	res := &handler.Resource{
-		Params: &paramsUpload{container: "foo", object: "bar"},
+		Params: &paramsUpload{
+			container: "foo",
+			object:    "bar",
+			stream:    strings.NewReader("hodor"),
+			opts:      osObjects.CreateOpts{},
+		},
 	}
 
 	cmd.Execute(res)
