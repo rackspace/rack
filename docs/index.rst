@@ -56,7 +56,7 @@ Synopsis
 
 ::
 
-  rack [--options] <service> <command> <subcommand> [--flags]
+  rack <service> <subservice> <action> [--flags]
 
 All ``rack`` commands follow the pattern above - for example, if you wanted to
 list all running servers on your Rackspace account, you would type::
@@ -96,6 +96,14 @@ pass in other required **global** information into the tool, these are:
 ``--auth-url``
   The Rackspace URL to use for authentication. If not provided, this
   will default to the public U.S. Rackspace endpoint.
+
+``--auth-tenant-id``
+  The tenant ID to use for authentication. Prefixed with 'auth-' to avoid name
+  collision with the ``tenant-id`` command flag.
+
+``--auth-token``
+  The token to use for authentication. This must be used with the ``auth-tenant-id``
+  flag.
 
 ``--profile``
   The name of the config file profile to use to look for authentication credentials.
