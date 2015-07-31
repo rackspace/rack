@@ -307,6 +307,13 @@ func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, er
 	lrt.Logger.Infof("Request URL: %s\n", request.URL)
 
 	response, err := lrt.rt.RoundTrip(request)
+	if err != nil {
+		return nil, err
+	}
+	if response == nil {
+		return nil, err
+	}
+
 	if response.StatusCode == http.StatusUnauthorized {
 		if lrt.numReauthAttempts == 3 {
 			return response, fmt.Errorf("Tried to re-authenticate 3 times with no success.")

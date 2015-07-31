@@ -235,7 +235,7 @@ func Create(c *gophercloud.ServiceClient, containerName, objectName string, cont
 			res.Header = resp.Header
 			if resp.Header.Get("ETag") == fmt.Sprintf("%x", localChecksum) {
 				res.Err = err
-				break
+				return res
 			}
 		}
 		if i == 3 {
