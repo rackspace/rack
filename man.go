@@ -18,7 +18,7 @@ func man() {
 	content += fmt.Sprintln(`.SH NAME`)
 	content += fmt.Sprintf(`rack \- %s`+"\n", Usage())
 	content += fmt.Sprintln(`.SH SYNOPSIS`)
-	content += fmt.Sprintln("rack [GLOBALS] command subcommand [OPTIONS]")
+	content += fmt.Sprintln("rack <command> <subcommand> <action> [OPTIONS]")
 	content += fmt.Sprintln(`.SH DESCRIPTION`)
 	content += fmt.Sprintf("%s\n\n\n", Desc())
 

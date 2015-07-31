@@ -2,11 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"os"
-	"strings"
-	"text/tabwriter"
-	"text/template"
 
 	"github.com/jrperritt/rack/commands/blockstoragecommands"
 	"github.com/jrperritt/rack/commands/filescommands"
@@ -20,16 +16,11 @@ import (
 
 func main() {
 	cli.HelpPrinter = printHelp
-	cli.CommandHelpTemplate = `NAME: {{.Name}} - {{.Usage}}{{if .Description}}
-
-DESCRIPTION: {{.Description}}{{end}}{{if .Flags}}
-
-OPTIONS:
-{{range .Flags}}{{flag .}}
-{{end}}{{ end }}
-`
+	cli.CommandHelpTemplate = commandHelpTemplate
+	cli.AppHelpTemplate = appHelpTemplate
 	app := cli.NewApp()
 	app.Name = "rack"
+	app.Version = fmt.Sprintf("%v version %v\n   commit: %v\n", app.Name, util.Version, util.Commit)
 	app.Usage = Usage()
 	app.HideVersion = true
 	app.EnableBashCompletion = true
@@ -72,9 +63,11 @@ func Cmds() []cli.Command {
 			Action: configure,
 		},
 		{
-			Name:   "version",
-			Usage:  "Print the version of this binary.",
-			Action: version,
+			Name:  "version",
+			Usage: "Print the version of this binary.",
+			Action: func(c *cli.Context) {
+				fmt.Fprintf(c.App.Writer, "%v version %v\ncommit: %v\n", c.App.Name, util.Version, util.Commit)
+			},
 		},
 		{
 			Name:        "servers",
@@ -97,41 +90,4 @@ func Cmds() []cli.Command {
 			Subcommands: blockstoragecommands.Get(),
 		},
 	}
-}
-
-func printHelp(out io.Writer, templ string, data interface{}) {
-	funcMap := template.FuncMap{
-		"join": strings.Join,
-		"flag": flag,
-	}
-
-	w := tabwriter.NewWriter(out, 0, 8, 1, '\t', 0)
-	t := template.Must(template.New("help").Funcs(funcMap).Parse(templ))
-	err := t.Execute(w, data)
-	if err != nil {
-		panic(err)
-	}
-	w.Flush()
-}
-
-func flag(flag cli.Flag) string {
-	switch flag.(type) {
-	case cli.StringFlag:
-		flagType := flag.(cli.StringFlag)
-		return fmt.Sprintf("%s\t%s", flagType.Name, flagType.Usage)
-	case cli.IntFlag:
-		flagType := flag.(cli.IntFlag)
-		return fmt.Sprintf("%s\t%s", flagType.Name, flagType.Usage)
-	case cli.BoolFlag:
-		flagType := flag.(cli.BoolFlag)
-		return fmt.Sprintf("%s\t%s", flagType.Name, flagType.Usage)
-	case cli.StringSliceFlag:
-		flagType := flag.(cli.StringSliceFlag)
-		return fmt.Sprintf("%s\t%s", flagType.Name, flagType.Usage)
-	}
-	return ""
-}
-
-func version(c *cli.Context) {
-	fmt.Fprintf(c.App.Writer, "%v version %v\ncommit: %v\n", c.App.Name, util.Version, util.Commit)
 }

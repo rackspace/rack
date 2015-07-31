@@ -33,7 +33,7 @@ func Get() []cli.Command {
 			Subcommands: keypaircommands.Get(),
 		},
 		{
-			Name:        "volume-attach",
+			Name:        "volume-attachment",
 			Usage:       "Volumes attached to servers.",
 			Subcommands: volumeattachmentcommands.Get(),
 		},
