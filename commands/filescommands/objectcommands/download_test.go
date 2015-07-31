@@ -60,25 +60,19 @@ func TestDlExecute(t *testing.T) {
 
 	th.Mux.HandleFunc("/foo/bar", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "text/plain")
-		fmt.Fprintf(w, `hodor`)
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, "hodor")
 	})
 
 	fs := flag.NewFlagSet("flags", 1)
-	fs.String("container", "", "")
-	fs.String("name", "", "")
-	fs.Set("container", "foo")
-	fs.Set("name", "bar")
-
 	cmd := newDlCmd(fs)
 	cmd.Ctx.ServiceClient = client.ServiceClient()
-	cmd.Ctx.OutputFormat = "json"
 
-	res := &handler.Resource{
+	actual := &handler.Resource{
 		Params: &paramsDownload{container: "foo", object: "bar"},
 	}
 
-	cmd.Execute(res)
+	cmd.Execute(actual)
 
-	th.AssertNoErr(t, res.Err)
-	th.AssertEquals(t, "hodor", res.Result)
+	th.AssertNoErr(t, actual.Err)
 }
