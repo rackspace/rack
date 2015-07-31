@@ -3,10 +3,26 @@
 Services
 ========
 
-The services supported so far are documented here.
+Here you can find the services currently supported by Rackspace CLI, and those
+services' supported commands.
+
+Commands Reference
+------------------
+
+This section lists the commands you can use with Rackspace CLI.
+
+.. toctree::
+   :maxdepth: 3
+
+   servers.rst
+   files.rst
+   blockstorage.rst
+   networks.rst
 
 Examples for services
 ---------------------
+
+This section shows service-specific use cases for Rackspace CLI.
 
 .. toctree::
    maxdepth: 2
@@ -78,16 +94,3 @@ on any `rack` command::
     PublicIPv4
     162.209.0.32
     23.253.213.33
-
-Contents:
-
-Reference for commands
-~~~~~~~~~~~~~~~~~~~~~~
-
-.. toctree::
-   :maxdepth: 3
-
-   servers.rst
-   files.rst
-   blockstorage.rst
-   networks.rst
