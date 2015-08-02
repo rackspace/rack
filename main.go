@@ -16,8 +16,9 @@ import (
 
 func main() {
 	cli.HelpPrinter = printHelp
-	cli.CommandHelpTemplate = commandHelpTemplate
 	cli.AppHelpTemplate = appHelpTemplate
+	cli.CommandHelpTemplate = commandHelpTemplate
+	cli.SubcommandHelpTemplate = subcommandHelpTemplate
 	app := cli.NewApp()
 	app.Name = "rack"
 	app.Version = fmt.Sprintf("%v version %v\n   commit: %v\n", app.Name, util.Version, util.Commit)
