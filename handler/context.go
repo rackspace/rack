@@ -34,9 +34,10 @@ type Context struct {
 	Results chan *Resource
 
 	GlobalOptions struct {
-		output   string
-		noCache  bool
-		noHeader bool
+		output        string
+		noCache       bool
+		noHeader      bool
+		useServiceNet bool
 	}
 
 	// logger is used to log information acquired while processing the command.
@@ -79,9 +80,15 @@ func (ctx *Context) storeCredentials() {
 		}
 		// get auth credentials
 		credsResult, err := auth.Credentials(ctx.CLIContext, nil)
+		ao := credsResult.AuthOpts
+		region := credsResult.Region
 		if err == nil {
+			urlType := gophercloud.AvailabilityPublic
+			if ctx.GlobalOptions.useServiceNet {
+				urlType = gophercloud.AvailabilityInternal
+			}
 			// form the cache key
-			cacheKey := auth.CacheKey(*credsResult.AuthOpts, credsResult.Region, ctx.ServiceClientType)
+			cacheKey := auth.CacheKey(*ao, region, ctx.ServiceClientType, urlType)
 			// initialize the cache
 			cache := &auth.Cache{}
 			// set the cache value to the current values
@@ -103,10 +110,11 @@ func (ctx *Context) handleGlobalOptions() error {
 
 	have := make(map[string]commandoptions.Cred)
 	want := map[string]string{
-		"output":    "",
-		"no-cache":  "",
-		"no-header": "",
-		"log":       "",
+		"output":          "",
+		"no-cache":        "",
+		"no-header":       "",
+		"log":             "",
+		"use-service-net": "",
 	}
 
 	// use command-line options if available
@@ -149,6 +157,12 @@ func (ctx *Context) handleGlobalOptions() error {
 		ctx.GlobalOptions.noCache = true
 	} else if value, ok := defaultKeysHash["no-cache"]; ok && value != "" {
 		ctx.GlobalOptions.noCache = true
+	}
+
+	if ctx.CLIContext.IsSet("use-service-net") {
+		ctx.GlobalOptions.useServiceNet = true
+	} else if value, ok := defaultKeysHash["use-service-net"]; ok && value != "" {
+		ctx.GlobalOptions.useServiceNet = true
 	}
 
 	var logLevel string
