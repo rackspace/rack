@@ -114,6 +114,9 @@ pass in other required **global** information into the tool, these are:
 ``--no-header``
   Don't set the header for CSV nor tabular output.
 
+``--use-service-net``
+  Use the Rackspace internal URL to execute the request.
+
 ``--help, -h``
   Show help
 

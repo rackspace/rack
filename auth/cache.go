@@ -27,7 +27,7 @@ type CacheItem struct {
 // CacheKey returns the cache key formed from the user's authentication credentials.
 func CacheKey(ao gophercloud.AuthOptions, region, serviceClientType string, urlType gophercloud.Availability) string {
 	if ao.Username != "" {
-		return fmt.Sprintf("%s,%s,%s,%s", ao.Username, ao.IdentityEndpoint, region, serviceClientType, urlType)
+		return fmt.Sprintf("%s,%s,%s,%s,%s", ao.Username, ao.IdentityEndpoint, region, serviceClientType, urlType)
 	}
 	return fmt.Sprintf("%s,%s,%s,%s,%s", ao.TenantID, ao.IdentityEndpoint, region, serviceClientType, urlType)
 }

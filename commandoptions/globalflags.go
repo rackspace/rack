@@ -31,7 +31,7 @@ func GlobalFlags() []cli.Flag {
 			Usage: "The region to which authenticate.",
 		},
 		cli.BoolFlag{
-			Name:  "internal",
+			Name:  "use-service-net",
 			Usage: "Whether or not to use the internal Rackspace network",
 		},
 		cli.StringFlag{

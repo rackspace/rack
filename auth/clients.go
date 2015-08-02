@@ -40,6 +40,7 @@ var tenantIDAuthErrSlice = []string{"There are some required Rackspace Cloud cre
 	"",
 }
 
+// Err returns the custom error to print when authentication fails.
 func Err(have map[string]commandoptions.Cred, want map[string]string, errMsg []string) error {
 	haveString := ""
 	for k, v := range have {
@@ -58,6 +59,8 @@ func Err(have map[string]commandoptions.Cred, want map[string]string, errMsg []s
 	return nil
 }
 
+// CredentialsResult holds the information acquired from looking for authentication
+// credentials.
 type CredentialsResult struct {
 	AuthOpts *gophercloud.AuthOptions
 	Region   string
@@ -92,23 +95,22 @@ func reauthFunc(pc *gophercloud.ProviderClient, ao gophercloud.AuthOptions) func
 	}
 }
 
-func URLTypeFromCtx(c *cli.Context) gophercloud.Availability {
-	urlType := gophercloud.AvailabilityPublic
-	if c.GlobalIsSet("internal") {
-		urlType = gophercloud.AvailabilityInternal
-	}
-	return urlType
-}
-
 // NewClient creates and returns a Rackspace client for the given service.
-func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger, noCache bool) (*gophercloud.ServiceClient, error) {
+func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger, noCache bool, useServiceNet bool) (*gophercloud.ServiceClient, error) {
 	// get the user's authentication credentials
 	credsResult, err := Credentials(c, logger)
 	if err != nil {
 		return nil, err
 	}
 
-	urlType := URLTypeFromCtx(c)
+	logMsg := "Using public endpoint"
+	urlType := gophercloud.AvailabilityPublic
+	if useServiceNet {
+		logMsg = "Using service net endpoint"
+		urlType = gophercloud.AvailabilityInternal
+	}
+	logger.Infoln(logMsg)
+
 	if noCache {
 		return authFromScratch(credsResult, serviceType, urlType, logger)
 	}
@@ -146,7 +148,7 @@ func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger, noCach
 	return nil, nil
 }
 
-func authFromScratch(credsResult *CredentialsResult,  serviceType string, urlType gophercloud.Availability, logger *logrus.Logger) (*gophercloud.ServiceClient, error) {
+func authFromScratch(credsResult *CredentialsResult, serviceType string, urlType gophercloud.Availability, logger *logrus.Logger) (*gophercloud.ServiceClient, error) {
 	logger.Info("Not using cache; Authenticating from scratch.\n")
 
 	ao := credsResult.AuthOpts
@@ -190,6 +192,11 @@ func authFromScratch(credsResult *CredentialsResult,  serviceType string, urlTyp
 	if sc == nil {
 		return nil, fmt.Errorf("Unable to create service client: Unknown service type: %s\n", serviceType)
 	}
+	if sc.Endpoint == "/" {
+		return nil, fmt.Errorf(strings.Join([]string{"You wanted to use service net for the %s request",
+			"but the %s service doesn't have an internal URL.\n"}, " "), serviceType, serviceType)
+	}
+	logger.Debugf("Created %s service client: %+v", serviceType, sc)
 	sc.UserAgent.Prepend(util.UserAgent)
 	return sc, nil
 }
