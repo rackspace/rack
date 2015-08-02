@@ -13,6 +13,7 @@ Examples for services
 
    cloudfilesexamples.rst
    cloudserversexamples.rst
+   cloudblockexamples.rst
 
 Authenticating as another user
 ------------------------------
@@ -46,7 +47,7 @@ on any `rack` command::
     INFO[0000] Using token from cache: 9c99727c0af4434ea41627761683a012
 
     INFO[0000] Request URL: https://ord.servers.api.rackspacecloud.com/v2/1234567/servers/detail
- 
+
     DEBU[0000] Response Status: 200 OK
 
     DEBU[0000] Response Headers: {
