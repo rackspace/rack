@@ -1,6 +1,10 @@
 package handler
 
-import "github.com/jrperritt/rack/util"
+import (
+	"fmt"
+
+	"github.com/jrperritt/rack/util"
+)
 
 // Resource is a general resource from Rackspace. This object stores information
 // about a single request and response from Rackspace.
@@ -25,13 +29,15 @@ func (resource *Resource) FlattenMap(key string) {
 		switch m.(type) {
 		case map[string]interface{}:
 			for k, v := range m.(map[string]interface{}) {
-				res[k] = v
-				keys = append(keys, k)
+				newKey := fmt.Sprintf("%s:%s", key, k)
+				res[newKey] = v
+				keys = append(keys, newKey)
 			}
 		case map[string]string:
 			for k, v := range m.(map[string]string) {
-				res[k] = v
-				keys = append(keys, k)
+				newKey := fmt.Sprintf("%s:%s", key, k)
+				res[newKey] = v
+				keys = append(keys, newKey)
 			}
 		}
 	}

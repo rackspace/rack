@@ -5,8 +5,8 @@ import (
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/flavors"
 	osFlavors "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/flavors"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/flavors"
 	"github.com/jrperritt/rack/util"
 )
 
@@ -38,7 +38,7 @@ func flagsGet() []cli.Flag {
 	}
 }
 
-var keysGet = []string{"ID", "Name", "Disk", "RAM", "RxTxFactor", "Swap", "VCPUs"}
+var keysGet = []string{"ID", "Name", "Disk", "RAM", "RxTxFactor", "Swap", "VCPUs", "ExtraSpecs"}
 
 type paramsGet struct {
 	flavor string
@@ -95,4 +95,12 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 
 func (command *commandGet) StdinField() string {
 	return "id"
+}
+
+func (command *commandGet) PreCSV(resource *handler.Resource) {
+	resource.FlattenMap("ExtraSpecs")
+}
+
+func (command *commandGet) PreTable(resource *handler.Resource) {
+	command.PreCSV(resource)
 }
