@@ -28,11 +28,10 @@ Reboot multiple servers
 
 With this one-line example, you list all the server IDs in an ACTIVE state, cut
 the header row that's output, then look for your servers with "-db" in the name
-and restart them.
+and restart them.::
 
-    $ rack servers instance list --status active --fields name | \
-    tail -n+2 | grep -i '-db' \
-    | rack servers instance reboot --stdin name
+    $ rack servers instance list --status active --fields name --no-header |
+    grep -i '-db' | rack servers instance reboot --soft --stdin name
 
 Search for existing servers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -45,13 +44,16 @@ account::
 
     $ rack servers instance list | grep "minecraft"
 
-ID                    Name        Status    PublicIPv4    PrivateIPv4    Image                    Flavor
-543ce918-9d5c-476b-80a8-eefd396214ff    minecraft    ACTIVE    23.253.213.33    10.209.161.191    e19a734c-c7e6-443a-830c-242209c4d65c    performance1-4
+::
+
+    543ce918-9d5c-476b-80a8-eefd396214ef	minecraft	ACTIVE	23.253.213.35	10.209.161.191	e19a734c-c7e6-443a-830c-242209c4d65d	performance1-4
 
 If you have a long list of servers, here's an example of listing with only the
 server ID returned::
 
     $ rack servers instance list --fields id
+
+::
 
     ID
     aa049bf9-132c-4364-9808-bea21a009061
@@ -61,6 +63,8 @@ Or just get a list of IP addresses for all your Rackspace Cloud Servers::
 
     $ rack servers instance list --fields publicipv4
 
+::
+
     PublicIPv4
     162.209.0.32
     23.253.213.33
@@ -69,6 +73,9 @@ Or search through metadata on each server. This example shows the Orchestration
 information available on this particular server::
 
     $ rack servers instance get-metadata --name minecraft
+
+::
+
     rax-heatdf149087-bf14-468c-9cfe-a76d83e43066
 
 Get required information before creating a server
@@ -84,17 +91,22 @@ copy and paste it into the command itself::
 
     $ cat ~/.ssh/id_rsa.pub
 
+::
+
     ssh-rsa AAAB3.........t0mr name@example.com
 
     $ rack servers keypair upload --file ~/.ssh/id_rsa.pub --name macpub
 
-or
+or::
 
-    $ rack servers keypair upload --public-key ssh-rsa AAAB3.........t0mr name@example.com --name macpub
+    $ rack servers keypair upload --public-key ssh-rsa AAAB3.........t0mr
+    name@example.com --name macpub
 
 Take a look at any keypairs you already have by listing them::
 
     $ rack servers keypair list
+
+::
 
     Name                    Fingerprint
     4cb08c2f-c9db-4b00-86db-5d4b2c9a3aff    01:1b:4a:8f:9b:a3:c3:76:3d:90:06:bd:d2:5e:c2:16
@@ -105,22 +117,26 @@ followed by any snapshot images you have stored in your account::
 
     $ rack servers image list | grep -i ubuntu
 
-973775ab-0653-4ef8-a571-7a2777787735	Ubuntu 12.04 LTS (Precise Pangolin) (PVHVM)		ACTIVE	20	512
-656e65f7-6441-46e8-978d-0d39beaaf559	Ubuntu 12.04 LTS (Precise Pangolin) (PV)		ACTIVE	20	512
-4315b2dc-23fc-4d81-9e73-aa620357e1d8	Ubuntu 15.04 (Vivid Vervet) (PVHVM)			ACTIVE	20	512
-09de0a66-3156-48b4-90a5-1cf25a905207	Ubuntu 14.04 LTS (Trusty Tahr) (PVHVM)			ACTIVE	20	512
-5ed162cc-b4eb-4371-b24a-a0ae73376c73	Ubuntu 14.04 LTS (Trusty Tahr) (PV)			ACTIVE	20	512
+::
+
+    973775ab-0653-4ef8-a571-7a2777787735	Ubuntu 12.04 LTS (Precise Pangolin) (PVHVM)		ACTIVE	20	512
+    656e65f7-6441-46e8-978d-0d39beaaf559	Ubuntu 12.04 LTS (Precise Pangolin) (PV)		ACTIVE	20	512
+    4315b2dc-23fc-4d81-9e73-aa620357e1d8	Ubuntu 15.04 (Vivid Vervet) (PVHVM)			ACTIVE	20	512
+    09de0a66-3156-48b4-90a5-1cf25a905207	Ubuntu 14.04 LTS (Trusty Tahr) (PVHVM)			ACTIVE	20	512
+    5ed162cc-b4eb-4371-b24a-a0ae73376c73	Ubuntu 14.04 LTS (Trusty Tahr) (PV)			ACTIVE	20	512
 
 Next, choose the size and power of the server by looking at the available
 flavors::
 
     $ rack servers flavor list | grep -i compute
 
-compute1-15		15 GB Compute v1	15360	0	0	8	1250
-compute1-30		30 GB Compute v1	30720	0	0	16	2500
-compute1-4		3.75 GB Compute v1	3840	0	0	2	312.5
-compute1-60		60 GB Compute v1	61440	0	0	32	5000
-compute1-8		7.5 GB Compute v1	7680	0	0	4	625
+::
+
+    compute1-15		15 GB Compute v1	15360	0	0	8	1250
+    compute1-30		30 GB Compute v1	30720	0	0	16	2500
+    compute1-4		3.75 GB Compute v1	3840	0	0	2	312.5
+    compute1-60		60 GB Compute v1	61440	0	0	32	5000
+    compute1-8		7.5 GB Compute v1	7680	0	0	4	625
 
 Start a server with a keypair and metadata
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -135,12 +151,16 @@ you want to include. Here is an example::
     --flavor-id general1-4 --metadata purpose=dev \
     --keypair macpub
 
+::
+
     ID        ab95d1d6-27d1-42bb-8cdc-800efcb5fc1f
     AdminPass    k6yfaDkgQfEr
 
 Now you can view the server to make sure the Status is ACTIVE::
 
    $ rack servers instance list | grep devserver
+
+::
 
     ID					Name		Status	PublicIPv4	PrivateIPv4Image					Flavor
     ab95d1d6-27d1-42bb-8cdc-800efcb5fc1f	devserver	ACTIVE	23.253.50.104	10.209.137.65	09de0a66-3156-48b4-90a5-1cf25a905207	general1-4

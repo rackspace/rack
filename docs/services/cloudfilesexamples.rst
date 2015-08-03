@@ -19,10 +19,10 @@ First, list the available containers in your account::
 
     $ rack files container list
 
-    Name                        Count    Bytes
-    Presentations                    14    125902668
-    Public                        47    179289516
-    allphotos                    493    295697436
+    Name						Count	Bytes
+    Presentations					14	125902668
+    Public						47	179289516
+    allphotos					493	295697436
 
 Here's an example of searching through a container named
 Presentations for a file with the name "workshop" in it::
@@ -38,9 +38,7 @@ As a handy one-line clean-up utility, use this command to list objects in a
 container, then match on a pattern, then delete them all. This example shows
 clearing all the .log files from a container::
 
-    $ rack files object list --all-pages --container server-test-logs \
-    --fields name | grep -i '.log' \ | rack files object delete --container \
-    server-test-logs --stdin name
+    $ rack files object list --all-pages --container server-test-logs --fields name | grep -i '.log' \ | rack files object delete --container server-test-logs --stdin name
 
 Download an object
 ~~~~~~~~~~~~~~~~~~
