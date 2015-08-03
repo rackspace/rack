@@ -1,8 +1,6 @@
 package objectcommands
 
 import (
-	"fmt"
-
 	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
@@ -94,24 +92,19 @@ func (command *commandSetMetadata) Execute(resource *handler.Resource) {
 	containerName := params.containerName
 	objectName := params.objectName
 
-	fmt.Printf("params.metadata: %+v\n", params.metadata)
-
 	currentMetadata, err := objects.Get(command.Ctx.ServiceClient, containerName, objectName, nil).ExtractMetadata()
 	if err != nil {
 		resource.Err = err
 		return
 	}
-	fmt.Printf("current metadata: %+v\n", currentMetadata)
 
 	for k := range currentMetadata {
 		currentMetadata[k] = ""
 	}
-	fmt.Printf("current metadata emptied: %+v\n", currentMetadata)
 
 	for k, v := range params.metadata {
 		currentMetadata[k] = v
 	}
-	fmt.Printf("current metadata to set: %+v\n", currentMetadata)
 
 	updateOpts := osObjects.UpdateOpts{
 		Metadata: currentMetadata,

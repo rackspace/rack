@@ -94,14 +94,19 @@ func (command *commandUpdateMetadata) Execute(resource *handler.Resource) {
 	containerName := params.containerName
 	objectName := params.objectName
 
-	getResponse := objects.Get(command.Ctx.ServiceClient, containerName, objectName, nil)
-	if getResponse.Err != nil {
-		resource.Err = getResponse.Err
+	currentMetadata, err := objects.Get(command.Ctx.ServiceClient, containerName, objectName, nil).ExtractMetadata()
+	if err != nil {
+		resource.Err = err
 		return
 	}
 
+	for k, v := range params.metadata {
+		k = strings.Title(k)
+		currentMetadata[k] = v
+	}
+
 	updateOpts := osObjects.UpdateOpts{
-		Metadata: params.metadata,
+		Metadata: currentMetadata,
 	}
 	updateResponse := objects.Update(command.Ctx.ServiceClient, containerName, objectName, updateOpts)
 	if updateResponse.Err != nil {
