@@ -14,5 +14,9 @@ func Get() []cli.Command {
 		download,
 		get,
 		remove,
+		setMetadata,
+		updateMetadata,
+		getMetadata,
+		deleteMetadata,
 	}
 }

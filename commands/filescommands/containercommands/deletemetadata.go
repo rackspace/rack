@@ -1,4 +1,4 @@
-package instancecommands
+package containercommands
 
 import (
 	"fmt"
@@ -7,14 +7,14 @@ import (
 	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
-	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
+	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers"
 	"github.com/jrperritt/rack/util"
 )
 
 var deleteMetadata = cli.Command{
 	Name:        "delete-metadata",
-	Usage:       util.Usage(commandPrefix, "delete-metadata", ""),
-	Description: "Delete metadata associated with the given server",
+	Usage:       util.Usage(commandPrefix, "delete-metadata", "--name <containerName> --metadata-keys <metadataKeys>"),
+	Description: "Delete specific metadata from the given container.",
 	Action:      actionDeleteMetadata,
 	Flags:       commandoptions.CommandFlags(flagsDeleteMetadata, keysDeleteMetadata),
 	BashComplete: func(c *cli.Context) {
@@ -25,16 +25,12 @@ var deleteMetadata = cli.Command{
 func flagsDeleteMetadata() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "id",
-			Usage: "[optional; required if `name` isn't provided] The server ID with the metadata.",
-		},
-		cli.StringFlag{
 			Name:  "name",
-			Usage: "[optional; required if `name` isn't provided] The server name with the metadata.",
+			Usage: "[required] The container name with the metadata.",
 		},
 		cli.StringFlag{
 			Name:  "metadata-keys",
-			Usage: "[required] A comma-separated string of keys of the metadata to delete from the server.",
+			Usage: "[required] A comma-separated string of metadata keys to delete from the container.",
 		},
 	}
 }
@@ -42,8 +38,8 @@ func flagsDeleteMetadata() []cli.Flag {
 var keysDeleteMetadata = []string{}
 
 type paramsDeleteMetadata struct {
-	serverID     string
-	metadataKeys []string
+	containerName string
+	metadataKeys  []string
 }
 
 type commandDeleteMetadata handler.Command
@@ -70,27 +66,39 @@ func (command *commandDeleteMetadata) ServiceClientType() string {
 }
 
 func (command *commandDeleteMetadata) HandleFlags(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"metadata-keys"})
+	err := command.Ctx.CheckFlagsSet([]string{"name", "metadata-keys"})
 	if err != nil {
 		return err
 	}
-
-	serverID, err := command.Ctx.IDOrName(osServers.IDFromName)
-	resource.Params = &paramsDeleteMetadata{
-		serverID:     serverID,
-		metadataKeys: strings.Split(command.Ctx.CLIContext.String("metadata-keys"), ","),
+	metadataKeys := strings.Split(command.Ctx.CLIContext.String("metadata-keys"), ",")
+	for i, k := range metadataKeys {
+		metadataKeys[i] = strings.Title(k)
 	}
-	return err
+
+	resource.Params = &paramsDeleteMetadata{
+		containerName: command.Ctx.CLIContext.String("name"),
+		metadataKeys:  metadataKeys,
+	}
+	return nil
 }
 
 func (command *commandDeleteMetadata) Execute(resource *handler.Resource) {
 	params := resource.Params.(*paramsDeleteMetadata)
-	for _, key := range params.metadataKeys {
-		err := osServers.DeleteMetadatum(command.Ctx.ServiceClient, params.serverID, key).ExtractErr()
-		if err != nil {
-			resource.Err = err
-			return
-		}
+	containerName := params.containerName
+
+	getResponse := containers.Get(command.Ctx.ServiceClient, containerName)
+	if getResponse.Err != nil {
+		resource.Err = getResponse.Err
+		return
 	}
-	resource.Result = fmt.Sprintf("Successfully deleted metadata")
+
+	updateOpts := containers.UpdateOpts{
+		DeleteMetadata: params.metadataKeys,
+	}
+	updateResponse := containers.Update(command.Ctx.ServiceClient, containerName, updateOpts)
+	if updateResponse.Err != nil {
+		resource.Err = updateResponse.Err
+		return
+	}
+	resource.Result = fmt.Sprintf("Successfully deleted metadata with keys [%s] from container [%s].\n", strings.Join(params.metadataKeys, ", "), containerName)
 }
