@@ -28,10 +28,6 @@ func flagsUpdate() []cli.Flag {
 			Usage: "[required] The name of the container",
 		},
 		cli.StringFlag{
-			Name:  "metadata",
-			Usage: "[optional] Comma-separated key-value pairs for the container. Example: key1=val1,key2=val2",
-		},
-		cli.StringFlag{
 			Name:  "container-read",
 			Usage: "[optional] Comma-separated list of users for whom to grant read access to the container",
 		},
