@@ -3,10 +3,11 @@
 Installation and Configuration
 ==============================
 
-.. warning:: The installation / configuration instructions here must be
-considered buyer-beware. As development continues, a range of configuration
-options will be supported; as such what works today may not work tomorrow, but
-it works right now so that's ok.
+.. warning::
+   The installation / configuration instructions here must be
+   considered buyer-beware. As development continues, a range of configuration
+   options will be supported; as such what works today may not work tomorrow,
+   but it works right now so that's ok.
 
 Installation
 ------------
@@ -204,7 +205,7 @@ To see the current version, run::
     rack version
 
     rack version 0.0.0-dev
-commit: d69f4d2030b307076ad0a10f4b5addf440493aec
+    commit: d69f4d2030b307076ad0a10f4b5addf440493aec
 
 Advanced Configuration Values
 -----------------------------
