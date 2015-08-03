@@ -78,10 +78,11 @@ fi
 # Set up the build and deploy layout
 ################################################################################
 
+# Get the version from travis, or default to 0.0.0
 if [ -z $TRAVIS_TAG ]; then
   VERSION=$TRAVIS_TAG
 else
-  VERSION="0.0.0"
+  VERSION="v0.0.0"
 fi
 
 BASEDIR="${VERSION}/${os}/${arch}"
@@ -98,7 +99,7 @@ BASENAME="rack"
 RACKBUILD="${BASENAME}${SUFFIX}"
 
 COMMIT=$(git rev-parse --verify HEAD)
-sed -i "s/var Commit =.*/var Commit = \"$COMMIT\"/" util/util.go
+sed -i "s/var Commit =.*/var Commit = \"$COMMIT\"/" util/commit.go
 
 go build -o $RACKBUILD
 
