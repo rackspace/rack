@@ -15,7 +15,7 @@ series of commands::
     $ rack block-storage snapshot create --help
 
 Create a volume
----------------
+~~~~~~~~~~~~~~~
 
 Create a volume by using the `rack block-storage volume create --size`
 command, than specifying the size and name you wish the volume to be. In the
@@ -41,7 +41,7 @@ the volume above is attached to server named "RACK"::
     ServerID8a254ea3-77b5-4f74-a893-8d2d51ae2cca
 
 Create a snapshot
------------------
+~~~~~~~~~~~~~~~~~
 
 Create a snapshot by detaching detaching the volume from it's server. You will
 need to use the volume's `attachment id`, which can be found with the
