@@ -31,15 +31,27 @@ Presentations for a file with the name "workshop" in it::
 
     humanitarian-openstack-workshop.zip     16760097    application/zip    2014-09-17T03:18:11.873700
 
+Delete all objects in a container with a matching pattern
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+As a handy one-line clean-up utility, use this command to list objects in a
+container, then match on a pattern, then delete them all. This example shows
+clearing all the .log files from a container::
+
+    $ rack files object list --all-pages --container server-test-logs \
+    --fields name | grep -i '.log' \ | rack files object delete --container \
+    server-test-logs --stdin name
+
 Download an object
 ~~~~~~~~~~~~~~~~~~
 
 With the name of an object and the container it is stored within you can download it::
 
-    rack files object download --container Presentations --name humanitarian-openstack-workshop.zip > humanitarian-openstack-workshop.zip
+    rack files object download --container Presentations --name \
+    humanitarian-openstack-workshop.zip > humanitarian-openstack-workshop.zip
 
 Upload an object
-~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
 
 First, make sure you have a container to upload to::
 

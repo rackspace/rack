@@ -16,7 +16,7 @@ Commands
 --------
 
 ``container``
-~~~~~~~~~~~~
+~~~~~~~~~~~~~
 
   Files Container operations
 
@@ -73,7 +73,7 @@ Usage::
     (echo containerName1 && echo containerName2) | rack files object list --stdin container [optional flags]
 
 ``upload``
-^^^^^^^^
+^^^^^^^^^^
 Usage::
 
     rack files object upload --container <containerName> --name <objectName> --content <contentToUpload> [optional flags]
@@ -89,7 +89,7 @@ Usage::
     find . -type d -name "something*" | rack files object upload-dir --container <containerName> --stdin dir [optional flags]
 
 ``download``
-^^^^^^^^
+^^^^^^^^^^^^
 Usage::
 
     rack files object download --container <containerName> --name <objectName> [optional flags]
@@ -101,7 +101,7 @@ Usage::
     rack files object get --container <containerName> --name <objectName> [optional flags]
 
 ``delete``
-^^^^^^^^
+^^^^^^^^^^
 Usage::
 
     rack files object delete --container <containerName> --name <objectName> [optional flags]

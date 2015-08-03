@@ -29,7 +29,7 @@ Examples for services
 This section shows service-specific use cases for Rackspace CLI.
 
 .. toctree::
-   maxdepth: 2
+   :maxdepth: 2
 
    cloudfilesexamples.rst
    cloudserversexamples.rst
