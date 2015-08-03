@@ -34,6 +34,7 @@ This section shows service-specific use cases for Rackspace CLI.
    cloudfilesexamples.rst
    cloudserversexamples.rst
    cloudblockexamples.rst
+   cloudnetworksexamples.rst
 
 .. _authenticating:
 
