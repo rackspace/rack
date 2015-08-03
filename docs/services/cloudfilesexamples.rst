@@ -38,7 +38,9 @@ As a handy one-line clean-up utility, use this command to list objects in a
 container, then match on a pattern, then delete them all. This example shows
 clearing all the .log files from a container::
 
-    $ rack files object list --all-pages --container server-test-logs --fields name | grep -i '.log' \ | rack files object delete --container server-test-logs --stdin name
+    rack files object list --all-pages --container server-test-logs --fields name | \
+    grep -i '.log' | \
+    rack files object delete --container server-test-logs --stdin name
 
 Download an object
 ~~~~~~~~~~~~~~~~~~
