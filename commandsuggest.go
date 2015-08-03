@@ -30,6 +30,13 @@ func commandNotFound(c *cli.Context, command string) {
 		"",
 		"Did you mean this?",
 		fmt.Sprintf("\t%s\n", bestSuggestion),
+		"",
+		"You can use the --h or --help flag to see a list of options for any command.",
+		"Examples:",
+		"\track --h",
+		"\track servers --h",
+		"\track block-storage volumes --help",
+		"",
 	}
 
 	fmt.Fprintf(c.App.Writer, strings.Join(suggestion, "\n"))

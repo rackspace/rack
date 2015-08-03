@@ -1,6 +1,7 @@
 package instancecommands
 
 import (
+	"errors"
 	"io/ioutil"
 	"path/filepath"
 	"strings"
@@ -176,6 +177,12 @@ func (command *commandCreate) Execute(resource *handler.Resource) {
 	opts := resource.Params.(*paramsCreate).opts
 	server, err := servers.Create(command.Ctx.ServiceClient, opts).Extract()
 	if err != nil {
+		switch err.(type) {
+		case *osServers.ErrNeitherImageIDNorImageNameProvided:
+			err = errors.New("One and only one of the --image-id and the --image-name flags must be provided.")
+		case *osServers.ErrNeitherFlavorIDNorFlavorNameProvided:
+			err = errors.New("One and only one of the --flavor-id and the --flavor-name flags must be provided.")
+		}
 		resource.Err = err
 		return
 	}

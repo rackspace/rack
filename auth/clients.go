@@ -3,6 +3,7 @@ package auth
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -13,6 +14,7 @@ import (
 	"github.com/jrperritt/rack/internal/github.com/Sirupsen/logrus"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
+	tokens2 "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/identity/v2/tokens"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace"
 	"github.com/jrperritt/rack/util"
 )
@@ -40,6 +42,7 @@ var tenantIDAuthErrSlice = []string{"There are some required Rackspace Cloud cre
 	"",
 }
 
+// Err returns the custom error to print when authentication fails.
 func Err(have map[string]commandoptions.Cred, want map[string]string, errMsg []string) error {
 	haveString := ""
 	for k, v := range have {
@@ -58,6 +61,8 @@ func Err(have map[string]commandoptions.Cred, want map[string]string, errMsg []s
 	return nil
 }
 
+// CredentialsResult holds the information acquired from looking for authentication
+// credentials.
 type CredentialsResult struct {
 	AuthOpts *gophercloud.AuthOptions
 	Region   string
@@ -93,22 +98,30 @@ func reauthFunc(pc *gophercloud.ProviderClient, ao gophercloud.AuthOptions) func
 }
 
 // NewClient creates and returns a Rackspace client for the given service.
-func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger, noCache bool) (*gophercloud.ServiceClient, error) {
+func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger, noCache bool, useServiceNet bool) (*gophercloud.ServiceClient, error) {
 	// get the user's authentication credentials
 	credsResult, err := Credentials(c, logger)
 	if err != nil {
 		return nil, err
 	}
 
+	logMsg := "Using public endpoint"
+	urlType := gophercloud.AvailabilityPublic
+	if useServiceNet {
+		logMsg = "Using service net endpoint"
+		urlType = gophercloud.AvailabilityInternal
+	}
+	logger.Infoln(logMsg)
+
 	if noCache {
-		return authFromScratch(credsResult, serviceType, logger)
+		return authFromScratch(credsResult, serviceType, urlType, logger)
 	}
 
 	ao := credsResult.AuthOpts
 	region := credsResult.Region
 
 	// form the cache key
-	cacheKey := CacheKey(*ao, region, serviceType)
+	cacheKey := CacheKey(*ao, region, serviceType, urlType)
 	// initialize cache
 	cache := &Cache{}
 	logger.Infof("Looking in the cache for cache key: %s\n", cacheKey)
@@ -131,13 +144,13 @@ func NewClient(c *cli.Context, serviceType string, logger *logrus.Logger, noCach
 			}, nil
 		}
 	} else {
-		return authFromScratch(credsResult, serviceType, logger)
+		return authFromScratch(credsResult, serviceType, urlType, logger)
 	}
 
 	return nil, nil
 }
 
-func authFromScratch(credsResult *CredentialsResult, serviceType string, logger *logrus.Logger) (*gophercloud.ServiceClient, error) {
+func authFromScratch(credsResult *CredentialsResult, serviceType string, urlType gophercloud.Availability, logger *logrus.Logger) (*gophercloud.ServiceClient, error) {
 	logger.Info("Not using cache; Authenticating from scratch.\n")
 
 	ao := credsResult.AuthOpts
@@ -145,6 +158,10 @@ func authFromScratch(credsResult *CredentialsResult, serviceType string, logger 
 
 	pc, err := rackspace.AuthenticatedClient(*ao)
 	if err != nil {
+		switch err.(type) {
+		case *tokens2.ErrNoPassword:
+			return nil, errors.New("Please supply an API key.")
+		}
 		return nil, err
 	}
 	pc.HTTPClient = newHTTPClient()
@@ -152,22 +169,26 @@ func authFromScratch(credsResult *CredentialsResult, serviceType string, logger 
 	switch serviceType {
 	case "compute":
 		sc, err = rackspace.NewComputeV2(pc, gophercloud.EndpointOpts{
-			Region: region,
+			Region:       region,
+			Availability: urlType,
 		})
 		break
 	case "object-store":
 		sc, err = rackspace.NewObjectStorageV1(pc, gophercloud.EndpointOpts{
-			Region: region,
+			Region:       region,
+			Availability: urlType,
 		})
 		break
 	case "blockstorage":
 		sc, err = rackspace.NewBlockStorageV1(pc, gophercloud.EndpointOpts{
-			Region: region,
+			Region:       region,
+			Availability: urlType,
 		})
 		break
 	case "network":
 		sc, err = rackspace.NewNetworkV2(pc, gophercloud.EndpointOpts{
-			Region: region,
+			Region:       region,
+			Availability: urlType,
 		})
 		break
 	}
@@ -177,6 +198,11 @@ func authFromScratch(credsResult *CredentialsResult, serviceType string, logger 
 	if sc == nil {
 		return nil, fmt.Errorf("Unable to create service client: Unknown service type: %s\n", serviceType)
 	}
+	if sc.Endpoint == "/" {
+		return nil, fmt.Errorf(strings.Join([]string{"You wanted to use service net for the %s request",
+			"but the %s service doesn't have an internal URL.\n"}, " "), serviceType, serviceType)
+	}
+	logger.Debugf("Created %s service client: %+v", serviceType, sc)
 	sc.UserAgent.Prepend(util.UserAgent)
 	return sc, nil
 }
@@ -294,8 +320,6 @@ func newHTTPClient() http.Client {
 func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, error) {
 	var err error
 
-	//fmt.Printf("request body: %+v\n", request.Body)
-
 	if lrt.Logger.Level == logrus.DebugLevel && request.Body != nil {
 		fmt.Println("logging request body")
 		request.Body, err = lrt.logRequestBody(request.Body, request.Header)
@@ -307,14 +331,15 @@ func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, er
 	lrt.Logger.Infof("Request URL: %s\n", request.URL)
 
 	response, err := lrt.rt.RoundTrip(request)
+	if response == nil {
+		return nil, err
+	}
+
 	if response.StatusCode == http.StatusUnauthorized {
 		if lrt.numReauthAttempts == 3 {
 			return response, fmt.Errorf("Tried to re-authenticate 3 times with no success.")
 		}
 		lrt.numReauthAttempts++
-	}
-	if err != nil {
-		return response, err
 	}
 
 	lrt.Logger.Debugf("Response Status: %s\n", response.Status)
@@ -325,7 +350,7 @@ func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, er
 	}
 	lrt.Logger.Debugf("Response Headers: %+v\n", string(info))
 
-	return response, nil
+	return response, err
 }
 
 func (lrt *LogRoundTripper) logRequestBody(original io.ReadCloser, headers http.Header) (io.ReadCloser, error) {

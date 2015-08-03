@@ -151,6 +151,11 @@ This presents a compact format with appropriate CSV headers.
 
   (boolean) Don't set the header for CSV nor tabular output.
 
+``--use-service-net``
+~~~~~~~~~~~~~~~~~~~~~
+
+  (boolean) Use the Rackspace internal URL to execute the request.
+
 ``--help, -h``
 ~~~~~~~~~~~~~~
 

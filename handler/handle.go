@@ -91,7 +91,7 @@ func Handle(command Commander) {
 		errExit1(command, resource)
 	}
 
-	client, err := auth.NewClient(ctx.CLIContext, ctx.ServiceClientType, ctx.logger, ctx.GlobalOptions.noCache)
+	client, err := auth.NewClient(ctx.CLIContext, ctx.ServiceClientType, ctx.logger, ctx.GlobalOptions.noCache, ctx.GlobalOptions.useServiceNet)
 	if err != nil {
 		resource.Err = err
 		errExit1(command, resource)
