@@ -80,13 +80,6 @@ func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
 		ContainerRead:  c.String("container-read"),
 		ContainerWrite: c.String("container-write"),
 	}
-	if c.IsSet("metadata") {
-		metadata, err := command.Ctx.CheckKVFlag("metadata")
-		if err != nil {
-			return err
-		}
-		opts.Metadata = metadata
-	}
 	resource.Params = &paramsUpdate{
 		container: c.String("name"),
 		opts:      opts,
