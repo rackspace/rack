@@ -29,23 +29,23 @@ func flagsUpload() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "container",
-			Usage: "[required] The name of the container to upload the object upload",
+			Usage: "[required] The name of the container to upload the object into.",
 		},
 		cli.StringFlag{
 			Name:  "name",
-			Usage: "[required] The name the object should have in the Cloud Files container",
+			Usage: "[required] The name the object should have in the Cloud Files container.",
 		},
 		cli.StringFlag{
 			Name:  "content",
-			Usage: "[optional; required if `file` or `stdin` isn't provided] The string contents to upload",
+			Usage: "[optional; required if `file` or `stdin` isn't provided] The string contents to upload.",
 		},
 		cli.StringFlag{
 			Name:  "file",
-			Usage: "[optional; required if `content` or `stdin` isn't provided] The file name containing the contents to upload",
+			Usage: "[optional; required if `content` or `stdin` isn't provided] The file name containing the contents to upload.",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `file` or `content` isn't provided] The field being piped to STDIN, if any. Valid values are: content",
+			Usage: "[optional; required if `file` or `content` isn't provided] The field being piped to STDIN, if any. Valid values are: content.",
 		},
 		cli.StringFlag{
 			Name:  "content-type",
@@ -56,12 +56,8 @@ func flagsUpload() []cli.Flag {
 			Usage: "[optional] The Content-Length header.",
 		},
 		cli.StringFlag{
-			Name:  "content-encoding",
-			Usage: "[optional] The Content-Encoding header. By default, the uploaded content will be gzipped.",
-		},
-		cli.StringFlag{
 			Name:  "metadata",
-			Usage: "[optional] A comma-separated string a key=value pairs.",
+			Usage: "[optional] A comma-separated string of key=value pairs.",
 		},
 	}
 }
