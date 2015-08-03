@@ -6,6 +6,8 @@ Services
 Here you can find the services currently supported by Rackspace CLI, and those
 services' supported commands.
 
+.. _cmd-reference:
+
 Commands Reference
 ------------------
 
@@ -19,6 +21,8 @@ This section lists the commands you can use with Rackspace CLI.
    blockstorage.rst
    networks.rst
 
+.. _services-examples:
+
 Examples for services
 ---------------------
 
@@ -31,6 +35,8 @@ This section shows service-specific use cases for Rackspace CLI.
    cloudserversexamples.rst
    cloudblockexamples.rst
 
+.. _authenticating:
+
 Authenticating as another user
 ------------------------------
 
@@ -38,6 +44,8 @@ If you have an administrative account, you can authenticate as another user
 with `--tenant-id` and `--auth-token` so that you can run commands with their
 account information. This scenario is useful when you are troubleshooting for
 someone.
+
+.. _troubleshooting:
 
 Troubleshooting a request
 -------------------------
