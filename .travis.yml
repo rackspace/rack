@@ -3,11 +3,12 @@ go:
 - 1.4
 sudo: false
 env:
-- GIMME_OS=linux GIMME_ARCH=amd64
-- GIMME_OS=darwin GIMME_ARCH=amd64
-- GIMME_OS=windows GIMME_ARCH=amd64
-- GIMME_OS=linux GIMME_ARCH=arm GOARM=6
-- GIMME_OS=linux GIMME_ARCH=arm GOARM=7
+  matrix:
+  - GIMME_OS=linux GIMME_ARCH=amd64
+  - GIMME_OS=darwin GIMME_ARCH=amd64
+  - GIMME_OS=windows GIMME_ARCH=amd64
+  - GIMME_OS=linux GIMME_ARCH=arm GOARM=6
+  - GIMME_OS=linux GIMME_ARCH=arm GOARM=7
 install:
 - go get -d -v ./...
 script:
@@ -18,10 +19,10 @@ before_deploy:
 - cd build
 deploy:
   provider: cloudfiles
-  username: rackcli.trythingsout
+  username: rackcli.drgsites
   region: IAD
   api-key:
-    secure: FLdkVNKnCcntd/bJlbzPuPyw/scLPfFYk7+FJ1SqoLRqeZEdnBvoHvDj0YEb2AFs7JVlbvHRCD8en9XhYPhZZuzAfSoSicp3LXAoGYMBrPD5d2sChOJXcELr8Q6+CQ4g0gN4dNJ0tsRa9Hi+ZlQs0MWX1vOP73WuXzwrXW2Vi2A=
+    secure: B94hK9XBKfav8TdEPIhjwWTEKGXmcJzmZhnYDzN6YOEbfgq9ZhNfYQzHzKrcoZQUG8/mLjQUjUBxJPPlccw4UOilf7Fe0NKzI9bNxjUTwlmfGXMjOvT1CrAF/mzgr35wsGHB8N6JQwGepdhCdMC2SmywZid13DQDmm1B3c7dUNg=
   container: rackclibuilds
   skip_cleanup: true
   on:
