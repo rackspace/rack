@@ -40,6 +40,8 @@ You can now add it to your path with::
 
 Windows
 ^^^^^^^
+Option 1 : Manual
+~~~~~~~~~~~~~~~~~
 
 After downloading the binary on Windows, you can immediately run it.
 
@@ -49,6 +51,35 @@ We recommend that you copy it to a location outside of your Downloads folder (e.
 2. Copy rack.exe to that directory
 3. Add the directory to your user's PATH environment variable, e.g. ``setx path "%path%;C:\tools"`` or press the Windows key, type "set env", select "Edit environment variables for your account", select the PATH user variable and append ";C:\\tools" to the value and save your changes.
 4. Open a new command prompt after modifying the PATH variable.
+
+Option 2 : Script
+~~~~~~~~~~~~~~~~~
+
+Requires Powershell version 3 or above.
+
+The following commands will set up Rackspace CLI. First, open Powershell_ise and paste the following script in the scripting pane, then click on the green play button to start the execution. Saving the script as a powershell file eg: rackspace-cli.ps1 and executing it will also set up Rackspace CLI on your windows computer.
+
+::
+
+  #requires -Version 3
+  $DownloadPath = 'C:\Tools'
+  
+  Write-Output -InputObject "[$(Get-Date)] Status  :: Set the Tools Directory $DownloadPath"
+  New-Item -Path $DownloadPath -ItemType Directory -ErrorAction SilentlyContinue > $null
+  Set-Location -Path $DownloadPath -ErrorAction SilentlyContinue
+  
+  Write-Output -InputObject "[$(Get-Date)] Status  :: Download Rackspace CLI in C:\Tools"
+  Invoke-WebRequest -Uri 'https://goo.gl/NMvmcx/Windows/amd64/rack.exe' -Method Get -OutFile rack.exe
+  
+  Write-Output -InputObject "[$(Get-Date)] Status  :: Unblock the executable file rack.exe"
+  Unblock-File -Path $("$DownloadPath\rack.exe")
+  
+  Write-Output -InputObject "[$(Get-Date)] Status  :: Permanently set the path $DownloadPath to the Environment variable (Reboot required)."
+  [System.Environment]::SetEnvironmentVariable('Path', $env:Path + 'C:\Tools', [System.EnvironmentVariableTarget]::Machine)
+  Write-Output -InputObject "[$(Get-Date)] Status  :: Temporarily set the path $DownloadPath to the Environment variable for immediate use in the current powershell session"
+  $env:Path += ';C:\Tools'
+
+
 
 
 Configuration
