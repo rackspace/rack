@@ -3,6 +3,7 @@ package auth
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -13,6 +14,7 @@ import (
 	"github.com/jrperritt/rack/internal/github.com/Sirupsen/logrus"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
+	tokens2 "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/identity/v2/tokens"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace"
 	"github.com/jrperritt/rack/util"
 )
@@ -156,6 +158,10 @@ func authFromScratch(credsResult *CredentialsResult, serviceType string, urlType
 
 	pc, err := rackspace.AuthenticatedClient(*ao)
 	if err != nil {
+		switch err.(type) {
+		case *tokens2.ErrNoPassword:
+			return nil, errors.New("Please supply an API key.")
+		}
 		return nil, err
 	}
 	pc.HTTPClient = newHTTPClient()
