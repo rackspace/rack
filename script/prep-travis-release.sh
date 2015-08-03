@@ -78,7 +78,13 @@ fi
 # Set up the build and deploy layout
 ################################################################################
 
-BASEDIR="${os}/${arch}"
+if [ -z $TRAVIS_TAG ]; then
+  VERSION=$TRAVIS_TAG
+else
+  VERSION="0.0.0"
+fi
+
+BASEDIR="${VERSION}/${os}/${arch}"
 # Mirror the github layout for branches, tags, commits
 TREEDIR="${os}/${arch}/tree"
 
