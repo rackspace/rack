@@ -33,8 +33,8 @@ func flagsDeleteMetadata() []cli.Flag {
 			Usage: "[optional; required if `name` isn't provided] The server name with the metadata.",
 		},
 		cli.StringFlag{
-			Name:  "metadata",
-			Usage: "[required] A comma-separated string of metadata keys to delete from the server.",
+			Name:  "metadata-keys",
+			Usage: "[required] A comma-separated string of keys of the metadata to delete from the server.",
 		},
 	}
 }
@@ -70,7 +70,7 @@ func (command *commandDeleteMetadata) ServiceClientType() string {
 }
 
 func (command *commandDeleteMetadata) HandleFlags(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"metadata"})
+	err := command.Ctx.CheckFlagsSet([]string{"metadata-keys"})
 	if err != nil {
 		return err
 	}
@@ -78,7 +78,7 @@ func (command *commandDeleteMetadata) HandleFlags(resource *handler.Resource) er
 	serverID, err := command.Ctx.IDOrName(osServers.IDFromName)
 	resource.Params = &paramsDeleteMetadata{
 		serverID:     serverID,
-		metadataKeys: strings.Split(command.Ctx.CLIContext.String("metadata"), ","),
+		metadataKeys: strings.Split(command.Ctx.CLIContext.String("metadata-keys"), ","),
 	}
 	return err
 }
