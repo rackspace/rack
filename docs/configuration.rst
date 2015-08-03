@@ -167,7 +167,7 @@ github.com/jrperritt/rack/setup/commandcompletion_bash.sh
 
 If you are using PowerShell and want command-completion, you can run the ``commandcompletion_posh.ps1`` script in the
 ``setup`` directory. That script will perform normal command-completion for non-rack commands, and rack-specific
-completions for ``rack`` commands. A few caviats for PowerShell users:
+completions for ``rack`` commands. A few caveats for PowerShell users:
 * The script overrides the ``global:TabExpansion2`` function.
 * This should work for PowerShell versions greater than or equal to 3, but it was tested with PowerShell_ISE v4.
 * You will get the normal Windows command-completion (with a circular buffer).
