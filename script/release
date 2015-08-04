@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#
+# Helper function to do replace; this should work across operating systems
+#
+
 function update {
   TMP_FILE=`mktemp $1`
   sed -e "$2" $3 > $TMP_FILE
@@ -13,11 +17,21 @@ REMOTE_URL="git@github.com:jrperritt/rack.git"
 VERSION_FILE="util/util.go"
 DOCS_INDEX_FILE="docs/index.rst"
 DOCS_CONFIGURATION_FILE="docs/configuration.rst"
+BRANCH=`git rev-parse --abbrev-ref HEAD`
 
 echo "Releasing new version: ${NEW_VERSION}"
 
 #
-# First confirm that we have a remote named "Release"
+# First confirm we're operating on the master branch
+#
+
+if [ "$BRANCH" != "master" ]; then
+  echo "Must release from master branch";
+  exit 1;
+fi
+
+#
+# Confirm that we have a remote named "Release"
 #
 
 git remote show ${REMOTE} &> /dev/null
