@@ -203,7 +203,7 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 		if volumeSizeRaw, ok := bfvMap["volume-size"]; ok {
 			volumeSize, err := strconv.ParseInt(volumeSizeRaw, 10, 16)
 			if err != nil {
-				return fmt.Errorf("Invalid value for volume-size: %s. Value must be an integer.\n", volumeSize)
+				return fmt.Errorf("Invalid value for volume-size: %d. Value must be an integer.\n", volumeSize)
 			}
 			bd.VolumeSize = int(volumeSize)
 		}
@@ -211,7 +211,7 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 		if deleteOnTerminationRaw, ok := bfvMap["delete-on-termination"]; ok {
 			deleteOnTermination, err := strconv.ParseBool(deleteOnTerminationRaw)
 			if err != nil {
-				return fmt.Errorf("Invalid value for delete-on-termination: %s. Options are: true, false.\n", deleteOnTermination)
+				return fmt.Errorf("Invalid value for delete-on-termination: %v. Options are: true, false.\n", deleteOnTermination)
 			}
 			bd.DeleteOnTermination = deleteOnTermination
 		}
@@ -219,7 +219,7 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 		if bootIndexRaw, ok := bfvMap["boot-index"]; ok {
 			bootIndex, err := strconv.ParseInt(bootIndexRaw, 10, 8)
 			if err != nil {
-				return fmt.Errorf("Invalid value for boot-index: %s. Value must be an integer.\n", err)
+				return fmt.Errorf("Invalid value for boot-index: %d. Value must be an integer.\n", bootIndex)
 			}
 			bd.BootIndex = int(bootIndex)
 		}
