@@ -80,7 +80,7 @@ fi
 
 # Allow failure for a moment (for git describe)
 set +e
-if [ -n "$TRAVIS_TAG" ]; then
+if [ -z "$TRAVIS_TAG" ]; then
     # Version will be the most recent tag, appended with -dev (e.g. 1.0.0-dev)
     OLD_TAG=$(git describe --tags 2> /dev/null)
     VERSION="${OLD_TAG}-dev"
