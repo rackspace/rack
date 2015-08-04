@@ -75,7 +75,7 @@ git fetch $REMOTE
 SYNC_STATUS=`git rev-list master...${REMOTE}/master`
 
 if [ -z "$SYNC_STATUS" ]; then
-  echo "Master is not in sync with release remote. Exiting.
+  echo "Master is not in sync with release remote. Exiting."
   exit 5
 fi
 
