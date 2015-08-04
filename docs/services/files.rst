@@ -6,12 +6,12 @@ Files
 
 This section lists all cloud files commands supported by Rackspace CLI.
 
-All cloud files commands are based on this syntax::
-
 Commands
 --------
 
-   rack files <resource> <action> [command flags]
+All cloud files commands are based on this syntax::
+
+    rack files <resource> <action> [command flags]
 
 
 ``container``
