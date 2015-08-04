@@ -1,40 +1,40 @@
 .. _block_storage:
 
-block storage
+=============
+Block storage
 =============
 
-Commands for Rackspace Cloud Block Storage.
-
-Synopsis
---------
-
-::
-
-   rack block-storage <resource> <action> [command flags]
+This section lists all block storage commands supported by Rackspace CLI
 
 Commands
 --------
 
+All block storage commands are based on this syntax::
+
+   rack block-storage <resource> <action> [command flags]
+
 ``volume``
 ~~~~~~~~~~
 
-  Block Storage Volume operations
+Block storage volume commands use this syntax::
+
+    rack block-storage volume <action> [optional flags]
 
 ``list``
 ^^^^^^^^
-Usage::
+Retrieves a list of volumes::
 
     rack block-storage volume list [optional flags]
 
 ``create``
 ^^^^^^^^^^
-Usage::
+Creates a volume::
 
     rack block-storage volume create --size <volumeSize> [optional flags]
 
 ``get``
 ^^^^^^^
-Usage::
+Retrieves details on a specified volume::
 
     rack block-storage volume get --id <volumeID> [optional flags]
     rack block-storage volume get --name <volumeName> [optional flags]
@@ -42,14 +42,14 @@ Usage::
 
 ``update``
 ^^^^^^^^^^
-Usage::
+Updates the name and description of a volume::
 
     rack block-storage volume update --id <volumeID> [optional flags]
     rack block-storage volume update --name <volumeName> [optional flags]
 
 ``delete``
 ^^^^^^^^^^
-Usage::
+Permanently removes a volume::
 
     rack block-storage volume delete --id <volumeID> [optional flags]
     rack block-storage volume delete --name <volumeName> [optional flags]
@@ -58,23 +58,25 @@ Usage::
 ``snapshot``
 ~~~~~~~~~~~~
 
-  Block Storage Snapshot operations
+Block storage snapshot commands use this syntax::
+
+    rack block-storage snapshot <actions> [optional flags]
 
 ``list``
 ^^^^^^^^
-Usage::
+Retrieves a list of snapshots::
 
     rack block-storage snapshot list [optional flags]
 
 ``create``
 ^^^^^^^^^^
-Usage::
+Creates a snapshot based on a specified volume id::
 
     rack block-storage snapshot create --volume-id <volumeID> [optional flags]
 
 ``get``
 ^^^^^^^
-Usage::
+Retrieves details on a specified snapshot::
 
     rack block-storage snapshot get --id <snapshotID> [optional flags]
     rack block-storage snapshot get --name <snapshotName>] [optional flags]
@@ -82,7 +84,7 @@ Usage::
 
 ``delete``
 ^^^^^^^^^^
-Usage::
+Permanently removes a snapshot::
 
     rack block-storage snapshot delete --id <snapshotID> [optional flags]
     rack block-storage snapshot delete --name <snapshotName> [optional flags]
