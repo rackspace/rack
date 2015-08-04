@@ -108,6 +108,7 @@ RACKBUILD="${BASENAME}${SUFFIX}"
 
 COMMIT=$(git rev-parse --verify HEAD)
 sed -i "s/var Commit =.*/var Commit = \"$COMMIT\"/" util/commit.go
+sed -i "s/var Version =.*/var Version = \"$VERSION\"/" util/util.go
 
 go build -o $RACKBUILD
 
