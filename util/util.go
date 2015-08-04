@@ -79,4 +79,4 @@ func Pluralize(noun string, count int64) string {
 }
 
 // Version is the current CLI version
-var Version = "0.0.0-dev"
+var Version = "0.0.0"
