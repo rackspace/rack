@@ -59,11 +59,13 @@ fi
 # Confirm our workspace is clean
 #
 
+set +e
 WORKSPACE_STATUS=`git diff --exit-code`
 if [ $? != 0 ]; then
   echo "Workspace is not clean. Exiting"
   exit 4
 fi
+set -e
 
 #
 # Ensure we're in sync with release remote
