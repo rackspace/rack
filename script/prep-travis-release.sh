@@ -117,8 +117,8 @@ cp $RACKBUILD ${BUILDDIR}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}
 echo "Fresh build for branch '${BRANCH}' at "
 echo "${CDN}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}"
 
-if [ "$BRANCH" == "master" ]; then
-  # Only when we're on master do we spit out the official ones.
+if [ -n "$TRAVIS_TAG" ]; then
+  # Only when we're on an official tag do we spit out the official ones.
   cp $RACKBUILD ${BUILDDIR}/${BASEDIR}/${BASENAME}${SUFFIX}
   echo "Get it while it's hot at"
   echo "${CDN}/${BASEDIR}/${BASENAME}${SUFFIX}"
