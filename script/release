@@ -1,0 +1,69 @@
+#!/bin/bash
+
+function update {
+  TMP_FILE=`mktemp $1`
+  sed -e "$2" $3 > $TMP_FILE
+  chmod 0644 $TMP_FILE
+  mv -f $TMP_FILE $3
+}
+
+NEW_VERSION=$1
+REMOTE="release"
+REMOTE_URL="git@github.com:jrperritt/rack.git"
+VERSION_FILE="util/util.go"
+DOCS_INDEX_FILE="docs/index.rst"
+DOCS_CONFIGURATION_FILE="docs/configuration.rst"
+
+echo "Releasing new version: ${NEW_VERSION}"
+
+#
+# First confirm that we have a remote named "Release"
+#
+
+git remote show ${REMOTE} &> /dev/null
+
+rc=$?
+
+if [[ $rc != 0 ]]; then
+  echo "Remote \"${REMOTE}\" not found. Exiting.";
+  exit 1;
+fi
+
+#
+# Now confirm that we've got the proper remote URL
+#
+
+REMOTE_ACTUAL_URL=`git remote show release | grep Push | cut -d ":" -f2-`
+
+if [ $REMOTE_URL != $REMOTE_ACTUAL_URL ]; then
+  echo -e "Remote \"${REMOTE}\" PUSH url incorrect.\nShould be ${REMOTE_URL}. Exiting.";
+  exit 1;
+fi
+
+#
+# Generate new util.go with proper version
+#
+
+update ./util.go-version "s/var Version =.*/var Version = \"$NEW_VERSION\"/" $VERSION_FILE
+
+#
+# Update the docs index paths
+#
+
+update ./index.rst-version "s#rackcdn\.com/[0-9a-zA-Z.-]*/#rackcdn\.com/$NEW_VERSION/#g" $DOCS_INDEX_FILE
+
+#
+# Update the docs configuration paths
+#
+
+update ./configuration.rst-version "s#rackcdn\.com/[0-9a-zA-Z.-]*/#rackcdn\.com/$NEW_VERSION/#g" $DOCS_CONFIGURATION_FILE
+
+#
+# Commit and push the code changes
+#
+
+git commit -am "Version ${NEW_VERSION}"
+git tag ${NEW_VERSION}
+git push release master
+git push release --tags
+
