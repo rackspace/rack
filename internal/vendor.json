@@ -310,6 +310,13 @@
 			"revisionTime": "2015-08-02T22:24:28-06:00"
 		},
 		{
+			"canonical": "github.com/rackspace/gophercloud/rackspace/objectstorage/v1/accounts",
+			"comment": "",
+			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/accounts",
+			"revision": "581482c6535dfea558b96d1c58f0dfe533629363",
+			"revisionTime": "2015-08-03T19:12:27-06:00"
+		},
+		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers",
