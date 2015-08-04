@@ -16,13 +16,13 @@ All cloud server commands are based on this syntax::
 ``instance``
 ~~~~~~~~~~~~
 
-All cloud server instance commands use this syntax::
+Cloud server instance commands use this syntax::
 
     rack servers instance <action> [command flags]
 
 ``list``
 ^^^^^^^^
-Gives you a list of virtual and bare metal servers::
+Retrieves a list of virtual and bare metal servers::
 
     rack servers instance list [optional flags]
 
@@ -35,8 +35,7 @@ Creates a server instance::
 
 ``get``
 ^^^^^^^
-This command gives you information on a specific instance. You
-must provide the `name` or `id` of the instance::
+Retrieves details of a specified server::
 
     rack servers instance get --id <serverID> [optional flags]
     rack servers instance get --name <serverName> [optional flags]
@@ -52,8 +51,7 @@ instance::
 
 ``delete``
 ^^^^^^^^^^
-Deletes a server instance. You must provide the `name` or `id` of
-the instance::
+Deletes a server instance::
 
     rack servers instance delete --id <serverID> [optional flags]
     rack servers instance delete --name <serverName> [optional flags]
@@ -122,7 +120,7 @@ Deletes a metadata item::
 ``image``
 ~~~~~~~~~
 
-All cloud server image commands use this syntax::
+Cloud server image commands use this syntax::
 
     rack server image <action> [optional flags]
 
@@ -134,7 +132,7 @@ Lists all images visible by your account::
 
 ``get``
 ^^^^^^^
-Returns details of the specified image::
+Retrieves details of the specified image::
 
     rack servers image get --id <imageID> [optional flags]
     rack servers image get --name <imageName>] [optional flags]
@@ -150,7 +148,7 @@ Returns details of the specified image::
 ``flavor``
 ~~~~~~~~~~
 
-All cloud server flavor commands use this syntax::
+Cloud server flavor commands use this syntax::
 
     rack servers flavor <action> [optional flags]
 
@@ -162,7 +160,7 @@ Lists information for all available flavors::
 
 ``get``
 ^^^^^^^
-Returns details of the specified flavor::
+Retrieves details of the specified flavor::
 
     rack servers flavor get --id <flavorID> [optional flags]
     rack servers flavor get --name <flavorName>] [optional flags]
@@ -171,19 +169,19 @@ Returns details of the specified flavor::
 ``keypair``
 ~~~~~~~~~~~
 
-All server keypair commands use this syntax::
+Server keypair commands use this syntax::
 
     rack servers keypair <action> [optional flags]
 
 ``list``
 ^^^^^^^^
-Returns a list of all key pairs associated with this account::
+Retrieves a list of all key pairs associated with your account::
 
     rack servers keypair list [flags]
 
 ``generate``
 ^^^^^^^^^^^^
-Generates a newly create key pair with the specified name::
+Generates a newly created key pair with the specified name::
 
     rack servers keypair generate --name <keypairName> [optional flags]
     (echo keypairName1 && echo keypairName2) | rack servers keypair generate --stdin name [optional flags]
@@ -197,7 +195,7 @@ Uploads an existing key pair with the specified name::
 
 ``get``
 ^^^^^^^
-Returns information on a specified key pair::
+Retrieves details on a specified key pair::
 
     rack [globals] servers keypair get --name <keypairName> [optional flags]
     (echo keypairName1 && echo keypairName2) | rack servers keypair get --stdin name [optional flags]
@@ -213,7 +211,7 @@ Deletes the specified key paid::
 ``volume-attachment``
 ~~~~~~~~~~~~~~~~~~~~~
 
-All cloud server volume attachment commands use this syntax::
+Cloud server volume attachment commands use this syntax::
 
     rack server volume-attachment <action> [optional flag]
 
@@ -229,7 +227,7 @@ Lists the volume attachments for the specified server::
 
 ``create``
 ^^^^^^^^^^
-Attaches one of more volumes to the specified sever::
+Attaches one or more volumes to the specified sever::
 
     rack servers volume-attachment create --server-id <serverID> --volume-id <volumeID> [optional flags]
     rack servers volume-attachment create --server-name <serverName> --volume-id <volumeID> [optional flags]
@@ -240,7 +238,7 @@ Attaches one of more volumes to the specified sever::
 
 ``get``
 ^^^^^^^
-Returns the volume details of a specified volume attachment ID for a specified server::
+Retrieves details of a specified volume attachment ID for a specified server::
 
     rack servers volume-attachment get --server-id <serverID> --id <attachmentID> [optional flags]
     rack servers volume-attachment get --server-name <serverName> --id <attachmentID> [optional flags]

@@ -17,7 +17,7 @@ All cloud files commands are based on this syntax::
 ``container``
 ~~~~~~~~~~~~~
 
-All cloud files container operations use this syntax::
+Cloud files container commands use this syntax::
 
     rack files container <action> [optional flags]
 
@@ -36,15 +36,14 @@ Creates a container::
 
 ``get``
 ^^^^^^^
-Retrieves a list of containers. Optional flags can
-be used to refine your search::
+Retrieves a list of containers::
 
     rack files container get --name <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files container get --stdin name [optional flags]
 
 ``update``
 ^^^^^^^^^^
-Creates or updates metadata for a specified container::
+Create or update metadata for a specified container::
 
     rack files container update --name <containerName> [optional flags]
 
@@ -65,14 +64,13 @@ Empties a container of all its objects::
 ``object``
 ~~~~~~~~~~
 
-All cloud files object commands use this syntax::
+Cloud files object commands use this syntax::
 
     rack files object <action> [optional flags]
 
 ``list``
 ^^^^^^^^
-Lists all objects contained in a specified container. Optional flags can be
-used to refine your search::
+Lists all objects contained in a specified container::
 
     rack files object list --container <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files object list --stdin container [optional flags]
