@@ -78,12 +78,20 @@ fi
 # Set up the build and deploy layout
 ################################################################################
 
-# Get the version from travis, or default to 0.0.0
-if [ -z $TRAVIS_TAG ]; then
-  VERSION=$TRAVIS_TAG
+# Allow failure for a moment (for git describe)
+set +e
+if [ -z "$TRAVIS_TAG" ]; then
+    # Version will be the most recent tag, appended with -dev (e.g. 1.0.0-dev)
+    OLD_TAG=$(git describe --tags 2> /dev/null)
+    VERSION="${OLD_TAG}-dev"
+    if [ "$OLD_TAG" == "" ]; then
+        VERSION="dev"
+    fi
 else
-  VERSION="v0.0.0"
+    # We have ourselves a *real* release
+    VERSION=$TRAVIS_TAG
 fi
+set -e
 
 BASEDIR="${VERSION}/${os}/${arch}"
 # Mirror the github layout for branches, tags, commits
