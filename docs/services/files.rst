@@ -54,11 +54,36 @@ Usage::
     (echo containerName1 && echo containerName2) | rack files container delete --stdin name [optional flags]
 
 ``empty``
-^^^^^^^^^^
+^^^^^^^^^
 Usage::
 
     rack files container empty --name <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files container empty --stdin name [optional flags]
+
+``set-metadata``
+^^^^^^^^^^^^^^^^
+Usage::
+
+    rack files container set-metadata --name <containerName> --metadata <metadata> [optional flags]
+
+``get-metadata``
+^^^^^^^^^^^^^^^^
+Usage::
+
+    rack files container get-metadata --name <containerName> [optional flags]
+
+``update-metadata``
+^^^^^^^^^^^^^^^^
+Usage::
+
+    rack files container update-metadata --name <containerName> --metadata <metadata> [optional flags]
+
+``delete-metadata``
+^^^^^^^^^^^^^^^^
+Usage::
+
+    rack files container delete-metadata --name <containerName> --metadata-keys <metadataKeys> [optional flags]
+
 
 ``object``
 ~~~~~~~~~~
