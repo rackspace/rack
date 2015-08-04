@@ -103,6 +103,6 @@ update ./configuration.rst-version "s#rackcdn\.com/[0-9a-zA-Z.-]*/#rackcdn\.com/
 
 git commit -am "Version ${NEW_VERSION}"
 git tag ${NEW_VERSION}
-git push release master
-git push release --tags
+git push ${REMOTE} master
+git push ${REMOTE} --tags
 
