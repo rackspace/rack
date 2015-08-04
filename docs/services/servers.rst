@@ -4,7 +4,7 @@
 Servers
 =======
 
-This section gives a list of all Cloud Server commands supported by Rackspace CLI.
+This section lists of all cloud servers commands supported by Rackspace CLI.
 
 Commands
 --------

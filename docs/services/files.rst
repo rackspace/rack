@@ -1,14 +1,15 @@
 .. _files:
 
-files
-=======
+=====
+Files
+=====
 
-Commands for Rackspace Cloud Files.
+This section lists all cloud files commands supported by Rackspace CLI.
 
 Synopsis
 --------
 
-::
+All cloud files commands are based of off this syntax::
 
    rack files <resource> <action> [command flags]
 
