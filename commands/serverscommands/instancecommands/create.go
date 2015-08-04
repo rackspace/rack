@@ -192,7 +192,7 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 		case "volume", "image", "snapshot":
 			sourceType = osBFV.SourceType(sourceTypeRaw)
 		default:
-			return fmt.Errorf("Invalid value for source-type: %s\n", sourceType)
+			return fmt.Errorf("Invalid value for source-type: %s. Options are: volume, image, snapshot.\n", sourceType)
 		}
 
 		bd := osBFV.BlockDevice{
@@ -203,7 +203,7 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 		if volumeSizeRaw, ok := bfvMap["volume-size"]; ok {
 			volumeSize, err := strconv.ParseInt(volumeSizeRaw, 10, 16)
 			if err != nil {
-				return fmt.Errorf("Error reading volume-size key from --block-device: %s", err)
+				return fmt.Errorf("Invalid value for volume-size: %s. Value must be an integer.\n", volumeSize)
 			}
 			bd.VolumeSize = int(volumeSize)
 		}
@@ -211,7 +211,7 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 		if deleteOnTerminationRaw, ok := bfvMap["delete-on-termination"]; ok {
 			deleteOnTermination, err := strconv.ParseBool(deleteOnTerminationRaw)
 			if err != nil {
-				return fmt.Errorf("Error reading delete-on-termination key from --block-device: %s", err)
+				return fmt.Errorf("Invalid value for delete-on-termination: %s. Options are: true, false.\n", deleteOnTermination)
 			}
 			bd.DeleteOnTermination = deleteOnTermination
 		}
@@ -219,14 +219,14 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 		if bootIndexRaw, ok := bfvMap["boot-index"]; ok {
 			bootIndex, err := strconv.ParseInt(bootIndexRaw, 10, 8)
 			if err != nil {
-				return fmt.Errorf("Error reading boot-index key from --block-device: %s", err)
+				return fmt.Errorf("Invalid value for boot-index: %s. Value must be an integer.\n", err)
 			}
 			bd.BootIndex = int(bootIndex)
 		}
 
 		if destinationType, ok := bfvMap["destination-type"]; ok {
 			if destinationType != "volume" && destinationType != "local" {
-				return fmt.Errorf("Invalid value for destination-type: %s", destinationType)
+				return fmt.Errorf("Invalid value for destination-type: %s. Options are: volume, local.\n", destinationType)
 			}
 			bd.DestinationType = destinationType
 		}
