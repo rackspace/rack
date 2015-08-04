@@ -55,6 +55,18 @@ if [ $REMOTE_URL != $REMOTE_ACTUAL_URL ]; then
 fi
 
 #
+# Ensure we're in sync with release remote
+#
+
+git fetch remote
+SYNC_STATUS=`git rev-list master...release/master`
+
+if [ -z "$SYNC_STATUS" ]; then
+  echo "Master is not in sync with release remote. Exiting.;
+  exit 1;
+fi
+
+#
 # Generate new util.go with proper version
 #
 
