@@ -78,7 +78,22 @@ fi
 # Set up the build and deploy layout
 ################################################################################
 
-BASEDIR="${os}/${arch}"
+# Allow failure for a moment (for git describe)
+set +e
+if [ -z "$TRAVIS_TAG" ]; then
+    # Version will be the most recent tag, appended with -dev (e.g. 1.0.0-dev)
+    OLD_TAG=$(git describe --tags 2> /dev/null)
+    VERSION="${OLD_TAG}-dev"
+    if [ "$OLD_TAG" == "" ]; then
+        VERSION="dev"
+    fi
+else
+    # We have ourselves a *real* release
+    VERSION=$TRAVIS_TAG
+fi
+set -e
+
+BASEDIR="${VERSION}/${os}/${arch}"
 # Mirror the github layout for branches, tags, commits
 TREEDIR="${os}/${arch}/tree"
 
@@ -92,7 +107,8 @@ BASENAME="rack"
 RACKBUILD="${BASENAME}${SUFFIX}"
 
 COMMIT=$(git rev-parse --verify HEAD)
-sed -i "s/var Commit =.*/var Commit = \"$COMMIT\"/" util/util.go
+sed -i "s/var Commit =.*/var Commit = \"$COMMIT\"/" util/commit.go
+sed -i "s/var Version =.*/var Version = \"$VERSION\"/" util/util.go
 
 go build -o $RACKBUILD
 

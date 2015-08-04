@@ -229,8 +229,8 @@ config file profile. In either case, the parameter name will be ``auth-url``.
 
 
 .. _go: https://golang.org/
-.. _Mac OSX (64 bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/Darwin/amd64/rack
-.. _Linux (64 bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/Linux/amd64/rack
-.. _Windows (64 bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/Windows/amd64/rack.exe
+.. _Mac OSX (64 bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/0.0.0/Darwin/amd64/rack
+.. _Linux (64 bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/0.0.0/Linux/amd64/rack
+.. _Windows (64 bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/0.0.0/Windows/amd64/rack.exe
 .. _Cloud Control panel: https://mycloud.rackspace.com/
 
