@@ -28,10 +28,6 @@ func flagsUpdate() []cli.Flag {
 			Usage: "[required] The name of the container",
 		},
 		cli.StringFlag{
-			Name:  "metadata",
-			Usage: "[optional] Comma-separated key-value pairs for the container. Example: key1=val1,key2=val2",
-		},
-		cli.StringFlag{
 			Name:  "container-read",
 			Usage: "[optional] Comma-separated list of users for whom to grant read access to the container",
 		},
@@ -83,13 +79,6 @@ func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
 	opts := containers.UpdateOpts{
 		ContainerRead:  c.String("container-read"),
 		ContainerWrite: c.String("container-write"),
-	}
-	if c.IsSet("metadata") {
-		metadata, err := command.Ctx.CheckKVFlag("metadata")
-		if err != nil {
-			return err
-		}
-		opts.Metadata = metadata
 	}
 	resource.Params = &paramsUpdate{
 		container: c.String("name"),

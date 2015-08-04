@@ -140,7 +140,10 @@ type UpdateOptsBuilder interface {
 // UpdateOpts is a structure that holds parameters for updating, creating, or
 // deleting a container's metadata.
 type UpdateOpts struct {
-	Metadata               map[string]string
+	// a map of key-value pairs to add/update for the container.
+	Metadata map[string]string
+	// a slice a keys of the metadata to delete from the container.
+	DeleteMetadata         []string
 	ContainerRead          string `h:"X-Container-Read"`
 	ContainerSyncTo        string `h:"X-Container-Sync-To"`
 	ContainerSyncKey       string `h:"X-Container-Sync-Key"`
@@ -159,6 +162,9 @@ func (opts UpdateOpts) ToContainerUpdateMap() (map[string]string, error) {
 	}
 	for k, v := range opts.Metadata {
 		h["X-Container-Meta-"+k] = v
+	}
+	for _, k := range opts.DeleteMetadata {
+		h["X-Remove-Container-Meta-"+k] = "true"
 	}
 	return h, nil
 }

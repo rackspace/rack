@@ -321,12 +321,18 @@ func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, er
 	var err error
 
 	if lrt.Logger.Level == logrus.DebugLevel && request.Body != nil {
-		fmt.Println("logging request body")
+		fmt.Println("Logging request body...")
 		request.Body, err = lrt.logRequestBody(request.Body, request.Header)
 		if err != nil {
 			return nil, err
 		}
 	}
+
+	info, err := json.MarshalIndent(request.Header, "", "  ")
+	if err != nil {
+		lrt.Logger.Debugf(fmt.Sprintf("Error logging request headers: %s\n", err))
+	}
+	lrt.Logger.Debugf("Request Headers: %+v\n", string(info))
 
 	lrt.Logger.Infof("Request URL: %s\n", request.URL)
 
@@ -344,9 +350,9 @@ func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, er
 
 	lrt.Logger.Debugf("Response Status: %s\n", response.Status)
 
-	info, err := json.MarshalIndent(response.Header, "", "  ")
+	info, err = json.MarshalIndent(response.Header, "", "  ")
 	if err != nil {
-		lrt.Logger.Debugf(fmt.Sprintf("Error logging request: %s\n", err))
+		lrt.Logger.Debugf(fmt.Sprintf("Error logging response headers: %s\n", err))
 	}
 	lrt.Logger.Debugf("Response Headers: %+v\n", string(info))
 
