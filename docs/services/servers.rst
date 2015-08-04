@@ -4,12 +4,12 @@
 Servers
 =======
 
-This section lists of all cloud servers commands supported by Rackspace CLI.
+This section lists all cloud servers commands supported by Rackspace CLI.
 
 Commands
 --------
 
-All cloud server commands are based off of this syntax::
+All cloud server commands are based on this syntax::
 
    rack servers <resource> <action> [command flags]
 

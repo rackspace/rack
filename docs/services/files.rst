@@ -6,7 +6,7 @@ Files
 
 This section lists all cloud files commands supported by Rackspace CLI.
 
-All cloud files commands are based of off this syntax::
+All cloud files commands are based on this syntax::
 
 Commands
 --------
