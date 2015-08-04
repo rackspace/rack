@@ -89,16 +89,16 @@ func flag(cliflag cli.Flag) string {
 	switch cliflag.(type) {
 	case cli.StringFlag:
 		flagType := cliflag.(cli.StringFlag)
-		flagString = fmt.Sprintf("%s\t%s", flagType.Name, flagType.Usage)
+		flagString = fmt.Sprintf("%s\t%s", fmt.Sprintf("--%s", flagType.Name), flagType.Usage)
 	case cli.IntFlag:
 		flagType := cliflag.(cli.IntFlag)
-		flagString = fmt.Sprintf("%s\t%s", flagType.Name, flagType.Usage)
+		flagString = fmt.Sprintf("%s\t%s", fmt.Sprintf("--%s", flagType.Name), flagType.Usage)
 	case cli.BoolFlag:
 		flagType := cliflag.(cli.BoolFlag)
-		flagString = fmt.Sprintf("%s\t%s", flagType.Name, flagType.Usage)
+		flagString = fmt.Sprintf("%s\t%s", fmt.Sprintf("--%s", flagType.Name), flagType.Usage)
 	case cli.StringSliceFlag:
 		flagType := cliflag.(cli.StringSliceFlag)
-		flagString = fmt.Sprintf("%s\t%s", flagType.Name, flagType.Usage)
+		flagString = fmt.Sprintf("%s\t%s", fmt.Sprintf("--%s", flagType.Name), flagType.Usage)
 	}
 	return flagString
 }
