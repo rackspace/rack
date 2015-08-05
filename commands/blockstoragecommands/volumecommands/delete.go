@@ -12,7 +12,7 @@ import (
 
 var remove = cli.Command{
 	Name:        "delete",
-	Usage:       util.Usage(commandPrefix, "delete", "[--id <volumeID> | | --name <volumeName> | --stdin id]"),
+	Usage:       util.Usage(commandPrefix, "delete", "[--id <volumeID> | --name <volumeName> | --stdin id]"),
 	Description: "Deletes a volume",
 	Action:      actionDelete,
 	Flags:       commandoptions.CommandFlags(flagsDelete, keysDelete),

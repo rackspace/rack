@@ -10,7 +10,7 @@ import (
 
 var update = cli.Command{
 	Name:        "update",
-	Usage:       util.Usage(commandPrefix, "update", "--id <volumeID>"),
+	Usage:       util.Usage(commandPrefix, "update", "[--id <volumeID> | --name <volumeName>]"),
 	Description: "Updates a volume",
 	Action:      actionUpdate,
 	Flags:       commandoptions.CommandFlags(flagsUpdate, keysUpdate),
@@ -23,7 +23,11 @@ func flagsUpdate() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "id",
-			Usage: "[required] The ID of the volume to update.",
+			Usage: "[optional; required if `name` isn't provided] The ID of the volume.",
+		},
+		cli.StringFlag{
+			Name:  "name",
+			Usage: "[optional; required if `id` isn't provided] The name of the volume.",
 		},
 		cli.StringFlag{
 			Name:  "rename",
@@ -67,7 +71,7 @@ func (command *commandUpdate) ServiceClientType() string {
 }
 
 func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"volume-id"})
+	volumeID, err := command.Ctx.IDOrName(osVolumes.IDFromName)
 	if err != nil {
 		return err
 	}
@@ -80,7 +84,7 @@ func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
 	}
 
 	resource.Params = &paramsUpdate{
-		volumeID: c.String("volume-id"),
+		volumeID: volumeID,
 		opts:     opts,
 	}
 
