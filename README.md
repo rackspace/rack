@@ -65,3 +65,29 @@ and source it:
 ```sh
 source ~/.bashrc
 ```
+
+## Roadmap
+
+Our plan is to release a limited beta of `rack` the first week of August 2015 with full support for the following services:
+
+- Cloud Servers
+- Cloud Files
+- Cloud Networks
+- Cloud Block Storage
+
+We expect to exit beta in the coming weeks, while also focusing on adding new services. The current plan of record to add new services is based on the following priority:
+
+1. Cloud Load Balancers
+2. Cloud DNS
+3. Cloud Databases
+4. Cloud Identity
+5. Cloud Images
+6. Rackspace CDN
+7. RackConnect
+8. Cloud Big Data
+9. Cloud Monitoring
+10. Cloud Orchestration
+11. Cloud Queues
+12. Cloud Backup
+13. Autoscale
+14. Cloud Metrics
