@@ -197,6 +197,13 @@ If you'd like to set up command completion yourself (or if you're on a Windows O
 you can copy file in the location below to the appropriate directory and source it:
 github.com/jrperritt/rack/setup/commandcompletion_bash.sh
 
+If you are using PowerShell and want command-completion, you can run the ``commandcompletion_posh.ps1`` script in the
+``setup`` directory. That script will perform normal command-completion for non-rack commands, and rack-specific
+completions for ``rack`` commands. A few caveats for PowerShell users:
+* The script overrides the ``global:TabExpansion2`` function.
+* This should work for PowerShell versions greater than or equal to 3, but it was tested with PowerShell_ISE v4.
+* You will get the normal Windows command-completion (with a circular buffer).
+
 Check the version
 -----------------
 
@@ -233,4 +240,3 @@ config file profile. In either case, the parameter name will be ``auth-url``.
 .. _Linux (64 bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/0.0.3/Linux/amd64/rack
 .. _Windows (64 bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/0.0.3/Windows/amd64/rack.exe
 .. _Cloud Control panel: https://mycloud.rackspace.com/
-
