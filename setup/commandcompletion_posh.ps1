@@ -40,6 +40,9 @@ function global:TabExpansion2 {
 
 
     if ($result.CompletionMatches.Count -eq 0){
+			if ($psCmdlet.ParameterSetName -eq 'ScriptInputSet') {
+        $ast = [System.Management.Automation.Language.Parser]::ParseInput($inputScript, [ref]$tokens, [ref]$null)
+      }
       $text = $ast.Extent.Text
     	if($text -match '^*rack.exe*') {
         $cmd1 = $text -split '\s+'
