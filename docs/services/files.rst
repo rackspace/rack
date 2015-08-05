@@ -1,105 +1,83 @@
 .. _files:
 
-files
-=======
+=====
+Files
+=====
 
-Commands for Rackspace Cloud Files.
-
-Synopsis
---------
-
-::
-
-   rack files <resource> <action> [command flags]
+This section lists all cloud files commands supported by Rackspace CLI.
 
 Commands
 --------
 
+All cloud files commands are based on this syntax::
+
+    rack files <resource> <action> [command flags]
+
+
 ``container``
 ~~~~~~~~~~~~~
 
-  Files Container operations
+Cloud files container commands use this syntax::
+
+    rack files container <action> [optional flags]
 
 ``list``
 ^^^^^^^^
-Usage::
+Retrieves a list of of containers::
 
     rack files container list [optional flags]
 
 ``create``
 ^^^^^^^^^^
-Usage::
+Creates a container::
 
     rack files container create --name <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files container create --stdin name
 
 ``get``
 ^^^^^^^
-Usage::
+Retrieves a list of containers::
 
     rack files container get --name <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files container get --stdin name [optional flags]
 
 ``update``
 ^^^^^^^^^^
-Usage::
+Create or update metadata for a specified container::
 
     rack files container update --name <containerName> [optional flags]
 
 ``delete``
 ^^^^^^^^^^
-Usage::
+Permanently removes the specified container::
 
     rack files container delete --name <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files container delete --stdin name [optional flags]
 
 ``empty``
 ^^^^^^^^^
-Usage::
+Empties a container of all its objects::
 
     rack files container empty --name <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files container empty --stdin name [optional flags]
 
-``set-metadata``
-^^^^^^^^^^^^^^^^
-Usage::
-
-    rack files container set-metadata --name <containerName> --metadata <metadata> [optional flags]
-
-``get-metadata``
-^^^^^^^^^^^^^^^^
-Usage::
-
-    rack files container get-metadata --name <containerName> [optional flags]
-
-``update-metadata``
-^^^^^^^^^^^^^^^^
-Usage::
-
-    rack files container update-metadata --name <containerName> --metadata <metadata> [optional flags]
-
-``delete-metadata``
-^^^^^^^^^^^^^^^^
-Usage::
-
-    rack files container delete-metadata --name <containerName> --metadata-keys <metadataKeys> [optional flags]
-
-
 ``object``
 ~~~~~~~~~~
 
-  Files Object operations
+Cloud files object commands use this syntax::
+
+    rack files object <action> [optional flags]
 
 ``list``
 ^^^^^^^^
-Usage::
+Lists all objects contained in a specified container::
 
     rack files object list --container <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files object list --stdin container [optional flags]
 
 ``upload``
 ^^^^^^^^^^
-Usage::
+Uploads an object into a specified container::
 
     rack files object upload --container <containerName> --name <objectName> --content <contentToUpload> [optional flags]
     rack files object upload --container <containerName> --name <objectName> --file <fileToUpload> [optional flags]
@@ -108,50 +86,26 @@ Usage::
 ``upload-dir``
 ^^^^^^^^^^^^^^
 
-Usage::
+Uploads an object directory into a specified container::
 
     rack files object upload-dir --container <containerName> --dir <dirPath> [optional flags]
     find . -type d -name "something*" | rack files object upload-dir --container <containerName> --stdin dir [optional flags]
 
 ``download``
 ^^^^^^^^^^^^
-Usage::
+Downloads an object from the specified contained into your local system::
 
     rack files object download --container <containerName> --name <objectName> [optional flags]
 
 ``get``
 ^^^^^^^^
-Usage::
+Retrieves an object's data::
 
     rack files object get --container <containerName> --name <objectName> [optional flags]
 
 ``delete``
 ^^^^^^^^^^
-Usage::
+Permanently removes an object::
 
     rack files object delete --container <containerName> --name <objectName> [optional flags]
     (echo objectName1 && echo objectName2) | rack files object delete --container <containerName> --stdin name [optional flags]
-
-``set-metadata``
-^^^^^^^^^^^^^^^^
-Usage::
-
-    rack files object set-metadata --name <objectName> --container <containerName> --metadata <metadata> [optional flags]
-
-``get-metadata``
-^^^^^^^^^^^^^^^^
-Usage::
-
-    rack files object get-metadata --name <objectName> --container <containerName> [optional flags]
-
-``update-metadata``
-^^^^^^^^^^^^^^^^
-Usage::
-
-    rack files object update-metadata --name <objectName> --container <containerName> --metadata <metadata> [optional flags]
-
-``delete-metadata``
-^^^^^^^^^^^^^^^^
-Usage::
-
-    rack files object delete-metadata --name <objectName> --container <containerName> --metadata-keys <metadataKeys> [optional flags]
