@@ -6,9 +6,9 @@ import (
 	"path"
 	"net/url"
 
-	"github.com/jrperritt/rack/internal/github.com/mitchellh/mapstructure"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/pagination"
+	"github.com/rackspace/rack/internal/github.com/mitchellh/mapstructure"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/pagination"
 )
 
 type serverResult struct {

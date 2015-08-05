@@ -3,7 +3,7 @@ package output
 import (
 	"testing"
 
-	th "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper"
+	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
 )
 
 func TestLimitJSONFields(t *testing.T) {

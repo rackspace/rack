@@ -1,6 +1,6 @@
 package commandoptions
 
-import "github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
+import "github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 
 type Cred struct {
 	Value string

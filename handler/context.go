@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jrperritt/rack/auth"
-	"github.com/jrperritt/rack/commandoptions"
-	"github.com/jrperritt/rack/internal/github.com/Sirupsen/logrus"
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
-	"github.com/jrperritt/rack/output"
-	"github.com/jrperritt/rack/util"
+	"github.com/rackspace/rack/auth"
+	"github.com/rackspace/rack/commandoptions"
+	"github.com/rackspace/rack/internal/github.com/Sirupsen/logrus"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud"
+	"github.com/rackspace/rack/output"
+	"github.com/rackspace/rack/util"
 )
 
 // Command is the type that commands have.

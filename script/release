@@ -14,7 +14,7 @@ function update {
 
 NEW_VERSION=${1:-}
 REMOTE="release"
-REMOTE_URL="git@github.com:jrperritt/rack.git"
+REMOTE_URL="git@github.com:rackspace/rack.git"
 VERSION_FILE="util/util.go"
 DOCS_INDEX_FILE="docs/index.rst"
 DOCS_CONFIGURATION_FILE="docs/configuration.rst"

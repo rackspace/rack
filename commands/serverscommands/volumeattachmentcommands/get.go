@@ -1,12 +1,12 @@
 package volumeattachmentcommands
 
 import (
-	"github.com/jrperritt/rack/commandoptions"
-	"github.com/jrperritt/rack/handler"
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
-	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
-	osVolumeAttach "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/volumeattach"
-	"github.com/jrperritt/rack/util"
+	"github.com/rackspace/rack/commandoptions"
+	"github.com/rackspace/rack/handler"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	"github.com/rackspace/rack/internal/github.com/fatih/structs"
+	osVolumeAttach "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/volumeattach"
+	"github.com/rackspace/rack/util"
 )
 
 var get = cli.Command{

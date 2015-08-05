@@ -7,8 +7,8 @@ import (
 	"text/tabwriter"
 	"text/template"
 
-	"github.com/jrperritt/rack/commandoptions"
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
+	"github.com/rackspace/rack/commandoptions"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 )
 
 var appHelpTemplate = `NAME:

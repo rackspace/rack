@@ -1,12 +1,12 @@
 package portcommands
 
 import (
-	"github.com/jrperritt/rack/commandoptions"
-	"github.com/jrperritt/rack/handler"
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
-	osPorts "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/ports"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/ports"
-	"github.com/jrperritt/rack/util"
+	"github.com/rackspace/rack/commandoptions"
+	"github.com/rackspace/rack/handler"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	osPorts "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/ports"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/ports"
+	"github.com/rackspace/rack/util"
 )
 
 var get = cli.Command{

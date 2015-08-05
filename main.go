@@ -5,14 +5,14 @@ import (
 	"os"
 	"strings"
 
-	"github.com/jrperritt/rack/commands/blockstoragecommands"
-	"github.com/jrperritt/rack/commands/filescommands"
-	"github.com/jrperritt/rack/commands/networkscommands"
-	"github.com/jrperritt/rack/commands/serverscommands"
-	"github.com/jrperritt/rack/setup"
-	"github.com/jrperritt/rack/util"
+	"github.com/rackspace/rack/commands/blockstoragecommands"
+	"github.com/rackspace/rack/commands/filescommands"
+	"github.com/rackspace/rack/commands/networkscommands"
+	"github.com/rackspace/rack/commands/serverscommands"
+	"github.com/rackspace/rack/setup"
+	"github.com/rackspace/rack/util"
 
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 )
 
 func main() {

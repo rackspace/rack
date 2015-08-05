@@ -3,9 +3,9 @@ package bootfromvolume
 import (
 	"testing"
 
-	osBFV "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/bootfromvolume"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
-	th "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper"
+	osBFV "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/bootfromvolume"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
+	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
 )
 
 func TestCreateOpts(t *testing.T) {

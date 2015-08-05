@@ -1,8 +1,8 @@
 package volumecommands
 
 import (
-	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes"
+	"github.com/rackspace/rack/internal/github.com/fatih/structs"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes"
 )
 
 func volumeSingle(volume *volumes.Volume) map[string]interface{} {

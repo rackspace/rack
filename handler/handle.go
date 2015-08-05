@@ -8,9 +8,9 @@ import (
 	"os"
 	"sync"
 
-	"github.com/jrperritt/rack/auth"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
-	"github.com/jrperritt/rack/output"
+	"github.com/rackspace/rack/auth"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud"
+	"github.com/rackspace/rack/output"
 )
 
 // StreamPipeHandler is an interface that commands implement if they can stream input

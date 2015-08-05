@@ -1,12 +1,12 @@
 package networkcommands
 
 import (
-	"github.com/jrperritt/rack/commandoptions"
-	"github.com/jrperritt/rack/handler"
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
-	osNetworks "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/networks"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/networks"
-	"github.com/jrperritt/rack/util"
+	"github.com/rackspace/rack/commandoptions"
+	"github.com/rackspace/rack/handler"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	osNetworks "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/networks"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/networks"
+	"github.com/rackspace/rack/util"
 )
 
 var get = cli.Command{
