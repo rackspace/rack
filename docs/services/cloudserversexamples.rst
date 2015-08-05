@@ -19,7 +19,7 @@ Delete servers with ERROR status
 
 You can list servers in ERROR status and then delete them all in one line::
 
-    $ rack servers instance list --status error --fields id | tail -n+2 | rack servers instance delete --stdin id
+    $ rack servers instance list --status error --fields id --no-header | rack servers instance delete --stdin id
 
 If you get a 404 Not Found, it means no servers were in error status.
 
@@ -99,8 +99,8 @@ copy and paste it into the command itself::
 
 or::
 
-    $ rack servers keypair upload --public-key ssh-rsa AAAB3.........t0mr
-    name@example.com --name macpub
+    $ rack servers keypair upload --public-key "ssh-rsa AAAB3.........t0mr
+    name@example.com" --name macpub
 
 Take a look at any keypairs you already have by listing them::
 

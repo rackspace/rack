@@ -43,7 +43,7 @@ Retrieves a list of containers::
 
 ``update``
 ^^^^^^^^^^
-Create or update metadata for a specified container::
+Create or update read and write permissions for a specified container::
 
     rack files container update --name <containerName> [optional flags]
 
@@ -60,6 +60,33 @@ Empties a container of all its objects::
 
     rack files container empty --name <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files container empty --stdin name [optional flags]
+
+
+``set-metadata``
+^^^^^^^^^^^^^^^^
+Sets metadata for the specified container::
+
+    rack files container set-metadata --name <conatinerName> --metadata <key1=val1,key2=val2,...> [optional flags]
+
+``get-metadata``
+^^^^^^^^^^^^^^^^
+Retrieves the metadata for a given container::
+
+    rack files container get-metadata --name <conatinerName> [optional flags]
+
+``update-metadata``
+^^^^^^^^^^^^^^^^^^^
+Updates metadata items for a specified container, or adds the specified
+metadata if there is no current metadata associated with the container::
+
+    rack files container update-metadata --name <conatinerName> --metadata <key1=val1,key2=val2,...> [optional flags]
+
+``delete-metadata``
+^^^^^^^^^^^^^^^^^^^
+Deletes one or more metadata keys for a container::
+
+    rack files container delete-metadata --name <conatinerName> --metadata-keys <key1,key2,...> [optional flags]
+
 
 ``object``
 ~~~~~~~~~~
@@ -109,3 +136,62 @@ Permanently removes an object::
 
     rack files object delete --container <containerName> --name <objectName> [optional flags]
     (echo objectName1 && echo objectName2) | rack files object delete --container <containerName> --stdin name [optional flags]
+
+``set-metadata``
+^^^^^^^^^^^^^^^^
+Sets metadata for the specified object::
+
+    rack files object set-metadata --container <containerName> --name <objectName> --metadata <key1=val1,key2=val2,...> [optional flags]
+
+``get-metadata``
+^^^^^^^^^^^^^^^^
+Retrieves the metadata for a given object::
+
+    rack files object get-metadata --container <containerName> --name <objectName> [optional flags]
+
+``update-metadata``
+^^^^^^^^^^^^^^^^^^^
+Updates metadata items for a specified object, or adds the specified
+metadata if there is no current metadata associated with the object::
+
+    rack files object update-metadata --container <containerName> --name <objectName> --metadata <key1=val1,key2=val2,...> [optional flags]
+
+``delete-metadata``
+^^^^^^^^^^^^^^^^^^^
+Deletes one or more metadata keys from an object::
+
+    rack files object delete-metadata --container <containerName> --name <objectName> --metadata-keys <key1,key2,...> [optional flags]
+
+
+``account``
+~~~~~~~~~~
+
+Cloud Files account commands use this syntax::
+
+    rack files account <action> [optional flags]
+
+``set-metadata``
+^^^^^^^^^^^^^^^^
+Sets metadata for the specified account::
+
+    rack files account set-metadata --metadata <key1=val1,key2=val2,...> [optional flags]
+
+``get-metadata``
+^^^^^^^^^^^^^^^^
+Retrieves the metadata for a given account::
+
+    rack files account get-metadata [optional flags]
+
+``update-metadata``
+^^^^^^^^^^^^^^^^^^^
+Updates metadata items for a specified account, or adds the specified
+metadata if there is no current metadata associated with the account::
+
+    rack files account update-metadata --metadata <key1=val1,key2=val2,...> [optional flags]
+
+``delete-metadata``
+^^^^^^^^^^^^^^^^^^^
+Deletes one or more metadata keys from an account::
+
+    rack files account delete-metadata  --metadata-keys <key1,key2,...> [optional flags]
+

@@ -96,7 +96,7 @@ Sets metadata for the specified server or image::
 
 ``get-metadata``
 ^^^^^^^^^^^^^^^^
-Retrieves a single metadata item::
+Retrieves the metadata for a given server::
 
     rack servers instance get-metadata --id <serverID> [optional flags]
     rack servers instance get-metadata --name <serverName> [optional flags]
@@ -111,10 +111,10 @@ metadata if there is no current metadata associated with the server or image::
 
 ``delete-metadata``
 ^^^^^^^^^^^^^^^^^^^
-Deletes a metadata item::
+Deletes one or more metadata keys from a server::
 
-    rack servers instance delete-metadata --id <serverID> --metadata <key1=val1,key2=val2,...> [optional flags]
-    rack servers instance delete-metadata --name <serverName> --metadata <key1=val1,key2=val2,...> [optional flags]
+    rack servers instance delete-metadata --id <serverID> --metadata-keys <key1,key2,...> [optional flags]
+    rack servers instance delete-metadata --name <serverName> --metadata-keys <key1,key2,...> [optional flags]
 
 
 ``image``
