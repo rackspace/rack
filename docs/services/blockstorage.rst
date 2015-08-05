@@ -1,11 +1,7 @@
 .. _block_storage:
 
-<<<<<<< HEAD
 =============
 Block storage
-=======
-block-storage
->>>>>>> fb9b3c09d96ce50bb2117a52db8c7d591d6d5157
 =============
 
 This section lists all block storage commands supported by Rackspace CLI
@@ -16,6 +12,33 @@ Commands
 All block storage commands are based on this syntax::
 
    rack block-storage <resource> <action> [command flags]
+
+*Command flags* allow you to customize certain attributes of the command.
+Below is a table of some of the most common *command flags*:
+
++-----------------+--------------------------------------+
+| `Flags`         | Description                          |
++-----------------+--------------------------------------+
+| `--size`        | Allows you to enter the size you     |
+|                 | want the volume to be. Valid values  |
+|                 | are between 75 and 1024.             |
++-----------------+--------------------------------------+
+| `--name`        | Allows you to name the volume or     |
+|                 | snapshot.                            |
++-----------------+--------------------------------------+
+| `--description` | Allows you to leave a description    |
+|                 | of the volume or snapshot.           |
++-----------------+--------------------------------------+
+| `--volume-type` | Allows you to enter a volume type.   |
++-----------------+--------------------------------------+
+| `--rename`      | Allows you to rename a volume.       |
++-----------------+--------------------------------------+
+
+.. note::
+
+    *Command flags* will work with some commands and not with others. If you want
+    to know what *flags* will work with the specific command, type
+    `rack block-storage <action> --help`.
 
 ``volume``
 ~~~~~~~~~~
@@ -30,11 +53,33 @@ Retrieves a list of volumes::
 
     rack block-storage volume list [optional flags]
 
+**Response**
+
+.. code::
+
+    ID					                          Name	 Size	 Status		    Description	VolumeType	SnapshotID	Attachments														Created
+    81c7a7e5-01a5-44bb-9b43-0cc9f7c4e423		     75	   available		            SATA				[]															<nil>
+    a7c97db7-a0d3-495b-9ba3-1cb9dd9cf12c	Store	 75	   in-use			            	SATA			[map[host_name:<nil> device:/dev/xvdb server_id:8a254ea3-77b5-4f74-a893-8d2d51ae2cca id:a7c97db7-a0d3-495b-9ba3-1cb9dd9cf12c volume_id:a7c97db7-a0d3-495b-9ba3-1cb9dd9cf12c]]	<nil>
+    ca50fdfd-21f2-47e9-8ede-1518cb7467af	Store  150	 in-use				            SSD				[map[host_name:<nil> device:/dev/xvda server_id:8a254ea3-77b5-4f74-a893-8d2d51ae2cca id:ca50fdfd-21f2-47e9-8ede-1518cb7467af volume_id:ca50fdfd-21f2-47e9-8ede-1518cb7467af]]	<nil>
+
 ``create``
 ^^^^^^^^^^
 Creates a volume::
 
     rack block-storage volume create --size <volumeSize> [optional flags]
+
+**Response**
+
+.. code::
+
+    ID		66dcbe53-1b62-4a15-adc2-e46e78b95f8b
+    Name		Response
+    Description
+    Size		75
+    VolumeType	SATA
+    SnapshotID
+    Attachments	[]
+    CreatedAt	2015-08-05T19:48:28.000000
 
 ``get``
 ^^^^^^^
@@ -44,12 +89,27 @@ Retrieves details on a specified volume::
     rack block-storage volume get --name <volumeName> [optional flags]
     (echo volumeID1 && echo volumeID2) | rack block-storage volume get --stdin id [optional flags]
 
+**Response**
+
+.. code::
+
+    ID		66dcbe53-1b62-4a15-adc2-e46e78b95f8b
+    Name		Response
+    Description
+    Size		75
+    VolumeType	SATA
+    SnapshotID
+    Attachments	[]
+    CreatedAt	2015-08-05T19:48:28.000000
+
+
 ``update``
 ^^^^^^^^^^
 Updates the name and description of a volume::
 
     rack block-storage volume update --id <volumeID> [optional flags]
     rack block-storage volume update --name <volumeName> [optional flags]
+
 
 ``delete``
 ^^^^^^^^^^
@@ -58,6 +118,12 @@ Permanently removes a volume::
     rack block-storage volume delete --id <volumeID> [optional flags]
     rack block-storage volume delete --name <volumeName> [optional flags]
     (echo volumeID1 && echo volumeID2) | rack block-storage volume delete --stdin id [optional flags]
+
+**Response**
+
+.. code::
+
+    Deleting volume [volume-id]
 
 ``snapshot``
 ~~~~~~~~~~~~
@@ -72,11 +138,31 @@ Retrieves a list of snapshots::
 
     rack block-storage snapshot list [optional flags]
 
+**Response**
+
+.. code::
+
+    ID				                          	Name	Size	Status		VolumeID				                      VolumeType	SnapshotID	Bootable	Attachments
+    180a6c5c-ad6d-4cb6-846f-d500d67e59a5		    75	  available	81c7a7e5-01a5-44bb-9b43-0cc9f7c4e423
+
 ``create``
 ^^^^^^^^^^
 Creates a snapshot based on a specified volume id::
 
     rack block-storage snapshot create --volume-id <volumeID> [optional flags]
+
+**Response**
+
+.. code::
+
+    ID		4aa6ae9b-9b1d-4870-9192-8da72df7473e
+    Name		Snapshot1
+    Description
+    Size		75
+    VolumeType
+    SnapshotID
+    Attachments
+    CreatedAt	2015-08-05T20:57:56.604914
 
 ``get``
 ^^^^^^^
@@ -86,6 +172,21 @@ Retrieves details on a specified snapshot::
     rack block-storage snapshot get --name <snapshotName>] [optional flags]
     (echo snapshotID1 && echo snapshotID2) | rack block-storage snapshot get --stdin id [optional flags]
 
+**Response**
+
+.. code::
+
+    ID		4aa6ae9b-9b1d-4870-9192-8da72df7473e
+    Name		Snapshot1
+    Size		75
+    Status		creating
+    VolumeID	66dcbe53-1b62-4a15-adc2-e46e78b95f8b
+    VolumeType
+    SnapshotID
+    Bootable
+    Attachments
+
+
 ``delete``
 ^^^^^^^^^^
 Permanently removes a snapshot::
@@ -93,3 +194,9 @@ Permanently removes a snapshot::
     rack block-storage snapshot delete --id <snapshotID> [optional flags]
     rack block-storage snapshot delete --name <snapshotName> [optional flags]
     (echo snapshotID1 && echo snapshotID2) | rack block-storage snapshot delete --stdin id [optional flags]
+
+**Response**
+
+.. code::
+
+    Deleting snapshot [snapshotID]
