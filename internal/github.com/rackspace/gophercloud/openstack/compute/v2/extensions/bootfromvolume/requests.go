@@ -4,8 +4,8 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 )
 
 // SourceType represents the type of medium being used to create the volume.
@@ -54,7 +54,11 @@ type CreateOptsExt struct {
 func (opts CreateOptsExt) ToServerCreateMap() (map[string]interface{}, error) {
 	base, err := opts.CreateOptsBuilder.ToServerCreateMap()
 	if err != nil {
-		return nil, err
+		switch err.(type) {
+		case *servers.ErrNeitherImageIDNorImageNameProvided:
+		default:
+			return nil, err
+		}
 	}
 
 	if len(opts.BlockDevice) == 0 {

@@ -6,11 +6,11 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/jrperritt/rack/handler"
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
-	th "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
-	"github.com/jrperritt/rack/output"
+	"github.com/rackspace/rack/handler"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
+	"github.com/rackspace/rack/output"
 )
 
 func newUpDirCmd(fs *flag.FlagSet) *commandUploadDir {

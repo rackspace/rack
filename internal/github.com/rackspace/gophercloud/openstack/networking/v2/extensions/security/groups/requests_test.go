@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"testing"
 
-	fake "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/common"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/rules"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/pagination"
-	th "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper"
+	fake "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/common"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/rules"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/pagination"
+	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
 )
 
 func TestURLs(t *testing.T) {

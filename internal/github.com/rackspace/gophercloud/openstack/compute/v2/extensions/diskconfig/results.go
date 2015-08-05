@@ -1,10 +1,10 @@
 package diskconfig
 
 import (
-	"github.com/jrperritt/rack/internal/github.com/mitchellh/mapstructure"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/pagination"
+	"github.com/rackspace/rack/internal/github.com/mitchellh/mapstructure"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/pagination"
 )
 
 func commonExtract(result gophercloud.Result) (*DiskConfig, error) {

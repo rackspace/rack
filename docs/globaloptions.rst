@@ -3,7 +3,7 @@
 Global Options
 ==============
 
-Global options are command line flags that precede any service call or command
+Global options are command-line flags that are valid for any command
 and allow you to customize various aspects of the ``rack`` tool at runtime.
 These options may override configuration file or environment variables you have
 set previously, change output format or other aspects of the tool.
@@ -12,9 +12,9 @@ For example:
 
 ::
 
-    rack --json <service> <command> <subcommand> [--flags]
+    rack <service> <command> <subcommand> --output json [flags]
 
-Would result in all commands returning a JSON_ formatted output.
+Would result in the command returning a JSON_ formatted output.
 
 Options
 -------
@@ -22,29 +22,27 @@ Options
 ``--output``
 ~~~~~~~~~~~~
 
-  (string) The format in which to return the output. Options are: table, json, csv.
-           Default is 'table'.
+  (string) The format in which to return the output. Options are: table, json, csv. Default is 'table'.
 
 ``json``
 ^^^^^^^^
 
-When added to the arguments; output changes from the default table-based output
-to JSON.
+  Return output in JSON.
 
-Given::
+  Given::
 
-    rack servers instance list
-    ID	        Name		Status	Public IPv4	Private IPv4	Image	Flavor
-    GUID	my_server	ACTIVE	101.130.19.31	10.208.128.233	GUID	io1-30
+      rack servers instance list
+      ID	        Name		Status	Public IPv4	Private IPv4	Image	Flavor
+      GUID	my_server	ACTIVE	101.130.19.31	10.208.128.233	GUID	io1-30
 
-Adding the JSON option returns::
+  Adding the ``--output json`` flag returns::
 
-    rack --json servers instance list
+    rack servers instance list --output json
     [
       {
         "Flavor": "io1-30",
         "ID": "GUID",
-        "Image": "fd1b9e98-21c5-43bb-89d7-bfc4ee3c5caf",
+        "Image": "GUID",
         "Name": "my_server",
         "Private IPv4": "10.208.128.233",
         "Public IPv4": "101.130.19.31",
@@ -52,49 +50,48 @@ Adding the JSON option returns::
       }
     ]
 
-When the output pipe is **not** a tty; the JSON is no longer "pretty printed" and
-can be used when passing straight into other commands that require a JSON_
-payload or argument or another service.
+  When the output pipe is **not** a tty, the JSON is no longer "pretty printed" and
+  can be used when passing straight into other commands that require a JSON_
+  payload.
 
 ``table``
 ^^^^^^^^^
 
-  (boolean) Return output in tabular format.
+  Return output in tabular format. Default output format for ``rack``.
 
-Default output format for ``rack``.
+  Given::
 
-Given::
+      rack servers instance list
+      ID	        Name		Status	Public IPv4	Private IPv4	Image	Flavor
+      GUID	my_server	ACTIVE	101.130.19.31	10.208.128.233	GUID	io1-30
 
-    rack servers instance list
-    ID	        Name		Status	Public IPv4	Private IPv4	Image	Flavor
-    GUID	my_server	ACTIVE	101.130.19.31	10.208.128.233	GUID	io1-30
+  This presents a well formatted table with headers.
 
-This presents a well formatted table with headers.
-
-You can add the ``--table`` option if you have set defaults to JSON, CSV, etc
-elsewhere.
+  You can add the ``--output table`` option if you have set defaults to JSON,
+  CSV, and so on elsewhere. You can use the ``--no-header`` option to output
+  without headers.
 
 ``csv``
 ^^^^^^^
 
-  (boolean) Return output in csv format.
+  Return output in csv format.
 
-CSV, or comma separated output is useful for passing to other operating system
-tools, importing into Excel, Google Sheets, or another data tool.
+  CSV, or comma separated output is useful for passing to other operating system
+  tools, importing into Excel, Google Sheets, or another data tool.
 
-Given::
+  Given::
 
-    rack servers instance list
-    ID	        Name		Status	Public IPv4	Private IPv4	Image	Flavor
-    GUID	my_server	ACTIVE	101.130.19.31	10.208.128.233	GUID	io1-30
+      rack servers instance list
+      ID	        Name		Status	Public IPv4	Private IPv4	Image	Flavor
+      GUID	my_server	ACTIVE	101.130.19.31	10.208.128.233	GUID	io1-30
 
-Adding the CSV option returns::
+  Adding the ``--output csv`` option::
 
-    rack --csv servers instance list
-    ID,Name,Status,Public IPv4,Private IPv4,Image,Flavor
-    GUID,my_server,ACTIVE,101.130.19.31,10.208.128.233,fd1b9e98-21c5-43bb-89d7-bfc4ee3c5caf,io1-30
+      rack servers instance list --output csv
+      ID,Name,Status,Public IPv4,Private IPv4,Image,Flavor
+      GUID,my_server,ACTIVE,101.130.19.31,10.208.128.233,GUID,io1-30
 
-This presents a compact format with appropriate CSV headers.
+  This presents a compact format with appropriate CSV headers.
 
 ``--log``
 ~~~~~~~~~
@@ -117,13 +114,13 @@ This presents a compact format with appropriate CSV headers.
 ~~~~~~~~~~~~~~~~~~~~
 
   (string) The tenant ID to use for authentication. May only be provided as a command-line flag.
-  (Prefixed with 'auth-' so as to not collide with the `tenant-id` command flags.
+  (Prefixed with 'auth-' so as to not collide with the ``tenant-id``` command flags.)
 
 ``--auth-token``
 ~~~~~~~~~~~~~~~~
 
   (string) The token to use for authentication. May only be provided as a command-line flag.
-  Must be used with the `auth-tenant-id` flag.
+  Must be used with the ``auth-tenant-id`` flag.
 
 ``--region``
 ~~~~~~~~~~~~
@@ -139,7 +136,7 @@ This presents a compact format with appropriate CSV headers.
 ``--profile``
 ~~~~~~~~~~~~~
 
-  (string) The name of the config file profile to use to look for authentication credentials.
+  (string) The name of the profile (in the config file) to use to look for authentication credentials.
 
 ``--no-cache``
 ~~~~~~~~~~~~~~
@@ -149,12 +146,13 @@ This presents a compact format with appropriate CSV headers.
 ``--no-header``
 ~~~~~~~~~~~~~~~
 
-  (boolean) Don't set the header for CSV nor tabular output.
+  (boolean) Don't set the header for CSV nor tabular output. Helpful if piping output from a ``list`` command.
 
 ``--use-service-net``
 ~~~~~~~~~~~~~~~~~~~~~
 
-  (boolean) Use the Rackspace internal URL to execute the request.
+  (boolean) Use the Rackspace internal URL to execute the request. This will only be useful when running a
+  ``rack`` command from a Rackspace server.
 
 ``--help, -h``
 ~~~~~~~~~~~~~~
@@ -163,12 +161,12 @@ This presents a compact format with appropriate CSV headers.
 
 Help is available on the base level; for example::
 
-    rack help
+    rack --help
     NAME:
        rack - An opinionated CLI for the Rackspace cloud
 
     USAGE:
-       rack [global options] command [command options] [arguments...]
+       rack <command> <subcommand> <action> [flags]
 
     VERSION:
        0.0.0
@@ -182,17 +180,15 @@ Help is available on the base level; for example::
        --table			Return output in tabular format. This is the default output format.
        --csv			Return output in csv format.
        --help, -h			show help
-       --generate-bash-completion
-       --version, -v		print the version
 
-And it is available per service::
+And it is available per command::
 
-    rack servers help
+    rack servers --help
     NAME:
        rack servers - Used for the Servers service
 
     USAGE:
-       rack servers [global options] command [command options] [arguments...]
+       rack servers <subcommand> <action> [flags]
 
     VERSION:
        0.0.0
@@ -205,14 +201,14 @@ And it is available per service::
        help, h	Shows a list of commands or help for one command
 
 
-And again, per command:
+And again, per subcommand:
 
-    rack servers keypair help
+    rack servers keypair --help
     NAME:
        rack servers keypair - Used for Server Keypair operations
 
     USAGE:
-       rack servers keypair [global options] command [command options] [arguments...]
+       rack servers keypair <action> [flags]
 
     VERSION:
        0.0.0

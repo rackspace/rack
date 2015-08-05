@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 )
 
 func Test_ShowAppHelp_NoAuthor(t *testing.T) {

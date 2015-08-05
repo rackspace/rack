@@ -16,7 +16,7 @@ var UserAgent = fmt.Sprintf("%s-%s/%s", "rackcli", runtime.GOOS, Version)
 
 // Usage return a string that specifies how to call a particular command.
 func Usage(commandPrefix, action, mandatoryFlags string) string {
-	return fmt.Sprintf("%s %s %s %s [OPTIONS]", Name, commandPrefix, action, mandatoryFlags)
+	return fmt.Sprintf("%s %s %s %s [flags]", Name, commandPrefix, action, mandatoryFlags)
 }
 
 // RemoveFromList removes an element from a slice and returns the slice.
@@ -79,4 +79,4 @@ func Pluralize(noun string, count int64) string {
 }
 
 // Version is the current CLI version
-var Version = "0.0.0-dev"
+var Version = "0.0.4"

@@ -1,7 +1,11 @@
 .. _block_storage:
 
+<<<<<<< HEAD
 =============
 Block storage
+=======
+block-storage
+>>>>>>> fb9b3c09d96ce50bb2117a52db8c7d591d6d5157
 =============
 
 This section lists all block storage commands supported by Rackspace CLI

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jrperritt/rack/internal/github.com/fatih/structs"
-	osSecurityGroups "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/groups"
-	osSecurityGroupRules "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/rules"
+	"github.com/rackspace/rack/internal/github.com/fatih/structs"
+	osSecurityGroups "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/groups"
+	osSecurityGroupRules "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/rules"
 )
 
 func securityGroupSingle(securityGroup *osSecurityGroups.SecGroup) map[string]interface{} {

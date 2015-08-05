@@ -26,12 +26,12 @@ The tl;dr version is to grab the binary for your platform:
 * `Linux (64 bit)`_
 * `Windows (64 bit)`_
 
-Once downloaded; you need to make it executable, if you are unfamiliar with this
+Once downloaded, you need to make it executable. If you are unfamiliar with this
 or are running Windows, please see :ref:`installation_and_configuration`.
 
-Next, run::
+Next, move into the directory where you downloaded the ``rack`` binary and run::
 
-    rack configure
+    ./rack configure
 
 This command will automatically create a configuration file for you if it
 doesn't exist and walk you through creating a profile for it::
@@ -47,6 +47,12 @@ doesn't exist and walk you through creating a profile for it::
 
 This allows you to immediately get working::
 
+    ./rack servers instance list
+
+If the ``rack`` binary isn't on your system's PATH, you'll only be able to run it from the
+directory in which it resides. To run ``rack`` from anywhere, move the binary into a directory
+on your systems PATH. Then, you'll be able to run it from anywhere::
+
     rack servers instance list
 
 
@@ -55,10 +61,10 @@ Synopsis
 
 ::
 
-  rack <service> <subservice> <action> [--flags]
+    rack <service> <subservice> <action> [flags]
 
 All ``rack`` commands follow the pattern above - for example, if you wanted to
-list all running servers on your Rackspace account, you would type::
+list all servers on your Rackspace account, you would type::
 
   rack servers instance list
 
@@ -67,73 +73,30 @@ And the response (**default**: table-based output) would look like::
       ID	Name		Status	Public IPv4	Private IPv4	Image	Flavor
       GUID	my_server	ACTIVE	101.130.19.31	10.208.128.233	GUID	io1-30
 
-Options
--------
+Global Options
+--------------
 
-The ``rack`` CLI uses global options (``[--options]``) to alter the output, or
-pass in other required **global** information into the tool, these are:
-
-``--json``
-  (boolean) Return output in JSON format.
-
-``--table``
-  Return output in tabular format. *This is the default output format.*
-
-``--csv``
-  Return output in csv format.
-
-``--username``
-  The Rackspace username to use for authentication.
-
-``--api-key``
-  The Rackspace API key to use for authentication.
-
-``--region``
-  The Rackspace region to use for authentication.
-
-``--auth-url``
-  The Rackspace URL to use for authentication. If not provided, this
-  will default to the public U.S. Rackspace endpoint.
-
-``--auth-tenant-id``
-  The tenant ID to use for authentication. Prefixed with 'auth-' to avoid name
-  collision with the ``tenant-id`` command flag.
-
-``--auth-token``
-  The token to use for authentication. This must be used with the ``auth-tenant-id``
-  flag.
-
-``--profile``
-  The name of the config file profile to use to look for authentication credentials.
-
-``--no-cache``
-  Don't get or set authentication credentials in the rack cache.
-
-``--no-header``
-  Don't set the header for CSV nor tabular output.
-
-``--use-service-net``
-  Use the Rackspace internal URL to execute the request.
-
-``--help, -h``
-  Show help
-
-For more on options, see :ref:`global_options`.
+The ``rack`` CLI uses global options to alter output, authenticate, or
+pass in other **global** information into the tool. These options are
+called global because they are valid for any command. To see these, see :ref:`global_options`.
 
 Services
 --------
 
 * :ref:`servers` - Commands for Rackspace Cloud Servers, dedicated and virtual.
 * :ref:`files` - Commands for Rackspace Cloud Files.
+* :ref:`networks` - Commands for Rackspace Cloud Networks.
+* :ref:`block_storage` - Commands for Rackspace Block Storage.
 
 
 .. toctree::
-   :caption: Table of Contents
+   :caption: Contents
    :name: mastertoc
    :maxdepth: 2
 
    configuration.rst
    globaloptions.rst
+   userguide.rst
    services/index.rst
 
 
@@ -144,8 +107,8 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`search`
 
-.. _Github project: https://github.com/jrperritt/rack
-.. _Mac OSX (64 bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/Darwin/amd64/rack
-.. _Linux (64 bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/Linux/amd64/rack
-.. _Windows (64 bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/Windows/amd64/rack.exe
+.. _Github project: https://github.com/rackspace/rack
+.. _Mac OSX (64 bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/0.0.4/Darwin/amd64/rack
+.. _Linux (64 bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/0.0.4/Linux/amd64/rack
+.. _Windows (64 bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/0.0.4/Windows/amd64/rack.exe
 .. _Cloud Control panel: https://mycloud.rackspace.com/

@@ -4,7 +4,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/jrperritt/rack/commandoptions"
+	"github.com/rackspace/rack/commandoptions"
 )
 
 func envvars(have map[string]commandoptions.Cred, need map[string]string) {

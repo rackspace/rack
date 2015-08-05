@@ -3,13 +3,13 @@ package instancecommands
 import (
 	"fmt"
 
-	"github.com/jrperritt/rack/commandoptions"
-	"github.com/jrperritt/rack/handler"
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
-	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
-	"github.com/jrperritt/rack/output"
-	"github.com/jrperritt/rack/util"
+	"github.com/rackspace/rack/commandoptions"
+	"github.com/rackspace/rack/handler"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	osServers "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
+	"github.com/rackspace/rack/output"
+	"github.com/rackspace/rack/util"
 )
 
 var reboot = cli.Command{

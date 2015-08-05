@@ -14,7 +14,7 @@ For complete documentation, see [the docs](http://rackspace-cli.readthedocs.org/
 
 Make sure you have Go installed and the GOPATH environment variable set.
 ```sh
-go get github.com/jrperritt/rack
+go get github.com/rackspace/rack
 go build -o $GOPATH/bin/rack
 ```
 
