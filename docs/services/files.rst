@@ -166,7 +166,7 @@ Deletes one or more metadata keys from an object::
 ``account``
 ~~~~~~~~~~
 
-Cloud files account commands use this syntax::
+Cloud Files account commands use this syntax::
 
     rack files account <action> [optional flags]
 
