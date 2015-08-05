@@ -78,19 +78,18 @@ Our plan is to release a limited beta of `rack` the first week of August 2015 wi
 We expect to exit beta in the coming weeks, while also focusing on adding new services. The current plan of record to add new services is based on the following priority:
 
 1. Cloud Load Balancers
-2. Cloud DNS *
-3. Cloud Databases *
+2. Cloud DNS \*
+3. Cloud Databases \*
 4. Cloud Identity
-5. Cloud Images *
+5. Cloud Images \*
 6. Rackspace CDN
 7. RackConnect
-8. Cloud Big Data *
-9. Cloud Monitoring *
+8. Cloud Big Data \*
+9. Cloud Monitoring \*
 10. Cloud Orchestration
-11. Cloud Queues *
-12. Cloud Backup *
-13. Autoscale *
-14. Cloud Metrics *
+11. Cloud Queues \*
+12. Cloud Backup \*
+13. Autoscale \*
+14. Cloud Metrics \*
 
-
-* Services not supported in [Gophercloud](github.com/rackspace/gophercloud) at present.
+\* Services not supported in [Gophercloud](github.com/rackspace/gophercloud) at present.
