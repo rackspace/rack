@@ -1,6 +1,6 @@
 .. _block_storage:
 
-block storage
+block-storage
 =============
 
 Commands for Rackspace Cloud Block Storage.

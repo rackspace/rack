@@ -69,3 +69,4 @@ you wish the snapshot be. In the example, a snapshot called "Store1" is created:
     SnapshotID
     Attachments
     CreatedAt	2015-07-31T18:57:34.652136
+

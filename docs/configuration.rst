@@ -86,7 +86,7 @@ The following commands will set up Rackspace CLI. First, open Powershell_ise and
 Configuration
 -------------
 
-.. warning:: This may change.
+.. warning:: This configuration procedure may change.
 
 To authenticate against the Rackspace API, there are 4 required paramaters:
 

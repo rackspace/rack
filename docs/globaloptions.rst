@@ -67,8 +67,9 @@ Options
 
   This presents a well formatted table with headers.
 
-  You can add the ``--output table`` option if you have set defaults to JSON, CSV, etc
-  elsewhere.
+  You can add the ``--output table`` option if you have set defaults to JSON,
+  CSV, and so on elsewhere. You can use the ``--no-header`` option to output
+  without headers.
 
 ``csv``
 ^^^^^^^
