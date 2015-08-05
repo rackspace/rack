@@ -111,7 +111,7 @@ metadata if there is no current metadata associated with the server or image::
 
 ``delete-metadata``
 ^^^^^^^^^^^^^^^^^^^
-Delete one or more metadata keys from a server::
+Deletes one or more metadata keys from a server::
 
     rack servers instance delete-metadata --id <serverID> --metadata-keys <key1,key2,...> [optional flags]
     rack servers instance delete-metadata --name <serverName> --metadata-keys <key1,key2,...> [optional flags]
