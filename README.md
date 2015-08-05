@@ -92,4 +92,4 @@ We expect to exit beta in the coming weeks, while also focusing on adding new se
 13. Autoscale \*
 14. Cloud Metrics \*
 
-\* Services not supported in [Gophercloud](github.com/rackspace/gophercloud) at present.
+\* Services not supported in [Gophercloud](https://github.com/rackspace/gophercloud) at present.
