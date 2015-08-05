@@ -106,3 +106,4 @@ git tag ${NEW_VERSION}
 git push ${REMOTE} master
 git push ${REMOTE} --tags
 
+echo "${$NEW_VERSION} successfully released"
