@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/jrperritt/rack/commands/blockstoragecommands"
 	"github.com/jrperritt/rack/commands/filescommands"
@@ -51,8 +52,9 @@ commands have been tested against Rackspace's live API.`
 func Cmds() []cli.Command {
 	return []cli.Command{
 		{
-			Name:  "init",
-			Usage: "[Linux/OS X only] Creates the rack man page and sets up command completion for the Bash shell.",
+			Name: "init",
+			Usage: strings.Join([]string{"For Linux and OS X, creates the `rack` man page and sets up command completion for the Bash shell.",
+				"\tFor Windows, creates a `posh_autocomplete.ps1` file in the `$HOME/.rack` directory. You must run the file to set up command completion."}, "\n"),
 			Action: func(c *cli.Context) {
 				setup.Init(c)
 				man()
