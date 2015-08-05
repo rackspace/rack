@@ -12,7 +12,7 @@ env:
 install:
 - go get -d -v ./...
 script:
-- go build -v ./...
+  - if [[ $GIMME_OS == "linux" && $GIMME_ARCH == "amd64" ]]; then GOARCH=$GIMME_ARCH GOOS=$GIMME_OS go test github.com/rackspace/rack/commands/... -v; fi
 before_deploy:
 - curl -X POST http://readthedocs.org/build/rackspace-cli
 - "./script/prep-travis-release.sh"
