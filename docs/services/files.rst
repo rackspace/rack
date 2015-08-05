@@ -83,7 +83,7 @@ metadata if there is no current metadata associated with the container::
 
 ``delete-metadata``
 ^^^^^^^^^^^^^^^^^^^
-Deletes one or more metadata keys for an object::
+Deletes one or more metadata keys for a container::
 
     rack files container delete-metadata --name <conatinerName> --metadata-keys <key1,key2,...> [optional flags]
 
@@ -195,4 +195,3 @@ Deletes one or more metadata keys from an account::
 
     rack files account delete-metadata  --metadata-keys <key1,key2,...> [optional flags]
 
-    
