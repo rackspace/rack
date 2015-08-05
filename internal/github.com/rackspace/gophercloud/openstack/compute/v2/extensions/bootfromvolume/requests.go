@@ -54,7 +54,11 @@ type CreateOptsExt struct {
 func (opts CreateOptsExt) ToServerCreateMap() (map[string]interface{}, error) {
 	base, err := opts.CreateOptsBuilder.ToServerCreateMap()
 	if err != nil {
-		return nil, err
+		switch err.(type) {
+		case *servers.ErrNeitherImageIDNorImageNameProvided:
+		default:
+			return nil, err
+		}
 	}
 
 	if len(opts.BlockDevice) == 0 {

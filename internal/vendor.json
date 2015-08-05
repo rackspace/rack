@@ -72,6 +72,13 @@
 			"revisionTime": "2015-08-02T22:24:28-06:00"
 		},
 		{
+			"canonical": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions",
+			"comment": "",
+			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions",
+			"revision": "581482c6535dfea558b96d1c58f0dfe533629363",
+			"revisionTime": "2015-08-03T19:12:27-06:00"
+		},
+		{
 			"canonical": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/bootfromvolume",
 			"comment": "",
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/bootfromvolume",
@@ -224,6 +231,13 @@
 			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace",
 			"revision": "1fd76b19e3497a031b2086dbc8ffb71193298ea0",
 			"revisionTime": "2015-08-02T22:24:28-06:00"
+		},
+		{
+			"canonical": "github.com/rackspace/gophercloud/rackspace/compute/v2/bootfromvolume",
+			"comment": "",
+			"local": "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/bootfromvolume",
+			"revision": "581482c6535dfea558b96d1c58f0dfe533629363",
+			"revisionTime": "2015-08-03T19:12:27-06:00"
 		},
 		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace/compute/v2/flavors",

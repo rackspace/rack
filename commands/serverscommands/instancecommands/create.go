@@ -2,14 +2,18 @@ package instancecommands
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/jrperritt/rack/commandoptions"
 	"github.com/jrperritt/rack/handler"
 	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
+	osBFV "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/bootfromvolume"
 	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
+	bfv "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/bootfromvolume"
 	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
 	"github.com/jrperritt/rack/util"
 )
@@ -37,11 +41,11 @@ func flagsCreate() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "image-id",
-			Usage: "[optional; required if `image-name` is not provided] The image ID from which to create the server.",
+			Usage: "[optional; required if `image-name` or `block-device` is not provided] The image ID from which to create the server.",
 		},
 		cli.StringFlag{
 			Name:  "image-name",
-			Usage: "[optional; required if `image-id` is not provided] The name of the image from which to create the server.",
+			Usage: "[optional; required if `image-id` or `block-device` is not provided] The name of the image from which to create the server.",
 		},
 		cli.StringFlag{
 			Name:  "flavor-id",
@@ -74,6 +78,20 @@ func flagsCreate() []cli.Flag {
 		cli.StringFlag{
 			Name:  "keypair",
 			Usage: "[optional] The name of the already-existing SSH KeyPair to be injected into this server.",
+		},
+		cli.StringFlag{
+			Name: "block-device",
+			Usage: strings.Join([]string{"[optional] Used to boot from volume.",
+				"\tIf provided, the instance will be created based upon the comma-separated key=value pairs provided to this flag.",
+				"\tOptions:",
+				"\t\tsource-type\t[required] The source type of the device. Options: volume, snapshot, image.",
+				"\t\tsource-id\t[required] The ID of the source resource (volume, snapshot, or image) from which to create the instance.",
+				"\t\tboot-index\t[optional] The boot index of the device. Default is 0.",
+				"\t\tdelete-on-termination\t[optional] Whether or not to delete the attached volume when the server is delete. Default is false. Options: true, false.",
+				"\t\tdestination-type\t[optional] The type that gets created. Options: volume, local.",
+				"\t\tvolume-size\t[optional] The size of the volume to create (in gigabytes).",
+				"\tExamle: --block-device source-type=image,source-id=bb02b1a3-bc77-4d17-ab5b-421d89850fca,volume-size=100,destination-type=volume,delete-on-termination=false",
+			}, "\n"),
 		},
 	}
 }
@@ -153,6 +171,69 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 		}
 		opts.Metadata = metadata
 	}
+
+	if c.IsSet("block-device") {
+		bfvMap, err := command.Ctx.CheckKVFlag("block-device")
+		if err != nil {
+			return err
+		}
+
+		sourceID, ok := bfvMap["source-id"]
+		if !ok {
+			return fmt.Errorf("The source-id key is required when using the --block-device flag.\n")
+		}
+
+		sourceTypeRaw, ok := bfvMap["source-type"]
+		if !ok {
+			return fmt.Errorf("The source-type key is required when using the --block-device flag.\n")
+		}
+		var sourceType osBFV.SourceType
+		switch sourceTypeRaw {
+		case "volume", "image", "snapshot":
+			sourceType = osBFV.SourceType(sourceTypeRaw)
+		default:
+			return fmt.Errorf("Invalid value for source-type: %s. Options are: volume, image, snapshot.\n", sourceType)
+		}
+
+		bd := osBFV.BlockDevice{
+			SourceType: sourceType,
+			UUID:       sourceID,
+		}
+
+		if volumeSizeRaw, ok := bfvMap["volume-size"]; ok {
+			volumeSize, err := strconv.ParseInt(volumeSizeRaw, 10, 16)
+			if err != nil {
+				return fmt.Errorf("Invalid value for volume-size: %d. Value must be an integer.\n", volumeSize)
+			}
+			bd.VolumeSize = int(volumeSize)
+		}
+
+		if deleteOnTerminationRaw, ok := bfvMap["delete-on-termination"]; ok {
+			deleteOnTermination, err := strconv.ParseBool(deleteOnTerminationRaw)
+			if err != nil {
+				return fmt.Errorf("Invalid value for delete-on-termination: %v. Options are: true, false.\n", deleteOnTermination)
+			}
+			bd.DeleteOnTermination = deleteOnTermination
+		}
+
+		if bootIndexRaw, ok := bfvMap["boot-index"]; ok {
+			bootIndex, err := strconv.ParseInt(bootIndexRaw, 10, 8)
+			if err != nil {
+				return fmt.Errorf("Invalid value for boot-index: %d. Value must be an integer.\n", bootIndex)
+			}
+			bd.BootIndex = int(bootIndex)
+		}
+
+		if destinationType, ok := bfvMap["destination-type"]; ok {
+			if destinationType != "volume" && destinationType != "local" {
+				return fmt.Errorf("Invalid value for destination-type: %s. Options are: volume, local.\n", destinationType)
+			}
+			bd.DestinationType = destinationType
+		}
+
+		opts.BlockDevice = []osBFV.BlockDevice{bd}
+	}
+
 	resource.Params = &paramsCreate{
 		opts: opts,
 	}
@@ -175,7 +256,15 @@ func (command *commandCreate) HandleSingle(resource *handler.Resource) error {
 
 func (command *commandCreate) Execute(resource *handler.Resource) {
 	opts := resource.Params.(*paramsCreate).opts
-	server, err := servers.Create(command.Ctx.ServiceClient, opts).Extract()
+
+	var server *osServers.Server
+	var err error
+	if len(opts.BlockDevice) > 0 {
+		server, err = bfv.Create(command.Ctx.ServiceClient, opts).Extract()
+	} else {
+		server, err = servers.Create(command.Ctx.ServiceClient, opts).Extract()
+	}
+
 	if err != nil {
 		switch err.(type) {
 		case *osServers.ErrNeitherImageIDNorImageNameProvided:
