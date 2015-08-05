@@ -6,11 +6,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jrperritt/rack/handler"
-	"github.com/jrperritt/rack/internal/github.com/cenkalti/backoff"
-	"github.com/jrperritt/rack/internal/github.com/dustin/go-humanize"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
-	"github.com/jrperritt/rack/util"
+	"github.com/rackspace/rack/handler"
+	"github.com/rackspace/rack/internal/github.com/cenkalti/backoff"
+	"github.com/rackspace/rack/internal/github.com/dustin/go-humanize"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
+	"github.com/rackspace/rack/util"
 )
 
 type handleEmptyParams struct {

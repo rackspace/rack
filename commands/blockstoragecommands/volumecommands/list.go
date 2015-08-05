@@ -1,12 +1,12 @@
 package volumecommands
 
 import (
-	"github.com/jrperritt/rack/commandoptions"
-	"github.com/jrperritt/rack/handler"
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
-	osVolumes "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/pagination"
-	"github.com/jrperritt/rack/util"
+	"github.com/rackspace/rack/commandoptions"
+	"github.com/rackspace/rack/handler"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	osVolumes "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/pagination"
+	"github.com/rackspace/rack/util"
 )
 
 var list = cli.Command{

@@ -3,7 +3,7 @@ package handler
 import (
 	"fmt"
 
-	"github.com/jrperritt/rack/util"
+	"github.com/rackspace/rack/util"
 )
 
 // Resource is a general resource from Rackspace. This object stores information

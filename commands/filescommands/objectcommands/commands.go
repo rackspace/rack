@@ -1,6 +1,6 @@
 package objectcommands
 
-import "github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
+import "github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 
 var commandPrefix = "files object"
 var serviceClientType = "object-store"

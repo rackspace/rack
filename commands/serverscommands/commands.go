@@ -1,12 +1,12 @@
 package serverscommands
 
 import (
-	"github.com/jrperritt/rack/commands/serverscommands/flavorcommands"
-	"github.com/jrperritt/rack/commands/serverscommands/imagecommands"
-	"github.com/jrperritt/rack/commands/serverscommands/instancecommands"
-	"github.com/jrperritt/rack/commands/serverscommands/keypaircommands"
-	"github.com/jrperritt/rack/commands/serverscommands/volumeattachmentcommands"
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
+	"github.com/rackspace/rack/commands/serverscommands/flavorcommands"
+	"github.com/rackspace/rack/commands/serverscommands/imagecommands"
+	"github.com/rackspace/rack/commands/serverscommands/instancecommands"
+	"github.com/rackspace/rack/commands/serverscommands/keypaircommands"
+	"github.com/rackspace/rack/commands/serverscommands/volumeattachmentcommands"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 )
 
 // Get returns all the commands allowed for a `servers` request.

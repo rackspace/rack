@@ -9,8 +9,8 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
-	"github.com/jrperritt/rack/util"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	"github.com/rackspace/rack/util"
 )
 
 var rackBashAutocomplete = `

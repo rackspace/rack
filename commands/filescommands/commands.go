@@ -1,10 +1,10 @@
 package filescommands
 
 import (
-	"github.com/jrperritt/rack/commands/filescommands/accountcommands"
-	"github.com/jrperritt/rack/commands/filescommands/containercommands"
-	"github.com/jrperritt/rack/commands/filescommands/objectcommands"
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
+	"github.com/rackspace/rack/commands/filescommands/accountcommands"
+	"github.com/rackspace/rack/commands/filescommands/containercommands"
+	"github.com/rackspace/rack/commands/filescommands/objectcommands"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 )
 
 // Get returns all the commands allowed for a `files` request.

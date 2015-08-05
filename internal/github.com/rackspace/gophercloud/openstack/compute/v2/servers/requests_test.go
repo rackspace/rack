@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/pagination"
-	th "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/pagination"
+	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
 )
 
 func TestListServers(t *testing.T) {

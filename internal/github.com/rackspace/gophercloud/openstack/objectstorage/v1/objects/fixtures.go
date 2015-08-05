@@ -9,8 +9,8 @@ import (
 	"net/http"
 	"testing"
 
-	th "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper"
-	fake "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
+	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
+	fake "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
 )
 
 // HandleDownloadObjectSuccessfully creates an HTTP handler at `/testContainer/testObject` on the test handler mux that

@@ -4,7 +4,7 @@ import (
 	"flag"
 	"testing"
 
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 )
 
 func TestCommandDoNotIgnoreFlags(t *testing.T) {

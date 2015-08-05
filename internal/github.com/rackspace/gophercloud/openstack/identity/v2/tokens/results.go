@@ -3,9 +3,9 @@ package tokens
 import (
 	"time"
 
-	"github.com/jrperritt/rack/internal/github.com/mitchellh/mapstructure"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/identity/v2/tenants"
+	"github.com/rackspace/rack/internal/github.com/mitchellh/mapstructure"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/identity/v2/tenants"
 )
 
 // Token provides only the most basic information related to an authentication token.

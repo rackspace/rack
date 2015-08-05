@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"path"
 
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
-	"github.com/jrperritt/rack/internal/gopkg.in/ini.v1"
-	"github.com/jrperritt/rack/util"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	"github.com/rackspace/rack/internal/gopkg.in/ini.v1"
+	"github.com/rackspace/rack/util"
 )
 
 func ConfigFile(c *cli.Context, have map[string]Cred, need map[string]string) error {

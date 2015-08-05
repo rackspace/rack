@@ -3,9 +3,9 @@ package volumeattachmentcommands
 import (
 	"fmt"
 
-	"github.com/jrperritt/rack/handler"
-	osServers "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
-	"github.com/jrperritt/rack/output"
+	"github.com/rackspace/rack/handler"
+	osServers "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
+	"github.com/rackspace/rack/output"
 )
 
 func serverIDorName(ctx *handler.Context) (string, error) {

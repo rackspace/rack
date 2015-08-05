@@ -10,13 +10,13 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/jrperritt/rack/commandoptions"
-	"github.com/jrperritt/rack/internal/github.com/Sirupsen/logrus"
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud"
-	tokens2 "github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/openstack/identity/v2/tokens"
-	"github.com/jrperritt/rack/internal/github.com/rackspace/gophercloud/rackspace"
-	"github.com/jrperritt/rack/util"
+	"github.com/rackspace/rack/commandoptions"
+	"github.com/rackspace/rack/internal/github.com/Sirupsen/logrus"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud"
+	tokens2 "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/identity/v2/tokens"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace"
+	"github.com/rackspace/rack/util"
 )
 
 var usernameAuthErrSlice = []string{"There are some required Rackspace Cloud credentials that we couldn't find.",
