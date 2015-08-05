@@ -169,3 +169,45 @@ To connect to the server with SSH using your public key, use this command::
 
     $ ssh root@23.253.50.104
 
+Start a server from a volume
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The boot from volume features gives you the ability to start a server with an
+attached volume. You can either start with a volume with a bootable image, to
+enable simpler migration when a server fails, or a storage volume that remains
+intact even after a server is shutdown or deleted.
+
+To create a bootable volume from an image and launch an instance from
+this volume, use the ``--block-device`` parameter.
+
+   The settings are:
+
+   -  ``--block-device``
+      source=SOURCE,id=ID,dest=DEST,size=SIZE,shutdown=PRESERVE,bootindex=INDEX
+
+         **source-type=SOURCE**
+             The type of object used to create the block device. Valid values
+             are ``volume``, ``snapshot``, ``image``, and ``blank``.
+
+         **source-id=ID**
+             The ID of the source. Use a volume ID if the ``source-type`` is
+             a volume and an image ID if the ``source-type`` is image.
+
+         **destination-type=DEST**
+             The type of the target virtual device. Valid values are ``volume``
+             and ``local``.
+
+         **volume-size=SIZE**
+             The size of the volume that is created in GB.
+
+         **delete-on-termination={true\|false}**
+             What to do with the volume when the instance is deleted. Use
+             ``false`` to delete the volume and ``true`` to delete the
+             volume when the instance is deleted.
+
+Use this command to boot from a volume::
+
+    $ rack servers instance create --name rackTestBFV  --block-device \
+    "source-type=image,source-id=18d361d1-2875-458b-9917-65010e37982a,\
+    volume-size=100,destination-type=volume,delete-on-termination=false" \
+    --flavor-id compute1-15 --keypair macpub

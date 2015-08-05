@@ -90,7 +90,7 @@ Services
 
 
 .. toctree::
-   :caption: Table of Contents
+   :caption: Contents
    :name: mastertoc
    :maxdepth: 2
 
