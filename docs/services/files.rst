@@ -147,19 +147,52 @@ Sets metadata for the specified object::
 ^^^^^^^^^^^^^^^^
 Retrieves the metadata for a given object::
 
-    rack files object get-metadata --container <containerName> --name <objectName>  [optional flags]
+    rack files object get-metadata --container <containerName> --name <objectName> [optional flags]
 
 ``update-metadata``
 ^^^^^^^^^^^^^^^^^^^
 Updates metadata items for a specified object, or adds the specified
 metadata if there is no current metadata associated with the object::
 
-    rack files object update-metadata --container <containerName> --name <objectName>  --metadata <key1=val1,key2=val2,...> [optional flags]
+    rack files object update-metadata --container <containerName> --name <objectName> --metadata <key1=val1,key2=val2,...> [optional flags]
 
 ``delete-metadata``
 ^^^^^^^^^^^^^^^^^^^
 Deletes one or more metadata keys from an object::
 
-    rack files object delete-metadata --container <containerName> --name <objectName>  --metadata-keys <key1,key2,...> [optional flags]
+    rack files object delete-metadata --container <containerName> --name <objectName> --metadata-keys <key1,key2,...> [optional flags]
 
 
+``account``
+~~~~~~~~~~
+
+Cloud files account commands use this syntax::
+
+    rack files account <action> [optional flags]
+
+``set-metadata``
+^^^^^^^^^^^^^^^^
+Sets metadata for the specified account::
+
+    rack files account set-metadata --metadata <key1=val1,key2=val2,...> [optional flags]
+
+``get-metadata``
+^^^^^^^^^^^^^^^^
+Retrieves the metadata for a given account::
+
+    rack files account get-metadata [optional flags]
+
+``update-metadata``
+^^^^^^^^^^^^^^^^^^^
+Updates metadata items for a specified account, or adds the specified
+metadata if there is no current metadata associated with the account::
+
+    rack files account update-metadata --metadata <key1=val1,key2=val2,...> [optional flags]
+
+``delete-metadata``
+^^^^^^^^^^^^^^^^^^^
+Deletes one or more metadata keys from an account::
+
+    rack files account delete-metadata  --metadata-keys <key1,key2,...> [optional flags]
+
+    
