@@ -183,11 +183,12 @@ this volume, use the ``--block-device`` parameter.
    The settings are:
 
    -  ``--block-device``
-      source=SOURCE,id=ID,dest=DEST,size=SIZE,shutdown=PRESERVE,bootindex=INDEX
+      source-type=SOURCE,source-id=ID,destination-type=DEST,
+      volume-size=SIZE,delete-on-termination=TRUE|FALSE
 
          **source-type=SOURCE**
              The type of object used to create the block device. Valid values
-             are ``volume``, ``snapshot``, ``image``, and ``blank``.
+             are ``volume``, and ``image``.
 
          **source-id=ID**
              The ID of the source. Use a volume ID if the ``source-type`` is
