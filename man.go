@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jrperritt/rack/commandoptions"
-	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
-	"github.com/jrperritt/rack/util"
+	"github.com/rackspace/rack/commandoptions"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	"github.com/rackspace/rack/util"
 )
 
 func man() {
@@ -63,7 +63,7 @@ func man() {
 	}
 
 	content += fmt.Sprintln(".SH BUGS")
-	content += fmt.Sprintln("See https://github.com/jrperritt/rack/issues")
+	content += fmt.Sprintln("See https://github.com/rackspace/rack/issues")
 
 	ioutil.WriteFile("rack.1", []byte(content), 0755)
 }
