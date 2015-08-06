@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -euo pipefail
+
+ROOT=$(cd $(dirname $0)/.. && pwd)
+
+[ -z "${CONTENT_STORE_APIKEY:-}" ] && {
+  echo "No API key set!" >&2
+  echo "export CONTENT_STORE_APIKEY=\"...\""
+  exit 1
+}
+
+exec docker run --rm \
+  -e CONTENT_STORE_URL=http://staging.developer.rackspace.com:8000 \
+  -e CONTENT_STORE_APIKEY=${CONTENT_STORE_APIKEY} \
+  -e CONTENT_ID_BASE=https://github.com/rackspace/rack \
+  -e TRAVIS_PULL_REQUEST="false" \
+  -v ${ROOT}/docs:/usr/control-repo \
+  quay.io/deconst/preparer-sphinx
