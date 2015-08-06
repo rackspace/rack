@@ -4,7 +4,7 @@
 Block storage
 =============
 
-This section lists all block storage commands supported by Rackspace CLI
+This section lists all block storage commands supported by Rackspace CLI.
 
 Commands
 --------
@@ -13,32 +13,9 @@ All block storage commands are based on this syntax::
 
    rack block-storage <resource> <action> [command flags]
 
-*Command flags* allow you to customize certain attributes of the command.
-Below is a table of some common *command flags*:
-
-+-----------------+--------------------------------------+
-| `Flags`         | Description                          |
-+-----------------+--------------------------------------+
-| `--size`        | Allows you to enter the size you     |
-|                 | want the volume to be. Valid values  |
-|                 | are between 75 and 1024.             |
-+-----------------+--------------------------------------+
-| `--name`        | Allows you to name the volume or     |
-|                 | snapshot.                            |
-+-----------------+--------------------------------------+
-| `--description` | Allows you to leave a description    |
-|                 | of the volume or snapshot.           |
-+-----------------+--------------------------------------+
-| `--volume-type` | Allows you to enter a volume type.   |
-+-----------------+--------------------------------------+
-| `--rename`      | Allows you to rename a volume.       |
-+-----------------+--------------------------------------+
-
-.. note::
-
-    Not every command flag for `rack cloud block-storage` is listed above. Flags work with some commands and not with others.
-    If you want to know what *flags* will work with a specific command, type the command in the correct
-    syntax, followed by the flag `--help`.
+*Command flags* allow you to customize certain attributes of the command,
+such as `--name` to name a volume. Type `rack block-storage <resourse> <action> --help`
+to bring up a list *command flags* specific to the command.
 
 ``volume``
 ~~~~~~~~~~
@@ -52,7 +29,7 @@ Block storage volume commands use this syntax::
 Retrieves a list of volumes::
 
     rack block-storage volume list [optional flags]
-
+    
 **Response**
 
 .. code::
@@ -68,7 +45,7 @@ Retrieves a list of volumes::
 Creates a volume::
 
     rack block-storage volume create --size <volumeSize> [optional flags]
-
+    
 **Response**
 
 .. code::
