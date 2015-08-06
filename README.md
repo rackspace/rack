@@ -23,7 +23,7 @@ and development.
 
 ## Download
 
-Multi-platform binaries are available to download at [https://developer.rackspace.com/downloads](link tbd).
+`rack` binaries are available for OSX, Linux, and Windows. [Download `rack` now](http://rackspace-cli.readthedocs.org/en/latest/configuration.html#installation).
 
 ## Build From Source
 
