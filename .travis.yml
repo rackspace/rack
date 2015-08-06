@@ -21,9 +21,9 @@ install:
 - go get -d -v ./...
 script:
   - if [[ $GIMME_OS == "linux" && $GIMME_ARCH == "amd64" ]]; then GOARCH=$GIMME_ARCH GOOS=$GIMME_OS go test github.com/rackspace/rack/commands/... -v; fi
+  - "./script/submit-docs.sh"
 before_deploy:
 - curl -X POST http://readthedocs.org/build/rackspace-cli
-- "./script/submit-docs.sh"
 - "./script/prep-travis-release.sh"
 - cd build
 deploy:
