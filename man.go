@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rackspace/rack/commandoptions"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	"github.com/rackspace/rack/util"
+	"github.com/jrperritt/rack/commandoptions"
+	"github.com/jrperritt/rack/internal/github.com/codegangsta/cli"
+	"github.com/jrperritt/rack/util"
 )
 
 func man() {
@@ -17,10 +17,10 @@ func man() {
 	content += fmt.Sprintf(`.TH man 1 "%s" "%s" "rack man page"`+"\n", time.Now().Format("06 May 2010"), util.Version)
 	content += fmt.Sprintln(`.SH NAME`)
 	content += fmt.Sprintf(`rack \- %s`+"\n", Usage())
-	content += fmt.Sprintln(`.SH SYNOPSIS`)
-	content += fmt.Sprintln("rack <command> <subcommand> <action> [OPTIONS]")
 	content += fmt.Sprintln(`.SH DESCRIPTION`)
 	content += fmt.Sprintf("%s\n\n\n", Desc())
+	content += fmt.Sprintln(`.SH SYNOPSIS`)
+	content += fmt.Sprintln("rack <command> <subcommand> <action> [OPTIONS]")
 
 	content += fmt.Sprintln("The following global options are available:")
 	for _, flag := range commandoptions.GlobalFlags() {
@@ -63,7 +63,7 @@ func man() {
 	}
 
 	content += fmt.Sprintln(".SH BUGS")
-	content += fmt.Sprintln("See https://github.com/rackspace/rack/issues")
+	content += fmt.Sprintln("See https://github.com/jrperritt/rack/issues")
 
 	ioutil.WriteFile("rack.1", []byte(content), 0755)
 }
