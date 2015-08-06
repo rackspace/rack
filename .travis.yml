@@ -3,6 +3,14 @@ go:
 - 1.4
 sudo: false
 env:
+  global:
+  # API key for deconst staging
+  # Broken into pieces because our API keys are obnoxiously long
+  - secure: "KRqS0nVVNqK3u/RGDOun1G0D9ChZs/WyDBYlJXnxMNlFDBGxZ6CNCkTkz78Q68NB7m0Ct3hBHO5Ct9QJwuJgWPP6njA9Uozb93XhFm0q82a3pDDFqW2ouHJOakWYlUsifsrN0j84X6ijgoNeV2wEjBpWWcGqwso3sfXvqHnxK74="
+  - secure: "lRboRcdHDDr7F0Wtz8AZCRM46Uo1s0LfUtLbu4YGuVQB0lnxqrLOnzlL8YY6ExW8LL12Dgl4datXAz3+EkGp3BFlapvVag5CrQVlfRgKSpqfRbpFLlkL0vLmTtqxmTxQX99wUlIrrzfiX8O0mYcCkR/wvB49eZIzRNvlaq6FDYc="
+  - secure: "mRGM/OBRP0ZYnRm3h/X2+o/E1TMxcBwHpgwlKhTQ/aSp0Ml8S1i4/NkpmB03dnoOrAyRNR+3wayBtS5AJ+WbPHBD5g91tfcUY5Gpe/HUSauaDtdcMh1DACyRpRCtp8Sfl+vqIImqQ4TYnp8fwjANIXUqfCxHlqycVb9oSY1n9wE="
+  - CONTENT_STORE_URL=http://staging.developer.rackspace.com:8000/
+  - CONTENT_ID_BASE=https://github.com/rackspace/rack/
   matrix:
   - GIMME_OS=linux GIMME_ARCH=amd64
   - GIMME_OS=darwin GIMME_ARCH=amd64
@@ -13,6 +21,7 @@ install:
 - go get -d -v ./...
 script:
   - if [[ $GIMME_OS == "linux" && $GIMME_ARCH == "amd64" ]]; then GOARCH=$GIMME_ARCH GOOS=$GIMME_OS go test github.com/rackspace/rack/commands/... -v; fi
+  - "./script/submit-docs.sh"
 before_deploy:
 - curl -X POST http://readthedocs.org/build/rackspace-cli
 - "./script/prep-travis-release.sh"
