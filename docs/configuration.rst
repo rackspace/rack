@@ -12,7 +12,7 @@ Installation and Configuration
 Installation
 ------------
 
-The Rackspace CLI ``rack`` is a self-contained binary writted in go_ this means
+The Rackspace CLI ``rack`` is a self-contained binary writted in go_. This means
 that installation is as simple as downloading the relevant binary for your
 operating system and ensuring it is on your path.
 
