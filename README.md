@@ -1,20 +1,31 @@
 # rack
-The official command line interface for the Rackspace Cloud
+The official command line interface for the Rackspace Cloud.
+
+`rack` provides a consistent interface for interacting with the Rackspace Cloud. For example, creating a new server:
+
+```
+rack servers instance create
+    --name my-server
+    --image-id 5ed162cc-b4eb-4371-b24a-a0ae73376c73
+    --flavor-id general1-1
+    --keypair my-laptop
+
+ID		9818861f-2f14-437f-89b0-a36dfa1831b7
+AdminPass	4vLb2PiqUGdP
+```
+
+For complete documentation, see [the docs](http://rackspace-cli.readthedocs.org/en/latest/).
 
 ## Warning
 
 This repo is under active development and is not ready for anything but testing
 and development.
 
-## Documentation
-
-For complete documentation, see [the docs](http://rackspace-cli.readthedocs.org/en/latest/).
-
 ## Download
 
 Multi-platform binaries are available to download at [https://developer.rackspace.com/downloads](link tbd).
 
-## Build from Source
+## Build From Source
 
 Make sure you have [Go installed](https://golang.org/doc/install) and the [`GOPATH`](https://golang.org/doc/code.html#GOPATH) environment variable set.
 ```sh
