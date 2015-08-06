@@ -4,7 +4,7 @@ The official command line interface for the Rackspace Cloud.
 `rack` provides a consistent interface for interacting with the Rackspace Cloud. For example, creating a new server:
 
 ```
-rack servers instance create
+$ rack servers instance create
     --name my-server
     --image-id 5ed162cc-b4eb-4371-b24a-a0ae73376c73
     --flavor-id general1-1
