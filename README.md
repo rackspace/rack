@@ -80,6 +80,10 @@ $ rack servers instance list --username user1 --api-key 123456789 --region DFW
 
 ```
 
+### Precedence
+
+`rack` will first look for credentials as flags. Secondly, `rack` will use a named profile, or `default` if there is a default profile. Lastly, `rack` will look for environment variables.
+
 ## Bash Completion
 
 At any time, you can run `rack init` which will create the auto-completion file in `~/.rack/bash_autocomplete` and add it to `~/.bash_profile`. You'll need to restart your terminal session to enable auto-completion.
