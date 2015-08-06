@@ -14,7 +14,7 @@ All block storage commands are based on this syntax::
    rack block-storage <resource> <action> [command flags]
 
 *Command flags* allow you to customize certain attributes of the command,
-such as `--name` to name a volume. Type ``rack block-storage <resourse> <action> --help``
+such as ``--name`` to name a volume. Type ``rack block-storage <resourse> <action> --help``
 to bring up a list *command flags* specific to the command.
 
 ``volume``
