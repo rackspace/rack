@@ -26,7 +26,7 @@ go build -o $GOPATH/bin/rack
 
 `rack` has a number of ways of getting credentials configured. The easiest way is to use `rack configure` to setup a profile:
 
-```bash
+```
 $rack configure
 
     This interactive session will walk you through creating
@@ -41,13 +41,13 @@ $rack configure
 
 This will create a configuration file at `~/.rack/config` which will store your credentials. When using the default profile, you don't need to specify the profile:
 
-```bash
+```
 rack servers instance list
 ```
 
 However, if you've named a profile, you can use the `--profile` flag to specify it explicitly:
 
-```bash
+```
 rack servers instance list --profile staging
 ```
 
@@ -63,7 +63,7 @@ In addition to using the config file, you can also use environment variables. Th
 
 Lastly, you can also set your authentication credentials as flags:
 
-```bash
+```
 
 $ rack servers instance list --username user1 --api-key 123456789 --region DFW
 
