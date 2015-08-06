@@ -38,7 +38,7 @@ go build -o $GOPATH/bin/rack
 `rack` has a number of ways of getting credentials configured. The easiest way is to use `rack configure` to setup a profile:
 
 ```
-$rack configure
+$ rack configure
 
     This interactive session will walk you through creating
     a profile in your configuration file. You may fill in all or none of the
