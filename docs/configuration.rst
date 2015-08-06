@@ -4,10 +4,10 @@ Installation and Configuration
 ==============================
 
 .. warning::
-   The installation / configuration instructions here must be
+   The installation/configuration instructions here must be
    considered buyer-beware. As development continues, a range of configuration
-   options will be supported; as such what works today may not work tomorrow,
-   but it works right now so that's ok.
+   options will be supported; what works today may not work tomorrow, but it
+   works right now so that's ok.
 
 Installation
 ------------
@@ -64,17 +64,17 @@ The following commands will set up Rackspace CLI. First, open Powershell_ise and
 
   #requires -Version 3
   $DownloadPath = 'C:\Tools'
-  
+
   Write-Output -InputObject "[$(Get-Date)] Status  :: Set the Tools Directory $DownloadPath"
   New-Item -Path $DownloadPath -ItemType Directory -ErrorAction SilentlyContinue > $null
   Set-Location -Path $DownloadPath -ErrorAction SilentlyContinue
-  
+
   Write-Output -InputObject "[$(Get-Date)] Status  :: Download Rackspace CLI in C:\Tools"
   Invoke-WebRequest -Uri 'https://goo.gl/NMvmcx/Windows/amd64/rack.exe' -Method Get -OutFile rack.exe
-  
+
   Write-Output -InputObject "[$(Get-Date)] Status  :: Unblock the executable file rack.exe"
   Unblock-File -Path $("$DownloadPath\rack.exe")
-  
+
   Write-Output -InputObject "[$(Get-Date)] Status  :: Permanently set the path $DownloadPath to the Environment variable (Reboot required)."
   [System.Environment]::SetEnvironmentVariable('Path', $env:Path + 'C:\Tools', [System.EnvironmentVariableTarget]::Machine)
   Write-Output -InputObject "[$(Get-Date)] Status  :: Temporarily set the path $DownloadPath to the Environment variable for immediate use in the current powershell session"
@@ -103,9 +103,7 @@ run the interactive ``configure`` command.
    Windows users should use PowerShell, not PowerShell ISE to run this
    command.
 
-    rack configure
-
-This command will automatically create a configuration file for you if it
+``configure`` will automatically create a configuration file for you if it
 doesn't exist and walk you through creating a profile for it::
 
     rack configure
@@ -153,6 +151,8 @@ The config file format is like the following::
     api-key=<another rackspace api key>
 
 In the example above there is a default profile that doesn't have a named section. "another-profile" is a different profile in the config file. When using the default profile, you don't need to supply a flag when executing ``rack``. A specific profile can be specified on the command-line with the ``profile`` flag.
+
+::
 
     rack --profile another-profile servers instance list
 

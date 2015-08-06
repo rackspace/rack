@@ -1,6 +1,6 @@
 .. _block_storage:
 
-block-storage
+Block Storage
 =============
 
 Commands for Rackspace Cloud Block Storage.
@@ -18,7 +18,7 @@ Commands
 ``volume``
 ~~~~~~~~~~
 
-  Block Storage Volume operations
+Block Storage Volume operations
 
 ``list``
 ^^^^^^^^
@@ -58,7 +58,7 @@ Usage::
 ``snapshot``
 ~~~~~~~~~~~~
 
-  Block Storage Snapshot operations
+Block Storage Snapshot operations
 
 ``list``
 ^^^^^^^^

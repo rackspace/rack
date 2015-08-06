@@ -22,20 +22,20 @@ Options
 ``--output``
 ~~~~~~~~~~~~
 
-  (string) The format in which to return the output. Options are: table, json, csv. Default is 'table'.
+(string) The format in which to return the output. Options are: table, json, csv. Default is 'table'.
 
 ``json``
 ^^^^^^^^
 
-  Return output in JSON.
+Return output in JSON.
 
-  Given::
+Given::
 
-      rack servers instance list
-      ID	        Name		Status	Public IPv4	Private IPv4	Image	Flavor
-      GUID	my_server	ACTIVE	101.130.19.31	10.208.128.233	GUID	io1-30
+    rack servers instance list
+    ID	        Name		Status	Public IPv4	Private IPv4	Image	Flavor
+    GUID	my_server	ACTIVE	101.130.19.31	10.208.128.233	GUID	io1-30
 
-  Adding the ``--output json`` flag returns::
+Adding the ``--output json`` flag returns::
 
     rack servers instance list --output json
     [
@@ -50,114 +50,114 @@ Options
       }
     ]
 
-  When the output pipe is **not** a tty, the JSON is no longer "pretty printed" and
-  can be used when passing straight into other commands that require a JSON_
-  payload.
+When the output pipe is **not** a tty, the JSON is no longer "pretty printed" and
+can be used when passing straight into other commands that require a JSON_
+payload.
 
 ``table``
 ^^^^^^^^^
 
-  Return output in tabular format. Default output format for ``rack``.
+Return output in tabular format. Default output format for ``rack``.
 
-  Given::
+Given::
 
-      rack servers instance list
-      ID	        Name		Status	Public IPv4	Private IPv4	Image	Flavor
-      GUID	my_server	ACTIVE	101.130.19.31	10.208.128.233	GUID	io1-30
+    rack servers instance list
+    ID	        Name		Status	Public IPv4	Private IPv4	Image	Flavor
+    GUID	my_server	ACTIVE	101.130.19.31	10.208.128.233	GUID	io1-30
 
-  This presents a well formatted table with headers.
+This presents a well formatted table with headers.
 
-  You can add the ``--output table`` option if you have set defaults to JSON,
-  CSV, and so on elsewhere. You can use the ``--no-header`` option to output
-  without headers.
+You can add the ``--output table`` option if you have set defaults to JSON,
+CSV, and so on elsewhere. You can use the ``--no-header`` option to output
+without headers.
 
 ``csv``
 ^^^^^^^
 
-  Return output in csv format.
+Return output in csv format.
 
-  CSV, or comma separated output is useful for passing to other operating system
-  tools, importing into Excel, Google Sheets, or another data tool.
+CSV, or comma separated output is useful for passing to other operating system
+tools, importing into Excel, Google Sheets, or another data tool.
 
-  Given::
+Given::
 
-      rack servers instance list
-      ID	        Name		Status	Public IPv4	Private IPv4	Image	Flavor
-      GUID	my_server	ACTIVE	101.130.19.31	10.208.128.233	GUID	io1-30
+  rack servers instance list
+  ID	        Name		Status	Public IPv4	Private IPv4	Image	Flavor
+  GUID	my_server	ACTIVE	101.130.19.31	10.208.128.233	GUID	io1-30
 
-  Adding the ``--output csv`` option::
+Adding the ``--output csv`` option::
 
-      rack servers instance list --output csv
-      ID,Name,Status,Public IPv4,Private IPv4,Image,Flavor
-      GUID,my_server,ACTIVE,101.130.19.31,10.208.128.233,GUID,io1-30
+  rack servers instance list --output csv
+  ID,Name,Status,Public IPv4,Private IPv4,Image,Flavor
+  GUID,my_server,ACTIVE,101.130.19.31,10.208.128.233,GUID,io1-30
 
-  This presents a compact format with appropriate CSV headers.
+This presents a compact format with appropriate CSV headers.
 
 ``--log``
 ~~~~~~~~~
 
-  (string) Log relevant information about the HTTP request. Options are: info, debug.
+(string) Log relevant information about the HTTP request. Options are: info, debug.
 
-  Example: ``rack servers keypair list --log info``
+Example: ``rack servers keypair list --log info``
 
 ``--username``
 ~~~~~~~~~~~~~~
 
-  (string) The Rackspace username to use for authentication.
+(string) The Rackspace username to use for authentication.
 
 ``--api-key``
 ~~~~~~~~~~~~~
 
-  (string) The Rackspace API key to use for authentication.
+(string) The Rackspace API key to use for authentication.
 
 ``--auth-tenant-id``
 ~~~~~~~~~~~~~~~~~~~~
 
-  (string) The tenant ID to use for authentication. May only be provided as a command-line flag.
-  (Prefixed with 'auth-' so as to not collide with the ``tenant-id``` command flags.)
+(string) The tenant ID to use for authentication. May only be provided as a command-line flag.
+(Prefixed with 'auth-' so as to not collide with the ``tenant-id``` command flags.)
 
 ``--auth-token``
 ~~~~~~~~~~~~~~~~
 
-  (string) The token to use for authentication. May only be provided as a command-line flag.
-  Must be used with the ``auth-tenant-id`` flag.
+(string) The token to use for authentication. May only be provided as a command-line flag.
+Must be used with the ``auth-tenant-id`` flag.
 
 ``--region``
 ~~~~~~~~~~~~
 
-  (string) The Rackspace region to use for authentication.
+(string) The Rackspace region to use for authentication.
 
 ``--auth-url``
 ~~~~~~~~~~~~~~
 
-  (string) The Rackspace URL to use for authentication. If not provided, this
-  will default to the public U.S. Rackspace endpoint.
+(string) The Rackspace URL to use for authentication. If not provided, this
+will default to the public U.S. Rackspace endpoint.
 
 ``--profile``
 ~~~~~~~~~~~~~
 
-  (string) The name of the profile (in the config file) to use to look for authentication credentials.
+(string) The name of the profile (in the config file) to use to look for authentication credentials.
 
 ``--no-cache``
 ~~~~~~~~~~~~~~
 
-  (boolean) Don't get or set authentication credentials in the rack cache.
+(boolean) Don't get or set authentication credentials in the rack cache.
 
 ``--no-header``
 ~~~~~~~~~~~~~~~
 
-  (boolean) Don't set the header for CSV nor tabular output. Helpful if piping output from a ``list`` command.
+(boolean) Don't set the header for CSV nor tabular output. Helpful if piping output from a ``list`` command.
 
 ``--use-service-net``
 ~~~~~~~~~~~~~~~~~~~~~
 
-  (boolean) Use the Rackspace internal URL to execute the request. This will only be useful when running a
-  ``rack`` command from a Rackspace server.
+(boolean) Use the Rackspace internal URL to execute the request. This will only be useful when running a
+``rack`` command from a Rackspace server.
 
 ``--help, -h``
 ~~~~~~~~~~~~~~
 
-  (boolean) Show help in a given context.
+(boolean) Show help in a given context.
 
 Help is available on the base level; for example::
 
@@ -201,7 +201,7 @@ And it is available per command::
        help, h	Shows a list of commands or help for one command
 
 
-And again, per subcommand:
+And again, per subcommand::
 
     rack servers keypair --help
     NAME:

@@ -1,7 +1,7 @@
 .. _serversexamples:
 
 ======================
-Cloud Servers examples
+Servers
 ======================
 
 Before you get started on any examples, be sure you have entered your
@@ -37,7 +37,7 @@ Search for existing servers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you have a lot of servers, the `rack` command lets you search through
-the list. 
+the list.
 
 Use grep to search through the list of available Cloud Servers running in your
 account::
@@ -178,32 +178,29 @@ enable simpler migration when a server fails, or a storage volume that remains
 intact even after a server is shutdown or deleted.
 
 To create a bootable volume from an image and launch an instance from
-this volume, use the ``--block-device`` parameter.
+this volume, use the ``--block-device`` parameter::
 
-   The settings are:
+  --block-device "source-type=SOURCE,source-id=ID,destination-type=DEST,volume-size=SIZE,shutdown=PRESERVE,bootindex=INDEX"
 
-   -  ``--block-device``
-      source=SOURCE,id=ID,dest=DEST,size=SIZE,shutdown=PRESERVE,bootindex=INDEX
+- ``source-type=SOURCE``
+  The type of object used to create the block device. Valid values
+  are ``volume``, ``snapshot``, ``image``, and ``blank``.
 
-         **source-type=SOURCE**
-             The type of object used to create the block device. Valid values
-             are ``volume``, ``snapshot``, ``image``, and ``blank``.
+- ``source-id=ID``
+  The ID of the source. Use a volume ID if the ``source-type`` is
+  a volume and an image ID if the ``source-type`` is image.
 
-         **source-id=ID**
-             The ID of the source. Use a volume ID if the ``source-type`` is
-             a volume and an image ID if the ``source-type`` is image.
+- ``destination-type=DEST``
+  The type of the target virtual device. Valid values are ``volume``
+  and ``local``.
 
-         **destination-type=DEST**
-             The type of the target virtual device. Valid values are ``volume``
-             and ``local``.
+- ``volume-size=SIZE``
+  The size of the volume that is created in GB.
 
-         **volume-size=SIZE**
-             The size of the volume that is created in GB.
-
-         **delete-on-termination={true\|false}**
-             What to do with the volume when the instance is deleted. Use
-             ``false`` to delete the volume and ``true`` to delete the
-             volume when the instance is deleted.
+- ``delete-on-termination={true\|false}``
+  What to do with the volume when the instance is deleted. Use
+  ``false`` to delete the volume and ``true`` to delete the
+  volume when the instance is deleted.
 
 Use this command to boot from a volume::
 
