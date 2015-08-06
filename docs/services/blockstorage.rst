@@ -11,7 +11,7 @@ Commands
 
 All block storage commands are based on this syntax::
 
-   rack block-storage <subservice> <action> [command flags]
+   rack block-storage <resource> <action> [command flags]
 
 *Command flags* allow you to customize certain attributes of the command.
 Below is a table of some common *command flags*:
@@ -36,8 +36,8 @@ Below is a table of some common *command flags*:
 
 .. note::
 
-    The *command flags* above will work with some commands and not with others. If you want
-    to know what *flags* will work with the specific command, type the command in the correct
+    Not every command flag for `rack cloud block-storage` is listed above. Flags work with some commands and not with others.
+    If you want to know what *flags* will work with a specific command, type the command in the correct
     syntax, followed by the flag `--help`.
 
 ``volume``
