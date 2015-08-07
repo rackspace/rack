@@ -20,7 +20,7 @@ VERSION:
    {{.Version}}
    {{end}}{{if .Commands}}
 COMMANDS:
-   {{range .Commands}}{{join .Names ", "}}{{ "\t" }}{{.Usage}}
+   {{range .Commands}}{{join .Names ", "}}{{ "\t" }}{{wrap .Usage}}
    {{end}}{{end}}
 `
 
@@ -41,9 +41,11 @@ var subcommandHelpTemplate = `NAME:
    {{.Name}} - {{.Usage}}
 USAGE:
    {{.Name}}{{if eq (len (split .Name " ")) 2}} <subcommand>{{end}} <action> [FLAGS]
-{{if eq (len (split .Name " ")) 2}}SUBCOMMANDS{{else}}ACTIONS{{end}}:
-   {{range .Commands}}{{join .Names ", "}}{{ "\t" }}{{.Usage}}
-   {{end}}
+{{if eq (len (split .Name " ")) 2}}SUBCOMMANDS:
+   {{range .Commands}}{{join .Names ", "}}{{ "\t" }}{{wrap .Usage}}
+   {{end}}{{else}}ACTIONS:
+	 {{range .Commands}}{{join .Names ", "}}{{ "\t" }}{{.Usage}}
+	 {{end}}{{end}}
 `
 
 func printHelp(out io.Writer, templ string, data interface{}) {
@@ -53,6 +55,7 @@ func printHelp(out io.Writer, templ string, data interface{}) {
 		"isGlobalFlag":    isGlobalFlag,
 		"isNotGlobalFlag": isNotGlobalFlag,
 		"flag":            flag,
+		"wrap":            wrap,
 	}
 
 	w := tabwriter.NewWriter(out, 0, 8, 1, '\t', 0)

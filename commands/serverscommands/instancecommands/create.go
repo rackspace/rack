@@ -296,6 +296,5 @@ func blockDeviceUsage() string {
 }
 
 func wrap(textSlice []string) string {
-
 	return strings.Join(textSlice, "\n")
 }
