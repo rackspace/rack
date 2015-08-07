@@ -36,7 +36,7 @@ func flagsCreate() []cli.Flag {
 	}
 }
 
-var keysCreate = []string{"ID", "Name", "Description", "Size", "VolumeType", "SnapshotID", "Attachments", "CreatedAt", "Metadata"}
+var keysCreate = []string{"ID", "Name", "Description", "Size", "VolumeID", "VolumeType", "SnapshotID", "Attachments", "CreatedAt", "Metadata"}
 
 type paramsCreate struct {
 	opts *osSnapshots.CreateOpts
