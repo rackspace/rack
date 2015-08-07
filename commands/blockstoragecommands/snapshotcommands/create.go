@@ -36,7 +36,7 @@ func flagsCreate() []cli.Flag {
 	}
 }
 
-var keysCreate = []string{"ID", "Name", "Description", "Size", "VolumeType", "SnapshotID", "Attachments", "CreatedAt"}
+var keysCreate = []string{"ID", "Name", "Description", "Size", "VolumeType", "SnapshotID", "Attachments", "CreatedAt", "Metadata"}
 
 type paramsCreate struct {
 	opts *osSnapshots.CreateOpts
@@ -94,4 +94,12 @@ func (command *commandCreate) Execute(resource *handler.Resource) {
 		return
 	}
 	resource.Result = snapshotSingle(snapshot)
+}
+
+func (command *commandCreate) PreCSV(resource *handler.Resource) {
+	resource.FlattenMap("Metadata")
+}
+
+func (command *commandCreate) PreTable(resource *handler.Resource) {
+	command.PreCSV(resource)
 }

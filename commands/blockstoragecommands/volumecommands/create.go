@@ -40,7 +40,7 @@ func flagsCreate() []cli.Flag {
 	}
 }
 
-var keysCreate = []string{"ID", "Name", "Description", "Size", "VolumeType", "SnapshotID", "Attachments", "CreatedAt"}
+var keysCreate = []string{"ID", "Name", "Description", "Size", "VolumeType", "SnapshotID", "Attachments", "CreatedAt", "Metadata"}
 
 type paramsCreate struct {
 	opts *osVolumes.CreateOpts
@@ -99,4 +99,13 @@ func (command *commandCreate) Execute(resource *handler.Resource) {
 		return
 	}
 	resource.Result = volumeSingle(volume)
+}
+
+func (command *commandCreate) PreCSV(resource *handler.Resource) {
+	resource.FlattenMap("Metadata")
+	resource.FlattenMap("Attachments")
+}
+
+func (command *commandCreate) PreTable(resource *handler.Resource) {
+	command.PreCSV(resource)
 }
