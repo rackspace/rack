@@ -54,7 +54,7 @@ func Cmds() []cli.Command {
 		{
 			Name: "init",
 			Usage: strings.Join([]string{"For Linux and OS X, creates the `rack` man page and sets up command completion for the Bash shell.",
-				"\tFor Windows, creates a `posh_autocomplete.ps1` file in the `$HOME/.rack` directory. You must run the file to set up command completion."}, "\n"),
+				"For Windows, creates a `posh_autocomplete.ps1` file in the `$HOME/.rack` directory. Windows users must run the file to set up command completion."}, "\n"),
 			Action: func(c *cli.Context) {
 				setup.Init(c)
 				man()

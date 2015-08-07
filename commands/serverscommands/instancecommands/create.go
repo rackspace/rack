@@ -80,18 +80,8 @@ func flagsCreate() []cli.Flag {
 			Usage: "[optional] The name of the already-existing SSH KeyPair to be injected into this server.",
 		},
 		cli.StringFlag{
-			Name: "block-device",
-			Usage: strings.Join([]string{"[optional] Used to boot from volume.",
-				"\tIf provided, the instance will be created based upon the comma-separated key=value pairs provided to this flag.",
-				"\tOptions:",
-				"\t\tsource-type\t[required] The source type of the device. Options: volume, snapshot, image.",
-				"\t\tsource-id\t[required] The ID of the source resource (volume, snapshot, or image) from which to create the instance.",
-				"\t\tboot-index\t[optional] The boot index of the device. Default is 0.",
-				"\t\tdelete-on-termination\t[optional] Whether or not to delete the attached volume when the server is delete. Default is false. Options: true, false.",
-				"\t\tdestination-type\t[optional] The type that gets created. Options: volume, local.",
-				"\t\tvolume-size\t[optional] The size of the volume to create (in gigabytes).",
-				"\tExamle: --block-device source-type=image,source-id=bb02b1a3-bc77-4d17-ab5b-421d89850fca,volume-size=100,destination-type=volume,delete-on-termination=false",
-			}, "\n"),
+			Name:  "block-device",
+			Usage: blockDeviceUsage(),
 		},
 	}
 }
@@ -280,4 +270,31 @@ func (command *commandCreate) Execute(resource *handler.Resource) {
 
 func (command *commandCreate) StdinField() string {
 	return "name"
+}
+
+func blockDeviceUsage() string {
+	return wrap([]string{"[optional] Used to boot from volume. If provided, the instance will be created based upon the comma-separated key=value pairs provided to this flag.",
+		"Options:",
+		"\tsource-type [required] The source type of the device.",
+		"\t\tOptions: volume, snapshot, image.",
+		"\tsource-id [required] The ID of the source resource (volume,",
+		"\t\tsnapshot, or image) from which to create the instance.",
+		"\tboot-index [optional] The boot index of the device.",
+		"\t\tDefault is 0.",
+		"\tdelete-on-termination [optional] Whether or not to delete",
+		"\t\tthe attached volume when the server is delete.",
+		"\t\tDefault is false. Options: true, false.",
+		"\tdestination-type [optional] The type that gets created.",
+		"\t\tOptions: volume, local.",
+		"\tvolume-size [optional] The size of the volume to",
+		"\t\tcreate (in gigabytes).",
+		"\tExample: --block-device \"source-type=image,",
+		"\t\tsource-id=bb02b1a3-bc77-4d17-ab5b-421d89850fca,",
+		"\t\tvolume-size=100,destination-type=volume,",
+		"\t\tdelete-on-termination=false\"",
+	})
+}
+
+func wrap(textSlice []string) string {
+	return strings.Join(textSlice, "\n")
 }

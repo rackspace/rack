@@ -19,7 +19,7 @@ func CommandFlags(f func() []cli.Flag, keys []string) []cli.Flag {
 		}
 		flagFields := cli.StringFlag{
 			Name:  "fields",
-			Usage: fmt.Sprintf("[optional] Only return these comma-separated case-insensitive fields.\n\tChoices: %s", strings.Join(fields, ", ")),
+			Usage: fmt.Sprintf("[optional] Only return these comma-separated case-insensitive fields.\nChoices: %s", strings.Join(fields, ", ")),
 		}
 		of = append(of, flagFields)
 	}
