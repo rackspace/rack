@@ -11,7 +11,10 @@ import (
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud"
 	osBFV "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/bootfromvolume"
+	osFlavors "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/flavors"
+	osImages "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/images"
 	osServers "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	bfv "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/bootfromvolume"
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
@@ -271,6 +274,42 @@ func (command *commandCreate) Execute(resource *handler.Resource) {
 			err = errors.New("One and only one of the --image-id and the --image-name flags must be provided.")
 		case *osServers.ErrNeitherFlavorIDNorFlavorNameProvided:
 			err = errors.New("One and only one of the --flavor-id and the --flavor-name flags must be provided.")
+		case *gophercloud.UnexpectedResponseCodeError:
+			switch err.(*gophercloud.UnexpectedResponseCodeError).Actual {
+			case 403:
+				uuid := opts.ImageRef
+				if uuid == "" {
+					id, err := osImages.IDFromName(command.Ctx.ServiceClient, opts.ImageName)
+					if err != nil {
+						resource.Err = err
+						return
+					}
+					uuid = id
+				}
+				flavorID := opts.FlavorRef
+				if flavorID == "" {
+					id, err := osFlavors.IDFromName(command.Ctx.ServiceClient, opts.FlavorName)
+					if err != nil {
+						resource.Err = err
+						return
+					}
+					flavorID = id
+				}
+				resource.Params.(*paramsCreate).opts.FlavorRef = flavorID
+				resource.Params.(*paramsCreate).opts.BlockDevice = []osBFV.BlockDevice{
+					osBFV.BlockDevice{
+						VolumeSize:          50,
+						DeleteOnTermination: false,
+						UUID:                uuid,
+						SourceType:          "image",
+						DestinationType:     "volume",
+					},
+				}
+				resource.Params.(*paramsCreate).opts.ImageName = ""
+				resource.Params.(*paramsCreate).opts.ImageRef = ""
+				command.Execute(resource)
+				return
+			}
 		}
 		resource.Err = err
 		return
