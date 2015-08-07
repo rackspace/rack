@@ -27,6 +27,14 @@ func (resource *Resource) FlattenMap(key string) {
 	res := resource.Result.(map[string]interface{})
 	if m, ok := res[key]; ok && util.Contains(keys, key) {
 		switch m.(type) {
+		case []map[string]interface{}:
+			for i, hashmap := range m.([]map[string]interface{}) {
+				for k, v := range hashmap {
+					newKey := fmt.Sprintf("%s%d:%s", key, i, k)
+					res[newKey] = v
+					keys = append(keys, newKey)
+				}
+			}
 		case map[string]interface{}:
 			for k, v := range m.(map[string]interface{}) {
 				newKey := fmt.Sprintf("%s:%s", key, k)

@@ -37,7 +37,7 @@ func flagsList() []cli.Flag {
 	}
 }
 
-var keysList = []string{"ID", "Name", "Size", "Status", "VolumeID", "VolumeType", "SnapshotID", "Bootable", "Attachments"}
+var keysList = []string{"ID", "Name", "Size", "Status", "VolumeID", "VolumeType", "SnapshotID", "Bootable"}
 
 type paramsList struct {
 	opts *osSnapshots.ListOpts
