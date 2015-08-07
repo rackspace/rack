@@ -4,7 +4,7 @@
 Block storage
 =============
 
-This section lists all block storage commands supported by Rackspace CLI
+This section lists all block storage commands supported by Rackspace CLI.
 
 Commands
 --------
@@ -13,32 +13,9 @@ All block storage commands are based on this syntax::
 
    rack block-storage <resource> <action> [command flags]
 
-*Command flags* allow you to customize certain attributes of the command.
-Below is a table of some of the most common *command flags*:
-
-+-----------------+--------------------------------------+
-| `Flags`         | Description                          |
-+-----------------+--------------------------------------+
-| `--size`        | Allows you to enter the size you     |
-|                 | want the volume to be. Valid values  |
-|                 | are between 75 and 1024.             |
-+-----------------+--------------------------------------+
-| `--name`        | Allows you to name the volume or     |
-|                 | snapshot.                            |
-+-----------------+--------------------------------------+
-| `--description` | Allows you to leave a description    |
-|                 | of the volume or snapshot.           |
-+-----------------+--------------------------------------+
-| `--volume-type` | Allows you to enter a volume type.   |
-+-----------------+--------------------------------------+
-| `--rename`      | Allows you to rename a volume.       |
-+-----------------+--------------------------------------+
-
-.. note::
-
-    *Command flags* will work with some commands and not with others. If you want
-    to know what *flags* will work with the specific command, type
-    `rack block-storage <action> --help`.
+*Command flags* allow you to customize certain attributes of the command,
+such as ``--name`` to name a volume. Type ``rack block-storage <resourse> <action> --help``
+to bring up a list *command flags* specific to the command.
 
 ``volume``
 ~~~~~~~~~~
@@ -52,11 +29,12 @@ Block storage volume commands use this syntax::
 Retrieves a list of volumes::
 
     rack block-storage volume list [optional flags]
-
+    
 **Response**
 
 .. code::
-
+   
+    $ rack block-storage volume list
     ID					                          Name	 Size	 Status		    Description	VolumeType	SnapshotID	Attachments														Created
     81c7a7e5-01a5-44bb-9b43-0cc9f7c4e423		     75	   available		            SATA				[]															<nil>
     a7c97db7-a0d3-495b-9ba3-1cb9dd9cf12c	Store	 75	   in-use			            	SATA			[map[host_name:<nil> device:/dev/xvdb server_id:8a254ea3-77b5-4f74-a893-8d2d51ae2cca id:a7c97db7-a0d3-495b-9ba3-1cb9dd9cf12c volume_id:a7c97db7-a0d3-495b-9ba3-1cb9dd9cf12c]]	<nil>
@@ -67,11 +45,12 @@ Retrieves a list of volumes::
 Creates a volume::
 
     rack block-storage volume create --size <volumeSize> [optional flags]
-
+    
 **Response**
 
 .. code::
-
+    
+    $ rack block-storage volume create --size 75 --name Response
     ID		66dcbe53-1b62-4a15-adc2-e46e78b95f8b
     Name		Response
     Description
@@ -92,7 +71,8 @@ Retrieves details on a specified volume::
 **Response**
 
 .. code::
-
+    
+    $ rack block-storage volume get --name Response
     ID		66dcbe53-1b62-4a15-adc2-e46e78b95f8b
     Name		Response
     Description
@@ -122,8 +102,9 @@ Permanently removes a volume::
 **Response**
 
 .. code::
-
-    Deleting volume [volume-id]
+    
+    $ rack block-storage volume delete --name Response
+    Deleting volume [66dcbe53-1b62-4a15-adc2-e46e78b95f8b]
 
 ``snapshot``
 ~~~~~~~~~~~~
@@ -142,6 +123,7 @@ Retrieves a list of snapshots::
 
 .. code::
 
+    $ rack block-storage snapshot list
     ID				                          	Name	Size	Status		VolumeID				                      VolumeType	SnapshotID	Bootable	Attachments
     180a6c5c-ad6d-4cb6-846f-d500d67e59a5		    75	  available	81c7a7e5-01a5-44bb-9b43-0cc9f7c4e423
 
@@ -154,7 +136,8 @@ Creates a snapshot based on a specified volume id::
 **Response**
 
 .. code::
-
+    
+    $ rack block-storage snapshot create --volume-id 66dcbe53-1b62-4a15-adc2-e46e78b95f8b --name Snapshot1
     ID		4aa6ae9b-9b1d-4870-9192-8da72df7473e
     Name		Snapshot1
     Description
@@ -176,6 +159,7 @@ Retrieves details on a specified snapshot::
 
 .. code::
 
+    $ rack block-storage snapshot get --name Snapshot1
     ID		4aa6ae9b-9b1d-4870-9192-8da72df7473e
     Name		Snapshot1
     Size		75
@@ -199,4 +183,5 @@ Permanently removes a snapshot::
 
 .. code::
 
-    Deleting snapshot [snapshotID]
+    $ rack block-storage snapshot delete --name Snapshot1 
+    Deleting snapshot [4aa6ae9b-9b1d-4870-9192-8da72df7473e]
