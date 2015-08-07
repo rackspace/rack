@@ -36,7 +36,7 @@ func flagsGet() []cli.Flag {
 	}
 }
 
-var keysGet = []string{"ID", "Name", "Description", "Size", "VolumeType", "SnapshotID", "Attachments", "CreatedAt"}
+var keysGet = []string{"ID", "Name", "Bootable", "Description", "Size", "VolumeType", "SnapshotID", "SourceVolID", "Attachments", "CreatedAt", "Metadata"}
 
 type paramsGet struct {
 	volumeID string
@@ -96,4 +96,13 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 
 func (command *commandGet) StdinField() string {
 	return "id"
+}
+
+func (command *commandGet) PreCSV(resource *handler.Resource) {
+	resource.FlattenMap("Metadata")
+	resource.FlattenMap("Attachments")
+}
+
+func (command *commandGet) PreTable(resource *handler.Resource) {
+	command.PreCSV(resource)
 }
