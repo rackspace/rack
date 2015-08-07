@@ -164,7 +164,7 @@ Deletes one or more metadata keys from an object::
 
 
 ``account``
-~~~~~~~~~~
+~~~~~~~~~~~
 
 Cloud Files account commands use this syntax::
 
@@ -194,4 +194,3 @@ metadata if there is no current metadata associated with the account::
 Deletes one or more metadata keys from an account::
 
     rack files account delete-metadata  --metadata-keys <key1,key2,...> [optional flags]
-

@@ -1,7 +1,7 @@
 .. _cloudfilesexamples:
 
 ====================
-Cloud Files examples
+Files
 ====================
 
 Before you get started on any examples, be sure you have entered your
@@ -13,7 +13,7 @@ Search for existing objects
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you have a lot of objects, the `rack` command lets you search through
-the list. 
+the list.
 
 First, list the available containers in your account::
 
@@ -60,4 +60,3 @@ First, make sure you have a container to upload to::
 Next, upload a file, in this case a screenshot::
 
     rack files object upload --container screenshots --file browser-screenshot.png --name browser-screenshot.png
-

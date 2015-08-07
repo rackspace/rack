@@ -1,7 +1,7 @@
 .. _networkexamples:
 
 =======================
-Cloud Networks Examples
+Networks
 =======================
 
 Before you get started, be sure you have entered your username and API key

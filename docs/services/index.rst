@@ -3,10 +3,19 @@
 Services
 ========
 
+.. toctree::
+   :maxdepth: 3
+   :hidden:
+
+   servers.rst
+   files.rst
+   blockstorage.rst
+   networks.rst
+   examples/index.rst
+
+
 Here you can find the services currently supported by Rackspace CLI, and those
 services' supported commands.
-
-.. _cmd-reference:
 
 Commands Reference
 ------------------
@@ -31,10 +40,10 @@ This section shows service-specific use cases for Rackspace CLI.
 .. toctree::
    :maxdepth: 2
 
-   cloudfilesexamples.rst
-   cloudserversexamples.rst
-   cloudblockexamples.rst
-   cloudnetworksexamples.rst
+   examples/files
+   examples/servers
+   examples/block
+   examples/networks
 
 .. _authenticating:
 
