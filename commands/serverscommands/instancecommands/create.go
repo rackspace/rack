@@ -13,7 +13,6 @@ import (
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud"
 	osBFV "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/bootfromvolume"
-	osFlavors "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/flavors"
 	osImages "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/images"
 	osServers "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	bfv "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/bootfromvolume"
@@ -277,38 +276,27 @@ func (command *commandCreate) Execute(resource *handler.Resource) {
 		case *gophercloud.UnexpectedResponseCodeError:
 			switch err.(*gophercloud.UnexpectedResponseCodeError).Actual {
 			case 403:
-				uuid := opts.ImageRef
-				if uuid == "" {
+				imageID := opts.ImageRef
+				if imageID == "" {
 					id, err := osImages.IDFromName(command.Ctx.ServiceClient, opts.ImageName)
 					if err != nil {
 						resource.Err = err
 						return
 					}
-					uuid = id
+					imageID = id
 				}
+				flavorLabel := "id"
 				flavorID := opts.FlavorRef
 				if flavorID == "" {
-					id, err := osFlavors.IDFromName(command.Ctx.ServiceClient, opts.FlavorName)
-					if err != nil {
-						resource.Err = err
-						return
-					}
-					flavorID = id
+					flavorLabel = "name"
+					flavorID = opts.FlavorName
 				}
-				resource.Params.(*paramsCreate).opts.FlavorRef = flavorID
-				resource.Params.(*paramsCreate).opts.BlockDevice = []osBFV.BlockDevice{
-					osBFV.BlockDevice{
-						VolumeSize:          50,
-						DeleteOnTermination: false,
-						UUID:                uuid,
-						SourceType:          "image",
-						DestinationType:     "volume",
-					},
-				}
-				resource.Params.(*paramsCreate).opts.ImageName = ""
-				resource.Params.(*paramsCreate).opts.ImageRef = ""
-				command.Execute(resource)
-				return
+				err = fmt.Errorf(strings.Join([]string{"The flavor you've chosen has a disk size of 0, so an image can't be created on it directly.\n",
+					"To boot with this flavor, creating a 100 GB volume and not deleting that volume when the server is deleted, run this command:\n",
+					fmt.Sprintf("rack servers instance create --name %s --flavor-%s %s \\", opts.Name, flavorLabel, flavorID),
+					fmt.Sprintf("--block-device \"source-type=image,source-id=%s,volume-size=100,destination-type=volume,delete-on-termination=false\"\n", imageID),
+					"For more information please run: rack servers instance create --help",
+				}, "\n"))
 			}
 		}
 		resource.Err = err
