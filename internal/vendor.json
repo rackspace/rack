@@ -233,6 +233,13 @@
 			"revisionTime": "2015-08-02T22:24:28-06:00"
 		},
 		{
+			"canonical": "github.com/rackspace/gophercloud/rackspace/blockstorage/v1/snapshots",
+			"comment": "",
+			"local": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/blockstorage/v1/snapshots",
+			"revision": "47988a61f87c6ba806d4c952ed8fa62642b555c3",
+			"revisionTime": "2015-08-05T11:07:18-06:00"
+		},
+		{
 			"canonical": "github.com/rackspace/gophercloud/rackspace/compute/v2/bootfromvolume",
 			"comment": "",
 			"local": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/bootfromvolume",

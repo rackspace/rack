@@ -8,79 +8,78 @@ import (
 
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/blockstorage/v1/snapshots"
+	osSnapshots "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots"
 	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
 )
 
-func newCreateApp(flags map[string]string) *cli.Context {
+func newListApp(flags map[string]string) *cli.Context {
 	app := cli.NewApp()
 	flagset := flag.NewFlagSet("flags", 1)
 	flagset.String("volume-id", "", "")
 	flagset.String("name", "", "")
-	flagset.String("description", "", "")
+	flagset.String("status", "", "")
 	for k, v := range flags {
 		flagset.Set(k, v)
 	}
 	return cli.NewContext(app, flagset, nil)
 }
 
-func TestCreateKeys(t *testing.T) {
-	cmd := &commandCreate{}
-	expected := keysCreate
+func TestListKeys(t *testing.T) {
+	cmd := &commandList{}
+	expected := keysList
 	actual := cmd.Keys()
 	th.AssertDeepEquals(t, expected, actual)
 }
 
-func TestCreateServiceClientType(t *testing.T) {
-	cmd := &commandCreate{}
+func TestListServiceClientType(t *testing.T) {
+	cmd := &commandList{}
 	expected := serviceClientType
 	actual := cmd.ServiceClientType()
 	th.AssertEquals(t, expected, actual)
 }
 
-func TestCreateHandleFlags(t *testing.T) {
-	c := newCreateApp(map[string]string{
-		"volume-id":   "13ba-75c0-4483-acf9",
-		"description": "a description",
+func TestListHandleFlags(t *testing.T) {
+	c := newListApp(map[string]string{
+		"name":   "rack-test-volume",
+		"status": "available",
 	})
-	cmd := &commandCreate{
+	cmd := &commandList{
 		Ctx: &handler.Context{
 			CLIContext: c,
 		},
 	}
 	expected := &handler.Resource{
-		Params: &paramsCreate{
-			opts: &snapshots.CreateOpts{
-				VolumeID:    "13ba-75c0-4483-acf9",
-				Description: "a description",
+		Params: &paramsList{
+			opts: &osSnapshots.ListOpts{
+				Name:   "rack-test-volume",
+				Status: "available",
 			},
 		},
 	}
 	actual := &handler.Resource{}
 	err := cmd.HandleFlags(actual)
 	th.AssertNoErr(t, err)
-	th.AssertDeepEquals(t, *expected.Params.(*paramsCreate).opts, *actual.Params.(*paramsCreate).opts)
+	th.AssertDeepEquals(t, *expected.Params.(*paramsList).opts, *actual.Params.(*paramsList).opts)
 }
 
-func TestCreateExecute(t *testing.T) {
+func TestListExecute(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 	th.Mux.HandleFunc("/snapshots", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
 		w.Header().Add("Content-Type", "application/json")
-		fmt.Fprintf(w, `{"snapshot":{}}`)
+		fmt.Fprintf(w, `{"snapshots": []}`)
 	})
-	cmd := &commandCreate{
+	cmd := &commandList{
 		Ctx: &handler.Context{
 			ServiceClient: client.ServiceClient(),
 		},
 	}
 	actual := &handler.Resource{
-		Params: &paramsCreate{
-			opts: &snapshots.CreateOpts{
-				VolumeID:    "13ba-75c0-4483-acf9",
-				Description: "a description",
+		Params: &paramsList{
+			opts: &osSnapshots.ListOpts{
+				Name:   "rack-test-volume",
+				Status: "available",
 			},
 		},
 	}
