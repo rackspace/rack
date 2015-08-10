@@ -5,6 +5,7 @@ import (
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 	osSnapshots "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/blockstorage/v1/snapshots"
 	"github.com/rackspace/rack/util"
 )
 
@@ -39,7 +40,7 @@ func flagsCreate() []cli.Flag {
 var keysCreate = []string{"ID", "Name", "Description", "Size", "VolumeID", "VolumeType", "SnapshotID", "Attachments", "CreatedAt", "Metadata"}
 
 type paramsCreate struct {
-	opts *osSnapshots.CreateOpts
+	opts *snapshots.CreateOpts
 }
 
 type commandCreate handler.Command
@@ -73,7 +74,7 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 
 	c := command.Ctx.CLIContext
 
-	opts := &osSnapshots.CreateOpts{
+	opts := &snapshots.CreateOpts{
 		VolumeID:    c.String("volume-id"),
 		Name:        c.String("name"),
 		Description: c.String("description"),
