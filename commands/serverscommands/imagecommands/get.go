@@ -12,8 +12,8 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       util.Usage(commandPrefix, "get", "[--id <serverID> | --name <serverName> | --stdin id]"),
-	Description: "Retreives an image",
+	Usage:       util.Usage(commandPrefix, "get", "[--id <imageID> | --name <imageName> | --stdin id]"),
+	Description: "Retreives information about the image.",
 	Action:      actionGet,
 	Flags:       commandoptions.CommandFlags(flagsGet, keysGet),
 	BashComplete: func(c *cli.Context) {
