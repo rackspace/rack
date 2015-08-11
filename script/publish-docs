@@ -11,7 +11,7 @@ case "${TARGET}" in
     CONTENT_STORE_URL=http://staging.developer.rackspace.com:8000
     ;;
   production)
-    CONTENT_STORE_URL=https://developer.rackspace.com
+    CONTENT_STORE_URL=https://developer.rackspace.com:9000
     ;;
   http*)
     CONTENT_STORE_URL=${TARGET}
