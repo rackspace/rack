@@ -17,10 +17,10 @@ func man() {
 	content += fmt.Sprintf(`.TH man 1 "%s" "%s" "rack man page"`+"\n", time.Now().Format("06 May 2010"), util.Version)
 	content += fmt.Sprintln(`.SH NAME`)
 	content += fmt.Sprintf(`rack \- %s`+"\n", Usage())
-	content += fmt.Sprintln(`.SH SYNOPSIS`)
-	content += fmt.Sprintln("rack <command> <subcommand> <action> [OPTIONS]")
 	content += fmt.Sprintln(`.SH DESCRIPTION`)
 	content += fmt.Sprintf("%s\n\n\n", Desc())
+	content += fmt.Sprintln(`.SH SYNOPSIS`)
+	content += fmt.Sprintln("rack <command> <subcommand> <action> [OPTIONS]")
 
 	content += fmt.Sprintln("The following global options are available:")
 	for _, flag := range commandoptions.GlobalFlags() {
