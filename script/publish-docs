@@ -4,6 +4,24 @@ set -euo pipefail
 
 ROOT=$(cd $(dirname $0)/.. && pwd)
 
+TARGET=${1:-staging}
+
+case "${TARGET}" in
+  staging)
+    CONTENT_STORE_URL=http://staging.developer.rackspace.com:8000
+    ;;
+  production)
+    CONTENT_STORE_URL=https://developer.rackspace.com
+    ;;
+  http*)
+    CONTENT_STORE_URL=${TARGET}
+    ;;
+  *)
+    echo "Usage: ${0} <environment|http://...>"
+    exit 1
+    ;;
+esac
+
 [ -z "${CONTENT_STORE_APIKEY:-}" ] && {
   echo "No API key set!" >&2
   echo "export CONTENT_STORE_APIKEY=\"...\""
@@ -11,7 +29,7 @@ ROOT=$(cd $(dirname $0)/.. && pwd)
 }
 
 exec docker run --rm \
-  -e CONTENT_STORE_URL=http://staging.developer.rackspace.com:8000 \
+  -e CONTENT_STORE_URL=${CONTENT_STORE_URL} \
   -e CONTENT_STORE_APIKEY=${CONTENT_STORE_APIKEY} \
   -e CONTENT_ID_BASE=https://github.com/rackspace/rack \
   -e TRAVIS_PULL_REQUEST="false" \
