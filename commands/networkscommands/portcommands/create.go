@@ -105,3 +105,11 @@ func (command *commandCreate) Execute(resource *handler.Resource) {
 	}
 	resource.Result = portSingle(port)
 }
+
+func (command *commandCreate) PreCSV(resource *handler.Resource) {
+	resource.FlattenMap("FixedIPs")
+}
+
+func (command *commandCreate) PreTable(resource *handler.Resource) {
+	command.PreCSV(resource)
+}

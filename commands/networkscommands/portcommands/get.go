@@ -11,8 +11,8 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       util.Usage(commandPrefix, "get", ""),
-	Description: "Gets a port",
+	Usage:       util.Usage(commandPrefix, "get", "[--id <portID> | --name <portName> | --stdin id]"),
+	Description: "Retrieves information about a port",
 	Action:      actionGet,
 	Flags:       commandoptions.CommandFlags(flagsGet, keysGet),
 	BashComplete: func(c *cli.Context) {
@@ -97,4 +97,12 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 
 func (command *commandGet) StdinField() string {
 	return "id"
+}
+
+func (command *commandGet) PreCSV(resource *handler.Resource) {
+	resource.FlattenMap("FixedIPs")
+}
+
+func (command *commandGet) PreTable(resource *handler.Resource) {
+	command.PreCSV(resource)
 }

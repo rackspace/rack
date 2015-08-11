@@ -69,7 +69,7 @@ func flagsList() []cli.Flag {
 	}
 }
 
-var keysList = []string{"ID", "Name", "Network ID", "CIDR", "EnableDHCP", "Gateway IP"}
+var keysList = []string{"ID", "Name", "Network ID", "CIDR", "EnableDHCP", "GatewayIP"}
 
 type paramsList struct {
 	opts     *osSubnets.ListOpts

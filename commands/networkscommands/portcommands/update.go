@@ -15,7 +15,7 @@ import (
 
 var update = cli.Command{
 	Name:        "update",
-	Usage:       util.Usage(commandPrefix, "update", ""),
+	Usage:       util.Usage(commandPrefix, "update", "[--id <portID> | --name <portName>]"),
 	Description: "Updates a ports",
 	Action:      actionUpdate,
 	Flags:       commandoptions.CommandFlags(flagsUpdate, keysUpdate),
@@ -28,11 +28,11 @@ func flagsUpdate() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "id",
-			Usage: "[optional; required if `name` or `stdin` isn't provided] The ID of the port to update.",
+			Usage: "[optional; required if `name` isn't provided] The ID of the port to update.",
 		},
 		cli.StringFlag{
 			Name:  "name",
-			Usage: "[optional; required if `stdin` or `id` isn't provided] The name of the port to update.",
+			Usage: "[optional; required if `id` isn't provided] The name of the port to update.",
 		},
 		cli.StringFlag{
 			Name:  "rename",
@@ -125,4 +125,12 @@ func (command *commandUpdate) Execute(resource *handler.Resource) {
 		return
 	}
 	resource.Result = portSingle(port)
+}
+
+func (command *commandUpdate) PreCSV(resource *handler.Resource) {
+	resource.FlattenMap("FixedIPs")
+}
+
+func (command *commandUpdate) PreTable(resource *handler.Resource) {
+	command.PreCSV(resource)
 }

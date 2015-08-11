@@ -10,8 +10,8 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       util.Usage(commandPrefix, "get", ""),
-	Description: "Gets an existing security group rule",
+	Usage:       util.Usage(commandPrefix, "get", "[--id <securityGroupRuleID> | --stdin id]"),
+	Description: "Retrieves information about an existing security group rule",
 	Action:      actionGet,
 	Flags:       commandoptions.CommandFlags(flagsGet, keysGet),
 	BashComplete: func(c *cli.Context) {

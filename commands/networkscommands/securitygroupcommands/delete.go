@@ -39,7 +39,7 @@ func flagsDelete() []cli.Flag {
 	}
 }
 
-var keysDelete = []string{"ID", "Name", "TenantID", "Rules"}
+var keysDelete = []string{}
 
 type paramsDelete struct {
 	securityGroupID string

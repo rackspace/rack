@@ -37,7 +37,7 @@ func flagsGet() []cli.Flag {
 	}
 }
 
-var keysGet = []string{"ID", "Name", "Network ID", "CIDR", "EnableDHCP", "Gateway IP", "DNS Nameservers", "Allocation Pools", "Host Routes"}
+var keysGet = []string{"ID", "Name", "NetworkID", "CIDR", "EnableDHCP", "GatewayIP", "DNSNameservers", "AllocationPools", "HostRoutes"}
 
 type paramsGet struct {
 	subnetID string
@@ -97,4 +97,12 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 
 func (command *commandGet) StdinField() string {
 	return "id"
+}
+
+func (command *commandGet) PreCSV(resource *handler.Resource) {
+	resource.FlattenMap("AllocationPools")
+}
+
+func (command *commandGet) PreTable(resource *handler.Resource) {
+	command.PreCSV(resource)
 }

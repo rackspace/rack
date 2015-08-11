@@ -73,7 +73,7 @@ func flagsCreate() []cli.Flag {
 	}
 }
 
-var keysCreate = []string{"ID", "Name", "Network ID", "CIDR", "EnableDHCP", "Gateway IP", "DNS Nameservers", "Allocation Pools"}
+var keysCreate = []string{"ID", "Name", "NetworkID", "CIDR", "EnableDHCP", "GatewayIP", "DNSNameservers", "AllocationPools"}
 
 type paramsCreate struct {
 	opts *osSubnets.CreateOpts
@@ -176,4 +176,12 @@ func (command *commandCreate) Execute(resource *handler.Resource) {
 		return
 	}
 	resource.Result = subnetSingle(subnet)
+}
+
+func (command *commandCreate) PreCSV(resource *handler.Resource) {
+	resource.FlattenMap("AllocationPools")
+}
+
+func (command *commandCreate) PreTable(resource *handler.Resource) {
+	command.PreCSV(resource)
 }

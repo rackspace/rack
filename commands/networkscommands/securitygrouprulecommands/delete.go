@@ -12,7 +12,7 @@ import (
 
 var remove = cli.Command{
 	Name:        "delete",
-	Usage:       util.Usage(commandPrefix, "delete", ""),
+	Usage:       util.Usage(commandPrefix, "delete", "[--id <securityGroupRuleID> | --stdin id]"),
 	Description: "Deletes an existing security group rule",
 	Action:      actionDelete,
 	Flags:       commandoptions.CommandFlags(flagsDelete, keysDelete),
