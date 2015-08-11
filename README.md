@@ -88,6 +88,8 @@ $ rack servers instance list --username user1 --api-key 123456789 --region DFW
 
 At any time, you can run `rack init` which will create the auto-completion file in `~/.rack/bash_autocomplete` and add it to `~/.bash_profile`. You'll need to restart your terminal session to enable auto-completion.
 
+For command completion on Windows, please see the [command completion](http://rackspace-cli.readthedocs.org/en/latest/configuration.html#command-completion) section on the configuration page of our documentation.
+
 ## Roadmap
 
 Our plan is to release a limited beta of `rack` the first week of August 2015 with full support for the following services:
