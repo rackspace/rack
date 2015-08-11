@@ -18,7 +18,7 @@ such as ``--name`` to name an instance. Type ``rack servers <subservice> <action
 to bring up a list *command flags* specific to the command.
 
 
-``instance``
+**Instance**
 ~~~~~~~~~~~~
 
 Instance commands use this syntax::
@@ -54,9 +54,9 @@ Creates a server instance::
     (echo serverName1 && echo serverName2) | rack servers instance create --stdin name [optional flags]
 
 In order for this command to work, you must select an image using either the
-`--image-id` or `--image-name` flags with the ID or name of the image you wish to use.
-Alternatively, you may provide the `--block-device` flag to boot an instance from a volume.
-In either case, you need to select a flavor by using the `--flavor-id` or `--flavor-name` with
+``--image-id`` or ``--image-name`` flags with the ID or name of the image you wish to use.
+Alternatively, you may provide the ``--block-device`` flag to boot an instance from a volume.
+In either case, you need to select a flavor by using the ``--flavor-id`` or ``--flavor-name`` with
 the ID or name of the flavor you wish to use.
 
 **Response**
@@ -148,7 +148,7 @@ will perform an immediate shutdown and restart::
     rack servers instance reboot --name <serverName> [--soft | --hard] [optional flags]
     (echo serverID1 && echo serverID2) | rack servers instance reboot --stdin id [--soft | --hard] [optional flags]
 
-*Response*
+**Response**
 
 .. code::
 
@@ -181,7 +181,7 @@ back if a problem occurs::
 
 **Response**
 
-.. code:
+.. code::
 
     $ rack servers instance resize --name Rack4 --flavor-id 4
     Successfully resized instance [e6a7263b-85ab-4640-b886-70eaaaf37e8c] to flavor [4]
@@ -247,7 +247,7 @@ Deletes one or more metadata keys from a server::
     $ rack servers instance delete-metadata --name Rack4 --metadata-keys heat
     Successfully deleted metadata
 
-``image``
+**Image**
 ~~~~~~~~~
 
 Image commands use this syntax::
@@ -305,12 +305,12 @@ Retrieves details of the specified image::
 
 .. note::
 
-   To guarantee usage of the same image every time, use the `--id` flag. Images often
+   To guarantee usage of the same image every time, use the ``--id`` flag. Images often
    are updated with security patches, and the updated images will have a different ID but
    the same name.
 
 
-``flavor``
+**Flavor**
 ~~~~~~~~~~
 
 Flavor commands use this syntax::
@@ -362,7 +362,7 @@ Retrieves details of the specified flavor::
     ExtraSpecs:Class	       standard1
     ExtraSpecs:DiskIOIndex	 0
 
-``keypair``
+**Keypair**
 ~~~~~~~~~~~
 
 Keypair commands use this syntax::
@@ -474,7 +474,7 @@ Deletes the specified key paid::
     Successfully deleted keypair [rack key]
 
 
-``volume-attachment``
+**Volume-attachment**
 ~~~~~~~~~~~~~~~~~~~~~
 
 Volume attachment commands use this syntax::
