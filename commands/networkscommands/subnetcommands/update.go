@@ -61,7 +61,7 @@ func flagsUpdate() []cli.Flag {
 	}
 }
 
-var keysUpdate = []string{"ID", "Name", "Network ID", "CIDR", "EnableDHCP", "Gateway IP", "DNS Nameservers", "Allocation Pools"}
+var keysUpdate = []string{"ID", "Name", "NetworkID", "CIDR", "EnableDHCP", "GatewayIP", "DNSNameservers", "AllocationPools"}
 
 type paramsUpdate struct {
 	subnetID string
@@ -154,4 +154,12 @@ func (command *commandUpdate) Execute(resource *handler.Resource) {
 		return
 	}
 	resource.Result = subnetSingle(subnet)
+}
+
+func (command *commandUpdate) PreCSV(resource *handler.Resource) {
+	resource.FlattenMap("AllocationPools")
+}
+
+func (command *commandUpdate) PreTable(resource *handler.Resource) {
+	command.PreCSV(resource)
 }

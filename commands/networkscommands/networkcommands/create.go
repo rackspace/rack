@@ -12,7 +12,7 @@ import (
 var create = cli.Command{
 	Name:        "create",
 	Usage:       util.Usage(commandPrefix, "create", "--name <networkName>"),
-	Description: "Creates a new networks instance",
+	Description: "Creates a new network",
 	Action:      actionCreate,
 	Flags:       commandoptions.CommandFlags(flagsCreate, keysCreate),
 	BashComplete: func(c *cli.Context) {
@@ -45,7 +45,7 @@ func flagsCreate() []cli.Flag {
 	}
 }
 
-var keysCreate = []string{"ID", "Name", "Up", "Status", "Shared", "Tenant ID"}
+var keysCreate = []string{"ID", "Name", "Up", "Status", "Shared", "TenantID"}
 
 type paramsCreate struct {
 	opts *osNetworks.CreateOpts

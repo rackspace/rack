@@ -13,7 +13,7 @@ import (
 
 var remove = cli.Command{
 	Name:        "delete",
-	Usage:       util.Usage(commandPrefix, "delete", ""),
+	Usage:       util.Usage(commandPrefix, "delete", "[--id <portID> | --name <portName> | --stdin id]"),
 	Description: "Deletes a port",
 	Action:      actionDelete,
 	Flags:       commandoptions.CommandFlags(flagsDelete, keysDelete),
@@ -39,7 +39,7 @@ func flagsDelete() []cli.Flag {
 	}
 }
 
-var keysDelete = []string{"ID", "Name", "Network ID", "Status", "MAC Address", "Device ID", "Device Owner", "Up", "Fixed IPs", "Security Groups"}
+var keysDelete = []string{}
 
 type paramsDelete struct {
 	portID string

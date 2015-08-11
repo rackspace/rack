@@ -61,7 +61,7 @@ func flagsList() []cli.Flag {
 	}
 }
 
-var keysList = []string{"ID", "Name", "Up", "Status", "Shared", "Tenant ID"}
+var keysList = []string{"ID", "Name", "Up", "Status", "Shared", "TenantID"}
 
 type paramsList struct {
 	opts     *osNetworks.ListOpts

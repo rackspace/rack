@@ -98,3 +98,11 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 func (command *commandGet) StdinField() string {
 	return "id"
 }
+
+func (command *commandGet) PreCSV(resource *handler.Resource) {
+	resource.FlattenMap("Rules")
+}
+
+func (command *commandGet) PreTable(resource *handler.Resource) {
+	command.PreCSV(resource)
+}

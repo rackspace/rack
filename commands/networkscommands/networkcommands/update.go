@@ -48,7 +48,7 @@ func flagsUpdate() []cli.Flag {
 	}
 }
 
-var keysUpdate = []string{"ID", "Name", "Up", "Status", "Shared", "Tenant ID"}
+var keysUpdate = []string{"ID", "Name", "Up", "Status", "Shared", "TenantID"}
 
 type paramsUpdate struct {
 	networkID string
