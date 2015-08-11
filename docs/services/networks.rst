@@ -17,7 +17,7 @@ All ``networks`` commands are based on this syntax::
 such as ``--name`` to name a network. Type ``rack networks <subservice> <action> --help``
 to bring up a list of *command flags* specific to the command.
 
-``network``
+**Network**
 ~~~~~~~~~~~
 
 Network commands use this syntax::
@@ -120,7 +120,7 @@ Permanently deletes a network::
     $ rack networks network delete --name RackCLItest
     Successfully deleted network [4d83cf66-26be-44cc-b344-034e8e58c769]
 
-``subnet``
+**Subnet**
 ~~~~~~~~~~
 
 Cloud networks subnet commands use this syntax::
@@ -217,7 +217,7 @@ Permanently deletes a subnet::
     $ rack networks subnet delete --name CLIsub
     Successfully deleted subnet [ed3161fa-f1d2-45e5-bd4d-4c5340ad0027]
 
-``port``
+**Port**
 ~~~~~~~~
 
 Port commands use this syntax::
@@ -331,7 +331,7 @@ Permanently deletes a port::
     Successfully deleted port [3456c2b0-7bee-40b4-ad0b-b4f3385fb36c]
 
 
-``security-group``
+**Security-group**
 ~~~~~~~~~~~~~~~~~~
 
 Security group commands use this syntax::
@@ -411,7 +411,7 @@ Permanently deletes a security group and all rules within that security group::
     Successfully deleted security group [928fb119-9c69-4f9f-8da5-8387fd923863]
 
 
-``security-group-rule``
+**Security-group-rule**
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Security group rule commands use this syntax::

@@ -17,7 +17,7 @@ All ``block-storage`` commands are based on this syntax::
 such as ``--name`` to name a volume. Type ``rack block-storage <subservice> <action> --help``
 to bring up a list of *command flags* specific to the command.
 
-``volume``
+**Volume**
 ~~~~~~~~~~
 
 Volume commands use this syntax::
@@ -106,7 +106,7 @@ Permanently deletes a volume::
     $ rack block-storage volume delete --name Response
     Deleting volume [66dcbe53-1b62-4a15-adc2-e46e78b95f8b]
 
-``snapshot``
+**Snapshot**
 ~~~~~~~~~~~~
 
 Snapshot commands use this syntax::
