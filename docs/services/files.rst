@@ -17,7 +17,7 @@ All ``files`` commands are based on this syntax::
 such as ``--name`` to name a container. Type ``rack files <subservice> <action> --help``
 to bring up a list of *command flags* specific to the command.
 
-``container``
+**Container**
 ~~~~~~~~~~~~~
 
 Container commands use this syntax::
@@ -186,7 +186,7 @@ Deletes one or more metadata keys for a container::
     Successfully deleted metadata with keys [Heat] from container [RackCLI].
 
 
-``object``
+**Object**
 ~~~~~~~~~~
 
 Object commands use this syntax::
@@ -345,7 +345,7 @@ Deletes one or more metadata keys from an object::
     $ rack files object delete-metadata --container RackCLI --name Image --metadata-keys heat
     Successfully deleted metadata with keys [Heat] from object [Image].
 
-``account``
+**Account**
 ~~~~~~~~~~
 
 Cloud Files account commands use this syntax::
