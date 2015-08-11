@@ -23,7 +23,7 @@ and development.
 
 ## Download
 
-`rack` binaries are available for OSX, Linux, and Windows. [Download `rack` now](http://rackspace-cli.readthedocs.org/en/latest/configuration.html#installation).
+`rack` binaries are available for OSX, Linux, and Windows. [Download `rack` now](https://developer.rackspace.com/docs/rack-cli/configuration#installation).
 
 ## Build From Source
 
@@ -88,7 +88,7 @@ $ rack servers instance list --username user1 --api-key 123456789 --region DFW
 
 At any time, you can run `rack init` which will create the auto-completion file in `~/.rack/bash_autocomplete` and add it to `~/.bash_profile`. You'll need to restart your terminal session to enable auto-completion.
 
-For command completion on Windows, please see the [command completion](http://rackspace-cli.readthedocs.org/en/latest/configuration.html#command-completion) section on the configuration page of our documentation.
+For command completion on Windows, please see the [command completion](https://developer.rackspace.com/docs/rack-cli/configuration#command-completion) section on the configuration page of our documentation.
 
 ## Roadmap
 
