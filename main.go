@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/rackspace/rack/commands/blockstoragecommands"
 	"github.com/rackspace/rack/commands/filescommands"
@@ -41,7 +42,7 @@ func Usage() string {
 
 // Desc returns, you guessed it, the description
 func Desc() string {
-	return `The rack CLI manages authentication, configures a local setup, and provides workflows for operations on Rackspace cloud resources.`
+	return `The rack CLI manages authentication, configures a local setup, and provides workflows for operations on Rackspace Cloud resources.`
 }
 
 // Cmds returns a list of commands supported by the tool
@@ -54,7 +55,12 @@ func Cmds() []cli.Command {
 		},
 		{
 			Name:  "init",
-			Usage: "[Linux/OS X only] Creates the rack man page and sets up command completion for the Bash shell.",
+			Usage: strings.Join([]string{"Interactively create a config file.",
+			"\tFor Linux and OS X, creates the `rack` man page and sets up",
+			"\tcommand completion for the Bash shell.",
+			"\tFor Windows, creates a `posh_autocomplete.ps1` file in the",
+			"\t`$HOME/.rack` directory. You must run the file to set up",
+			"\tcommand completion."}, "\n"),
 			Action: func(c *cli.Context) {
 				setup.Init(c)
 				man()
@@ -84,7 +90,8 @@ func Cmds() []cli.Command {
 		},
 		{
 			Name:        "block-storage",
-			Usage:       "Block-level storage, exposed as volumes to mount to host servers. Work with volumes and their associated snapshots.",
+			Usage:       strings.Join([]string{"Block-level storage, exposed as volumes to mount to",
+			"\thost servers. Work with volumes and their associated snapshots."}, "\n"),
 			Subcommands: blockstoragecommands.Get(),
 		},
 	}
