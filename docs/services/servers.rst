@@ -4,24 +4,24 @@
 Servers
 =======
 
-This section lists all cloud servers commands supported by Rackspace CLI.
+This section lists the commands for interacting with Cloud Servers.
 
 Commands
 --------
 
-All cloud server commands are based on this syntax::
+All ``servers`` commands are based on this syntax::
 
-   rack servers <resource> <action> [command flags]
+   rack servers <subservice> <action> [command flags]
 
 *Command flags* allow you to customize certain attributes of the command,
-such as ``--name`` to name a volume. Type ``rack block-storage <resourse> <action> --help``
+such as ``--name`` to name an instance. Type ``rack servers <subservice> <action> --help``
 to bring up a list *command flags* specific to the command.
 
 
 ``instance``
 ~~~~~~~~~~~~
 
-Cloud server instance commands use this syntax::
+Instance commands use this syntax::
 
     rack servers instance <action> [command flags]
 
@@ -53,10 +53,11 @@ Creates a server instance::
     rack servers instance create --name <serverName> [optional flags]
     (echo serverName1 && echo serverName2) | rack servers instance create --stdin name [optional flags]
 
-In order for this command to work you must select an image using either the
-`--image-id` or `--image-name` flags with the id or name of the image you wish to use.
-You also need to select a flavor by using the `--flavor-id` or `--flavor-name` with
-the id or name of the flavor you wish to use.
+In order for this command to work, you must select an image using either the
+`--image-id` or `--image-name` flags with the ID or name of the image you wish to use.
+Alternatively, you may provide the `--block-device` flag to boot an instance from a volume.
+In either case, you need to select a flavor by using the `--flavor-id` or `--flavor-name` with
+the ID or name of the flavor you wish to use.
 
 **Response**
 
@@ -64,7 +65,7 @@ the id or name of the flavor you wish to use.
 
     $ rack servers instance create --name Rack4 --image-name "Red Hat Enterprise Linux 7 (PVHVM)" --flavor-id 2
     ID		e6a7263b-85ab-4640-b886-70eaaaf37e8c
-    AdminPass	[admin password used for the server]
+    AdminPass	8n75vdF8EL2U
 
 .. note::
 
@@ -115,7 +116,7 @@ you chose to update.
 
 .. code::
 
-
+    $ rack servers instance update --rename ReRack
     ID		8a254ea3-77b5-4f74-a893-8d2d51ae2cca
     Name		ReRack
     PublicIPv4	23.253.234.169
@@ -249,7 +250,7 @@ Deletes one or more metadata keys from a server::
 ``image``
 ~~~~~~~~~
 
-Cloud server image commands use this syntax::
+Image commands use this syntax::
 
     rack server image <action> [optional flags]
 
@@ -312,7 +313,7 @@ Retrieves details of the specified image::
 ``flavor``
 ~~~~~~~~~~
 
-Cloud server flavor commands use this syntax::
+Flavor commands use this syntax::
 
     rack servers flavor <action> [optional flags]
 
@@ -364,7 +365,7 @@ Retrieves details of the specified flavor::
 ``keypair``
 ~~~~~~~~~~~
 
-Server keypair commands use this syntax::
+Keypair commands use this syntax::
 
     rack servers keypair <action> [optional flags]
 
@@ -476,11 +477,11 @@ Deletes the specified key paid::
 ``volume-attachment``
 ~~~~~~~~~~~~~~~~~~~~~
 
-Cloud server volume attachment commands use this syntax::
+Volume attachment commands use this syntax::
 
     rack server volume-attachment <action> [optional flag]
 
-These commands are often used with :ref:`cloud block storage <blockexamples>`.
+These commands are often used with :ref:`Cloud Block Storage <blockexamples>`.
 
 ``list``
 ^^^^^^^^
@@ -538,7 +539,7 @@ Retrieves details of a specified volume attachment ID for a specified server::
 
 ``delete``
 ^^^^^^^^^^
-Deletes a specified volume attachment from a specified server instance::
+Removes a specified volume attachment from a specified server instance::
 
     rack servers volume-attachment delete --server-id <serverID> --id <attachmentID> [optional flags]
     rack servers volume-attachment delete --server-name <serverName> --id <attachmentID> [optional flags]

@@ -4,23 +4,23 @@
 Networks
 ========
 
-This section lists all cloud networks commands supported by Rackspace CLI.
+This section lists the commands for interacting with Cloud Networks.
 
 Commands
 --------
 
-All cloud networks commands are based on this syntax::
+All ``networks`` commands are based on this syntax::
 
-   rack networks <resource> <action> [command flags]
+   rack networks <subservice> <action> [command flags]
 
 *Command flags* allow you to customize certain attributes of the command,
-such as ``--name`` to name a volume. Type ``rack block-storage <resourse> <action> --help``
-to bring up a list *command flags* specific to the command.
+such as ``--name`` to name a network. Type ``rack networks <subservice> <action> --help``
+to bring up a list of *command flags* specific to the command.
 
 ``network``
 ~~~~~~~~~~~
 
-All cloud networks network commands use this syntax::
+Network commands use this syntax::
 
     rack networks network <action> [optional flag]
 
@@ -59,7 +59,7 @@ Creates a network::
     Up		true
     Status		ACTIVE
     Shared		false
-    Tenant ID	661145
+    TenantID	661145
 
 
 ``get``
@@ -81,7 +81,7 @@ Retrieves details on a specified network::
     Status		ACTIVE
     Subnets
     Shared		false
-    Tenant ID	661145
+    TenantID	661145
 
 
 ``update``
@@ -102,12 +102,12 @@ Updates a network::
     Up		false
     Status		ACTIVE
     Shared		false
-    Tenant ID	661145
+    TenantID	661145
 
 
 ``delete``
 ^^^^^^^^^^
-Permanently removes a network::
+Permanently deletes a network::
 
     rack networks network delete --id <networkID> [optional flags]
     rack networks network delete --name <networkName> [optional flags]
@@ -137,7 +137,7 @@ Retrieves a list of subnets. Optional flags can be used to refine your search::
 ^^^^^^^^^^
 Creates a subnet::
 
-    rack networks subnet create --network-id <networkID> --cidr <CIDR> --ip-version <IPVersion> [optional flags]
+    rack networks subnet create --network-id <networkID> --cidr <CIDR> --ip-version <4|6> [optional flags]
 
 **Response**
 
@@ -146,13 +146,13 @@ Creates a subnet::
     $ rack networks subnet create --network-id 8694604a-eb48-4c69-8fce-ce8fa647fa30 --cidr 192.0.2.0/24 --ip-version 4
     ID		ed3161fa-f1d2-45e5-bd4d-4c5340ad0027
     Name
-    Network ID	8694604a-eb48-4c69-8fce-ce8fa647fa30
+    NetworkID	8694604a-eb48-4c69-8fce-ce8fa647fa30
     CIDR		192.0.2.0/24
     EnableDHCP	false
-    Gateway IP
-    DNS Nameservers
-    Allocation PoolsStart		  End
-                    192.0.2.1	192.0.2.254
+    GatewayIP
+    DNSNameservers
+    AllocationPools0Start   192.0.2.1
+    AllocationPools0End   192.0.2.254
 
 
 ``get``
@@ -170,14 +170,14 @@ Retrieves details on a specified subnet::
     $ rack networks subnet get --id ed3161fa-f1d2-45e5-bd4d-4c5340ad0027
     ID		ed3161fa-f1d2-45e5-bd4d-4c5340ad0027
     Name
-    Network ID	8694604a-eb48-4c69-8fce-ce8fa647fa30
+    NetworkID	8694604a-eb48-4c69-8fce-ce8fa647fa30
     CIDR		192.0.2.0/24
     EnableDHCP	false
-    Gateway IP
-    DNS Nameservers
-    Allocation PoolsStart		  End
-		                192.0.2.1	192.0.2.254
-    Host Routes	<nil>
+    GatewayIP
+    DNSNameservers
+    AllocationPools0Start   192.0.2.1
+    AllocationPools0End   192.0.2.254
+    HostRoutes	[]
 
 
 ``update``
@@ -194,13 +194,13 @@ Updates a subnet::
     $ rack networks subnet update --id ed3161fa-f1d2-45e5-bd4d-4c5340ad0027 --rename CLIsub
     ID		ed3161fa-f1d2-45e5-bd4d-4c5340ad0027
     Name		CLIsub
-    Network ID	8694604a-eb48-4c69-8fce-ce8fa647fa30
+    NetworkID	8694604a-eb48-4c69-8fce-ce8fa647fa30
     CIDR		192.0.2.0/24
     EnableDHCP	false
-    Gateway IP
-    DNS Nameservers
-    Allocation PoolsStart		  End
-                    192.0.2.1	192.0.2.254
+    GatewayIP
+    DNSNameservers
+    AllocationPools0Start   192.0.2.1
+    AllocationPools0End   192.0.2.254
 
 ``delete``
 ^^^^^^^^^^
@@ -220,7 +220,7 @@ Permanently deletes a subnet::
 ``port``
 ~~~~~~~~
 
-Cloud networks port commands use this syntax::
+Port commands use this syntax::
 
     rack networks port <action> [optional flags]
 
@@ -256,9 +256,9 @@ Creates a port::
     MACAddress	BC:76:4E:05:FF:1B
     DeviceID
     DeviceOwner
-    Up		<nil>
-    FixedIPs	Subnet ID				                      IP Address
-              e3cdb6bd-f308-4c15-93db-7638dd995111	192.168.4.3
+    Up		false
+    FixedIPs0:SubnetID    e3cdb6bd-f308-4c15-93db-7638dd995111
+    FixedIPs0:IPAddress   192.168.4.3
     SecurityGroups
     TenantID	661145
 
@@ -275,7 +275,7 @@ Retrieves details on a specified port::
 
 .. code::
 
-    $ rack networks port get -id 3456c2b0-7bee-40b4-ad0b-b4f3385fb36c
+    $ rack networks port get --id 3456c2b0-7bee-40b4-ad0b-b4f3385fb36c
     ID		3456c2b0-7bee-40b4-ad0b-b4f3385fb36c
     Name
     NetworkID	e6fba9eb-5211-4637-bf1a-cdb4c04a2845
@@ -283,9 +283,9 @@ Retrieves details on a specified port::
     MACAddress	BC:76:4E:05:FF:1B
     DeviceID
     DeviceOwner
-    Up		<nil>
-    FixedIPs	Subnet ID				                      IP Address
-		          e3cdb6bd-f308-4c15-93db-7638dd995111	192.168.4.3
+    Up		false
+    FixedIPs0:SubnetID    e3cdb6bd-f308-4c15-93db-7638dd995111
+    FixedIPs0:IPAddress   192.168.4.3
     SecurityGroups
     TenantID	661145
 
@@ -301,7 +301,7 @@ Updates the information on a port::
 
 .. code::
 
-    $ rack networks port get -id 3456c2b0-7bee-40b4-ad0b-b4f3385fb36c
+    $ rack networks port update --id 3456c2b0-7bee-40b4-ad0b-b4f3385fb36c --rename CLIport
     ID		3456c2b0-7bee-40b4-ad0b-b4f3385fb36c
     Name	CLIport
     NetworkID	e6fba9eb-5211-4637-bf1a-cdb4c04a2845
@@ -309,15 +309,15 @@ Updates the information on a port::
     MACAddress	BC:76:4E:05:FF:1B
     DeviceID
     DeviceOwner
-    Up		<nil>
-    FixedIPs	Subnet ID				                      IP Address
-  	          e3cdb6bd-f308-4c15-93db-7638dd995111	192.168.4.3
+    Up		false
+    FixedIPs0:SubnetID    e3cdb6bd-f308-4c15-93db-7638dd995111
+    FixedIPs0:IPAddress   192.168.4.3
     SecurityGroups
     TenantID	661145
 
 ``delete``
 ^^^^^^^^^^
-Permanently removes a port::
+Permanently deletes a port::
 
     rack networks port delete --id <portID> [optional flags]
     rack networks port delete --name <portName>] [optional flags]
@@ -334,14 +334,14 @@ Permanently removes a port::
 ``security-group``
 ~~~~~~~~~~~~~~~~~~
 
-Cloud network security-group commands use this syntax::
+Security group commands use this syntax::
 
     rack networks security-group <action> [optional flags]
 
 .. note::
 
     The security groups feature is currently in limited availability. It is available
-    only to Managed Infrastructure customers. To use this feature, contact Rackspace S
+    only to Managed Infrastructure customers. To use this feature, contact Rackspace
     Support.
 
 ``list``
@@ -389,27 +389,38 @@ Retrieves details on a specified security group, including any security group ru
     ID	928fb119-9c69-4f9f-8da5-8387fd923863
     Name	CLIsec
     TenantID661145
-    Rules
+    Rules0:EtherTypeIPv4
+    Rules0:Protocol
+    Rules0:ID	ff0029e9-f09d-4ddd-889f-36f9c2ff316b
+    Rules0:Directioningress
 
 
 ``delete``
 ^^^^^^^^^^
-Permanently removes a security group and all rules within that security group::
+Permanently deletes a security group and all rules within that security group::
 
     rack networks security-group delete --id <securityGroupID> [optional flags]
     rack networks security-group delete --name <securityGroupName> [optional flags]
     (echo securityGroupID1 && echo securityGroupID2) | rack networks security-group delete --stdin id [optional flags]
 
+**Response**
+
+.. code::
+
+    $ rack networks security-group delete --name CLIsec
+    Successfully deleted security group [928fb119-9c69-4f9f-8da5-8387fd923863]
+
+
 ``security-group-rule``
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Cloud networks security group rule commands use this syntax::
+Security group rule commands use this syntax::
 
     rack networks security-group-rule <action> [optional flags]
 
 ``list``
 ^^^^^^^^
-Retrieves a list of security group rules with the rules' unique ID::
+Retrieves a list of security group rules::
 
     rack networks security-group-rule list [optional flags]
 

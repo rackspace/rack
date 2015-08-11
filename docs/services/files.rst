@@ -4,23 +4,23 @@
 Files
 =====
 
-This section lists all cloud files commands supported by Rackspace CLI.
+This section lists the commands for interacting with Cloud Files.
 
 Commands
 --------
 
-All cloud files commands are based on this syntax::
+All ``files`` commands are based on this syntax::
 
-    rack files <resource> <action> [command flags]
+    rack files <subservice> <action> [command flags]
 
 *Command flags* allow you to customize certain attributes of the command,
-such as ``--name`` to name a volume. Type ``rack block-storage <resourse> <action> --help``
-to bring up a list *command flags* specific to the command.
+such as ``--name`` to name a container. Type ``rack files <subservice> <action> --help``
+to bring up a list of *command flags* specific to the command.
 
 ``container``
 ~~~~~~~~~~~~~
 
-Cloud files container commands use this syntax::
+Container commands use this syntax::
 
     rack files container <action> [optional flags]
 
@@ -91,13 +91,13 @@ Create or update read and write permissions for a specified container::
 
 .. code::
 
-    $ rack files container update --name RackCLI
+    $ rack files container update --name RackCLI --container-read user1
     Successfully updated container [RackCLI]
 
 
 ``delete``
 ^^^^^^^^^^
-Permanently removes the specified container::
+Permanently deletes the specified container::
 
     rack files container delete --name <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files container delete --stdin name [optional flags
@@ -168,7 +168,7 @@ metadata if there is no current metadata associated with the container::
 
 .. code::
 
-    $ rack files container get-metadata --name RackCLI --metadata heat=false
+    $ rack files container update-metadata --name RackCLI --metadata heat=false
     Metadata:Heat	false
 
 
@@ -189,7 +189,7 @@ Deletes one or more metadata keys for a container::
 ``object``
 ~~~~~~~~~~
 
-Cloud files object commands use this syntax::
+Object commands use this syntax::
 
     rack files object <action> [optional flags]
 
@@ -252,13 +252,13 @@ Uploads an object directory into a specified container::
 
 ``download``
 ^^^^^^^^^^^^
-Downloads an object from the specified contained into your local system::
+Downloads an object from the specified container to your local system::
 
     rack files object download --container <containerName> --name <objectName> [optional flags]
 
 ``get``
 ^^^^^^^^
-Retrieves an object's data::
+Retrieves information about an object::
 
     rack files object get --container <containerName> --name <objectName> [optional flags]
 
@@ -279,7 +279,7 @@ Retrieves an object's data::
 
 ``delete``
 ^^^^^^^^^^
-Permanently removes an object::
+Permanently deletes an object::
 
     rack files object delete --container <containerName> --name <objectName> [optional flags]
     (echo objectName1 && echo objectName2) | rack files object delete --container <containerName> --stdin name [optional flags]
@@ -342,8 +342,8 @@ Deletes one or more metadata keys from an object::
 
 .. code::
 
-    $ rack files object delete-metadata --container RackCLI --name Image --metadata-keys heat=
-    Successfully deleted metadata with keys [Heat=] from object [Image].
+    $ rack files object delete-metadata --container RackCLI --name Image --metadata-keys heat
+    Successfully deleted metadata with keys [Heat] from object [Image].
 
 ``account``
 ~~~~~~~~~~
