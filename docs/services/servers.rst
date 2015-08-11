@@ -70,7 +70,7 @@ the ID or name of the flavor you wish to use.
 .. note::
 
     The admin password for your server is only given once. Please copy
-    the password if you wish to make changes to server in the future.
+    the password if you wish to make changes to your server in the future.
 
 ``get``
 ^^^^^^^

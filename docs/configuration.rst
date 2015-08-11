@@ -4,10 +4,8 @@ Installation and Configuration
 ==============================
 
 .. warning::
-   The installation/configuration instructions here must be
-   considered buyer-beware. As development continues, a range of configuration
-   options will be supported; what works today may not work tomorrow, but it
-   works right now so that's ok.
+   Rackspace CLI is currently in beta. The installation/configurations instructions are subject
+   to change. As development continues, a range of configuration options will be supported.
 
 Installation
 ------------
