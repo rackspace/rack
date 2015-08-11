@@ -1,18 +1,33 @@
 # rack
-An opinionated CLI for Rackspace interactions
+The official command line interface for the Rackspace Cloud.
+
+`rack` provides a consistent interface for interacting with the Rackspace Cloud. For example, creating a new server:
+
+```
+$ rack servers instance create \
+    --name my-server \
+    --image-id 5ed162cc-b4eb-4371-b24a-a0ae73376c73 \
+    --flavor-id general1-1 \
+    --keypair my-laptop
+
+ID		9818861f-2f14-437f-89b0-a36dfa1831b7
+AdminPass	4vLb2PiqUGdP
+```
+
+For complete documentation, see [the docs](http://rackspace-cli.readthedocs.org/en/latest/).
 
 ## Warning
 
 This repo is under active development and is not ready for anything but testing
 and development.
 
-## Documentation
+## Download
 
-For complete documentation, see [the docs](http://rackspace-cli.readthedocs.org/en/latest/).
+`rack` binaries are available for OSX, Linux, and Windows. [Download `rack` now](http://rackspace-cli.readthedocs.org/en/latest/configuration.html#installation).
 
-## Installation
+## Build From Source
 
-Make sure you have Go installed and the GOPATH environment variable set.
+Make sure you have [Go installed](https://golang.org/doc/install) and the [`GOPATH`](https://golang.org/doc/code.html#GOPATH) environment variable set.
 ```sh
 go get github.com/rackspace/rack
 go build -o $GOPATH/bin/rack
@@ -20,51 +35,60 @@ go build -o $GOPATH/bin/rack
 
 ## Setting Authentication Credentials
 
+`rack` has a number of ways of getting credentials configured. The easiest way is to use `rack configure` to setup a profile:
+
+```
+$ rack configure
+
+    This interactive session will walk you through creating
+    a profile in your configuration file. You may fill in all or none of the
+    values.
+
+    Rackspace Username: iamacat
+    Rackspace API key: secrets
+    Rackspace Region : IAD
+    Profile Name (leave blank to create a default profile):
+```
+
+This will create a configuration file at `~/.rack/config` which will store your credentials. When using the default profile, you don't need to specify the profile:
+
+```
+rack servers instance list
+```
+
+However, if you've named a profile, you can use the `--profile` flag to specify it explicitly:
+
+```
+rack servers instance list --profile staging
+```
+
 ### Environment Variables
-Export the following environment variables:  
+
+In addition to using the config file, you can also use environment variables. The following environment variables are supported:
+
 `RS_REGION_NAME` (DFW, IAD, ORD, LON, SYD, HKG)  
 `RS_USERNAME` (Your Rackspace username)  
 `RS_API_KEY` (Your Rackspace API key)  
 
 ### Command-line
-You can set auth parameters on the command-line using global flags:
-`rack --username user1 --api-key 123456789 --region DFW servers instance list`
 
-### Config file
-You can create a config file in ` ~/.rack/config`:
+Lastly, you can also set your authentication credentials as flags:
 
 ```
-[DEFAULT]
-username=user1
-api-key=123456789
-region=DFW
 
-[PROFILE2]
-username=user2
-api-key=987654321
-region=IAD
+$ rack servers instance list --username user1 --api-key 123456789 --region DFW
+
 ```
 
-If you're using the default profile, you can call a command without additional flags:
-```sh
-rack servers instance list
-```
+### Precedence
 
-However, if you'd like to use a different profile (such as PROFILE2 above):
-```sh
-rack --profile PROFILE2 servers instance list
-```
-
+`rack` will first look for credentials as flags. Secondly, `rack` will use a named profile, or `default` if there is a default profile. Lastly, `rack` will look for environment variables.
 
 ## Bash Completion
-Add the following line to your `.bashrc` file:
-```sh
-PROG=rack source $GOPATH/src/github.com/codegangsta/cli/autocomplete/bash_autocomplete
-```
-and source it:
-```sh
-source ~/.bashrc
-```
+
+At any time, you can run `rack init` which will create the auto-completion file in `~/.rack/bash_autocomplete` and add it to `~/.bash_profile`. You'll need to restart your terminal session to enable auto-completion.
+
+For command completion on Windows, please see the [command completion](http://rackspace-cli.readthedocs.org/en/latest/configuration.html#command-completion) section on the configuration page of our documentation.
 
 ## Roadmap
 
