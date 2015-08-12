@@ -40,8 +40,7 @@ This section shows service-specific use cases for Rackspace CLI.
 .. toctree::
    :maxdepth: 2
 
-   examples/files
    examples/servers
+   examples/files
    examples/block
    examples/networks
-
