@@ -6,7 +6,7 @@ set -euo pipefail
 #
 
 function update {
-  TMP_FILE=`mktemp $1`
+  TMP_FILE=`mktemp -d 2>/dev/null || mktemp -d -t $1`
   sed -e "$2" $3 > $TMP_FILE
   chmod 0644 $TMP_FILE
   mv -f $TMP_FILE $3
