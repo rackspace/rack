@@ -112,7 +112,7 @@ doesn't exist and walk you through creating a profile for it::
 
     Rackspace Username: iamacat
     Rackspace API key: secrets
-    Rackspace Region : IAD
+    Rackspace Region: IAD
     Profile Name (leave blank to create a default profile):
 
 This allows you to immediately get working::

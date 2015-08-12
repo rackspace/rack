@@ -31,7 +31,7 @@ func configure(c *cli.Context) {
 	apiKey, _ := reader.ReadString('\n')
 	m["api-key"] = strings.TrimSpace(apiKey)
 
-	fmt.Print("Rackspace Region : ")
+	fmt.Print("Rackspace Region: ")
 	region, _ := reader.ReadString('\n')
 	m["region"] = strings.ToUpper(strings.TrimSpace(region))
 
