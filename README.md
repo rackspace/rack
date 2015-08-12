@@ -46,7 +46,7 @@ $ rack configure
 
     Rackspace Username: iamacat
     Rackspace API key: secrets
-    Rackspace Region : IAD
+    Rackspace Region: IAD
     Profile Name (leave blank to create a default profile):
 ```
 
