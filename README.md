@@ -14,7 +14,7 @@ ID		9818861f-2f14-437f-89b0-a36dfa1831b7
 AdminPass	4vLb2PiqUGdP
 ```
 
-For complete documentation, see [the docs](http://rackspace-cli.readthedocs.org/en/latest/).
+For complete documentation, see [the docs](https://developer.rackspace.com/docs/rack-cli/).
 
 ## Warning
 
