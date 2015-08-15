@@ -5,3 +5,4 @@
    configuration.rst
    globaloptions.rst
    services/index.rst
+   troubleshooting.rst
