@@ -267,12 +267,16 @@ func (command *commandCreate) Execute(resource *handler.Resource) {
 		server, err = servers.Create(command.Ctx.ServiceClient, opts).Extract()
 	}
 
+handleErr:
 	if err != nil {
 		switch err.(type) {
 		case *osServers.ErrNeitherImageIDNorImageNameProvided:
 			err = errors.New("One and only one of the --image-id and the --image-name flags must be provided.")
 		case *osServers.ErrNeitherFlavorIDNorFlavorNameProvided:
 			err = errors.New("One and only one of the --flavor-id and the --flavor-name flags must be provided.")
+		case *gophercloud.ErrErrorAfterReauthentication:
+			err = err.(*gophercloud.ErrErrorAfterReauthentication).UnexpectedResponseCodeError
+			goto handleErr
 		case *gophercloud.UnexpectedResponseCodeError:
 			switch err.(*gophercloud.UnexpectedResponseCodeError).Actual {
 			case 403:

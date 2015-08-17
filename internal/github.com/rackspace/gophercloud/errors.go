@@ -4,11 +4,12 @@ import "fmt"
 
 // BaseError is an error type that all other error types embed.
 type BaseError struct {
-	Function string
+	OriginalError error
+	Function      string
 }
 
 func (e *BaseError) Error() string {
-	return "An error occurred while executing a Gophercloud request."
+	return fmt.Sprintf("An error occurred while executing a Gophercloud request: %s", e.OriginalError)
 }
 
 // InvalidInputError is an error type used for most non-HTTP Gophercloud errors.
@@ -145,17 +146,15 @@ func (e *ErrTimeOut) Error() string {
 }
 
 type ErrUnableToReauthenticate struct {
-	*BaseError
-	OriginalError error
+	*UnexpectedResponseCodeError
 }
 
 func (e *ErrUnableToReauthenticate) Error() string {
-	return fmt.Sprintf("Unable to re-authenticate: %s", e.OriginalError)
+	return fmt.Sprintf("Unable to re-authenticate")
 }
 
 type ErrErrorAfterReauthentication struct {
-	*BaseError
-	OriginalError error
+	*UnexpectedResponseCodeError
 }
 
 func (e *ErrErrorAfterReauthentication) Error() string {
