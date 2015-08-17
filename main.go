@@ -55,9 +55,10 @@ func Cmds() []cli.Command {
 		},
 		{
 			Name:  "init",
-			Usage: strings.Join([]string{"Interactively create a config file.",
+			Usage: strings.Join([]string{"Enable tab for command completion.",
 			"\tFor Linux and OS X, creates the `rack` man page and sets up",
-			"\tcommand completion for the Bash shell.",
+			"\tcommand completion for the Bash shell. Run `man ./rack.1` to",
+			"\tview the generated man page.",
 			"\tFor Windows, creates a `posh_autocomplete.ps1` file in the",
 			"\t`$HOME/.rack` directory. You must run the file to set up",
 			"\tcommand completion."}, "\n"),
