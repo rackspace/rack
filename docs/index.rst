@@ -98,7 +98,7 @@ Services
    globaloptions.rst
    userguide.rst
    services/index.rst
-
+   troubleshooting.rst
 
 
 Indices and tables
