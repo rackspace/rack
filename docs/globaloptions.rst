@@ -11,13 +11,13 @@ set previously, change output format or other aspects of the tool.
 Display any available command-line flags by appending `--help` to list the
 flags available::
 
-    rack <service> <command> <subcommand> --help
+    rack <service> <subservice> <action> --help
 
 For example, you can get JSON output from any series of commands:
 
 ::
 
-    rack <service> <command> <subcommand> --output json [flags]
+    rack <service> <subservice> <action> --output json [flags]
 
 Would result in the command returning a JSON_ formatted output.
 
@@ -171,7 +171,7 @@ Help is available on the base level; for example::
        rack - An opinionated CLI for the Rackspace cloud
 
     USAGE:
-       rack <command> <subcommand> <action> [flags]
+       rack <service> <subservice> <action> [flags]
 
     VERSION:
        0.0.0
