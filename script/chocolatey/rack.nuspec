@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>rack</id>
+    <title>Rackspace Command Line Interface</title>
+    <version>$version$</version>
+    <authors>Rackspace</authors>
+    <owners>carolynvs</owners>
+    <summary>Distributes rack.exe</summary>
+    <description>The Rackspace Command Line Interface is a unified tool to manage your Rackspace services. It provides streamlined and secure configuration as well as a single point of entry for all Rackspace Cloud services.</description>
+    <projectUrl>https://developer.rackspace.com/docs/rack-cli/</projectUrl>
+    <packageSourceUrl>https://github.com/rackspace/rack/script/chocolatey</packageSourceUrl>
+    <projectSourceUrl>https://github.com/rackspace/rack</projectSourceUrl>
+    <docsUrl>https://developer.rackspace.com/docs/rack-cli/</docsUrl>
+    <bugTrackerUrl>https://github.com/rackspace/rack/issues</bugTrackerUrl>
+    <tags>rack cli rackspace</tags>
+    <copyright>Copyright © 2015 Rackspace, Inc.</copyright>
+    <licenseUrl>https://github.com/rackspace/rack/blob/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>http://cdn.rawgit.com/rackspace/rack/master/script/chocolatey/rackspace-logo.png</iconUrl>
+    <releaseNotes>https://github.com/rackspace/rack/releases</releaseNotes>
+  </metadata>
+  <files>
+    <file src="rack.exe" />
+  </files>
+</package>
