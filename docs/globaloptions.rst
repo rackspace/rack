@@ -8,11 +8,16 @@ and allow you to customize various aspects of the ``rack`` tool at runtime.
 These options may override configuration file or environment variables you have
 set previously, change output format or other aspects of the tool.
 
-For example:
+Display any available command-line flags by appending `--help` to list the
+flags available::
+
+    rack <service> <subservice> <action> --help
+
+For example, you can get JSON output from any series of commands:
 
 ::
 
-    rack <service> <command> <subcommand> --output json [flags]
+    rack <service> <subservice> <action> --output json [flags]
 
 Would result in the command returning a JSON_ formatted output.
 
@@ -166,7 +171,7 @@ Help is available on the base level; for example::
        rack - An opinionated CLI for the Rackspace cloud
 
     USAGE:
-       rack <command> <subcommand> <action> [flags]
+       rack <service> <subservice> <action> [flags]
 
     VERSION:
        0.0.0
@@ -188,7 +193,7 @@ And it is available per command::
        rack servers - Used for the Servers service
 
     USAGE:
-       rack servers <subcommand> <action> [flags]
+       rack servers <subservice> <action> [flags]
 
     VERSION:
        0.0.0
@@ -201,7 +206,7 @@ And it is available per command::
        help, h	Shows a list of commands or help for one command
 
 
-And again, per subcommand::
+And again, per subservice::
 
     rack servers keypair --help
     NAME:
@@ -219,6 +224,40 @@ And again, per subcommand::
        get		rack [globals] servers keypair get [--name <keypairName>] [flags]
        delete	rack servers keypair delete [--name <keypairName>] [flags]
        help, h	Shows a list of commands or help for one command
+
+And one more time, per action::
+
+    rack servers instance list --help
+    NAME: list - rack servers instance list  [flags]
+
+    DESCRIPTION: Lists existing servers
+
+    COMMAND FLAGS:
+    --all-pages     [optional] Return all servers. Default is to paginate.
+    --name          [optional] Only list servers with this name.
+    --changes-since [optional] Only list servers that have been changed since this time/date stamp.
+    --image         [optional] Only list servers that have this image ID.
+    --flavor        [optional] Only list servers that have this flavor ID.
+    --status        [optional] Only list servers that have this status.
+    --marker        [optional] Start listing servers at this server ID.
+    --limit         [optional] Only return this many servers at most.
+    --fields        [optional] Only return these comma-separated case-insensitive fields.
+                    Choices: id, name, status, publicipv4, privateipv4, image, flavor
+
+
+    GLOBAL FLAGS:
+    --username              The username with which to authenticate.
+    --api-key               The API key with which to authenticate.
+    --auth-tenant-id        The tenant ID of the user to authenticate as. May only be provided as a command-line flag.
+    --auth-token            The authentication token of the user to authenticate as. This must be used with the `auth-tenant-id` flag.
+    --auth-url              The endpoint to which authenticate.
+    --region                The region to which authenticate.
+    --use-service-net       Whether or not to use the internal Rackspace network
+    --profile               The config file profile to use for authentication.
+    --output                Format in which to return output. Options: json, csv, table. Default is 'table'.
+    --no-cache              Don't get or set authentication credentials in the rack cache.
+    --log                   Print debug information from the command. Options are: debug, info
+    --no-header             Don't return a header for CSV nor tabular output.
 
 
 .. JSON: http://json.org/

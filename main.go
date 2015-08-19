@@ -37,33 +37,35 @@ func main() {
 
 // Usage returns, you guessed it, the usage information
 func Usage() string {
-	return "An opinionated CLI for the Rackspace cloud"
+	return "Command-line interface to manage Rackspace Cloud resources"
 }
 
 // Desc returns, you guessed it, the description
 func Desc() string {
-	return `Rack is an opinionated command-line tool that allows Rackspace users
-to accomplish tasks in a simple, idiomatic way. It seeks to provide
-flexibility through common Unix practices like piping and composability. All
-commands have been tested against Rackspace's live API.`
+	return `The rack CLI manages authentication, configures a local setup, and provides workflows for operations on Rackspace Cloud resources.`
 }
 
 // Cmds returns a list of commands supported by the tool
 func Cmds() []cli.Command {
 	return []cli.Command{
 		{
-			Name: "init",
-			Usage: strings.Join([]string{"For Linux and OS X, creates the `rack` man page and sets up command completion for the Bash shell.",
-				"\tFor Windows, creates a `posh_autocomplete.ps1` file in the `$HOME/.rack` directory. You must run the file to set up command completion."}, "\n"),
+			Name:   "configure",
+			Usage:  "Interactively create a config file for Rackspace authentication.",
+			Action: configure,
+		},
+		{
+			Name:  "init",
+			Usage: strings.Join([]string{"Enable tab for command completion.",
+			"\tFor Linux and OS X, creates the `rack` man page and sets up",
+			"\tcommand completion for the Bash shell. Run `man ./rack.1` to",
+			"\tview the generated man page.",
+			"\tFor Windows, creates a `posh_autocomplete.ps1` file in the",
+			"\t`$HOME/.rack` directory. You must run the file to set up",
+			"\tcommand completion."}, "\n"),
 			Action: func(c *cli.Context) {
 				setup.Init(c)
 				man()
 			},
-		},
-		{
-			Name:   "configure",
-			Usage:  "Interactively create a config file for Rackspace authentication.",
-			Action: configure,
 		},
 		{
 			Name:  "version",
@@ -89,7 +91,8 @@ func Cmds() []cli.Command {
 		},
 		{
 			Name:        "block-storage",
-			Usage:       "Block-level storage, exposed as volumes to mount to host servers. Work with volumes and their associated snapshots.",
+			Usage:       strings.Join([]string{"Block-level storage, exposed as volumes to mount to",
+			"\thost servers. Work with volumes and their associated snapshots."}, "\n"),
 			Subcommands: blockstoragecommands.Get(),
 		},
 	}
