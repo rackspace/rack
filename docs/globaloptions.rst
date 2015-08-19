@@ -193,7 +193,7 @@ And it is available per command::
        rack servers - Used for the Servers service
 
     USAGE:
-       rack servers <subcommand> <action> [flags]
+       rack servers <subservice> <action> [flags]
 
     VERSION:
        0.0.0
@@ -206,7 +206,7 @@ And it is available per command::
        help, h	Shows a list of commands or help for one command
 
 
-And again, per subcommand::
+And again, per subservice::
 
     rack servers keypair --help
     NAME:
