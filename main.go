@@ -8,6 +8,7 @@ import (
 	"github.com/rackspace/rack/commands/blockstoragecommands"
 	"github.com/rackspace/rack/commands/filescommands"
 	"github.com/rackspace/rack/commands/networkscommands"
+	"github.com/rackspace/rack/commands/orchestrationcommands"
 	"github.com/rackspace/rack/commands/serverscommands"
 	"github.com/rackspace/rack/setup"
 	"github.com/rackspace/rack/util"
@@ -94,6 +95,11 @@ func Cmds() []cli.Command {
 			Usage:       strings.Join([]string{"Block-level storage, exposed as volumes to mount to",
 			"\thost servers. Work with volumes and their associated snapshots."}, "\n"),
 			Subcommands: blockstoragecommands.Get(),
+		},
+		{
+			Name: "orch",
+			Usage: "Cloud orchestration",
+			Subcommands: orchestrationcommands.Get(),
 		},
 	}
 }
