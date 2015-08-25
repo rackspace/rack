@@ -152,9 +152,9 @@ In the example above there is a default profile that doesn't have a named sectio
 
 ::
 
-    rack --profile another-profile servers instance list
+    rack servers instance list --profile another-profile
 
-Note that not all (or any) of the authentication parameters
+Note that none of the authentication parameters
 have to be set in the config file. Parameters not set there will be looked for elsewhere.
 
 
