@@ -76,14 +76,21 @@ func (command *commandDeleteMetadata) HandleFlags(resource *handler.Resource) er
 	if err != nil {
 		return err
 	}
-	metadataKeys := strings.Split(command.Ctx.CLIContext.String("metadata-keys"), ",")
+
+	c := command.Ctx.CLIContext
+	containerName := c.String("container")
+	if err := checkContainerExists(command.Ctx.ServiceClient, containerName); err != nil {
+		return err
+	}
+
+	metadataKeys := strings.Split(c.String("metadata-keys"), ",")
 	for i, k := range metadataKeys {
 		metadataKeys[i] = strings.Title(k)
 	}
 
 	resource.Params = &paramsDeleteMetadata{
-		objectName:    command.Ctx.CLIContext.String("name"),
-		containerName: command.Ctx.CLIContext.String("container"),
+		objectName:    c.String("name"),
+		containerName: containerName,
 		metadataKeys:  metadataKeys,
 	}
 	return nil

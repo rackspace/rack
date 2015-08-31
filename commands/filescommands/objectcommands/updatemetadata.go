@@ -76,14 +76,20 @@ func (command *commandUpdateMetadata) HandleFlags(resource *handler.Resource) er
 		return err
 	}
 
+	c := command.Ctx.CLIContext
+	containerName := c.String("container")
+	if err := checkContainerExists(command.Ctx.ServiceClient, containerName); err != nil {
+		return err
+	}
+
 	metadata, err := command.Ctx.CheckKVFlag("metadata")
 	if err != nil {
 		return err
 	}
 
 	resource.Params = &paramsUpdateMetadata{
-		objectName:    command.Ctx.CLIContext.String("name"),
-		containerName: command.Ctx.CLIContext.String("container"),
+		objectName:    c.String("name"),
+		containerName: containerName,
 		metadata:      metadata,
 	}
 	return err

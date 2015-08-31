@@ -101,6 +101,11 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 	}
 
 	c := command.Ctx.CLIContext
+	containerName := c.String("container")
+
+	if err := checkContainerExists(command.Ctx.ServiceClient, containerName); err != nil {
+		return err
+	}
 
 	opts := osObjects.CreateOpts{
 		ContentLength: int64(c.Int("content-length")),
@@ -120,7 +125,7 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 	}
 
 	resource.Params = &paramsUpload{
-		container: c.String("container"),
+		container: containerName,
 		object:    c.String("name"),
 		opts:      opts,
 	}

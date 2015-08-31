@@ -68,9 +68,15 @@ func (command *commandGetMetadata) HandleFlags(resource *handler.Resource) error
 		return err
 	}
 
+	c := command.Ctx.CLIContext
+	containerName := c.String("container")
+	if err := checkContainerExists(command.Ctx.ServiceClient, containerName); err != nil {
+		return err
+	}
+
 	resource.Params = &paramsGetMetadata{
-		objectName:    command.Ctx.CLIContext.String("name"),
-		containerName: command.Ctx.CLIContext.String("container"),
+		objectName:    c.String("name"),
+		containerName: containerName,
 	}
 	return err
 }
