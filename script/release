@@ -16,6 +16,7 @@ NEW_VERSION=${1:-}
 REMOTE="release"
 REMOTE_URL="git@github.com:rackspace/rack.git"
 VERSION_FILE="util/util.go"
+LATEST_VERSION_FILE="docs/latest.json"
 DOCS_INDEX_FILE="docs/index.rst"
 DOCS_CONFIGURATION_FILE="docs/configuration.rst"
 BRANCH=`git rev-parse --abbrev-ref HEAD`
@@ -96,6 +97,15 @@ update ./index.rst-version "s#rackcdn\.com/[0-9a-zA-Z.-]*/#rackcdn\.com/$NEW_VER
 #
 
 update ./configuration.rst-version "s#rackcdn\.com/[0-9a-zA-Z.-]*/#rackcdn\.com/$NEW_VERSION/#g" $DOCS_CONFIGURATION_FILE
+
+#
+# Update the latest version of `rack`
+#
+
+TMP_FILE=`mktemp -d 2>/dev/null || mktemp -d -t ./latest.json-version`
+printf '{"version": "%s"}' $NEW_VERSION > $TMP_FILE
+chmod 0644 $TMP_FILE
+mv -f $TMP_FILE $LATEST_VERSION_FILE
 
 #
 # Commit and push the code changes
