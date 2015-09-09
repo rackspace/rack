@@ -63,7 +63,7 @@ func (r FindResult) Extract() ([]Resource, error) {
 // As OpenStack extensions may freely alter the response bodies of structures returned to the client, you may only safely access the
 // data provided through the ExtractResources call.
 type ResourcePage struct {
-	pagination.MarkerPageBase
+	pagination.SinglePageBase
 }
 
 // IsEmpty returns true if a page contains no Server results.
@@ -75,18 +75,6 @@ func (r ResourcePage) IsEmpty() (bool, error) {
 	return len(resources) == 0, nil
 }
 
-// LastMarker returns the last container name in a ListResult.
-func (r ResourcePage) LastMarker() (string, error) {
-	resources, err := ExtractResources(r)
-	if err != nil {
-		return "", err
-	}
-	if len(resources) == 0 {
-		return "", nil
-	}
-	return resources[len(resources)-1].PhysicalID, nil
-}
-
 // ExtractResources interprets the results of a single page from a List() call, producing a slice of Resource entities.
 func ExtractResources(page pagination.Page) ([]Resource, error) {
 	casted := page.(ResourcePage).Body
@@ -94,8 +82,9 @@ func ExtractResources(page pagination.Page) ([]Resource, error) {
 	var response struct {
 		Resources []Resource `mapstructure:"resources"`
 	}
-	err := mapstructure.Decode(casted, &response)
-
+	if err := mapstructure.Decode(casted, &response); err != nil {
+		return nil, err
+	}
 	var resources []interface{}
 	switch casted.(type) {
 	case map[string]interface{}:
@@ -117,7 +106,7 @@ func ExtractResources(page pagination.Page) ([]Resource, error) {
 		}
 	}
 
-	return response.Resources, err
+	return response.Resources, nil
 }
 
 // GetResult represents the result of a Get operation.
@@ -193,7 +182,7 @@ func (r ResourceTypePage) IsEmpty() (bool, error) {
 }
 
 // ExtractResourceTypes extracts and returns resource types.
-func ExtractResourceTypes(page pagination.Page) ([]string, error) {
+func ExtractResourceTypes(page pagination.Page) (resourceTypes, error) {
 	var response struct {
 		ResourceTypes []string `mapstructure:"resource_types"`
 	}

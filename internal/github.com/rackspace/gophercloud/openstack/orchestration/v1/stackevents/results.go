@@ -72,7 +72,7 @@ func (r FindResult) Extract() ([]Event, error) {
 // As OpenStack extensions may freely alter the response bodies of structures returned to the client, you may only safely access the
 // data provided through the ExtractResources call.
 type EventPage struct {
-	pagination.MarkerPageBase
+	pagination.SinglePageBase
 }
 
 // IsEmpty returns true if a page contains no Server results.
@@ -82,18 +82,6 @@ func (r EventPage) IsEmpty() (bool, error) {
 		return true, err
 	}
 	return len(events) == 0, nil
-}
-
-// LastMarker returns the last stack ID in a ListResult.
-func (r EventPage) LastMarker() (string, error) {
-	events, err := ExtractEvents(r)
-	if err != nil {
-		return "", err
-	}
-	if len(events) == 0 {
-		return "", nil
-	}
-	return events[len(events)-1].ID, nil
 }
 
 // ExtractEvents interprets the results of a single page from a List() call, producing a slice of Event entities.
