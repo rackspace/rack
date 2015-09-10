@@ -12,37 +12,22 @@ func TestCreateStack(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 	HandleCreateSuccessfully(t, CreateOutput)
-
+	template := new(Template)
+	template.Bin = []byte(`
+		{
+			"heat_template_version": "2013-05-23",
+			"description": "Simple template to test heat commands",
+			"parameters": {
+				"flavor": {
+					"default": "m1.tiny",
+					"type": "string"
+				}
+			}
+		}`)
 	createOpts := CreateOpts{
-		Name:    "stackcreated",
-		Timeout: 60,
-		Template: `
-    {
-      "stack_name": "postman_stack",
-      "template": {
-        "heat_template_version": "2013-05-23",
-        "description": "Simple template to test heat commands",
-        "parameters": {
-          "flavor": {
-            "default": "m1.tiny",
-            "type": "string"
-          }
-        },
-        "resources": {
-          "hello_world": {
-            "type":"OS::Nova::Server",
-            "properties": {
-              "key_name": "heat_key",
-              "flavor": {
-                "get_param": "flavor"
-              },
-              "image": "ad091b52-742f-469e-8f3c-fd81cadf0743",
-              "user_data": "#!/bin/bash -xv\necho \"hello world\" &gt; /root/hello-world.txt\n"
-            }
-          }
-        }
-      }
-    }`,
+		Name:            "stackcreated",
+		Timeout:         60,
+		TemplateOpts:    template,
 		DisableRollback: Disable,
 	}
 	actual, err := Create(fake.ServiceClient(), createOpts).Extract()
@@ -106,31 +91,20 @@ func TestUpdateStack(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandleUpdateSuccessfully(t)
 
+	template := new(Template)
+	template.Bin = []byte(`
+		{
+			"heat_template_version": "2013-05-23",
+			"description": "Simple template to test heat commands",
+			"parameters": {
+				"flavor": {
+					"default": "m1.tiny",
+					"type": "string"
+				}
+			}
+		}`)
 	updateOpts := UpdateOpts{
-		Template: `
-    {
-      "heat_template_version": "2013-05-23",
-      "description": "Simple template to test heat commands",
-      "parameters": {
-        "flavor": {
-          "default": "m1.tiny",
-          "type": "string"
-        }
-      },
-      "resources": {
-        "hello_world": {
-          "type":"OS::Nova::Server",
-          "properties": {
-            "key_name": "heat_key",
-            "flavor": {
-              "get_param": "flavor"
-            },
-            "image": "ad091b52-742f-469e-8f3c-fd81cadf0743",
-            "user_data": "#!/bin/bash -xv\necho \"hello world\" &gt; /root/hello-world.txt\n"
-          }
-        }
-      }
-    }`,
+		TemplateOpts: template,
 	}
 	err := Update(fake.ServiceClient(), "gophercloud-test-stack-2", "db6977b2-27aa-4775-9ae7-6213212d4ada", updateOpts).ExtractErr()
 	th.AssertNoErr(t, err)
@@ -150,36 +124,22 @@ func TestPreviewStack(t *testing.T) {
 	defer th.TeardownHTTP()
 	HandlePreviewSuccessfully(t, GetOutput)
 
+	template := new(Template)
+	template.Bin = []byte(`
+		{
+			"heat_template_version": "2013-05-23",
+			"description": "Simple template to test heat commands",
+			"parameters": {
+				"flavor": {
+					"default": "m1.tiny",
+					"type": "string"
+				}
+			}
+		}`)
 	previewOpts := PreviewOpts{
-		Name:    "stackcreated",
-		Timeout: 60,
-		Template: `
-    {
-      "stack_name": "postman_stack",
-      "template": {
-        "heat_template_version": "2013-05-23",
-        "description": "Simple template to test heat commands",
-        "parameters": {
-          "flavor": {
-            "default": "m1.tiny",
-            "type": "string"
-          }
-        },
-        "resources": {
-          "hello_world": {
-            "type":"OS::Nova::Server",
-            "properties": {
-              "key_name": "heat_key",
-              "flavor": {
-                "get_param": "flavor"
-              },
-              "image": "ad091b52-742f-469e-8f3c-fd81cadf0743",
-              "user_data": "#!/bin/bash -xv\necho \"hello world\" &gt; /root/hello-world.txt\n"
-            }
-          }
-        }
-      }
-    }`,
+		Name:            "stackcreated",
+		Timeout:         60,
+		TemplateOpts:    template,
 		DisableRollback: Disable,
 	}
 	actual, err := Preview(fake.ServiceClient(), previewOpts).Extract()
