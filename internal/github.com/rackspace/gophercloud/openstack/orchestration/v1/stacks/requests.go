@@ -139,20 +139,6 @@ type AdoptOpts struct {
 	Name string
 	// (REQUIRED) The timeout for stack creation in minutes.
 	Timeout int
-	// (OPTIONAL; REQUIRED IF Template IS EMPTY) The URL of the template to instantiate.
-	// This value is ignored if Template is supplied inline.
-	TemplateURL string
-	// (OPTIONAL; REQUIRED IF TemplateURL IS EMPTY) A template to instantiate. The value
-	// is a stringified version of the JSON/YAML template. Since the template will likely
-	// be located in a file, one way to set this variable is by using ioutil.ReadFile:
-	// import "io/ioutil"
-	// var opts stacks.CreateOpts
-	// b, err := ioutil.ReadFile("path/to/you/template/file.json")
-	// if err != nil {
-	//   // handle error...
-	// }
-	// opts.Template = string(b)
-	Template string
 	// (OPTIONAL) Enables or disables deletion of all stack resources when a stack
 	// creation fails. Default is true, meaning all resources are not deleted when
 	// stack creation fails.
@@ -175,14 +161,6 @@ func (opts AdoptOpts) ToStackAdoptMap() (map[string]interface{}, error) {
 		return s, errors.New("Required field 'Name' not provided.")
 	}
 	s["stack_name"] = opts.Name
-
-	if opts.Template != "" {
-		s["template"] = opts.Template
-	} else if opts.TemplateURL != "" {
-		s["template_url"] = opts.TemplateURL
-	} else {
-		return s, errors.New("Either Template or TemplateURL must be provided.")
-	}
 
 	if opts.AdoptStackData == "" {
 		return s, errors.New("Required field 'AdoptStackData' not provided.")
