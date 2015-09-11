@@ -82,7 +82,7 @@ func ExtractStacks(page pagination.Page) ([]ListedStack, error) {
 		Stacks []ListedStack `mapstructure:"stacks"`
 	}
 
-	err := mapstructure.Decode(page.(StackPage).Body, &res)
+	err := mapstructure.Decode(casted, &res)
 	if err != nil {
 		return nil, err
 	}

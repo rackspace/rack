@@ -224,11 +224,13 @@ func (r resourceTypes) Less(i, j int) bool {
 
 // ExtractResourceTypes extracts and returns resource types.
 func ExtractResourceTypes(page pagination.Page) (resourceTypes, error) {
+	casted := page.(ResourceTypePage).Body
+
 	var response struct {
 		ResourceTypes resourceTypes `mapstructure:"resource_types"`
 	}
 
-	if err := mapstructure.Decode(page.(ResourceTypePage).Body, &response); err != nil {
+	if err := mapstructure.Decode(casted, &response); err != nil {
 		return nil, err
 	}
 	return response.ResourceTypes, nil
