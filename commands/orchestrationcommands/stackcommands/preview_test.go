@@ -1,0 +1,74 @@
+package stackcommands
+
+import (
+	"flag"
+	"testing"
+
+	"github.com/rackspace/rack/handler"
+	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
+	osStacks "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stacks"
+)
+
+func TestPreviewContext(t *testing.T) {
+	app := cli.NewApp()
+	flagset := flag.NewFlagSet("flags", 1)
+	c := cli.NewContext(app, flagset, nil)
+	cmd := &commandPreview{
+		Ctx: &handler.Context{
+			CLIContext: c,
+		},
+	}
+	expected := cmd.Ctx
+	actual := cmd.Context()
+	th.AssertDeepEquals(t, expected, actual)
+}
+
+func TestPreviewKeys(t *testing.T) {
+	cmd := &commandPreview{}
+	expected := keysPreview
+	actual := cmd.Keys()
+	th.AssertDeepEquals(t, expected, actual)
+}
+
+func TestPreviewServiceClientType(t *testing.T) {
+	cmd := &commandPreview{}
+	expected := serviceClientType
+	actual := cmd.ServiceClientType()
+	th.AssertEquals(t, expected, actual)
+}
+
+func TestPreviewHandleSingle(t *testing.T) {
+	app := cli.NewApp()
+	flagset := flag.NewFlagSet("flags", 1)
+	flagset.String("name", "", "")
+	flagset.Set("name", "stack1")
+	c := cli.NewContext(app, flagset, nil)
+	cmd := &commandPreview{
+		Ctx: &handler.Context{
+			CLIContext: c,
+		},
+	}
+
+	expected := &handler.Resource{
+		Params: &paramsPreview{
+            opts: &osStacks.PreviewOpts{Name: "stack1"},
+		},
+	}
+	actual := &handler.Resource{
+		Params: &paramsPreview{
+            opts: &osStacks.PreviewOpts{},
+        },
+	}
+	err := cmd.HandleSingle(actual)
+	th.AssertNoErr(t, err)
+	th.AssertEquals(t, expected.Params.(*paramsPreview).opts.Name, actual.Params.(*paramsPreview).opts.Name)
+}
+
+
+func TestPreviewTemplateStdinField(t *testing.T) {
+	cmd := &commandPreview{}
+	expected := "name"
+	actual := cmd.StdinField()
+	th.AssertEquals(t, expected, actual)
+}
