@@ -37,12 +37,17 @@ func flagsCreate() []cli.Flag {
 			Name:  "volume-type",
 			Usage: "[optional] The volume type of this volume.",
 		},
+		cli.BoolFlag{
+			Name:  "wait-for-completion",
+			Usage: "[optional] If provided, the command will wait to return until the volume is available.",
+		},
 	}
 }
 
-var keysCreate = []string{"ID", "Name", "Description", "Size", "VolumeType", "SnapshotID", "Attachments", "CreatedAt", "Metadata"}
+var keysCreate = []string{"ID", "Name", "Status", "Description", "Size", "VolumeType", "SnapshotID", "Attachments", "CreatedAt", "Metadata"}
 
 type paramsCreate struct {
+	wait bool
 	opts *osVolumes.CreateOpts
 }
 
@@ -77,6 +82,11 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 
 	c := command.Ctx.CLIContext
 
+	wait := false
+	if c.IsSet("wait-for-completion") {
+		wait = true
+	}
+
 	opts := &osVolumes.CreateOpts{
 		Size:        c.Int("size"),
 		Name:        c.String("name"),
@@ -85,6 +95,7 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 	}
 
 	resource.Params = &paramsCreate{
+		wait: wait,
 		opts: opts,
 	}
 
@@ -98,6 +109,21 @@ func (command *commandCreate) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
+
+	if resource.Params.(*paramsCreate).wait {
+		err = osVolumes.WaitForStatus(command.Ctx.ServiceClient, volume.ID, "available", 600)
+		if err != nil {
+			resource.Err = err
+			return
+		}
+
+		volume, err = osVolumes.Get(command.Ctx.ServiceClient, volume.ID).Extract()
+		if err != nil {
+			resource.Err = err
+			return
+		}
+	}
+
 	resource.Result = volumeSingle(volume)
 }
 
