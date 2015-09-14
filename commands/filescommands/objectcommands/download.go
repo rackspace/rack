@@ -70,10 +70,16 @@ func (command *commandDownload) HandleFlags(resource *handler.Resource) error {
 	if err != nil {
 		return err
 	}
-	container := command.Ctx.CLIContext.String("container")
-	object := command.Ctx.CLIContext.String("name")
+
+	c := command.Ctx.CLIContext
+	containerName := c.String("container")
+	if err := checkContainerExists(command.Ctx.ServiceClient, containerName); err != nil {
+		return err
+	}
+
+	object := c.String("name")
 	resource.Params = &paramsDownload{
-		container: container,
+		container: containerName,
 		object:    object,
 	}
 	return nil

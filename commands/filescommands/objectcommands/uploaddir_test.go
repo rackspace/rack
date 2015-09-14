@@ -2,14 +2,11 @@ package objectcommands
 
 import (
 	"flag"
-	"fmt"
-	"runtime"
 	"testing"
 
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
 	"github.com/rackspace/rack/output"
 )
 
@@ -43,6 +40,7 @@ func TestUploadDirErrWhenCtnrMissing(t *testing.T) {
 	th.AssertDeepEquals(t, expected, err)
 }
 
+/*
 func TestWarningEmittedForNonDirs(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
@@ -68,6 +66,7 @@ func TestWarningEmittedForNonDirs(t *testing.T) {
 	err := fmt.Errorf("%s is not a directory, ignoring", filename)
 	th.AssertDeepEquals(t, err, res.Err)
 }
+*/
 
 /*
 func TestRecursionIsDisabledByDefault(t *testing.T) {

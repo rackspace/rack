@@ -73,9 +73,16 @@ func (command *commandDelete) HandleFlags(resource *handler.Resource) error {
 	if err != nil {
 		return err
 	}
-	container := command.Ctx.CLIContext.String("container")
+
+	c := command.Ctx.CLIContext
+	containerName := c.String("container")
+
+	if err := checkContainerExists(command.Ctx.ServiceClient, containerName); err != nil {
+		return err
+	}
+
 	resource.Params = &paramsDelete{
-		container: container,
+		container: containerName,
 	}
 	return nil
 }
