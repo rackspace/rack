@@ -8,6 +8,7 @@ import (
 	"github.com/rackspace/rack/commands/blockstoragecommands"
 	"github.com/rackspace/rack/commands/filescommands"
 	"github.com/rackspace/rack/commands/networkscommands"
+	"github.com/rackspace/rack/commands/orchestrationcommands"
 	"github.com/rackspace/rack/commands/serverscommands"
 	"github.com/rackspace/rack/setup"
 	"github.com/rackspace/rack/util"
@@ -54,14 +55,14 @@ func Cmds() []cli.Command {
 			Action: configure,
 		},
 		{
-			Name:  "init",
+			Name: "init",
 			Usage: strings.Join([]string{"Enable tab for command completion.",
-			"\tFor Linux and OS X, creates the `rack` man page and sets up",
-			"\tcommand completion for the Bash shell. Run `man ./rack.1` to",
-			"\tview the generated man page.",
-			"\tFor Windows, creates a `posh_autocomplete.ps1` file in the",
-			"\t`$HOME/.rack` directory. You must run the file to set up",
-			"\tcommand completion."}, "\n"),
+				"\tFor Linux and OS X, creates the `rack` man page and sets up",
+				"\tcommand completion for the Bash shell. Run `man ./rack.1` to",
+				"\tview the generated man page.",
+				"\tFor Windows, creates a `posh_autocomplete.ps1` file in the",
+				"\t`$HOME/.rack` directory. You must run the file to set up",
+				"\tcommand completion."}, "\n"),
 			Action: func(c *cli.Context) {
 				setup.Init(c)
 				man()
@@ -90,10 +91,15 @@ func Cmds() []cli.Command {
 			Subcommands: networkscommands.Get(),
 		},
 		{
-			Name:        "block-storage",
-			Usage:       strings.Join([]string{"Block-level storage, exposed as volumes to mount to",
-			"\thost servers. Work with volumes and their associated snapshots."}, "\n"),
+			Name: "block-storage",
+			Usage: strings.Join([]string{"Block-level storage, exposed as volumes to mount to",
+				"\thost servers. Work with volumes and their associated snapshots."}, "\n"),
 			Subcommands: blockstoragecommands.Get(),
+		},
+		{
+			Name:        "orchestration",
+			Usage:       "Use a template language to orchestrate Rackspace cloud services.",
+			Subcommands: orchestrationcommands.Get(),
 		},
 	}
 }
