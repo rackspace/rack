@@ -205,10 +205,7 @@ func (client *ProviderClient) Request(method, url string, options RequestOpts) (
 				err = client.ReauthFunc()
 				if err != nil {
 					return nil, &ErrUnableToReauthenticate{
-						BaseError: &BaseError{
-							Function: "*ProviderClient.Request",
-						},
-						OriginalError: err,
+						respErr,
 					}
 				}
 				if options.RawBody != nil {
@@ -216,11 +213,17 @@ func (client *ProviderClient) Request(method, url string, options RequestOpts) (
 				}
 				resp, err = client.Request(method, url, options)
 				if err != nil {
-					return nil, &ErrErrorAfterReauthentication{
-						BaseError: &BaseError{
-							Function: "*ProviderClient.Request",
-						},
-						OriginalError: err,
+					switch err.(type) {
+					case *UnexpectedResponseCodeError:
+						return nil, &ErrErrorAfterReauthentication{err.(*UnexpectedResponseCodeError)}
+					default:
+						return nil, &ErrErrorAfterReauthentication{
+							UnexpectedResponseCodeError: &UnexpectedResponseCodeError{
+								BaseError: BaseError{
+									OriginalError: err,
+								},
+							},
+						}
 					}
 				}
 				return resp, nil
