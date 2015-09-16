@@ -72,6 +72,8 @@ build() {
 }
 
 deploy() {
+  # Set up the directory structure for release to rack's backing CDN
+  # and copy the built `rack` into the right paths for this build type
 
   BASEDIR="${VERSION}/${os}/${arch}"
   # Mirror the github layout for branches, tags, commits
