@@ -18,16 +18,20 @@ SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 source "${SCRIPT_DIR}/lib.sh"
 
+
 ################################################################################
 # Disable strict temporarily to accept global environment variables that come
 # from GIMME and Travis
 ################################################################################
-set +u
 
-if [[ -z "$GIMME_OS" && -z "$GIMME_ARCH" ]]; then
+if [[ -z "${GIMME_OS-}" && -z "${GIMME_ARCH-}" ]]; then
   >&2 echo "GIMME_OS and GIMME_ARCH must be defined"
   exit 2
 fi
+
+set +u
+
+
 
 os=$GIMME_OS
 arch=$GIMME_ARCH
@@ -99,15 +103,21 @@ fi
 
 # Ship /tree/rack-branchname
 cp "${RACKBUILD}" "${BUILDDIR}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}"
-echo "Fresh build for branch '${BRANCH}' at "
-echo "${CDN}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}"
 
-if [ -n "$TRAVIS_TAG" ]; then
-  # Only when we're on an official tag do we spit out the official ones.
-  cp "${RACKBUILD}" "${BUILDDIR}/${BASEDIR}/${BASENAME}${SUFFIX}"
-  echo "Get it while it's hot at"
-  echo "${CDN}/${BASEDIR}/${BASENAME}${SUFFIX}"
+# Only when we're on the canonical rackspace/rack repo will we be shipping
+# binaries, which comes down to whether TRAVIS_SECURE_ENV_VARS is defined
+if [ -n "${TRAVIS_SECURE_ENV_VARS-}" ]; then
+  echo "Fresh build for branch '${BRANCH}' at "
+  echo "${CDN}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}"
+  if [ -n "${TRAVIS_TAG-}" ]; then
+    # Only when we're on an official tag do we spit out the official ones.
+    cp "${RACKBUILD}" "${BUILDDIR}/${BASEDIR}/${BASENAME}${SUFFIX}"
+    echo "Get it while it's hot at"
+    echo "${CDN}/${BASEDIR}/${BASENAME}${SUFFIX}"
+  fi
+  # Clean up after build
+  rm $RACKBUILD
+else
+  # Do nothing, keep the built artifact
+  echo "${RACKBUILD} is ready for you"
 fi
-
-# Clean up after build
-rm $RACKBUILD
