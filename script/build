@@ -1,7 +1,8 @@
 #!/bin/bash
 
+# Load our library functions
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source $SCRIPT_DIR/lib.sh
+source "${SCRIPT_DIR}/lib.sh"
 
 build() {
   if [ -n "$GOPATH" ]; then
@@ -17,10 +18,10 @@ build() {
     COMMIT=$(git rev-parse --verify HEAD)
     LDFLAGS="-X github.com/rackspace/rack/util.Commit=${COMMIT} \
              -X github.com/rackspace/rack/util.Version=${VERSION}"
-    go build  -ldflags "$LDFLAGS" -o $RACKBUILD
+    go build  -ldflags "${LDFLAGS}" -o "${RACKBUILD}"
     return $?
   else
-    echo '$GOPATH must be defined. Do you have go setup?'
+    echo "\$GOPATH must be defined. Do you have go setup?"
     return 1
   fi
 }
