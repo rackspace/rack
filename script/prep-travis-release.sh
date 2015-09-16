@@ -29,10 +29,6 @@ if [[ -z "${GIMME_OS-}" && -z "${GIMME_ARCH-}" ]]; then
   exit 2
 fi
 
-set +u
-
-
-
 os=$GIMME_OS
 arch=$GIMME_ARCH
 
@@ -41,12 +37,10 @@ get_version
 get_commit
 
 # Ensure GOARM is defined later
-if [ "$arch" == "arm" -a -z "$GOARM" ]; then
+if [ "$arch" == "arm" -a -z "${GOARM-}" ]; then
   GOARM="6"
 fi
 
-# Back to strict
-set -u
 ################################################################################
 
 case $os in
