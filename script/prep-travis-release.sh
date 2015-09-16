@@ -14,6 +14,9 @@ IFS=$'\n\t'
 declare -xr CDN="https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com"
 declare -xr BUILDDIR="build"
 
+SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
+source $SCRIPT_DIR/lib.sh
 
 ################################################################################
 # Disable strict temporarily to accept global environment variables that come
@@ -28,13 +31,10 @@ fi
 
 os=$GIMME_OS
 arch=$GIMME_ARCH
-# See http://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
-# for details about default Travis Environment Variables and their values
-if [ -z "$TRAVIS_BRANCH" ]; then
-  BRANCH=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
-else
-  BRANCH=$TRAVIS_BRANCH
-fi
+
+get_branch
+get_version
+get_commit
 
 # Ensure GOARM is defined later
 if [ "$arch" == "arm" -a -z "$GOARM" ]; then
@@ -78,21 +78,6 @@ fi
 # Set up the build and deploy layout
 ################################################################################
 
-# Allow failure for a moment (for git describe)
-set +e
-if [ -z "$TRAVIS_TAG" ]; then
-    # Version will be the most recent tag, appended with -dev (e.g. 1.0.0-dev)
-    OLD_TAG=$(git describe --tags 2> /dev/null)
-    VERSION="${OLD_TAG}-dev"
-    if [ "$OLD_TAG" == "" ]; then
-        VERSION="dev"
-    fi
-else
-    # We have ourselves a *real* release
-    VERSION=$TRAVIS_TAG
-fi
-set -e
-
 BASEDIR="${VERSION}/${os}/${arch}"
 # Mirror the github layout for branches, tags, commits
 TREEDIR="${os}/${arch}/tree"
@@ -106,11 +91,7 @@ BASENAME="rack"
 # Base build not in build dir to prevent accidental upload on failure
 RACKBUILD="${BASENAME}${SUFFIX}"
 
-COMMIT=$(git rev-parse --verify HEAD)
-sed -i "s/var Commit =.*/var Commit = \"$COMMIT\"/" util/commit.go
-sed -i "s/var Version =.*/var Version = \"$VERSION\"/" util/util.go
-
-go build -o $RACKBUILD
+script/build
 
 # Ship /tree/rack-branchname
 cp $RACKBUILD ${BUILDDIR}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}

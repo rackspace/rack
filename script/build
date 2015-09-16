@@ -1,10 +1,22 @@
 #!/bin/bash
 
-if [ -n "$GOPATH" ]; then
-  echo "Building rack!"
-  COMMIT=$(git rev-parse --verify HEAD)
-  echo $COMMIT
-  go build -o $GOPATH/bin/rack -ldflags "-X util.Commit=${COMMIT}"
-else
-  echo '$GOPATH must be defined. Do you have go setup?'
-fi
+build() {
+  if [ -n "$GOPATH" ]; then
+    echo "Building rack!"
+
+    if [ -z "$RACKBUILD" ]; then
+        RACKBUILD=$GOPATH/bin/rack
+    fi
+
+    COMMIT=$(git rev-parse --verify HEAD)
+    LDFLAGS="-X github.com/rackspace/rack/util.Commit=${COMMIT} \
+             -X github.com/rackspace/rack/util.Version=${VERSION}"
+    go build  -ldflags "$LDFLAGS" -o $RACKBUILD
+    return $?
+  else
+    echo '$GOPATH must be defined. Do you have go setup?'
+    return 1
+  fi
+}
+
+build
