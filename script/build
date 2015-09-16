@@ -1,5 +1,8 @@
 #!/bin/bash
 
+SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source $SCRIPT_DIR/lib.sh
+
 build() {
   if [ -n "$GOPATH" ]; then
     echo "Building rack!"
@@ -7,6 +10,9 @@ build() {
     if [ -z "$RACKBUILD" ]; then
         RACKBUILD=$GOPATH/bin/rack
     fi
+
+    get_commit
+    get_version
 
     COMMIT=$(git rev-parse --verify HEAD)
     LDFLAGS="-X github.com/rackspace/rack/util.Commit=${COMMIT} \
