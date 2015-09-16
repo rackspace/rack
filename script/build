@@ -8,9 +8,8 @@ build() {
   if [ -n "$GOPATH" ]; then
     echo "Building rack!"
 
-    if [ -z "$RACKBUILD" ]; then
-        RACKBUILD=$GOPATH/bin/rack
-    fi
+    # Default build location is $GOPATH/bin/rack
+    : "${RACKBUILD:=$GOPATH/bin/rack}"
 
     get_commit
     get_version

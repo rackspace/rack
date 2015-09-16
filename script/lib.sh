@@ -9,6 +9,8 @@ get_branch() {
     BRANCH=$TRAVIS_BRANCH
   fi
   export BRANCH
+  
+  return 0
 }
 
 get_commit() {

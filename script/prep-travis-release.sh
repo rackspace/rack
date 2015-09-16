@@ -89,9 +89,13 @@ mkdir -p "${BUILDDIR}/${TREEDIR}"
 BASENAME="rack"
 
 # Base build not in build dir to prevent accidental upload on failure
-RACKBUILD="${BASENAME}${SUFFIX}"
-
+export RACKBUILD="${BASENAME}${SUFFIX}"
 script/build
+
+if (( $? != 0 )); then
+  echo "Failed build."
+  return 1
+fi
 
 # Ship /tree/rack-branchname
 cp "${RACKBUILD}" "${BUILDDIR}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}"
