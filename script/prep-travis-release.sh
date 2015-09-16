@@ -16,7 +16,7 @@ declare -xr BUILDDIR="build"
 
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-source $SCRIPT_DIR/lib.sh
+source "${SCRIPT_DIR}/lib.sh"
 
 ################################################################################
 # Disable strict temporarily to accept global environment variables that come
@@ -82,9 +82,9 @@ BASEDIR="${VERSION}/${os}/${arch}"
 # Mirror the github layout for branches, tags, commits
 TREEDIR="${os}/${arch}/tree"
 
-mkdir -p $BUILDDIR
-mkdir -p $BUILDDIR/$BASEDIR
-mkdir -p $BUILDDIR/$TREEDIR
+mkdir -p "${BUILDDIR}"
+mkdir -p "${BUILDDIR}/${BASEDIR}"
+mkdir -p "${BUILDDIR}/${TREEDIR}"
 
 BASENAME="rack"
 
@@ -94,13 +94,13 @@ RACKBUILD="${BASENAME}${SUFFIX}"
 script/build
 
 # Ship /tree/rack-branchname
-cp $RACKBUILD ${BUILDDIR}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}
+cp "${RACKBUILD}" "${BUILDDIR}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}"
 echo "Fresh build for branch '${BRANCH}' at "
 echo "${CDN}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}"
 
 if [ -n "$TRAVIS_TAG" ]; then
   # Only when we're on an official tag do we spit out the official ones.
-  cp $RACKBUILD ${BUILDDIR}/${BASEDIR}/${BASENAME}${SUFFIX}
+  cp "${RACKBUILD}" "${BUILDDIR}/${BASEDIR}/${BASENAME}${SUFFIX}"
   echo "Get it while it's hot at"
   echo "${CDN}/${BASEDIR}/${BASENAME}${SUFFIX}"
 fi
