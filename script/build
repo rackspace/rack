@@ -7,9 +7,7 @@ source "${SCRIPT_DIR}/lib.sh"
 build() {
   if [ -n "$GOPATH" ]; then
     echo "Building rack!"
-
-    # Default build location is $GOPATH/bin/rack
-    : "${RACKBUILD:=$GOPATH/bin/rack}"
+    RACKBUILD=${1:-${GOPATH}/bin/rack}
 
     get_commit
     get_version
@@ -25,4 +23,4 @@ build() {
   fi
 }
 
-build
+build $1
