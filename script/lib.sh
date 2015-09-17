@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# This script is intended to be `source`d
+
+# It populates several environment variables via these functions:
+# $BRANCH - get_branch()
+# $VERSION - get_version()
+# $COMMIT - get_commit()
+
 get_branch() {
   # See http://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
   # for details about default Travis Environment Variables and their values
