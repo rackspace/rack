@@ -1,10 +1,25 @@
 #!/bin/bash
 
-if [ -n "$GOPATH" ]; then
-  echo "Building rack!"
-  COMMIT=$(git rev-parse --verify HEAD)
-  echo -e "package util\n\nvar Commit = \"$COMMIT\"" > util/commit.go
-  go build -o $GOPATH/bin/rack
-else
-  echo '$GOPATH must be defined. Do you have go setup?'
-fi
+# Load our library functions
+SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source "${SCRIPT_DIR}/lib.sh"
+
+build() {
+  if [ -n "$GOPATH" ]; then
+    echo "Building rack!"
+    RACKBUILD=${1:-${GOPATH}/bin/rack}
+
+    get_commit
+    get_version
+
+    LDFLAGS="-X github.com/rackspace/rack/util.Commit=${COMMIT} \
+             -X github.com/rackspace/rack/util.Version=${VERSION}"
+    go build  -ldflags "${LDFLAGS}" -o "${RACKBUILD}"
+    return $?
+  else
+    echo "\$GOPATH must be defined. Do you have go setup?"
+    return 1
+  fi
+}
+
+build "$1"

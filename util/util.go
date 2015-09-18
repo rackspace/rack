@@ -78,5 +78,10 @@ func Pluralize(noun string, count int64) string {
 	return noun
 }
 
+// The following are both set during build time
+
 // Version is the current CLI version
-var Version = "1.0.0-beta.1"
+var Version string
+
+// Commit is the commit this build comes from
+var Commit string

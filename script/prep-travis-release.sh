@@ -13,116 +13,103 @@ IFS=$'\n\t'
 
 declare -xr CDN="https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com"
 declare -xr BUILDDIR="build"
+declare -xr BASENAME="rack"
 
+SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source "${SCRIPT_DIR}/lib.sh"
 
-################################################################################
-# Disable strict temporarily to accept global environment variables that come
-# from GIMME and Travis
-################################################################################
-set +u
+initialize() {
+  if [[ -z "${GIMME_OS-}" && -z "${GIMME_ARCH-}" ]]; then
+    >&2 echo "GIMME_OS and GIMME_ARCH must be defined"
+    exit 2
+  fi
 
-if [[ -z "$GIMME_OS" && -z "$GIMME_ARCH" ]]; then
-  >&2 echo "GIMME_OS and GIMME_ARCH must be defined"
-  exit 2
-fi
+  os=$GIMME_OS
+  arch=$GIMME_ARCH
 
-os=$GIMME_OS
-arch=$GIMME_ARCH
-# See http://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
-# for details about default Travis Environment Variables and their values
-if [ -z "$TRAVIS_BRANCH" ]; then
-  BRANCH=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
-else
-  BRANCH=$TRAVIS_BRANCH
-fi
+  get_branch
+  get_version
+  get_commit
 
-# Ensure GOARM is defined later
-if [ "$arch" == "arm" -a -z "$GOARM" ]; then
-  GOARM="6"
-fi
+  # Ensure GOARM is defined later
+  if [ "$arch" == "arm" -a -z "${GOARM-}" ]; then
+    GOARM="6"
+  fi
 
-# Back to strict
-set -u
-################################################################################
+  case $os in
+    windows)
+      os="Windows"
+      ;;
+    linux)
+      os="Linux"
+      ;;
+    darwin)
+      os="Darwin"
+      ;;
+    freebsd)
+      os="FreeBSD"
+      ;;
+    *)
+      >&2 echo "Unknown OS ${os}. Assuming it's a valid OS for gimme/go and charging ahead."
+  esac
 
-case $os in
-  windows)
-    os="Windows"
-    ;;
-  linux)
-    os="Linux"
-    ;;
-  darwin)
-    os="Darwin"
-    ;;
-  freebsd)
-    os="FreeBSD"
-    ;;
-  *)
-    >&2 echo "Unknown OS ${os}. Assuming it's a valid OS for gimme/go and charging ahead."
-esac
+  case $arch in
+    arm)
+      # Note that we can never be 1:1 between `uname -m` and arm versions
+      arch="armv${GOARM}"
+      ;;
+  esac
 
-case $arch in
-  arm)
-    # Note that we can never be 1:1 between `uname -m` and arm versions
-    arch="armv${GOARM}"
-    ;;
-esac
+  SUFFIX=""
+  if [ "$os" == "Windows" ]; then
+    SUFFIX=".exe"
+  fi
+}
 
-SUFFIX=""
-if [ "$os" == "Windows" ]; then
-  SUFFIX=".exe"
-fi
+build() {
+  RACKBUILD="${BASENAME}${SUFFIX}"
+  script/build ${RACKBUILD}
+}
 
-################################################################################
-# Set up the build and deploy layout
-################################################################################
+deploy() {
+  # Set up the directory structure for release to rack's backing CDN
+  # and copy the built `rack` into the right paths for this build type
 
-# Allow failure for a moment (for git describe)
-set +e
-if [ -z "$TRAVIS_TAG" ]; then
-    # Version will be the most recent tag, appended with -dev (e.g. 1.0.0-dev)
-    OLD_TAG=$(git describe --tags 2> /dev/null)
-    VERSION="${OLD_TAG}-dev"
-    if [ "$OLD_TAG" == "" ]; then
-        VERSION="dev"
+  BASEDIR="${VERSION}/${os}/${arch}"
+  # Mirror the github layout for branches, tags, commits
+  TREEDIR="${os}/${arch}/tree"
+
+  mkdir -p "${BUILDDIR}"
+  mkdir -p "${BUILDDIR}/${BASEDIR}"
+  mkdir -p "${BUILDDIR}/${TREEDIR}"
+
+  if (( $? != 0 )); then
+    echo "Failed build."
+    exit 1
+  fi
+
+  # Ship /tree/rack-branchname
+  cp "${RACKBUILD}" "${BUILDDIR}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}"
+
+  # Only when we're on the canonical rackspace/rack repo will we be shipping
+  # binaries, which comes down to whether TRAVIS_SECURE_ENV_VARS is defined
+  if [ -n "${TRAVIS_SECURE_ENV_VARS-}" ]; then
+    echo "Fresh build for branch '${BRANCH}' at "
+    echo "${CDN}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}"
+    if [ -n "${TRAVIS_TAG-}" ]; then
+      # Only when we're on an official tag do we spit out the official ones.
+      cp "${RACKBUILD}" "${BUILDDIR}/${BASEDIR}/${BASENAME}${SUFFIX}"
+      echo "Get it while it's hot at"
+      echo "${CDN}/${BASEDIR}/${BASENAME}${SUFFIX}"
     fi
-else
-    # We have ourselves a *real* release
-    VERSION=$TRAVIS_TAG
-fi
-set -e
+    # Clean up after build
+    rm $RACKBUILD
+  else
+    # Do nothing, keep the built artifact
+    echo "${RACKBUILD} is ready for you"
+  fi
+}
 
-BASEDIR="${VERSION}/${os}/${arch}"
-# Mirror the github layout for branches, tags, commits
-TREEDIR="${os}/${arch}/tree"
-
-mkdir -p $BUILDDIR
-mkdir -p $BUILDDIR/$BASEDIR
-mkdir -p $BUILDDIR/$TREEDIR
-
-BASENAME="rack"
-
-# Base build not in build dir to prevent accidental upload on failure
-RACKBUILD="${BASENAME}${SUFFIX}"
-
-COMMIT=$(git rev-parse --verify HEAD)
-sed -i "s/var Commit =.*/var Commit = \"$COMMIT\"/" util/commit.go
-sed -i "s/var Version =.*/var Version = \"$VERSION\"/" util/util.go
-
-go build -o $RACKBUILD
-
-# Ship /tree/rack-branchname
-cp $RACKBUILD ${BUILDDIR}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}
-echo "Fresh build for branch '${BRANCH}' at "
-echo "${CDN}/${TREEDIR}/${BASENAME}-${BRANCH}${SUFFIX}"
-
-if [ -n "$TRAVIS_TAG" ]; then
-  # Only when we're on an official tag do we spit out the official ones.
-  cp $RACKBUILD ${BUILDDIR}/${BASEDIR}/${BASENAME}${SUFFIX}
-  echo "Get it while it's hot at"
-  echo "${CDN}/${BASEDIR}/${BASENAME}${SUFFIX}"
-fi
-
-# Clean up after build
-rm $RACKBUILD
+initialize
+build
+deploy
