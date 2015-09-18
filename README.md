@@ -30,6 +30,7 @@ and development.
 Make sure you have [Go installed](https://golang.org/doc/install) and the [`GOPATH`](https://golang.org/doc/code.html#GOPATH) environment variable set.
 ```sh
 go get github.com/rackspace/rack
+cd $GOPATH/src/github.com/rackspace/rack
 go build -o $GOPATH/bin/rack
 ```
 
