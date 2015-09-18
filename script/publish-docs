@@ -34,5 +34,5 @@ exec docker run --rm \
   -e CONTENT_STORE_URL=${CONTENT_STORE_URL} \
   -e CONTENT_STORE_APIKEY=${CONTENT_STORE_APIKEY} \
   -e TRAVIS_PULL_REQUEST="false" \
-  -v ${ROOT}/docs:/usr/control-repo \
+  -v ${ROOT}/docs:/usr/content-repo \
   quay.io/deconst/preparer-sphinx
