@@ -59,7 +59,7 @@ fi
 #
 
 set +e
-git diff --exit-code | /dev/null
+git diff --exit-code > /dev/null
 if [ $? != 0 ]; then
   echo "Workspace is not clean. Exiting"
   exit 4
