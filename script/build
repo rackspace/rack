@@ -12,8 +12,8 @@ build() {
     get_commit
     get_version
 
-    LDFLAGS="-X github.com/rackspace/rack/util.Commit=${COMMIT} \
-             -X github.com/rackspace/rack/util.Version=${VERSION}"
+    LDFLAGS="-X github.com/rackspace/rack/util.Commit ${COMMIT} \
+             -X github.com/rackspace/rack/util.Version ${VERSION}"
     go build  -ldflags "${LDFLAGS}" -o "${RACKBUILD}"
     return $?
   else
