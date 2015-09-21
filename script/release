@@ -1,23 +1,16 @@
 #!/bin/bash
 set -euo pipefail
 
-#
-# Helper function to do replace; this should work across operating systems
-#
-
-function update {
-  TMP_FILE=`mktemp $1`
-  sed -e "$2" $3 > $TMP_FILE
-  chmod 0644 $TMP_FILE
-  mv -f $TMP_FILE $3
-}
+SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+source "${SCRIPT_DIR}/lib.sh"
 
 NEW_VERSION=${1:-}
 REMOTE="release"
 REMOTE_URL="git@github.com:rackspace/rack.git"
-DOCS_INDEX_FILE="docs/index.rst"
-DOCS_CONFIGURATION_FILE="docs/configuration.rst"
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+
+# BRANCH
+get_branch
 
 echo "Releasing new version: ${NEW_VERSION}"
 
@@ -78,17 +71,7 @@ if [ -n "$SYNC_STATUS" ]; then
   exit 5
 fi
 
-#
-# Update the docs index paths
-#
-
-update ./index.rst-version "s#rackcdn\.com/[0-9a-zA-Z.-]*/#rackcdn\.com/$NEW_VERSION/#g" $DOCS_INDEX_FILE
-
-#
-# Update the docs configuration paths
-#
-
-update ./configuration.rst-version "s#rackcdn\.com/[0-9a-zA-Z.-]*/#rackcdn\.com/$NEW_VERSION/#g" $DOCS_CONFIGURATION_FILE
+update_docs "${NEW_VERSION}"
 
 #
 # Commit and push the code changes
