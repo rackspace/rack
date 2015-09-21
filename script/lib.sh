@@ -51,7 +51,7 @@ get_version() {
 #
 # Helper function to do replace; this should work across operating systems
 #
-update {
+update() {
   TMP_FILE=$(mktemp "$1")
   sed -e "$2" "$3" > "$TMP_FILE"
   chmod 0644 "$TMP_FILE"
