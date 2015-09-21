@@ -7,13 +7,21 @@ source "${SCRIPT_DIR}/lib.sh"
 build() {
   if [ -n "$GOPATH" ]; then
     echo "Building rack!"
+
     RACKBUILD=${1:-${GOPATH}/bin/rack}
 
     get_commit
     get_version
 
-    LDFLAGS="-X github.com/rackspace/rack/util.Commit ${COMMIT} \
-             -X github.com/rackspace/rack/util.Version ${VERSION}"
+    # Check the go version
+    EQ=" "
+    go version | grep -q go1.5
+    if [ $? == 0 ]; then
+      EQ="="
+    fi
+
+    LDFLAGS="-X github.com/rackspace/rack/util.Commit${EQ}${COMMIT} \
+             -X github.com/rackspace/rack/util.Version${EQ}${VERSION}"
     go build  -ldflags "${LDFLAGS}" -o "${RACKBUILD}"
     return $?
   else
