@@ -47,3 +47,32 @@ get_version() {
 
   return 0
 }
+
+#
+# Helper function to do replace; this should work across operating systems
+#
+update {
+  TMP_FILE=$(mktemp "$1")
+  sed -e "$2" "$3" > "$TMP_FILE"
+  chmod 0644 "$TMP_FILE"
+  mv -f "$TMP_FILE" "$3"
+}
+
+update_docs() {
+  NEW_VERSION=$1
+  DOCS_INDEX_FILE="docs/index.rst"
+  DOCS_CONFIGURATION_FILE="docs/configuration.rst"
+
+  #
+  # Update the docs index paths
+  #
+
+  update ./index.rst-tmpXXX "s#rackcdn\.com/[0-9a-zA-Z.-]*/#rackcdn\.com/$NEW_VERSION/#g" $DOCS_INDEX_FILE
+
+  #
+  # Update the docs configuration paths
+  #
+
+  update ./configuration.rst-tmpXXX "s#rackcdn\.com/[0-9a-zA-Z.-]*/#rackcdn\.com/$NEW_VERSION/#g" $DOCS_CONFIGURATION_FILE
+
+}
