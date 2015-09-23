@@ -1,12 +1,13 @@
 package objects
 
 import (
-	"bytes"
+	"bufio"
 	"crypto/hmac"
 	"crypto/md5"
 	"crypto/sha1"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"strings"
 	"time"
 
@@ -214,19 +215,20 @@ func Create(c *gophercloud.ServiceClient, containerName, objectName string, cont
 	}
 
 	hash := md5.New()
+	bufioReader := bufio.NewReader(io.TeeReader(content, hash))
+	io.Copy(ioutil.Discard, bufioReader)
+	localChecksum := hash.Sum(nil)
 
-	contentBuffer := bytes.NewBuffer([]byte{})
-	_, err := io.Copy(contentBuffer, io.TeeReader(content, hash))
+	h["ETag"] = fmt.Sprintf("%x", localChecksum)
+
+	_, err := content.Seek(0, 0)
 	if err != nil {
 		res.Err = err
 		return res
 	}
 
-	localChecksum := hash.Sum(nil)
-	h["ETag"] = fmt.Sprintf("%x", localChecksum)
-
 	ropts := gophercloud.RequestOpts{
-		RawBody:      strings.NewReader(contentBuffer.String()),
+		RawBody:      content,
 		MoreHeaders:  h,
 		ErrorContext: &ObjectError{name: objectName, container: containerName},
 	}
@@ -236,13 +238,9 @@ func Create(c *gophercloud.ServiceClient, containerName, objectName string, cont
 		res.Err = err
 		return res
 	}
+
 	if resp != nil {
 		res.Header = resp.Header
-		if resp.Header.Get("ETag") == fmt.Sprintf("%x", localChecksum) {
-			res.Err = err
-			return res
-		}
-		res.Err = fmt.Errorf("Local checksum does not match API ETag header")
 	}
 
 	return res
