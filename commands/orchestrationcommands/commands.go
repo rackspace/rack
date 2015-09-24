@@ -14,7 +14,11 @@ var serviceClientType = "orchestration"
 // Get returns all the commands allowed for a `orchestration` request.
 func Get() []cli.Command {
 	return []cli.Command{
-		buildinfocommands.BuildInfo,
+		{
+			Name:        "buildinfo",
+			Usage:       "Build information.",
+			Subcommands: buildinfocommands.Get(),
+		},
 		{
 			Name:        "stack",
 			Usage:       "Stack management.",

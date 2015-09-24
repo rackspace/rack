@@ -12,11 +12,11 @@ import (
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
 )
 
-func TestBuildInfoContext(t *testing.T) {
+func TestGetContext(t *testing.T) {
 	app := cli.NewApp()
 	flagset := flag.NewFlagSet("flags", 1)
 	c := cli.NewContext(app, flagset, nil)
-	cmd := &commandBuildInfo{
+	cmd := &commandGet{
 		Ctx: &handler.Context{
 			CLIContext: c,
 		},
@@ -26,21 +26,21 @@ func TestBuildInfoContext(t *testing.T) {
 	th.AssertDeepEquals(t, expected, actual)
 }
 
-func TestBuildInfoKeys(t *testing.T) {
-	cmd := &commandBuildInfo{}
-	expected := keysBuildInfo
+func TestGetKeys(t *testing.T) {
+	cmd := &commandGet{}
+	expected := keysGet
 	actual := cmd.Keys()
 	th.AssertDeepEquals(t, expected, actual)
 }
 
-func TestBuildInfoServiceClientType(t *testing.T) {
-	cmd := &commandBuildInfo{}
+func TestGetServiceClientType(t *testing.T) {
+	cmd := &commandGet{}
 	expected := serviceClientType
 	actual := cmd.ServiceClientType()
 	th.AssertEquals(t, expected, actual)
 }
 
-func TestBuildInfoExecute(t *testing.T) {
+func TestGetExecute(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 	th.Mux.HandleFunc("/build_info", func(w http.ResponseWriter, r *http.Request) {
@@ -49,7 +49,7 @@ func TestBuildInfoExecute(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprint(w, `{"api": {"revision": "{api_build_revision}"}}`)
 	})
-	cmd := &commandBuildInfo{
+	cmd := &commandGet{
 		Ctx: &handler.Context{
 			ServiceClient: client.ServiceClient(),
 		},

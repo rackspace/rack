@@ -22,12 +22,12 @@ to bring up a list *command flags* specific to the command.
 
 Retrieves the build information of the orchestration service::
 
-    rack orchestration buildinfo [optional flags]
+    rack orchestration buildinfo get [optional flags]
 **Response**
 
 .. code::
 
-    $ rack orchestration buildinfo
+    $ rack orchestration buildinfo get
     API		2015.l3-20150903-1517
     Engine		2015.l3-20150903-1517
     FusionAPI	l1-20150622-17c7bae-141
