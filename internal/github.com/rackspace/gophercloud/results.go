@@ -113,6 +113,9 @@ func DecodeHeader(from, to interface{}) error {
 // RFC3339Milli describes a common time format used by some API responses.
 const RFC3339Milli = "2006-01-02T15:04:05.999999Z"
 
+// Time format used in cloud orchestration
+const STACK_TIME_FMT = "2006-01-02T15:04:05"
+
 /*
 Link is an internal type to be used in packages of collection resources that are
 paginated in a certain way.
@@ -124,6 +127,16 @@ Rel field set to "next".
 type Link struct {
 	Href string `mapstructure:"href"`
 	Rel  string `mapstructure:"rel"`
+}
+
+// PrettyPrintJSON creates a string containing the links as
+// pretty-printed JSON. It is useful for displaying the results.
+func (link Link) PrettyPrintJSON() string {
+	pretty, err := json.MarshalIndent(link, "", "  ")
+	if err != nil {
+		panic(err.Error())
+	}
+	return string(pretty)
 }
 
 /*
