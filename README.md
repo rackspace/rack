@@ -31,7 +31,7 @@ Make sure you have [Go installed](https://golang.org/doc/install) and the [`GOPA
 ```sh
 go get github.com/rackspace/rack
 cd $GOPATH/src/github.com/rackspace/rack
-go build -o $GOPATH/bin/rack
+./script/build
 ```
 
 ## Setting Authentication Credentials
