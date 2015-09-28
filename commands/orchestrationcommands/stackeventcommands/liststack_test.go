@@ -8,6 +8,7 @@ import (
 
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	osStackEvents "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stackevents"
 	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
 )
@@ -87,6 +88,7 @@ func TestListStackExecute(t *testing.T) {
 		Params: &paramsListStack{
 			stackName: "stack1",
 			stackID:   "id1",
+			opts:      &osStackEvents.ListOpts{},
 		},
 	}
 	cmd.Execute(actual)

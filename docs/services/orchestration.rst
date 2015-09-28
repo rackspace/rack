@@ -634,14 +634,14 @@ Retrieves details for a specified event::
 ^^^^^^^^
 Retrieves events for a specified stack resource::
 
-    rack orchestration stack-event list-resource --stack-name <stackName> --resource <resourceName> [optional flags]
-    rack orchestration stack-event list-resource --stack-id <stackID> --resource <resourceName> [optional flags]
+    rack orchestration stack-event list-resource --stack-name <stackName> --resource-name <resourceName> [optional flags]
+    rack orchestration stack-event list-resource --stack-id <stackID> --resource-name <resourceName> [optional flags]
 
 **Response**
 
 .. code::
 
-    $ rack orchestration stack-event list-resource --stack-name RackTest --resource test_server
+    $ rack orchestration stack-event list-resource --stack-name RackTest --resource-name test_server
     ResourceName	Time				ResourceStatusReason	ResourceStatus		PhysicalResourceID			ID
     test_server	2015-09-13 04:20:24 +0000 UTC	state changed		ADOPT_COMPLETE		f075a7c1-28ef-4699-9046-383098134902	dcfe8ad3-150f-4cbe-9993-2d82793753b7
     test_server	2015-09-13 04:20:24 +0000 UTC	state changed		ADOPT_IN_PROGRESS						e78533e1-c8e0-4eca-8734-b193b6d32e06

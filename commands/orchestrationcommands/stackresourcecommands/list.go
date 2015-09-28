@@ -36,10 +36,15 @@ func flagsList() []cli.Flag {
 			Name:  "stdin",
 			Usage: "[optional; required if neither `name` nor `id` is provided] The field being piped into STDIN. Valid values are: stack-name.",
 		},
+		cli.IntFlag{
+			Name:  "depth",
+			Usage: "[optional] The depth of nested stacks from which resources are retrieved.",
+		},
 	}
 }
 
 type paramsList struct {
+	opts      *osStackResources.ListOpts
 	stackName string
 	stackID   string
 }
@@ -87,23 +92,29 @@ func (command *commandList) HandleSingle(resource *handler.Resource) error {
 	if err != nil {
 		return err
 	}
-
-	resource.Params = &paramsList{
-		stackName: name,
-		stackID:   id,
-	}
+	resource.Params.(*paramsList).stackName = name
+	resource.Params.(*paramsList).stackID = id
 	return nil
 }
 
 func (command *commandList) HandleFlags(resource *handler.Resource) error {
+	c := command.Ctx.CLIContext
+
+	opts := &osStackResources.ListOpts{
+		Depth: c.Int("depth"),
+	}
+	resource.Params = &paramsList{
+		opts: opts,
+	}
 	return nil
 }
 
 func (command *commandList) Execute(resource *handler.Resource) {
 	params := resource.Params.(*paramsList)
+	opts := params.opts
 	stackName := params.stackName
 	stackID := params.stackID
-	pager := stackresources.List(command.Ctx.ServiceClient, stackName, stackID, nil)
+	pager := stackresources.List(command.Ctx.ServiceClient, stackName, stackID, opts)
 	pages, err := pager.AllPages()
 	if err != nil {
 		resource.Err = err
@@ -117,7 +128,6 @@ func (command *commandList) Execute(resource *handler.Resource) {
 	result := make([]map[string]interface{}, len(info))
 	for j, resource := range info {
 		result[j] = structs.Map(&resource)
-		// TODO: fix the decoding/parsing to make this work right
 		result[j]["UpdatedTime"] = resource.UpdatedTime
 	}
 	resource.Result = result

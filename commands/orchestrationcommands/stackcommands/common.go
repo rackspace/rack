@@ -3,6 +3,7 @@ package stackcommands
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/rackspace/rack/internal/github.com/fatih/structs"
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud"
 	osStacks "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stacks"
@@ -30,6 +31,21 @@ func stackList(client *gophercloud.ServiceClient) ([]map[string]interface{}, err
 func stackSingle(rawStack interface{}) map[string]interface{} {
 	m := structs.Map(rawStack)
 	switch stack := rawStack.(type) {
+	case *osStacks.ListedStack:
+		m["CreationTime"] = stack.CreationTime
+		if stack.UpdatedTime.Unix() != -62135596800 {
+			m["UpdatedTime"] = stack.UpdatedTime
+		} else {
+			m["UpdatedTime"] = "None"
+		}
+		if stack.Links != nil {
+			links := make([]string, len(stack.Links))
+			for i, link := range stack.Links {
+				links[i] = link.PrettyPrintJSON()
+			}
+			m["Links"] = links
+		}
+		return m
 	case *osStacks.CreatedStack:
 		if stack.Links != nil {
 			links := make([]string, len(stack.Links))

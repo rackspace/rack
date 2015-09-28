@@ -41,8 +41,6 @@ func TestListServiceClientType(t *testing.T) {
 	th.AssertEquals(t, expected, actual)
 }
 
-<<<<<<< Updated upstream
-=======
 func TestListHandleFlags(t *testing.T) {
 	app := cli.NewApp()
 	flagset := flag.NewFlagSet("flags", 1)
@@ -79,7 +77,6 @@ func TestListHandleFlags(t *testing.T) {
 	th.AssertDeepEquals(t, *expected.Params.(*paramsList).opts, *actual.Params.(*paramsList).opts)
 }
 
->>>>>>> Stashed changes
 func TestListExecute(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
@@ -95,7 +92,9 @@ func TestListExecute(t *testing.T) {
 		},
 	}
 	actual := &handler.Resource{
-		Params: &osStacks.ListOpts{},
+		Params: &paramsList{
+			opts: &osStacks.ListOpts{},
+		},
 	}
 	cmd.Execute(actual)
 	th.AssertNoErr(t, actual.Err)

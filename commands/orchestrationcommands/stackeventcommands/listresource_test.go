@@ -8,6 +8,7 @@ import (
 
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	osStackEvents "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stackevents"
 	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
 )
@@ -45,10 +46,10 @@ func TestListResourceHandleFlags(t *testing.T) {
 	flagset := flag.NewFlagSet("flags", 1)
 	flagset.String("stack-name", "", "")
 	flagset.String("stack-id", "", "")
-	flagset.String("resource", "", "")
+	flagset.String("resource-name", "", "")
 	flagset.Set("stack-name", "stack1")
 	flagset.Set("stack-id", "id1")
-	flagset.Set("resource", "resource1")
+	flagset.Set("resource-name", "resource1")
 	c := cli.NewContext(app, flagset, nil)
 	cmd := &commandListResource{
 		Ctx: &handler.Context{
@@ -92,6 +93,7 @@ func TestListResourceExecute(t *testing.T) {
 			stackName:    "stack1",
 			stackID:      "id1",
 			resourceName: "resource1",
+			opts:         &osStackEvents.ListResourceEventsOpts{},
 		},
 	}
 	cmd.Execute(actual)
