@@ -21,7 +21,6 @@ func stackList(client *gophercloud.ServiceClient) ([]map[string]interface{}, err
 	result := make([]map[string]interface{}, len(info))
 	for j, stack := range info {
 		result[j] = structs.Map(&stack)
-		// TODO: fix the decoding/parsing to make this work right
 		result[j]["CreationTime"] = stack.CreationTime
 		result[j]["UpdatedTime"] = stack.UpdatedTime
 	}
@@ -31,6 +30,15 @@ func stackList(client *gophercloud.ServiceClient) ([]map[string]interface{}, err
 func stackSingle(rawStack interface{}) map[string]interface{} {
 	m := structs.Map(rawStack)
 	switch stack := rawStack.(type) {
+	case *osStacks.CreatedStack:
+		if stack.Links != nil {
+			links := make([]string, len(stack.Links))
+			for i, link := range stack.Links {
+				links[i] = link.PrettyPrintJSON()
+			}
+			m["Links"] = links
+		}
+		return m
 	case *osStacks.RetrievedStack:
 		m["CreationTime"] = stack.CreationTime
 		if stack.UpdatedTime.Unix() != -62135596800 {

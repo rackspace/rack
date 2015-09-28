@@ -2,7 +2,8 @@ package stackcommands
 
 import (
 	"errors"
-	"fmt"
+	"strings"
+
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
@@ -44,7 +45,7 @@ func flagsUpdate() []cli.Flag {
 			Name:  "environment-file",
 			Usage: "[optional] File containing environment for the stack",
 		},
-		cli.StringFlag{
+		cli.IntFlag{
 			Name:  "timeout",
 			Usage: "[optional] Stack creation timeout in minutes.",
 		},
@@ -53,12 +54,12 @@ func flagsUpdate() []cli.Flag {
 			Usage: "[optional] Disable rollback on create/update failure.",
 		},
 		cli.StringFlag{
-			Name:  "parameter-file",
-			Usage: "[optional] Parameter values from file used to create the stack. This can be specified multiple times. Parameter value would be the content of the file",
+			Name:  "parameters",
+			Usage: "[optional] A comma-separated string of key=value pairs.",
 		},
-		cli.StringSliceFlag{
+		cli.StringFlag{
 			Name:  "tags",
-			Usage: "[optional] A list of tags to associate with the stack.",
+			Usage: "[optional] A comma-separated string of tags to associate with the stack.",
 		},
 	}
 }
@@ -69,7 +70,7 @@ type paramsUpdate struct {
 	stackName string
 }
 
-var keysUpdate = keysList
+var keysUpdate = keysGet
 
 type commandUpdate handler.Command
 
@@ -96,6 +97,12 @@ func (command *commandUpdate) ServiceClientType() string {
 
 func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
 	c := command.Ctx.CLIContext
+	name := c.String("name")
+	id := c.String("id")
+	name, id, err := IDAndName(command.Ctx.ServiceClient, name, id)
+	if err != nil {
+		return err
+	}
 	opts := &osStacks.UpdateOpts{
 		TemplateOpts: new(osStacks.Template),
 	}
@@ -127,25 +134,14 @@ func (command *commandUpdate) HandleFlags(resource *handler.Resource) error {
 	}
 
 	if c.IsSet("tags") {
-		opts.Tags = c.StringSlice("tags")
+		opts.Tags = strings.Split(c.String("tags"), ",")
 	}
 
 	resource.Params = &paramsUpdate{
-		opts: opts,
+		stackName: name,
+		stackID:   id,
+		opts:      opts,
 	}
-	return nil
-}
-
-func (command *commandUpdate) HandleSingle(resource *handler.Resource) error {
-	c := command.Ctx.CLIContext
-	name := c.String("name")
-	id := c.String("id")
-	name, id, err := IDAndName(command.Ctx.ServiceClient, name, id)
-	if err != nil {
-		return err
-	}
-	resource.Params.(*paramsUpdate).stackName = name
-	resource.Params.(*paramsUpdate).stackID = id
 	return nil
 }
 
@@ -155,13 +151,11 @@ func (command *commandUpdate) Execute(resource *handler.Resource) {
 	stackName := params.stackName
 	stackID := params.stackID
 	stacks.Update(command.Ctx.ServiceClient, stackName, stackID, opts)
-	// the behavior of the python-heatclient is to show a list of stacks as the
-	// output of stack-create.
-	result, err := stackList(command.Ctx.ServiceClient)
+	stack, err := stacks.Get(command.Ctx.ServiceClient, stackName, stackID).Extract()
 	if err != nil {
-		fmt.Println(err)
 		resource.Err = err
 		return
 	}
-	resource.Result = result
+
+	resource.Result = stackSingle(stack)
 }

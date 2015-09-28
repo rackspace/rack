@@ -1,8 +1,8 @@
-package templatecommands
+package stacktemplatecommands
 
 import "github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 
-var commandPrefix = "orchestration template"
+var commandPrefix = "orchestration stack-template"
 var serviceClientType = "orchestration"
 
 // Get returns all the commands allowed for a `orchestration template` request.

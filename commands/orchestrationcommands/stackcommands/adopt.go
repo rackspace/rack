@@ -37,7 +37,7 @@ func flagsAdopt() []cli.Flag {
 			Name:  "environment-file",
 			Usage: "[optional] File containing environment for the stack",
 		},
-		cli.StringFlag{
+		cli.IntFlag{
 			Name:  "timeout",
 			Usage: "[optional] Stack creation timeout in minutes.",
 		},
@@ -123,18 +123,6 @@ func (command *commandAdopt) HandleFlags(resource *handler.Resource) error {
 		opts.Parameters = parameters
 	}
 
-	if c.IsSet("adopt-file") {
-		abs, err := filepath.Abs(c.String("adopt-file"))
-		if err != nil {
-			return err
-		}
-		environment, err := ioutil.ReadFile(abs)
-		if err != nil {
-			return err
-		}
-		opts.AdoptStackData = string(environment)
-	}
-
 	resource.Params = &paramsAdopt{
 		opts: opts,
 	}
@@ -143,17 +131,10 @@ func (command *commandAdopt) HandleFlags(resource *handler.Resource) error {
 
 func (command *commandAdopt) Execute(resource *handler.Resource) {
 	opts := resource.Params.(*paramsAdopt).opts
-	_, err := stacks.Adopt(command.Ctx.ServiceClient, opts).Extract()
+	result, err := stacks.Adopt(command.Ctx.ServiceClient, opts).Extract()
 	if err != nil {
 		resource.Err = err
 		return
 	}
-	// the behavior of the python-heatclient is to show a list of stacks as the
-	// output of stack-adopt.
-	result, err := stackList(command.Ctx.ServiceClient)
-	if err != nil {
-		resource.Err = err
-		return
-	}
-	resource.Result = result
+	resource.Result = stackSingle(result)
 }

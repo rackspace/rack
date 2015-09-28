@@ -5,7 +5,7 @@ import (
 	"github.com/rackspace/rack/commands/orchestrationcommands/stackcommands"
 	"github.com/rackspace/rack/commands/orchestrationcommands/stackeventcommands"
 	"github.com/rackspace/rack/commands/orchestrationcommands/stackresourcecommands"
-	"github.com/rackspace/rack/commands/orchestrationcommands/templatecommands"
+	"github.com/rackspace/rack/commands/orchestrationcommands/stacktemplatecommands"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 )
 
@@ -25,19 +25,19 @@ func Get() []cli.Command {
 			Subcommands: stackcommands.Get(),
 		},
 		{
-			Name:        "event",
+			Name:        "stack-event",
 			Usage:       "Stack event queries.",
 			Subcommands: stackeventcommands.Get(),
 		},
 		{
-			Name:        "resource",
+			Name:        "stack-resource",
 			Usage:       "Stack resource queries.",
 			Subcommands: stackresourcecommands.Get(),
 		},
 		{
-			Name:        "template",
+			Name:        "stack-template",
 			Usage:       "Stack template queries.",
-			Subcommands: templatecommands.Get(),
+			Subcommands: stacktemplatecommands.Get(),
 		},
 	}
 }

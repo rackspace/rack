@@ -1,4 +1,4 @@
-package templatecommands
+package stacktemplatecommands
 
 import (
 	"github.com/rackspace/rack/commandoptions"
@@ -11,7 +11,7 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       util.Usage(commandPrefix, "get", "[--name <stackName> | --id <stackID> | --stdin name]"),
+	Usage:       util.Usage(commandPrefix, "get", "[--stack-name <stackName> | --stack-id <stackID> | --stdin stack-name]"),
 	Description: "Get template for specified stack",
 	Action:      actionGet,
 	Flags:       commandoptions.CommandFlags(flagsGet, keysGet),
@@ -23,16 +23,16 @@ var get = cli.Command{
 func flagsGet() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "name",
+			Name:  "stack-name",
 			Usage: "[optional; required if `id` isn't provided] The stack name.",
 		},
 		cli.StringFlag{
-			Name:  "id",
+			Name:  "stack-id",
 			Usage: "[optional; required if `name` isn't provided] The stack id.",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if neither `name` nor `id` is provided] The field being piped into STDIN. Valid values are: name.",
+			Usage: "[optional; required if neither `name` nor `id` is provided] The field being piped into STDIN. Valid values are: stack-name.",
 		},
 	}
 }
@@ -81,8 +81,8 @@ func (command *commandGet) HandlePipe(resource *handler.Resource, item string) e
 
 func (command *commandGet) HandleSingle(resource *handler.Resource) error {
 	c := command.Ctx.CLIContext
-	name := c.String("name")
-	id := c.String("id")
+	name := c.String("stack-name")
+	id := c.String("stack-id")
 	name, id, err := stackcommands.IDAndName(command.Ctx.ServiceClient, name, id)
 	if err != nil {
 		return err
@@ -112,5 +112,5 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 }
 
 func (command *commandGet) StdinField() string {
-	return "name"
+	return "stack-name"
 }

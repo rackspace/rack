@@ -1,10 +1,6 @@
 package stackcommands
 
 import (
-	"encoding/json"
-	"io/ioutil"
-	"path/filepath"
-
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
@@ -37,19 +33,14 @@ func flagsAbandon() []cli.Flag {
 			Name:  "stdin",
 			Usage: "[optional; required if `id` or `name` isn't provided] The field being piped into STDIN. Valid values are: name.",
 		},
-		cli.StringFlag{
-			Name:  "output-file",
-			Usage: "[optional] The file into which result of abandon is stored.",
-		},
 	}
 }
 
 var keysAbandon = []string{"Status", "Name", "Template", "Action", "ID", "Resources", "Files", "StackUserProjectID", "ProjectID", "Environment"}
 
 type paramsAbandon struct {
-	stackName  string
-	stackID    string
-	outputFile string
+	stackName string
+	stackID   string
 }
 
 type commandAbandon handler.Command
@@ -76,14 +67,6 @@ func (command *commandAbandon) ServiceClientType() string {
 }
 
 func (command *commandAbandon) HandleFlags(resource *handler.Resource) error {
-	c := command.Ctx.CLIContext
-	var outputFile string
-	if c.IsSet("output-file") {
-		outputFile = c.String("output-file")
-	}
-	resource.Params = &paramsAbandon{
-		outputFile: outputFile,
-	}
 	return nil
 }
 
@@ -105,6 +88,11 @@ func (command *commandAbandon) HandleSingle(resource *handler.Resource) error {
 	if err != nil {
 		return err
 	}
+	resource.Params = &paramsAbandon{
+		stackName: name,
+		stackID:   id,
+	}
+
 	resource.Params.(*paramsAbandon).stackName = name
 	resource.Params.(*paramsAbandon).stackID = id
 	return nil
@@ -123,22 +111,6 @@ func (command *commandAbandon) Execute(resource *handler.Resource) {
 	}
 
 	resource.Result = stackSingle(resStack)
-	if params.outputFile != "" {
-		data, err := json.MarshalIndent(res.Body, "", "    ")
-		if err != nil {
-			resource.Err = err
-			return
-		}
-		abs, err := filepath.Abs(params.outputFile)
-		if err != nil {
-			resource.Err = err
-			return
-		}
-		if err := ioutil.WriteFile(abs, data, 0644); err != nil {
-			resource.Err = err
-			return
-		}
-	}
 }
 
 func (command *commandAbandon) StdinField() string {

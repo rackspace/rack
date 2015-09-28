@@ -2,7 +2,7 @@ package stackeventcommands
 
 import "github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 
-var commandPrefix = "orchestration event"
+var commandPrefix = "orchestration stack-event"
 var serviceClientType = "orchestration"
 
 // Get returns all the commands allowed for a `orchestration event` request.

@@ -1,4 +1,4 @@
-package templatecommands
+package stacktemplatecommands
 
 import (
 	"encoding/json"

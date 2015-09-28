@@ -92,34 +92,10 @@ func TestCreateExecute(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 	th.Mux.HandleFunc("/stacks", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "POST" {
-			w.Header().Add("Content-Type", "application/json")
-			w.WriteHeader(http.StatusAccepted)
-			fmt.Fprintf(w, `{"stack": {"id": "3095aefc-09fb-4bc7-b1f0-f21a304e864c"}}`)
-		} else if r.Method == "GET" {
-			w.Header().Add("Content-Type", "application/json")
-			w.WriteHeader(http.StatusOK)
-			fmt.Fprint(w, `{
-    "stacks": [
-        {
-            "creation_time": "2014-06-03T20:59:46",
-            "description": "sample stack",
-            "id": "3095aefc-09fb-4bc7-b1f0-f21a304e864c",
-            "links": [
-                {
-                    "href": "http://192.168.123.200:8004/v1/eb1c63a4f77141548385f113a28f0f52/stacks/simple_stack/3095aefc-09fb-4bc7-b1f0-f21a304e864c",
-                    "rel": "self"
-                }
-            ],
-            "stack_name": "simple_stack",
-            "stack_status": "CREATE_COMPLETE",
-            "stack_status_reason": "Stack CREATE completed successfully",
-            "updated_time": "",
-            "tags": ["foo", "get"]
-        }
-    ]
-}`)
-		}
+		th.TestMethod(t, r, "POST")
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusAccepted)
+		fmt.Fprintf(w, `{"stack": {"id": "3095aefc-09fb-4bc7-b1f0-f21a304e864c"}}`)
 	})
 	cmd := &commandCreate{
 		Ctx: &handler.Context{

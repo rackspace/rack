@@ -43,10 +43,10 @@ func TestListServiceClientType(t *testing.T) {
 func TestListHandleSingle(t *testing.T) {
 	app := cli.NewApp()
 	flagset := flag.NewFlagSet("flags", 1)
-	flagset.String("name", "", "")
-	flagset.String("id", "", "")
-	flagset.Set("name", "stack1")
-	flagset.Set("id", "id1")
+	flagset.String("stack-name", "", "")
+	flagset.String("stack-id", "", "")
+	flagset.Set("stack-name", "stack1")
+	flagset.Set("stack-id", "id1")
 	c := cli.NewContext(app, flagset, nil)
 	cmd := &commandList{
 		Ctx: &handler.Context{
@@ -91,4 +91,11 @@ func TestListExecute(t *testing.T) {
 	}
 	cmd.Execute(actual)
 	th.AssertNoErr(t, actual.Err)
+}
+
+func TestGetStdinField(t *testing.T) {
+	cmd := &commandList{}
+	expected := "stack-name"
+	actual := cmd.StdinField()
+	th.AssertEquals(t, expected, actual)
 }

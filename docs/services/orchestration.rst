@@ -339,21 +339,21 @@ instead::
 
 Resource commands use this syntax::
 
-    rack orchestration resource <action> [command flags]
+    rack orchestration stack-resource <action> [command flags]
 
 ``list``
 ^^^^^^^^
 Retrieves a list of resources for a given stack::
 
-    rack orchestration resource list --name <stackName> [optional flags]
-    rack orchestration resource list --id <stackID> [optional flags]
-    (echo stackName1 && echo stackName2)  | rack orchestration resource list --stdin name [optional flags]
+    rack orchestration stack-resource list --stack-name <stackName> [optional flags]
+    rack orchestration stack-resource list --stack-id <stackID> [optional flags]
+    (echo stackName1 && echo stackName2)  | rack orchestration stack-resource list --stdin stack-name [optional flags]
 
 **Response**
 
 .. code::
 
-    $ rack orchestration resource list --name RackTest
+    $ rack orchestration stack-resource list --stack-name RackTest
     Name		PhysicalID				                Type			    Status		               UpdatedTime
     test_server	f075a7c1-28ef-4699-9046-383098134902	OS::Nova::Server	CREATE_COMPLETE	2015-09-12 16:37:49 +0000 UTC
 
@@ -362,14 +362,14 @@ Retrieves a list of resources for a given stack::
 ^^^^^^^
 Retrieves details of a specified resource in a stack::
 
-    rack orchestration resource get --id <stackID> --resource <resourceName> [optional flags]
-    rack orchestration resource get --name <stackName> --resource <resourceName> [optional flags]
+    rack orchestration stack-resource get --stack-id <stackID> --resource <resourceName> [optional flags]
+    rack orchestration stack-resource get --stack-name <stackName> --resource <resourceName> [optional flags]
 
 **Response**
 
 .. code::
 
-    $ rack orchestration resource get --name RackTest --resource test_server
+    $ rack orchestration stack-resource get --stack-name RackTest --resource test_server
     Name		test_server
     PhysicalID	f075a7c1-28ef-4699-9046-383098134902
     Type		OS::Nova::Server
@@ -459,8 +459,8 @@ Retrieves details of a specified resource in a stack::
 ^^^^^^^^^^
 Shows the interface schema for a specified resource type::
 
-    rack orchestration resource get-schema --resource <resourceName> [optional flags]
-    (echo stackName1 && echo stackName2) | rack orchestration resource get-schema --stdin name [optional flags]
+    rack orchestration stack-resource get-schema --resource <resourceName> [optional flags]
+    (echo stackName1 && echo stackName2) | rack orchestration stack-resource get-schema --stdin stack-name [optional flags]
 
 This schema describes the properties that can be set on the resource, their
 types, constraints, descriptions, and default values. Additionally, the
@@ -470,7 +470,7 @@ resource attributes and their descriptions are provided.
 
 .. code::
 
-    $ rack orchestration resource get-schema --type OS::Heat::None
+    $ rack orchestration stack-resource get-schema --type OS::Heat::None
     Attributes	{
 		  "show": {
 		    "description": "Detailed information about resource.",
@@ -490,14 +490,14 @@ resource attributes and their descriptions are provided.
 ^^^^^^^^^^
 Shows a template representation for specified resource type::
 
-    rack orchestration resource get-template --type <resourceType> [optional flags]
-    (echo stackName1 && echo stackName2) | rack orchestration resource get-template --stdin type [optional flags]
+    rack orchestration stack-resource get-template --type <resourceType> [optional flags]
+    (echo resourceType1 && echo resourceType2) | rack orchestration stack-resource get-template --stdin type [optional flags]
 
 **Response**
 
 .. code::
 
-    $ rack orchestration resource get-template --type OS::Heat::None
+    $ rack orchestration stack-resource get-template --type OS::Heat::None
     {
       "Description": "Initial template of NoneResource",
       "HeatTemplateFormatVersion": "2012-12-12",
@@ -520,13 +520,13 @@ Shows a template representation for specified resource type::
 ^^^^^^^^
 Lists the supported template resource types::
 
-    rack orchestration resource list-types [optional flags]
+    rack orchestration stack-resource list-types [optional flags]
 
 **Response**
 
 .. code::
 
-    $ rack orchestration resource list-types
+    $ rack orchestration stack-resource list-types
     ResourceType
     AWS::CloudFormation::WaitCondition
     AWS::CloudFormation::WaitConditionHandle
@@ -585,20 +585,20 @@ Lists the supported template resource types::
 
 Event commands use this syntax::
 
-    rack orchestration event <action> [command flags]
+    rack orchestration stack-event <action> [command flags]
 
 ``get``
 ^^^^^^^^
 Retrieves details for a specified event::
 
-    rack orchestration event get --name <stackName> --resource <resourceName> --event <eventID> [optional flags]
-    rack orchestration event get --id <stackID> --resource <resourceName> --event <eventID> [optional flags]
+    rack orchestration stack-event get --stack-name <stackName> --resource <resourceName> --event <eventID> [optional flags]
+    rack orchestration stack-event get --stack-id <stackID> --resource <resourceName> --event <eventID> [optional flags]
 
 **Response**
 
 .. code::
 
-    $ rack orchestration event get --name RackTest --resource test_server --event dcfe8ad3-150f-4cbe-9993-2d82793753b7
+    $ rack orchestration stack-event get --stack-name RackTest --resource test_server --event dcfe8ad3-150f-4cbe-9993-2d82793753b7
     ResourceName		test_server
     Time			2015-09-13 04:20:24 +0000 UTC
     ResourceStatusReason	state changed
@@ -634,14 +634,14 @@ Retrieves details for a specified event::
 ^^^^^^^^
 Retrieves events for a specified stack resource::
 
-    rack orchestration event list-resource --name <stackName> --resource <resourceName> [optional flags]
-    rack orchestration event list-resource --id <stackID> --resource <resourceName> [optional flags]
+    rack orchestration stack-event list-resource --stack-name <stackName> --resource <resourceName> [optional flags]
+    rack orchestration stack-event list-resource --stack-id <stackID> --resource <resourceName> [optional flags]
 
 **Response**
 
 .. code::
 
-    $ rack orchestration event list-resource --name RackTest --resource test_server
+    $ rack orchestration stack-event list-resource --stack-name RackTest --resource test_server
     ResourceName	Time				ResourceStatusReason	ResourceStatus		PhysicalResourceID			ID
     test_server	2015-09-13 04:20:24 +0000 UTC	state changed		ADOPT_COMPLETE		f075a7c1-28ef-4699-9046-383098134902	dcfe8ad3-150f-4cbe-9993-2d82793753b7
     test_server	2015-09-13 04:20:24 +0000 UTC	state changed		ADOPT_IN_PROGRESS						e78533e1-c8e0-4eca-8734-b193b6d32e06
@@ -650,15 +650,15 @@ Retrieves events for a specified stack resource::
 ^^^^^^^^
 Retrieves events for a specified stack resource::
 
-    rack orchestration event list-stack --name <stackName> [optional flags]
-    rack orchestration event list-resource --id <stackID> [optional flags]
-    (echo stackName1 && echo stackName2) | rack orchestration event list-resource --stdin name [optional flags]
+    rack orchestration stack-event list-stack --stack-name <stackName> [optional flags]
+    rack orchestration stack-event list-resource --stack-id <stackID> [optional flags]
+    (echo stackName1 && echo stackName2) | rack orchestration stack-event list-resource --stdin stack-name [optional flags]
 
 **Response**
 
 .. code::
 
-    $ rack orchestration event list-resource --name RackTest --resource test_server
+    $ rack orchestration stack-event list-resource --stack-name RackTest --resource test_server
     ResourceName	Time				ResourceStatusReason	ResourceStatus		PhysicalResourceID			ID
     test_server	2015-09-13 04:20:24 +0000 UTC	state changed		ADOPT_COMPLETE		f075a7c1-28ef-4699-9046-383098134902	dcfe8ad3-150f-4cbe-9993-2d82793753b7
     test_server	2015-09-13 04:20:24 +0000 UTC	state changed		ADOPT_IN_PROGRESS						e78533e1-c8e0-4eca-8734-b193b6d32e06
@@ -668,14 +668,14 @@ Retrieves events for a specified stack resource::
 
 Template commands use this syntax::
 
-    rack orchestration template <action> [command flags]
+    rack orchestration stack-template <action> [command flags]
 
 ``validate``
 ^^^^^^^^
 Validates a specified template::
 
-    rack orchestration template validate --template <templateFile> [optional flags]
-    rack orchestration template validate --template-url <templateURL> [optional flags]
+    rack orchestration stack-template validate --template <templateFile> [optional flags]
+    rack orchestration stack-template validate --template-url <templateURL> [optional flags]
 
 **Response**
 
@@ -698,15 +698,15 @@ Validates a specified template::
 ^^^^^^^
 Retrieves template for a specified stack::
 
-    rack orchestration template get --id <stackID> [optional flags]
-    rack orchestration template get --name <stackName> [optional flags]
-    (echo stackName1 && echo stackName2) | rack orchestration template get --stdin name
+    rack orchestration stack-template get --stack-id <stackID> [optional flags]
+    rack orchestration stack-template get --stack-name <stackName> [optional flags]
+    (echo stackName1 && echo stackName2) | rack orchestration stack-template get --stdin stack-name
 
 **Response**
 
 .. code::
 
-    $ rack orchestration template get --name RackTest
+    $ rack orchestration stack-template get --stack-name RackTest
     {
       "heat_template_version": "2014-10-16",
       "parameters": {

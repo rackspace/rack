@@ -43,11 +43,11 @@ func TestGetServiceClientType(t *testing.T) {
 func TestGetHandleFlags(t *testing.T) {
 	app := cli.NewApp()
 	flagset := flag.NewFlagSet("flags", 1)
-	flagset.String("name", "", "")
-	flagset.String("id", "", "")
+	flagset.String("stack-name", "", "")
+	flagset.String("stack-id", "", "")
 	flagset.String("resource", "", "")
-	flagset.Set("name", "stack1")
-	flagset.Set("id", "id1")
+	flagset.Set("stack-name", "stack1")
+	flagset.Set("stack-id", "id1")
 	flagset.Set("resource", "resource1")
 	c := cli.NewContext(app, flagset, nil)
 	cmd := &commandGet{

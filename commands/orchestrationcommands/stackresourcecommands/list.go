@@ -13,7 +13,7 @@ import (
 
 var list = cli.Command{
 	Name:        "list",
-	Usage:       util.Usage(commandPrefix, "list", "[--name <stackName> | --id <stackID> | --stdin name]"),
+	Usage:       util.Usage(commandPrefix, "list", "[--stack-name <stackName> | --stack-id <stackID> | --stdin stack-name]"),
 	Description: "List resources in a stack",
 	Action:      actionList,
 	Flags:       commandoptions.CommandFlags(flagsList, keysList),
@@ -25,16 +25,16 @@ var list = cli.Command{
 func flagsList() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "name",
+			Name:  "stack-name",
 			Usage: "[optional; required if `id` isn't provided] The stack name.",
 		},
 		cli.StringFlag{
-			Name:  "id",
+			Name:  "stack-id",
 			Usage: "[optional; required if `name` isn't provided] The stack id.",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if neither `name` nor `id` is provided] The field being piped into STDIN. Valid values are: name.",
+			Usage: "[optional; required if neither `name` nor `id` is provided] The field being piped into STDIN. Valid values are: stack-name.",
 		},
 	}
 }
@@ -81,8 +81,8 @@ func (command *commandList) HandlePipe(resource *handler.Resource, item string) 
 
 func (command *commandList) HandleSingle(resource *handler.Resource) error {
 	c := command.Ctx.CLIContext
-	name := c.String("name")
-	id := c.String("id")
+	name := c.String("stack-name")
+	id := c.String("stack-id")
 	name, id, err := stackcommands.IDAndName(command.Ctx.ServiceClient, name, id)
 	if err != nil {
 		return err
@@ -124,5 +124,5 @@ func (command *commandList) Execute(resource *handler.Resource) {
 }
 
 func (command *commandList) StdinField() string {
-	return "name"
+	return "stack-name"
 }

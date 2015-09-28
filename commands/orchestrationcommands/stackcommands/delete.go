@@ -1,6 +1,7 @@
 package stackcommands
 
 import (
+	"fmt"
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
@@ -24,11 +25,11 @@ func flagsDelete() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "id",
-			Usage: "[optional; required if `stdin` or `name` isn't provided] The ID of the server.",
+			Usage: "[optional; required if `stdin` or `name` isn't provided] The ID of the stack.",
 		},
 		cli.StringFlag{
 			Name:  "name",
-			Usage: "[optional; required if `id` or `stdin` isn't provided] The name of the server.",
+			Usage: "[optional; required if `id` or `stdin` isn't provided] The name of the stack.",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
@@ -105,14 +106,7 @@ func (command *commandDelete) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	// the behavior of the python-heatclient is to show a list of stacks as the
-	// output of stack-delete.
-	result, err := stackList(command.Ctx.ServiceClient)
-	if err != nil {
-		resource.Err = err
-		return
-	}
-	resource.Result = result
+	resource.Result = fmt.Sprintf("Stack %s is being deleted.", stackName)
 }
 
 func (command *commandDelete) StdinField() string {

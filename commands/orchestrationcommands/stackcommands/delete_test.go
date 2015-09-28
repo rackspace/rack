@@ -2,7 +2,6 @@ package stackcommands
 
 import (
 	"flag"
-	"fmt"
 	"net/http"
 	"testing"
 
@@ -76,34 +75,8 @@ func TestDeleteExecute(t *testing.T) {
 		th.TestMethod(t, r, "DELETE")
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusAccepted)
-		fmt.Fprint(w, `{"status": "COMPLETE"}`)
 	})
 
-	th.Mux.HandleFunc("/stacks", func(w http.ResponseWriter, r *http.Request) {
-		th.TestMethod(t, r, "GET")
-		w.Header().Add("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprint(w, `{
-"stacks": [
-	{
-		"creation_time": "2014-06-03T20:59:46",
-		"description": "sample stack",
-		"id": "3095aefc-09fb-4bc7-b1f0-f21a304e864c",
-		"links": [
-			{
-				"href": "http://192.168.123.200:8004/v1/eb1c63a4f77141548385f113a28f0f52/stacks/simple_stack/3095aefc-09fb-4bc7-b1f0-f21a304e864c",
-				"rel": "self"
-			}
-		],
-		"stack_name": "simple_stack",
-		"stack_status": "CREATE_COMPLETE",
-		"stack_status_reason": "Stack CREATE completed successfully",
-		"updated_time": "",
-		"tags": ["foo", "get"]
-	}
-]
-}`)
-	})
 	cmd := &commandDelete{
 		Ctx: &handler.Context{
 			ServiceClient: client.ServiceClient(),

@@ -41,6 +41,45 @@ func TestListServiceClientType(t *testing.T) {
 	th.AssertEquals(t, expected, actual)
 }
 
+<<<<<<< Updated upstream
+=======
+func TestListHandleFlags(t *testing.T) {
+	app := cli.NewApp()
+	flagset := flag.NewFlagSet("flags", 1)
+	flagset.String("sort-dir", "", "")
+	flagset.String("sort-key", "", "")
+	flagset.String("name", "", "")
+	flagset.String("status", "", "")
+	flagset.String("marker", "", "")
+	flagset.Set("sort-dir", "asc")
+	flagset.Set("sort-key", "name")
+	flagset.Set("name", "stacks*")
+	flagset.Set("status", "CREATE_COMPLETE")
+	flagset.Set("marker", "1fd3-4f9f-44df-1b5c")
+	c := cli.NewContext(app, flagset, nil)
+	cmd := &commandList{
+		Ctx: &handler.Context{
+			CLIContext: c,
+		},
+	}
+	expected := &handler.Resource{
+		Params: &paramsList{
+			opts: &osStacks.ListOpts{
+				SortKey: "name",
+				SortDir: "asc",
+				Name:    "stacks*",
+				Status:  "CREATE_COMPLETE",
+				Marker:  "1fd3-4f9f-44df-1b5c",
+			},
+		},
+	}
+	actual := &handler.Resource{}
+	err := cmd.HandleFlags(actual)
+	th.AssertNoErr(t, err)
+	th.AssertDeepEquals(t, *expected.Params.(*paramsList).opts, *actual.Params.(*paramsList).opts)
+}
+
+>>>>>>> Stashed changes
 func TestListExecute(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()

@@ -11,7 +11,7 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       util.Usage(commandPrefix, "get", "[--name <stackName> | --id <stackID>] --resource <resourceName> --event <eventID>"),
+	Usage:       util.Usage(commandPrefix, "get", "[--stack-name <stackName> | --stack-id <stackID>] --resource <resourceName> --event <eventID>"),
 	Description: "Show details for a specified event",
 	Action:      actionGet,
 	Flags:       commandoptions.CommandFlags(flagsGet, keysGet),
@@ -23,11 +23,11 @@ var get = cli.Command{
 func flagsGet() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "name",
+			Name:  "stack-name",
 			Usage: "[optional; required if `id` isn't specified] The stack name.",
 		},
 		cli.StringFlag{
-			Name:  "id",
+			Name:  "stack-id",
 			Usage: "[optional; required if `name` isn't specified] The stack id.",
 		},
 		cli.StringFlag{
@@ -79,8 +79,8 @@ func (command *commandGet) HandleFlags(resource *handler.Resource) error {
 		return err
 	}
 	c := command.Ctx.CLIContext
-	name := c.String("name")
-	id := c.String("id")
+	name := c.String("stack-name")
+	id := c.String("stack-id")
 	name, id, err = stackcommands.IDAndName(command.Ctx.ServiceClient, name, id)
 	if err != nil {
 		return err

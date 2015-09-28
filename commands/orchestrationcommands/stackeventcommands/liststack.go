@@ -13,7 +13,7 @@ import (
 
 var listStack = cli.Command{
 	Name:        "list-stack",
-	Usage:       util.Usage(commandPrefix, "list-stack", "[--name <stackName> | --id <stackID> | --stdin name]"),
+	Usage:       util.Usage(commandPrefix, "list-stack", "[--stack-name <stackName> | --stack-id <stackID> | --stdin stack-name]"),
 	Description: "Lists events for a specified stack",
 	Action:      actionListStack,
 	Flags:       commandoptions.CommandFlags(flagsListStack, keysListStack),
@@ -25,16 +25,16 @@ var listStack = cli.Command{
 func flagsListStack() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "name",
+			Name:  "stack-name",
 			Usage: "[optional; required if neither `id` nor `stdin` is provided] The stack name.",
 		},
 		cli.StringFlag{
-			Name:  "id",
+			Name:  "stack-id",
 			Usage: "[optional; required if neither `name` nor `stdin` is provided] The stack id.",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if neither `name` nor `id` is provided] The field being piped into STDIN. Valid values are: name.",
+			Usage: "[optional; required if neither `name` nor `id` is provided] The field being piped into STDIN. Valid values are: stack-name.",
 		},
 	}
 }
@@ -87,8 +87,8 @@ func (command *commandListStack) HandlePipe(resource *handler.Resource, item str
 
 func (command *commandListStack) HandleSingle(resource *handler.Resource) error {
 	c := command.Ctx.CLIContext
-	name := c.String("name")
-	id := c.String("id")
+	name := c.String("stack-name")
+	id := c.String("stack-id")
 	name, id, err := stackcommands.IDAndName(command.Ctx.ServiceClient, name, id)
 	if err != nil {
 		return err
@@ -120,12 +120,11 @@ func (command *commandListStack) Execute(resource *handler.Resource) {
 	result := make([]map[string]interface{}, len(info))
 	for j, event := range info {
 		result[j] = structs.Map(&event)
-		// TODO: fix the decoding/parsing to make this work right
 		result[j]["Time"] = event.Time
 	}
 	resource.Result = result
 }
 
 func (command *commandListStack) StdinField() string {
-	return "name"
+	return "stack-name"
 }

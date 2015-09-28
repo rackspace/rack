@@ -13,7 +13,7 @@ import (
 
 var listResource = cli.Command{
 	Name:        "list-resource",
-	Usage:       util.Usage(commandPrefix, "list-resource", "[--name <stackName> | --id <stackID>] --resource <resourceName>"),
+	Usage:       util.Usage(commandPrefix, "list-resource", "[--stack-name <stackName> | --stack-id <stackID>] --resource <resourceName>"),
 	Description: "Lists events for a specified stack resource",
 	Action:      actionListResource,
 	Flags:       commandoptions.CommandFlags(flagsListResource, keysListResource),
@@ -25,11 +25,11 @@ var listResource = cli.Command{
 func flagsListResource() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "name",
+			Name:  "stack-name",
 			Usage: "[optional; required if `id` isn't specified] The stack name.",
 		},
 		cli.StringFlag{
-			Name:  "id",
+			Name:  "stack-id",
 			Usage: "[optional; required if `name` isn't specified] The stack id.",
 		},
 		cli.StringFlag{
@@ -76,8 +76,8 @@ func (command *commandListResource) HandleFlags(resource *handler.Resource) erro
 	}
 
 	c := command.Ctx.CLIContext
-	name := c.String("name")
-	id := c.String("id")
+	name := c.String("stack-name")
+	id := c.String("stack-id")
 	name, id, err := stackcommands.IDAndName(command.Ctx.ServiceClient, name, id)
 	if err != nil {
 		return err
@@ -110,7 +110,6 @@ func (command *commandListResource) Execute(resource *handler.Resource) {
 	result := make([]map[string]interface{}, len(info))
 	for j, event := range info {
 		result[j] = structs.Map(&event)
-		// TODO: fix the decoding/parsing to make this work right
 		result[j]["Time"] = event.Time
 	}
 	resource.Result = result

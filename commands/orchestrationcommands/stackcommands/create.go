@@ -2,6 +2,7 @@ package stackcommands
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
@@ -39,7 +40,7 @@ func flagsCreate() []cli.Flag {
 			Name:  "environment-file",
 			Usage: "[optional] File containing environment for the stack",
 		},
-		cli.StringFlag{
+		cli.IntFlag{
 			Name:  "timeout",
 			Usage: "[optional] Stack creation timeout in minutes.",
 		},
@@ -51,9 +52,9 @@ func flagsCreate() []cli.Flag {
 			Name:  "parameters",
 			Usage: "[optional] A comma-separated string of key=value pairs.",
 		},
-		cli.StringSliceFlag{
+		cli.StringFlag{
 			Name:  "tags",
-			Usage: "[optional] A list of tags to associate with the stack.",
+			Usage: "[optional] A comma-separated string of tags to associate with the stack.",
 		},
 	}
 }
@@ -62,7 +63,7 @@ type paramsCreate struct {
 	opts *osStacks.CreateOpts
 }
 
-var keysCreate = keysList
+var keysCreate = []string{"ID", "Links"}
 
 type commandCreate handler.Command
 
@@ -131,7 +132,7 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 	}
 
 	if c.IsSet("tags") {
-		opts.Tags = c.StringSlice("tags")
+		opts.Tags = strings.Split(c.String("tags"), ",")
 	}
 
 	resource.Params = &paramsCreate{
@@ -142,17 +143,10 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 
 func (command *commandCreate) Execute(resource *handler.Resource) {
 	opts := resource.Params.(*paramsCreate).opts
-	_, err := osStacks.Create(command.Ctx.ServiceClient, opts).Extract()
+	result, err := osStacks.Create(command.Ctx.ServiceClient, opts).Extract()
 	if err != nil {
 		resource.Err = err
 		return
 	}
-	// the behavior of the python-heatclient is to show a list of stacks as the
-	// output of stack-create.
-	result, err := stackList(command.Ctx.ServiceClient)
-	if err != nil {
-		resource.Err = err
-		return
-	}
-	resource.Result = result
+	resource.Result = stackSingle(result)
 }
