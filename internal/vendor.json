@@ -149,8 +149,8 @@
 		},
 		{
 			"path": "github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects",
-			"revision": "1fd76b19e3497a031b2086dbc8ffb71193298ea0",
-			"revisionTime": "2015-08-02T22:24:28-06:00"
+			"revision": "d86f9582b08d56dc9422e3a5d9f120b117487427",
+			"revisionTime": "2015-09-24T09:14:44-06:00"
 		},
 		{
 			"path": "github.com/rackspace/gophercloud/openstack/orchestration/v1/buildinfo",

@@ -11,9 +11,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/accounts"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/pagination"
+	"github.com/rackspace/gophercloud"
+	"github.com/rackspace/gophercloud/openstack/objectstorage/v1/accounts"
+	"github.com/rackspace/gophercloud/pagination"
 )
 
 // ListOptsBuilder allows extensions to add additional parameters to the List
@@ -134,9 +134,8 @@ func Download(c *gophercloud.ServiceClient, containerName, objectName string, op
 	}
 
 	resp, err := c.Request("GET", url, gophercloud.RequestOpts{
-		MoreHeaders:  h,
-		OkCodes:      []int{200, 304},
-		ErrorContext: &ObjectError{name: objectName, container: containerName},
+		MoreHeaders: h,
+		OkCodes:     []int{200, 304},
 	})
 	if resp != nil {
 		res.Header = resp.Header
@@ -169,7 +168,7 @@ type CreateOpts struct {
 	ObjectManifest     string `h:"X-Object-Manifest"`
 	TransferEncoding   string `h:"Transfer-Encoding"`
 	Expires            string `q:"expires"`
-	MultipartManifest  string `q:"multiple-manifest"`
+	MultipartManifest  string `q:"multipart-manifest"`
 	Signature          string `q:"signature"`
 }
 
@@ -228,9 +227,8 @@ func Create(c *gophercloud.ServiceClient, containerName, objectName string, cont
 	}
 
 	ropts := gophercloud.RequestOpts{
-		RawBody:      content,
-		MoreHeaders:  h,
-		ErrorContext: &ObjectError{name: objectName, container: containerName},
+		RawBody:     content,
+		MoreHeaders: h,
 	}
 
 	resp, err := c.Request("PUT", url, ropts)
@@ -238,9 +236,13 @@ func Create(c *gophercloud.ServiceClient, containerName, objectName string, cont
 		res.Err = err
 		return res
 	}
-
 	if resp != nil {
 		res.Header = resp.Header
+		if resp.Header.Get("ETag") == fmt.Sprintf("%x", localChecksum) {
+			res.Err = err
+			return res
+		}
+		res.Err = fmt.Errorf("Local checksum does not match API ETag header")
 	}
 
 	return res
@@ -294,9 +296,8 @@ func Copy(c *gophercloud.ServiceClient, containerName, objectName string, opts C
 
 	url := copyURL(c, containerName, objectName)
 	resp, err := c.Request("COPY", url, gophercloud.RequestOpts{
-		MoreHeaders:  h,
-		OkCodes:      []int{201},
-		ErrorContext: &ObjectError{name: objectName, container: containerName},
+		MoreHeaders: h,
+		OkCodes:     []int{201},
 	})
 	if resp != nil {
 		res.Header = resp.Header
@@ -339,9 +340,7 @@ func Delete(c *gophercloud.ServiceClient, containerName, objectName string, opts
 		url += query
 	}
 
-	resp, err := c.Delete(url, &gophercloud.RequestOpts{
-		ErrorContext: &ObjectError{name: objectName, container: containerName},
-	})
+	resp, err := c.Delete(url, nil)
 	if resp != nil {
 		res.Header = resp.Header
 	}
@@ -386,8 +385,7 @@ func Get(c *gophercloud.ServiceClient, containerName, objectName string, opts Ge
 	}
 
 	resp, err := c.Request("HEAD", url, gophercloud.RequestOpts{
-		OkCodes:      []int{200, 204},
-		ErrorContext: &ObjectError{name: objectName, container: containerName},
+		OkCodes: []int{200, 204},
 	})
 	if resp != nil {
 		res.Header = resp.Header
@@ -445,8 +443,7 @@ func Update(c *gophercloud.ServiceClient, containerName, objectName string, opts
 
 	url := updateURL(c, containerName, objectName)
 	resp, err := c.Request("POST", url, gophercloud.RequestOpts{
-		MoreHeaders:  h,
-		ErrorContext: &ObjectError{name: objectName, container: containerName},
+		MoreHeaders: h,
 	})
 	if resp != nil {
 		res.Header = resp.Header
