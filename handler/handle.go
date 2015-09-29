@@ -242,6 +242,7 @@ func processResult(command Commander, resource *Resource) {
 			}
 		}
 		if err != nil {
+			resource.Keys = []string{"error"}
 			resource.Result = map[string]interface{}{"error": err.Error()}
 		}
 	}
