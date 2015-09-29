@@ -1,6 +1,8 @@
 package stackcommands
 
 import (
+	"encoding/json"
+
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
@@ -109,10 +111,29 @@ func (command *commandAbandon) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-
-	resource.Result = stackSingle(resStack)
+	resource.Result = resStack
 }
 
 func (command *commandAbandon) StdinField() string {
 	return "name"
+}
+
+func (command *commandAbandon) PreTable(resource *handler.Resource) error {
+	resource.Result = stackSingle(resource.Result)
+	return nil
+}
+
+func (command *commandAbandon) PreJSON(resource *handler.Resource) error {
+	var resInterface map[string]interface{}
+	res, err := json.Marshal(resource.Result)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(res, &resInterface)
+	if err != nil {
+		return err
+	}
+	resource.Result = resInterface
+	resource.Keys = []string{"status", "name", "template", "action", "id", "resources", "files", "stack_user_project_id", "project_id", "environment"}
+	return nil
 }
