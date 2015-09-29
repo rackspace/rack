@@ -118,3 +118,10 @@ func TestAbandonExecute(t *testing.T) {
 	cmd.Execute(actual)
 	th.AssertNoErr(t, actual.Err)
 }
+
+func TestAbandonStdinField(t *testing.T) {
+	cmd := &commandAbandon{}
+	expected := "name"
+	actual := cmd.StdinField()
+	th.AssertEquals(t, expected, actual)
+}
