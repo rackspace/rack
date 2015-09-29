@@ -101,11 +101,12 @@ func (command *commandCreate) Execute(resource *handler.Resource) {
 	resource.Result = volumeSingle(volume)
 }
 
-func (command *commandCreate) PreCSV(resource *handler.Resource) {
+func (command *commandCreate) PreCSV(resource *handler.Resource) error {
 	resource.FlattenMap("Metadata")
 	resource.FlattenMap("Attachments")
+	return nil
 }
 
-func (command *commandCreate) PreTable(resource *handler.Resource) {
-	command.PreCSV(resource)
+func (command *commandCreate) PreTable(resource *handler.Resource) error {
+	return command.PreCSV(resource)
 }

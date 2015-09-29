@@ -178,10 +178,11 @@ func (command *commandCreate) Execute(resource *handler.Resource) {
 	resource.Result = subnetSingle(subnet)
 }
 
-func (command *commandCreate) PreCSV(resource *handler.Resource) {
+func (command *commandCreate) PreCSV(resource *handler.Resource) error {
 	resource.FlattenMap("AllocationPools")
+	return nil
 }
 
-func (command *commandCreate) PreTable(resource *handler.Resource) {
-	command.PreCSV(resource)
+func (command *commandCreate) PreTable(resource *handler.Resource) error {
+	return command.PreCSV(resource)
 }
