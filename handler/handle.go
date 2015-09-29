@@ -216,7 +216,7 @@ func processResult(command Commander, resource *Resource) {
 		resource.Result = map[string]interface{}{"error": errorBody}
 	} else if resource.Result == nil {
 		switch resource.Result.(type) {
-		case map[string]interface{}:
+		case []map[string]interface{}:
 			resource.Result = fmt.Sprintf("No results found\n")
 		default:
 			resource.Result = fmt.Sprintf("No result found.\n")
