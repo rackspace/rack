@@ -40,17 +40,17 @@ type PipeHandler interface {
 
 // PreJSONer is an interface that commands will satisfy if they have a `PreJSON` method.
 type PreJSONer interface {
-	PreJSON(*Resource)
+	PreJSON(*Resource) error
 }
 
 // PreCSVer is an interface that commands will satisfy if they have a `PreCSV` method.
 type PreCSVer interface {
-	PreCSV(*Resource)
+	PreCSV(*Resource) error
 }
 
 // PreTabler is an interface that commands will satisfy if they have a `PreTable` method.
 type PreTabler interface {
-	PreTable(*Resource)
+	PreTable(*Resource) error
 }
 
 // Commander is an interface that all commands implement.
@@ -225,20 +225,24 @@ func processResult(command Commander, resource *Resource) {
 		// limit the returned fields if any were given in the `fields` flag
 		ctx.limitFields(resource)
 
+		var err error
 		// apply any output-specific transformations on the result
 		switch ctx.GlobalOptions.output {
 		case "json":
 			if jsoner, ok := command.(PreJSONer); ok {
-				jsoner.PreJSON(resource)
+				err = jsoner.PreJSON(resource)
 			}
 		case "csv":
 			if csver, ok := command.(PreCSVer); ok {
-				csver.PreCSV(resource)
+				err = csver.PreCSV(resource)
 			}
 		default:
 			if tabler, ok := command.(PreTabler); ok {
-				tabler.PreTable(resource)
+				err = tabler.PreTable(resource)
 			}
+		}
+		if err != nil {
+			resource.Result = map[string]interface{}{"error": err.Error()}
 		}
 	}
 }

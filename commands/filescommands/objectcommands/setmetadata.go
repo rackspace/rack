@@ -130,14 +130,15 @@ func (command *commandSetMetadata) Execute(resource *handler.Resource) {
 	resource.Result = metadata
 }
 
-func (command *commandSetMetadata) PreCSV(resource *handler.Resource) {
+func (command *commandSetMetadata) PreCSV(resource *handler.Resource) error {
 	resource.Result = map[string]interface{}{
 		"Metadata": resource.Result,
 	}
 	resource.Keys = []string{"Metadata"}
 	resource.FlattenMap("Metadata")
+	return nil
 }
 
-func (command *commandSetMetadata) PreTable(resource *handler.Resource) {
-	command.PreCSV(resource)
+func (command *commandSetMetadata) PreTable(resource *handler.Resource) error {
+	return command.PreCSV(resource)
 }
