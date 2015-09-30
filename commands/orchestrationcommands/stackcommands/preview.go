@@ -41,7 +41,7 @@ func flagsPreview() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "environment-file",
-			Usage: "[optional] File containing environment for the stack",
+			Usage: "[optional] Path to the file or URL containing environment for the stack",
 		},
 		cli.IntFlag{
 			Name:  "timeout",

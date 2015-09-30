@@ -38,7 +38,7 @@ func flagsDelete() []cli.Flag {
 	}
 }
 
-var keysDelete = keysList
+var keysDelete = []string{}
 
 type paramsDelete struct {
 	stackName string

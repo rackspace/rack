@@ -31,11 +31,11 @@ func flagsAdopt() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "adopt-file",
-			Usage: "[required] Path to adopt stack data file",
+			Usage: "[required] Path to file specifying data required to adopt existing resources",
 		},
 		cli.StringFlag{
 			Name:  "environment-file",
-			Usage: "[optional] File containing environment for the stack",
+			Usage: "[optional] Path to the file or URL containing environment for the stack",
 		},
 		cli.IntFlag{
 			Name:  "timeout",
@@ -56,7 +56,7 @@ type paramsAdopt struct {
 	opts *osStacks.AdoptOpts
 }
 
-var keysAdopt = keysList
+var keysAdopt = keysCreate
 
 type commandAdopt handler.Command
 

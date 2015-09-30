@@ -15,7 +15,7 @@ import (
 
 var listResource = cli.Command{
 	Name:        "list-resource",
-	Usage:       util.Usage(commandPrefix, "list-resource", "[--stack-name <stackName> | --stack-id <stackID>] --resource-name <resourceName>"),
+	Usage:       util.Usage(commandPrefix, "list-resource", "[--stack-name <stackName> | --stack-id <stackID>] --name <resourceName>"),
 	Description: "Lists events for a specified stack resource",
 	Action:      actionListResource,
 	Flags:       commandoptions.CommandFlags(flagsListResource, keysListResource),
@@ -28,14 +28,14 @@ func flagsListResource() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "stack-name",
-			Usage: "[optional; required if `id` isn't specified] The stack name.",
+			Usage: "[optional; required if `stack-id` isn't specified] The stack name.",
 		},
 		cli.StringFlag{
 			Name:  "stack-id",
-			Usage: "[optional; required if `name` isn't specified] The stack id.",
+			Usage: "[optional; required if `stack-name` isn't specified] The stack id.",
 		},
 		cli.StringFlag{
-			Name:  "resource-name",
+			Name:  "name",
 			Usage: "[required] The resource name.",
 		},
 		cli.StringFlag{
@@ -45,10 +45,6 @@ func flagsListResource() []cli.Flag {
 		cli.StringFlag{
 			Name:  "resource-statuses",
 			Usage: "[optional] A comma seperated list of statuses used for filtering events. Valid values are: IN_PROGRESS, COMPLETE, FAILED",
-		},
-		cli.StringFlag{
-			Name:  "resource-names",
-			Usage: "[optional] A comma seperated list of resource names used for filtering events.",
 		},
 		cli.StringFlag{
 			Name:  "resource-types",
@@ -98,7 +94,7 @@ func (command *commandListResource) ServiceClientType() string {
 }
 
 func (command *commandListResource) HandleFlags(resource *handler.Resource) error {
-	if err := command.Ctx.CheckFlagsSet([]string{"resource-name"}); err != nil {
+	if err := command.Ctx.CheckFlagsSet([]string{"name"}); err != nil {
 		return err
 	}
 
@@ -121,7 +117,7 @@ func (command *commandListResource) HandleFlags(resource *handler.Resource) erro
 		opts:         opts,
 		stackName:    name,
 		stackID:      id,
-		resourceName: c.String("resource-name"),
+		resourceName: c.String("name"),
 	}
 	return nil
 }

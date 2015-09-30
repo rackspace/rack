@@ -13,12 +13,19 @@ func eventSingle(rawEvent interface{}) map[string]interface{} {
 		if event.Time.Unix() != -62135596800 {
 			m["Time"] = event.Time
 		} else {
-			m["Time"] = "None"
+			m["Time"] = ""
 		}
 		if resourceProperties, err := json.MarshalIndent(event.ResourceProperties, "", "  "); err != nil {
 			m["ResourceProperties"] = ""
 		} else {
 			m["ResourceProperties"] = string(resourceProperties)
+		}
+		if event.Links != nil {
+			links := make([]string, len(event.Links))
+			for i, link := range event.Links {
+				links[i] = link.PrettyPrintJSON()
+			}
+			m["Links"] = links
 		}
 		return m
 	}

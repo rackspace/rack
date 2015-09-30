@@ -137,3 +137,8 @@ func (command *commandAbandon) PreJSON(resource *handler.Resource) error {
 	resource.Keys = []string{"status", "name", "template", "action", "id", "resources", "files", "stack_user_project_id", "project_id", "environment"}
 	return nil
 }
+
+func (command *commandAbandon) PreCSV(resource *handler.Resource) error {
+	command.PreTable(resource)
+	return nil
+}

@@ -2,6 +2,8 @@ package stacktemplatecommands
 
 import (
 	"encoding/json"
+	"errors"
+
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
@@ -32,7 +34,7 @@ func flagsValidate() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "template-url",
-			Usage: "[optional; required if `template` isn't provided] The url to template.",
+			Usage: "[optional; required if `template-file` isn't provided] The url to template.",
 		},
 	}
 }
@@ -83,6 +85,8 @@ func (command *commandValidate) HandleFlags(resource *handler.Resource) error {
 		opts.Template = string(template)
 	} else if c.IsSet("template-url") {
 		opts.TemplateURL = c.String("template-url")
+	} else {
+		return errors.New("Neither template-file nor template-url specified")
 	}
 
 	resource.Params = &paramsValidate{

@@ -46,10 +46,10 @@ func TestListResourceHandleFlags(t *testing.T) {
 	flagset := flag.NewFlagSet("flags", 1)
 	flagset.String("stack-name", "", "")
 	flagset.String("stack-id", "", "")
-	flagset.String("resource-name", "", "")
+	flagset.String("name", "", "")
 	flagset.Set("stack-name", "stack1")
 	flagset.Set("stack-id", "id1")
-	flagset.Set("resource-name", "resource1")
+	flagset.Set("name", "resource1")
 	c := cli.NewContext(app, flagset, nil)
 	cmd := &commandListResource{
 		Ctx: &handler.Context{

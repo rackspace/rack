@@ -11,7 +11,7 @@ import (
 
 var get = cli.Command{
 	Name:        "get",
-	Usage:       util.Usage(commandPrefix, "get", "[--stack-name <stackName> | --stack-id <stackID>] --resource <resourceName> --event <eventID>"),
+	Usage:       util.Usage(commandPrefix, "get", "[--stack-name <stackName> | --stack-id <stackID>] --resource <resourceName> --id <eventID>"),
 	Description: "Show details for a specified event",
 	Action:      actionGet,
 	Flags:       commandoptions.CommandFlags(flagsGet, keysGet),
@@ -24,18 +24,18 @@ func flagsGet() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "stack-name",
-			Usage: "[optional; required if `id` isn't specified] The stack name.",
+			Usage: "[optional; required if `stack-id` isn't specified] The stack name.",
 		},
 		cli.StringFlag{
 			Name:  "stack-id",
-			Usage: "[optional; required if `name` isn't specified] The stack id.",
+			Usage: "[optional; required if `stack-name` isn't specified] The stack id.",
 		},
 		cli.StringFlag{
 			Name:  "resource",
 			Usage: "[required] The resource name.",
 		},
 		cli.StringFlag{
-			Name:  "event",
+			Name:  "id",
 			Usage: "[required] The event id.",
 		},
 	}
@@ -74,7 +74,7 @@ func (command *commandGet) ServiceClientType() string {
 }
 
 func (command *commandGet) HandleFlags(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"resource", "event"})
+	err := command.Ctx.CheckFlagsSet([]string{"resource", "id"})
 	if err != nil {
 		return err
 	}
@@ -89,7 +89,7 @@ func (command *commandGet) HandleFlags(resource *handler.Resource) error {
 		stackName:    name,
 		stackID:      id,
 		resourceName: c.String("resource"),
-		eventID:      c.String("event"),
+		eventID:      c.String("id"),
 	}
 	return nil
 }

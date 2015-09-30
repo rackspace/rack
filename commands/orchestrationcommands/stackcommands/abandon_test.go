@@ -273,3 +273,76 @@ func TestAbandonPreJSON(t *testing.T) {
 	actual, _ := json.Marshal(resource.Result)
 	th.AssertEquals(t, expected, string(actual))
 }
+
+func TestAbandonPreCSV(t *testing.T) {
+	cmd := &commandAbandon{
+		Ctx: &handler.Context{
+			ServiceClient: client.ServiceClient(),
+		},
+	}
+
+	resource := &handler.Resource{
+		Params: &paramsAbandon{
+			stackName: "stack1",
+			stackID:   "id1",
+		},
+	}
+
+	expected := "{\"Action\":\"CREATE\",\"Environment\":\"{\\n  \\\"encrypted_param_names\\\": [],\\n  \\\"parameter_defaults\\\": {},\\n  \\\"parameters\\\": {},\\n  \\\"resource_registry\\\": {\\n    \\\"file:///Users/prat8228/go/src/github.com/rackspace/rack/my_nova.yaml\\\": \\\"file:///Users/prat8228/go/src/github.com/rackspace/rack/my_nova.yaml\\\",\\n    \\\"resources\\\": {}\\n  }\\n}\",\"Files\":\"{\\n  \\\"file:///Users/prat8228/go/src/github.com/rackspace/rack/my_nova.yaml\\\": \\\"heat_template_version: 2014-10-16\\\\nparameters:\\\\n  flavor:\\\\n    type: string\\\\n    description: Flavor for the server to be created\\\\n    default: 4353\\\\n    hidden: true\\\\nresources:\\\\n  test_server:\\\\n    type: \\\\\\\"OS::Nova::Server\\\\\\\"\\\\n    properties:\\\\n      name: test-server\\\\n      flavor: 2 GB General Purpose v1\\\\n image: Debian 7 (Wheezy) (PVHVM)\\\\n\\\"\\n}\",\"ID\":\"16ef0584-4458-41eb-87c8-0dc8d5f66c87\",\"Name\":\"postman_stack\",\"ProjectID\":\"897686\",\"Resources\":\"{\\n  \\\"hello_world\\\": {\\n    \\\"action\\\": \\\"CREATE\\\",\\n    \\\"name\\\": \\\"hello_world\\\",\\n    \\\"resource_id\\\": \\\"8a310d36-46fc-436f-8be4-37a696b8ac63\\\",\\n    \\\"status\\\": \\\"COMPLETE\\\",\\n    \\\"type\\\": \\\"OS::Nova::Server\\\"\\n  }\\n}\",\"StackUserProjectID\":\"897686\",\"Status\":\"COMPLETE\",\"Template\":\"{\\n  \\\"description\\\": \\\"Simple template to test heat commands\\\",\\n  \\\"heat_template_version\\\": \\\"2013-05-23\\\",\\n  \\\"parameters\\\": {\\n    \\\"flavor\\\": {\\n      \\\"default\\\": \\\"m1.tiny\\\",\\n      \\\"type\\\": \\\"string\\\"\\n    }\\n  },\\n  \\\"resources\\\": {\\n    \\\"hello_world\\\": {\\n      \\\"properties\\\": {\\n        \\\"flavor\\\": {\\n          \\\"get_param\\\": \\\"flavor\\\"\\n        },\\n        \\\"image\\\": \\\"ad091b52-742f-469e-8f3c-fd81cadf0743\\\",\\n        \\\"key_name\\\": \\\"heat_key\\\",\\n        \\\"user_data\\\": \\\"#!/bin/bash -xv\\\\necho \\\\\\\"hello world\\\\\\\" \\\\u0026gt; /root/hello-world.txt\\\\n\\\"\\n      },\\n      \\\"type\\\": \\\"OS::Nova::Server\\\"\\n    }\\n  }\\n}\"}"
+	resource.Result = &osStacks.AbandonedStack{
+		Status: "COMPLETE",
+		Name:   "postman_stack",
+		Template: map[string]interface{}{
+			"heat_template_version": "2013-05-23",
+			"description":           "Simple template to test heat commands",
+			"parameters": map[string]interface{}{
+				"flavor": map[string]interface{}{
+					"default": "m1.tiny",
+					"type":    "string",
+				},
+			},
+			"resources": map[string]interface{}{
+				"hello_world": map[string]interface{}{
+					"type": "OS::Nova::Server",
+					"properties": map[string]interface{}{
+						"key_name": "heat_key",
+						"flavor": map[string]interface{}{
+							"get_param": "flavor",
+						},
+						"image":     "ad091b52-742f-469e-8f3c-fd81cadf0743",
+						"user_data": "#!/bin/bash -xv\necho \"hello world\" &gt; /root/hello-world.txt\n",
+					},
+				},
+			},
+		},
+		Action: "CREATE",
+		ID:     "16ef0584-4458-41eb-87c8-0dc8d5f66c87",
+		Resources: map[string]interface{}{
+			"hello_world": map[string]interface{}{
+				"status":      "COMPLETE",
+				"name":        "hello_world",
+				"resource_id": "8a310d36-46fc-436f-8be4-37a696b8ac63",
+				"action":      "CREATE",
+				"type":        "OS::Nova::Server",
+			},
+		},
+		Files: map[string]string{
+			"file:///Users/prat8228/go/src/github.com/rackspace/rack/my_nova.yaml": "heat_template_version: 2014-10-16\nparameters:\n  flavor:\n    type: string\n    description: Flavor for the server to be created\n    default: 4353\n    hidden: true\nresources:\n  test_server:\n    type: \"OS::Nova::Server\"\n    properties:\n      name: test-server\n      flavor: 2 GB General Purpose v1\n image: Debian 7 (Wheezy) (PVHVM)\n",
+		},
+		StackUserProjectID: "897686",
+		ProjectID:          "897686",
+		Environment: map[string]interface{}{
+			"encrypted_param_names": make([]map[string]interface{}, 0),
+			"parameter_defaults":    make(map[string]interface{}),
+			"parameters":            make(map[string]interface{}),
+			"resource_registry": map[string]interface{}{
+				"file:///Users/prat8228/go/src/github.com/rackspace/rack/my_nova.yaml": "file:///Users/prat8228/go/src/github.com/rackspace/rack/my_nova.yaml",
+				"resources": make(map[string]interface{}),
+			},
+		},
+	}
+	err := cmd.PreCSV(resource)
+	th.AssertNoErr(t, err)
+	actual, _ := json.Marshal(resource.Result)
+	th.AssertEquals(t, expected, string(actual))
+}

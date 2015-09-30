@@ -1,13 +1,14 @@
 package stackresourcecommands
 
 import (
+	"sort"
+
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 	osStackResources "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stackresources"
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/orchestration/v1/stackresources"
 	"github.com/rackspace/rack/util"
-	"sort"
 )
 
 var listTypes = cli.Command{

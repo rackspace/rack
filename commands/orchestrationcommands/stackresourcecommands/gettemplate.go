@@ -23,7 +23,7 @@ func flagsGetTemplate() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "type",
-			Usage: "[optional; required if `stdin` isn't provided] The resource type name.",
+			Usage: "[optional; required if `stdin` isn't provided] The resource type.",
 		},
 		cli.StringFlag{
 			Name:  "stdin",

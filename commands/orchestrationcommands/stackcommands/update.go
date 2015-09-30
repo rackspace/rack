@@ -43,7 +43,7 @@ func flagsUpdate() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "environment-file",
-			Usage: "[optional] File containing environment for the stack",
+			Usage: "[optional] Path to the file or URL containing environment for the stack",
 		},
 		cli.IntFlag{
 			Name:  "timeout",
@@ -150,7 +150,11 @@ func (command *commandUpdate) Execute(resource *handler.Resource) {
 	opts := params.opts
 	stackName := params.stackName
 	stackID := params.stackID
-	stacks.Update(command.Ctx.ServiceClient, stackName, stackID, opts)
+	err := stacks.Update(command.Ctx.ServiceClient, stackName, stackID, opts).ExtractErr()
+	if err != nil {
+		resource.Err = err
+		return
+	}
 	stack, err := stacks.Get(command.Ctx.ServiceClient, stackName, stackID).Extract()
 	if err != nil {
 		resource.Err = err

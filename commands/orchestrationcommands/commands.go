@@ -11,7 +11,7 @@ import (
 
 var serviceClientType = "orchestration"
 
-// Get returns all the commands allowed for a `orchestration` request.
+// Get returns all the commands allowed for an `orchestration` request.
 func Get() []cli.Command {
 	return []cli.Command{
 		{

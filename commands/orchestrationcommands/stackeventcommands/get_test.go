@@ -46,11 +46,11 @@ func TestGetHandleFlags(t *testing.T) {
 	flagset.String("stack-name", "", "")
 	flagset.String("stack-id", "", "")
 	flagset.String("resource", "", "")
-	flagset.String("event", "", "")
+	flagset.String("id", "", "")
 	flagset.Set("stack-name", "stack1")
 	flagset.Set("stack-id", "id1")
 	flagset.Set("resource", "resource1")
-	flagset.Set("event", "event1")
+	flagset.Set("id", "event1")
 	c := cli.NewContext(app, flagset, nil)
 	cmd := &commandGet{
 		Ctx: &handler.Context{

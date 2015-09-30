@@ -28,15 +28,15 @@ func flagsListStack() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "stack-name",
-			Usage: "[optional; required if neither `id` nor `stdin` is provided] The stack name.",
+			Usage: "[optional; required if neither `stack-id` nor `stdin` is provided] The stack name.",
 		},
 		cli.StringFlag{
 			Name:  "stack-id",
-			Usage: "[optional; required if neither `name` nor `stdin` is provided] The stack id.",
+			Usage: "[optional; required if neither `stack-name` nor `stdin` is provided] The stack id.",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if neither `name` nor `id` is provided] The field being piped into STDIN. Valid values are: stack-name.",
+			Usage: "[optional; required if neither `stack-name` nor `stack-id` is provided] The field being piped into STDIN. Valid values are: stack-name.",
 		},
 		cli.StringFlag{
 			Name:  "resource-actions",
