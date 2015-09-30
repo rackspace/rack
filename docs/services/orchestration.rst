@@ -74,15 +74,16 @@ In order for this command to work, you must select a template using either the
 .. code::
 
     $ rack orchestration stack create --name RackTest --template-file mytemplate.yaml
-    ID					                    Name					            Status		        CreationTime
-    97c2e5a2-7d8c-4c7e-8fcc-eac122634f34    RackTest                            CREATE_IN_PROGRESS  2015-09-11 22:01:07 +0000 UTC
-    5b56395a-4e8b-4389-bd44-a123030c7c9c	pm_test_bug_DO_NOT_DELETE		    DELETE_FAILED	    2015-07-24 14:38:00 +0000 UTC
-
+    ID	f3e4294b-2134-4064-8876-04922b072368
+    Links	[{
+    	  "Href": "https://ord.orchestration.api.rackspacecloud.com/v1/897686/stacks/RackTest/f3e4294b-2134-4064-8876-04922b072368",
+    	  "Rel": "self"
+    	}]
 
 .. note::
 
     The details of the stack you created can be found by using the ``get``
-    commmand described below.
+    command described below.
 
 ``get``
 ^^^^^^^
@@ -135,10 +136,30 @@ Updates the stack using a provided template::
 .. code::
 
     $ rack orchestration stack update --name RackTest --template-file myNewTemplate.yaml
-    ID					                    Name					            Status		        CreationTime
-    97c2e5a2-7d8c-4c7e-8fcc-eac122634f34	RackTest				            UPDATE_IN_PROGRESS	2015-09-11 22:01:07 +0000 UTC
-    5b56395a-4e8b-4389-bd44-a123030c7c9c	pm_test_bug_DO_NOT_DELETE		    DELETE_FAILED	    2015-07-24 14:38:00 +0000 UTC
-
+    Capabilities		[]
+    CreationTime		2015-09-30 16:02:05 +0000 UTC
+    Description		No description
+    DisableRollback		true
+    ID			f3e4294b-2134-4064-8876-04922b072368
+    Links			[{
+    			  "Href": "https://ord.orchestration.api.rackspacecloud.com/v1/897686/stacks/RackTest/f3e4294b-2134-4064-8876-04922b072368",
+    			  "Rel": "self"
+    			}]
+    NotificiationTopics	<nil>
+    Outputs			null
+    Parameters		{
+    			  "OS::project_id": "897686",
+    			  "OS::stack_id": "f3e4294b-2134-4064-8876-04922b072368",
+    			  "OS::stack_name": "RackTest",
+    			  "flavor": "******"
+    			}
+    Name			RackTest
+    Status			UPDATE_IN_PROGRESS
+    StatusReason		Stack UPDATE started
+    TemplateDescription	No description
+    Timeout			None
+    Tags			[]
+    UpdatedTime		None
 
 ``delete``
 ^^^^^^^^^^
@@ -153,10 +174,7 @@ Deletes a stack::
 .. code::
 
     $ rack orchestration stack delete --name RackTest
-    ID					                    Name					            Status		        CreationTime
-    97c2e5a2-7d8c-4c7e-8fcc-eac122634f34	RackTest				            DELETE_IN_PROGRESS	2015-09-11 22:01:07 +0000 UTC
-    5b56395a-4e8b-4389-bd44-a123030c7c9c	pm_test_bug_DO_NOT_DELETE		    DELETE_FAILED	    2015-07-24 14:38:00 +0000 UTC
-
+    Stack RackTest is being deleted.
 
 ``preview``
 ^^^^^^^^^^
@@ -261,9 +279,9 @@ will not delete any of the underlying resources::
     rack orchestration stack abandon --id <stackID> [optional flags]
     rack orchestration stack abandon --name <stackName> [optional flags]
 
-Prints an JSON representation of the stack to stdout or a file on success. This
-can be used in the ``adopt`` command to create a new stack with the existing
-resources.
+To obtain a JSON representation of the abandoned stack, use the ``--output json``
+flag. When stored in a file, this can be used in the ``adopt`` command to
+create a new stack with the resources of the abandoned stack.
 
 **Response**
 
@@ -325,14 +343,21 @@ instead::
 
     rack orchestration stack adopt --name stackName --adopt-file adoptFile [optional flags]
 
+This command is usually used to create a stack using the resources of an
+abandoned stack. The JSON output representation of the abandoned stack can be
+used as the contents of the ``adoptFile`` to direct orchestration to use the
+resources of the abandoned stack in the creation of the adopted stack.
+
 **Response**
 
 .. code::
 
     $ rack orchestration stack adopt --name RackTest --adopt-file abandon.yaml
-    ID					                    Name					            Status		        CreationTime
-    43cedc45-e188-4e49-88a9-728b2126586c	RackTest				            ADOPT_COMPLETE	    2015-09-11 23:40:18 +0000 UTC
-    5b56395a-4e8b-4389-bd44-a123030c7c9c	pm_test_bug_DO_NOT_DELETE		    DELETE_FAILED	    2015-07-24 14:38:00 +0000 UTC
+    ID	9eb78f92-f5fc-4718-b0e5-7080ca0b7bf0
+    Links	[{
+    	  "Href": "https://ord.orchestration.api.rackspacecloud.com/v1/897686/stacks/RackTest2/9eb78f92-f5fc-4718-b0e5-7080ca0b7bf0",
+    	  "Rel": "self"
+    	}]
 
 **Resource**
 ~~~~~~~~~~~~
@@ -362,14 +387,14 @@ Retrieves a list of resources for a given stack::
 ^^^^^^^
 Retrieves details of a specified resource in a stack::
 
-    rack orchestration stack-resource get --stack-id <stackID> --resource <resourceName> [optional flags]
-    rack orchestration stack-resource get --stack-name <stackName> --resource <resourceName> [optional flags]
+    rack orchestration stack-resource get --stack-id <stackID> --name <resourceName> [optional flags]
+    rack orchestration stack-resource get --stack-name <stackName> --name <resourceName> [optional flags]
 
 **Response**
 
 .. code::
 
-    $ rack orchestration stack-resource get --stack-name RackTest --resource test_server
+    $ rack orchestration stack-resource get --stack-name RackTest --name test_server
     Name		test_server
     PhysicalID	f075a7c1-28ef-4699-9046-383098134902
     Type		OS::Nova::Server
@@ -459,8 +484,8 @@ Retrieves details of a specified resource in a stack::
 ^^^^^^^^^^
 Shows the interface schema for a specified resource type::
 
-    rack orchestration stack-resource get-schema --resource <resourceName> [optional flags]
-    (echo stackName1 && echo stackName2) | rack orchestration stack-resource get-schema --stdin stack-name [optional flags]
+    rack orchestration stack-resource get-schema --type <resourceType> [optional flags]
+    (echo resourceType1 && echo resourceType2) | rack orchestration stack-resource get-schema --stdin type [optional flags]
 
 This schema describes the properties that can be set on the resource, their
 types, constraints, descriptions, and default values. Additionally, the
@@ -591,14 +616,14 @@ Event commands use this syntax::
 ^^^^^^^^
 Retrieves details for a specified event::
 
-    rack orchestration stack-event get --stack-name <stackName> --resource <resourceName> --event <eventID> [optional flags]
-    rack orchestration stack-event get --stack-id <stackID> --resource <resourceName> --event <eventID> [optional flags]
+    rack orchestration stack-event get --stack-name <stackName> --resource <resourceName> --id <eventID> [optional flags]
+    rack orchestration stack-event get --stack-id <stackID> --resource <resourceName> --id <eventID> [optional flags]
 
 **Response**
 
 .. code::
 
-    $ rack orchestration stack-event get --stack-name RackTest --resource test_server --event dcfe8ad3-150f-4cbe-9993-2d82793753b7
+    $ rack orchestration stack-event get --stack-name RackTest --resource test_server --id dcfe8ad3-150f-4cbe-9993-2d82793753b7
     ResourceName		test_server
     Time			2015-09-13 04:20:24 +0000 UTC
     ResourceStatusReason	state changed
