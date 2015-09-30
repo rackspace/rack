@@ -3,10 +3,6 @@
 Rackspace Command Line Interface
 ================================
 
-.. warning:: The ``rack`` tool is under heavy development; the name of the binary
-             and other portions may rapidly change. If you want to participate or
-             provide early feedback, see the `Github project`_
-
 Description
 -----------
 
