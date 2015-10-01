@@ -111,7 +111,7 @@ We expect to exit beta in the coming weeks, while also focusing on adding new se
 7. RackConnect
 8. Cloud Big Data \*
 9. Cloud Monitoring \*
-10. Cloud Orchestration
+10. [~~Cloud Orchestration~~](https://github.com/rackspace/rack/commit/5d311719579c98a609beb7801c593e132711e003)
 11. Cloud Queues \*
 12. Cloud Backup \*
 13. Autoscale \*
