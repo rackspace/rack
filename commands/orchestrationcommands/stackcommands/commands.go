@@ -13,6 +13,7 @@ func Get() []cli.Command {
 		create,
 		get,
 		list,
+		listEvents,
 		preview,
 		remove,
 		update,

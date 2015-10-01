@@ -1,4 +1,4 @@
-package stackeventcommands
+package stackresourcecommands
 
 import (
 	"strings"
@@ -13,18 +13,18 @@ import (
 	"github.com/rackspace/rack/util"
 )
 
-var listResource = cli.Command{
-	Name:        "list-resource",
-	Usage:       util.Usage(commandPrefix, "list-resource", "[--stack-name <stackName> | --stack-id <stackID>] --name <resourceName>"),
+var listEvents = cli.Command{
+	Name:        "list-events",
+	Usage:       util.Usage(commandPrefix, "list-events", "[--stack-name <stackName> | --stack-id <stackID>] --name <resourceName>"),
 	Description: "Lists events for a specified stack resource",
-	Action:      actionListResource,
-	Flags:       commandoptions.CommandFlags(flagsListResource, keysListResource),
+	Action:      actionListEvents,
+	Flags:       commandoptions.CommandFlags(flagsListEvents, keysListEvents),
 	BashComplete: func(c *cli.Context) {
-		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsListResource, keysListResource))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsListEvents, keysListEvents))
 	},
 }
 
-func flagsListResource() []cli.Flag {
+func flagsListEvents() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
 			Name:  "stack-name",
@@ -61,19 +61,19 @@ func flagsListResource() []cli.Flag {
 	}
 }
 
-type paramsListResource struct {
+type paramsListEvents struct {
 	opts         *osStackEvents.ListResourceEventsOpts
 	stackName    string
 	stackID      string
 	resourceName string
 }
 
-var keysListResource = []string{"ResourceName", "Time", "ResourceStatusReason", "ResourceStatus", "PhysicalResourceID", "ID"}
+var keysListEvents = []string{"ResourceName", "Time", "ResourceStatusReason", "ResourceStatus", "PhysicalResourceID", "ID"}
 
-type commandListResource handler.Command
+type commandListEvents handler.Command
 
-func actionListResource(c *cli.Context) {
-	command := &commandListResource{
+func actionListEvents(c *cli.Context) {
+	command := &commandListEvents{
 		Ctx: &handler.Context{
 			CLIContext: c,
 		},
@@ -81,19 +81,19 @@ func actionListResource(c *cli.Context) {
 	handler.Handle(command)
 }
 
-func (command *commandListResource) Context() *handler.Context {
+func (command *commandListEvents) Context() *handler.Context {
 	return command.Ctx
 }
 
-func (command *commandListResource) Keys() []string {
-	return keysListResource
+func (command *commandListEvents) Keys() []string {
+	return keysListEvents
 }
 
-func (command *commandListResource) ServiceClientType() string {
+func (command *commandListEvents) ServiceClientType() string {
 	return serviceClientType
 }
 
-func (command *commandListResource) HandleFlags(resource *handler.Resource) error {
+func (command *commandListEvents) HandleFlags(resource *handler.Resource) error {
 	if err := command.Ctx.CheckFlagsSet([]string{"name"}); err != nil {
 		return err
 	}
@@ -113,7 +113,7 @@ func (command *commandListResource) HandleFlags(resource *handler.Resource) erro
 		SortDir:          osStackEvents.SortDir(c.String("sort-dir")),
 	}
 
-	resource.Params = &paramsListResource{
+	resource.Params = &paramsListEvents{
 		opts:         opts,
 		stackName:    name,
 		stackID:      id,
@@ -122,8 +122,8 @@ func (command *commandListResource) HandleFlags(resource *handler.Resource) erro
 	return nil
 }
 
-func (command *commandListResource) Execute(resource *handler.Resource) {
-	params := resource.Params.(*paramsListResource)
+func (command *commandListEvents) Execute(resource *handler.Resource) {
+	params := resource.Params.(*paramsListEvents)
 	opts := params.opts
 	stackName := params.stackName
 	stackID := params.stackID

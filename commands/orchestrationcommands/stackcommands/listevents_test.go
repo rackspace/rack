@@ -1,4 +1,4 @@
-package stackeventcommands
+package stackcommands
 
 import (
 	"flag"
@@ -13,11 +13,11 @@ import (
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
 )
 
-func TestListStackContext(t *testing.T) {
+func TestListEventsContext(t *testing.T) {
 	app := cli.NewApp()
 	flagset := flag.NewFlagSet("flags", 1)
 	c := cli.NewContext(app, flagset, nil)
-	cmd := &commandListStack{
+	cmd := &commandListEvents{
 		Ctx: &handler.Context{
 			CLIContext: c,
 		},
@@ -27,50 +27,50 @@ func TestListStackContext(t *testing.T) {
 	th.AssertDeepEquals(t, expected, actual)
 }
 
-func TestListStackKeys(t *testing.T) {
-	cmd := &commandListStack{}
-	expected := keysListStack
+func TestListEventsKeys(t *testing.T) {
+	cmd := &commandListEvents{}
+	expected := keysListEvents
 	actual := cmd.Keys()
 	th.AssertDeepEquals(t, expected, actual)
 }
 
-func TestListStackServiceClientType(t *testing.T) {
-	cmd := &commandListStack{}
+func TestListEventsServiceClientType(t *testing.T) {
+	cmd := &commandListEvents{}
 	expected := serviceClientType
 	actual := cmd.ServiceClientType()
 	th.AssertEquals(t, expected, actual)
 }
 
-func TestListStackHandleSingle(t *testing.T) {
+func TestListEventsHandleSingle(t *testing.T) {
 	app := cli.NewApp()
 	flagset := flag.NewFlagSet("flags", 1)
-	flagset.String("stack-name", "", "")
-	flagset.String("stack-id", "", "")
-	flagset.Set("stack-name", "stack1")
-	flagset.Set("stack-id", "id1")
+	flagset.String("name", "", "")
+	flagset.String("id", "", "")
+	flagset.Set("name", "stack1")
+	flagset.Set("id", "id1")
 	c := cli.NewContext(app, flagset, nil)
-	cmd := &commandListStack{
+	cmd := &commandListEvents{
 		Ctx: &handler.Context{
 			CLIContext: c,
 		},
 	}
 
 	expected := &handler.Resource{
-		Params: &paramsListStack{
+		Params: &paramsListEvents{
 			stackName: "stack1",
 			stackID:   "id1",
 		},
 	}
 	actual := &handler.Resource{
-		Params: &paramsListStack{},
+		Params: &paramsListEvents{},
 	}
 	err := cmd.HandleSingle(actual)
 	th.AssertNoErr(t, err)
-	th.AssertEquals(t, expected.Params.(*paramsListStack).stackName, actual.Params.(*paramsListStack).stackName)
-	th.AssertEquals(t, expected.Params.(*paramsListStack).stackID, actual.Params.(*paramsListStack).stackID)
+	th.AssertEquals(t, expected.Params.(*paramsListEvents).stackName, actual.Params.(*paramsListEvents).stackName)
+	th.AssertEquals(t, expected.Params.(*paramsListEvents).stackID, actual.Params.(*paramsListEvents).stackID)
 }
 
-func TestListStackExecute(t *testing.T) {
+func TestListEventsExecute(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 	th.Mux.HandleFunc("/stacks/stack1/id1/events", func(w http.ResponseWriter, r *http.Request) {
@@ -79,13 +79,13 @@ func TestListStackExecute(t *testing.T) {
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprint(w, `{"events": [{"event_time": "2014-06-03T20:59:46", "resource_name":"resource1"}]}`)
 	})
-	cmd := &commandListStack{
+	cmd := &commandListEvents{
 		Ctx: &handler.Context{
 			ServiceClient: client.ServiceClient(),
 		},
 	}
 	actual := &handler.Resource{
-		Params: &paramsListStack{
+		Params: &paramsListEvents{
 			stackName: "stack1",
 			stackID:   "id1",
 			opts:      &osStackEvents.ListOpts{},
@@ -95,9 +95,9 @@ func TestListStackExecute(t *testing.T) {
 	th.AssertNoErr(t, actual.Err)
 }
 
-func TestListStackStdinField(t *testing.T) {
-	cmd := &commandListStack{}
-	expected := "stack-name"
+func TestListEventsStdinField(t *testing.T) {
+	cmd := &commandListEvents{}
+	expected := "name"
 	actual := cmd.StdinField()
 	th.AssertEquals(t, expected, actual)
 }

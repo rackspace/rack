@@ -12,6 +12,7 @@ func Get() []cli.Command {
 		get,
 		getSchema,
 		getTemplate,
+		listEvents,
 		listTypes,
 	}
 }

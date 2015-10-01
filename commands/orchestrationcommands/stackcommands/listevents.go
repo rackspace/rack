@@ -1,10 +1,9 @@
-package stackeventcommands
+package stackcommands
 
 import (
 	"strings"
 
 	"github.com/rackspace/rack/commandoptions"
-	"github.com/rackspace/rack/commands/orchestrationcommands/stackcommands"
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 	"github.com/rackspace/rack/internal/github.com/fatih/structs"
@@ -13,30 +12,30 @@ import (
 	"github.com/rackspace/rack/util"
 )
 
-var listStack = cli.Command{
-	Name:        "list-stack",
-	Usage:       util.Usage(commandPrefix, "list-stack", "[--stack-name <stackName> | --stack-id <stackID> | --stdin stack-name]"),
+var listEvents = cli.Command{
+	Name:        "list-events",
+	Usage:       util.Usage(commandPrefix, "list-events", "[--name <stackName> | --id <stackID> | --stdin name]"),
 	Description: "Lists events for a specified stack",
-	Action:      actionListStack,
-	Flags:       commandoptions.CommandFlags(flagsListStack, keysListStack),
+	Action:      actionListEvents,
+	Flags:       commandoptions.CommandFlags(flagsListEvents, keysListEvents),
 	BashComplete: func(c *cli.Context) {
-		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsListStack, keysListStack))
+		commandoptions.CompleteFlags(commandoptions.CommandFlags(flagsListEvents, keysListEvents))
 	},
 }
 
-func flagsListStack() []cli.Flag {
+func flagsListEvents() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "stack-name",
-			Usage: "[optional; required if neither `stack-id` nor `stdin` is provided] The stack name.",
+			Name:  "name",
+			Usage: "[optional; required if neither `id` nor `stdin` is provided] The stack name.",
 		},
 		cli.StringFlag{
-			Name:  "stack-id",
-			Usage: "[optional; required if neither `stack-name` nor `stdin` is provided] The stack id.",
+			Name:  "id",
+			Usage: "[optional; required if neither `name` nor `stdin` is provided] The stack id.",
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if neither `stack-name` nor `stack-id` is provided] The field being piped into STDIN. Valid values are: stack-name.",
+			Usage: "[optional; required if neither `name` nor `id` is provided] The field being piped into STDIN. Valid values are: name.",
 		},
 		cli.StringFlag{
 			Name:  "resource-actions",
@@ -65,18 +64,18 @@ func flagsListStack() []cli.Flag {
 	}
 }
 
-type paramsListStack struct {
+type paramsListEvents struct {
 	opts      *osStackEvents.ListOpts
 	stackName string
 	stackID   string
 }
 
-var keysListStack = []string{"ResourceName", "Time", "ResourceStatusReason", "ResourceStatus", "PhysicalResourceID", "ID"}
+var keysListEvents = []string{"ResourceName", "Time", "ResourceStatusReason", "ResourceStatus", "PhysicalResourceID", "ID"}
 
-type commandListStack handler.Command
+type commandListEvents handler.Command
 
-func actionListStack(c *cli.Context) {
-	command := &commandListStack{
+func actionListEvents(c *cli.Context) {
+	command := &commandListEvents{
 		Ctx: &handler.Context{
 			CLIContext: c,
 		},
@@ -84,19 +83,19 @@ func actionListStack(c *cli.Context) {
 	handler.Handle(command)
 }
 
-func (command *commandListStack) Context() *handler.Context {
+func (command *commandListEvents) Context() *handler.Context {
 	return command.Ctx
 }
 
-func (command *commandListStack) Keys() []string {
-	return keysListStack
+func (command *commandListEvents) Keys() []string {
+	return keysListEvents
 }
 
-func (command *commandListStack) ServiceClientType() string {
+func (command *commandListEvents) ServiceClientType() string {
 	return serviceClientType
 }
 
-func (command *commandListStack) HandleFlags(resource *handler.Resource) error {
+func (command *commandListEvents) HandleFlags(resource *handler.Resource) error {
 	c := command.Ctx.CLIContext
 
 	stringResourceActions := strings.Split(c.String("resource-actions"), ",")
@@ -119,37 +118,37 @@ func (command *commandListStack) HandleFlags(resource *handler.Resource) error {
 		SortKey:          osStackEvents.SortKey(c.String("sort-key")),
 		SortDir:          osStackEvents.SortDir(c.String("sort-dir")),
 	}
-	resource.Params = &paramsListStack{
+	resource.Params = &paramsListEvents{
 		opts: opts,
 	}
 	return nil
 }
 
-func (command *commandListStack) HandlePipe(resource *handler.Resource, item string) error {
-	name, id, err := stackcommands.IDAndName(command.Ctx.ServiceClient, item, "")
+func (command *commandListEvents) HandlePipe(resource *handler.Resource, item string) error {
+	name, id, err := IDAndName(command.Ctx.ServiceClient, item, "")
 	if err != nil {
 		return err
 	}
-	resource.Params.(*paramsListStack).stackName = name
-	resource.Params.(*paramsListStack).stackID = id
+	resource.Params.(*paramsListEvents).stackName = name
+	resource.Params.(*paramsListEvents).stackID = id
 	return nil
 }
 
-func (command *commandListStack) HandleSingle(resource *handler.Resource) error {
+func (command *commandListEvents) HandleSingle(resource *handler.Resource) error {
 	c := command.Ctx.CLIContext
-	name := c.String("stack-name")
-	id := c.String("stack-id")
-	name, id, err := stackcommands.IDAndName(command.Ctx.ServiceClient, name, id)
+	name := c.String("name")
+	id := c.String("id")
+	name, id, err := IDAndName(command.Ctx.ServiceClient, name, id)
 	if err != nil {
 		return err
 	}
-	resource.Params.(*paramsListStack).stackName = name
-	resource.Params.(*paramsListStack).stackID = id
+	resource.Params.(*paramsListEvents).stackName = name
+	resource.Params.(*paramsListEvents).stackID = id
 	return nil
 }
 
-func (command *commandListStack) Execute(resource *handler.Resource) {
-	params := resource.Params.(*paramsListStack)
+func (command *commandListEvents) Execute(resource *handler.Resource) {
+	params := resource.Params.(*paramsListEvents)
 	opts := params.opts
 	stackName := params.stackName
 	stackID := params.stackID
@@ -173,6 +172,6 @@ func (command *commandListStack) Execute(resource *handler.Resource) {
 	resource.Result = result
 }
 
-func (command *commandListStack) StdinField() string {
-	return "stack-name"
+func (command *commandListEvents) StdinField() string {
+	return "name"
 }
