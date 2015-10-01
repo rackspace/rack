@@ -2,7 +2,7 @@ package stackresourcecommands
 
 import "github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 
-var commandPrefix = "orchestration stack-resource"
+var commandPrefix = "orchestration resource"
 var serviceClientType = "orchestration"
 
 // Get returns all the commands allowed for an `orchestration resource` request.

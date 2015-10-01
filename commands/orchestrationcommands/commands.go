@@ -25,17 +25,17 @@ func Get() []cli.Command {
 			Subcommands: stackcommands.Get(),
 		},
 		{
-			Name:        "stack-event",
+			Name:        "event",
 			Usage:       "Stack event queries.",
 			Subcommands: stackeventcommands.Get(),
 		},
 		{
-			Name:        "stack-resource",
+			Name:        "resource",
 			Usage:       "Stack resource queries.",
 			Subcommands: stackresourcecommands.Get(),
 		},
 		{
-			Name:        "stack-template",
+			Name:        "template",
 			Usage:       "Stack template queries.",
 			Subcommands: stacktemplatecommands.Get(),
 		},
