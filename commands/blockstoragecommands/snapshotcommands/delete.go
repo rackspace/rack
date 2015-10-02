@@ -38,7 +38,7 @@ func flagsDelete() []cli.Flag {
 		},
 		cli.BoolFlag{
 			Name:  "wait-for-completion",
-			Usage: "[optional] If provided, the command will wait to return until the volume is available.",
+			Usage: "[optional] If provided, the command will wait to return until the snapshot is available.",
 		},
 	}
 }
