@@ -2,6 +2,7 @@ package snapshotcommands
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
@@ -35,12 +36,17 @@ func flagsDelete() []cli.Flag {
 			Name:  "stdin",
 			Usage: "[optional; required if `id` or `name` isn't provided] The field being piped into STDIN. Valid values are: id",
 		},
+		cli.BoolFlag{
+			Name:  "wait-for-completion",
+			Usage: "[optional] If provided, the command will wait to return until the snapshot is available.",
+		},
 	}
 }
 
 var keysDelete = []string{}
 
 type paramsDelete struct {
+	wait       bool
 	snapshotID string
 }
 
@@ -68,7 +74,14 @@ func (command *commandDelete) ServiceClientType() string {
 }
 
 func (command *commandDelete) HandleFlags(resource *handler.Resource) error {
-	resource.Params = &paramsDelete{}
+	wait := false
+	if command.Ctx.CLIContext.IsSet("wait-for-completion") {
+		wait = true
+	}
+
+	resource.Params = &paramsDelete{
+		wait: wait,
+	}
 	return nil
 }
 
@@ -93,7 +106,21 @@ func (command *commandDelete) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = fmt.Sprintf("Deleting snapshot [%s]\n", snapshotID)
+
+	if resource.Params.(*paramsDelete).wait {
+		i := 0
+		for i < 120 {
+			_, err := osSnapshots.Get(command.Ctx.ServiceClient, snapshotID).Extract()
+			if err != nil {
+				break
+			}
+			time.Sleep(5 * time.Second)
+			i++
+		}
+		resource.Result = fmt.Sprintf("Deleted snapshot [%s]\n", snapshotID)
+	} else {
+		resource.Result = fmt.Sprintf("Deleting snapshot [%s]\n", snapshotID)
+	}
 }
 
 func (command *commandDelete) StdinField() string {

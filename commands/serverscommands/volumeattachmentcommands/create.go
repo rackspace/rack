@@ -86,6 +86,7 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 	}
 
 	c := command.Ctx.CLIContext
+
 	opts := &osVolumeAttach.CreateOpts{
 		Device: c.String("device"),
 	}

@@ -54,12 +54,17 @@ func flagsRebuild() []cli.Flag {
 			Name:  "metadata",
 			Usage: "[optional] A comma-separated string a key=value pairs.",
 		},
+		cli.BoolFlag{
+			Name:  "wait-for-completion",
+			Usage: "[optional] If provided, the command will wait to return until the instance has been rebuilt.",
+		},
 	}
 }
 
 var keysRebuild = []string{"ID", "Name", "Status", "Created", "Updated", "Image", "Flavor", "PublicIPv4", "PublicIPv6", "PrivateIPv4", "KeyName"}
 
 type paramsRebuild struct {
+	wait     bool
 	serverID string
 	opts     *servers.RebuildOpts
 }
@@ -99,6 +104,11 @@ func (command *commandRebuild) HandleFlags(resource *handler.Resource) error {
 	}
 
 	c := command.Ctx.CLIContext
+	wait := false
+	if c.IsSet("wait-for-completion") {
+		wait = true
+	}
+
 	opts := &servers.RebuildOpts{
 		ImageID:    c.String("image-id"),
 		AdminPass:  c.String("admin-pass"),
@@ -121,6 +131,7 @@ func (command *commandRebuild) HandleFlags(resource *handler.Resource) error {
 	}
 
 	resource.Params = &paramsRebuild{
+		wait:     wait,
 		opts:     opts,
 		serverID: serverID,
 	}
@@ -129,12 +140,28 @@ func (command *commandRebuild) HandleFlags(resource *handler.Resource) error {
 }
 
 func (command *commandRebuild) Execute(resource *handler.Resource) {
-	opts := resource.Params.(*paramsRebuild).opts
-	serverID := resource.Params.(*paramsRebuild).serverID
+	params := resource.Params.(*paramsRebuild)
+	opts := params.opts
+	serverID := params.serverID
 	server, err := servers.Rebuild(command.Ctx.ServiceClient, serverID, opts).Extract()
 	if err != nil {
 		resource.Err = err
 		return
 	}
+
+	if params.wait {
+		err = osServers.WaitForStatus(command.Ctx.ServiceClient, serverID, "ACTIVE", 600)
+		if err != nil {
+			resource.Err = err
+			return
+		}
+
+		server, err = servers.Get(command.Ctx.ServiceClient, serverID).Extract()
+		if err != nil {
+			resource.Err = err
+			return
+		}
+	}
+
 	resource.Result = serverSingle(server)
 }

@@ -34,12 +34,17 @@ func flagsCreate() []cli.Flag {
 			Name:  "description",
 			Usage: "[optional] A description for this snapshot.",
 		},
+		cli.BoolFlag{
+			Name:  "wait-for-completion",
+			Usage: "[optional] If provided, the command will wait to return until the snapshot is available.",
+		},
 	}
 }
 
 var keysCreate = []string{"ID", "Name", "Description", "Size", "VolumeID", "VolumeType", "SnapshotID", "Attachments", "CreatedAt", "Metadata"}
 
 type paramsCreate struct {
+	wait bool
 	opts *snapshots.CreateOpts
 }
 
@@ -73,6 +78,10 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 	}
 
 	c := command.Ctx.CLIContext
+	wait := false
+	if c.IsSet("wait-for-completion") {
+		wait = true
+	}
 
 	opts := &snapshots.CreateOpts{
 		VolumeID:    c.String("volume-id"),
@@ -81,6 +90,7 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 	}
 
 	resource.Params = &paramsCreate{
+		wait: wait,
 		opts: opts,
 	}
 
@@ -94,6 +104,21 @@ func (command *commandCreate) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
+
+	if resource.Params.(*paramsCreate).wait {
+		err = osSnapshots.WaitForStatus(command.Ctx.ServiceClient, snapshot.ID, "available", 600)
+		if err != nil {
+			resource.Err = err
+			return
+		}
+
+		snapshot, err = osSnapshots.Get(command.Ctx.ServiceClient, snapshot.ID).Extract()
+		if err != nil {
+			resource.Err = err
+			return
+		}
+	}
+
 	resource.Result = snapshotSingle(snapshot)
 }
 

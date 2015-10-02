@@ -95,12 +95,17 @@ func flagsCreate() []cli.Flag {
 				"\tExamle: --block-device source-type=image,source-id=bb02b1a3-bc77-4d17-ab5b-421d89850fca,volume-size=100,destination-type=volume,delete-on-termination=false",
 			}, "\n"),
 		},
+		cli.BoolFlag{
+			Name:  "wait-for-completion",
+			Usage: "[optional] If provided, the command will wait to return until the instance is available.",
+		},
 	}
 }
 
 var keysCreate = []string{"ID", "AdminPass"}
 
 type paramsCreate struct {
+	wait bool
 	opts *servers.CreateOpts
 }
 
@@ -129,6 +134,11 @@ func (command *commandCreate) ServiceClientType() string {
 
 func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 	c := command.Ctx.CLIContext
+	wait := false
+	if c.IsSet("wait-for-completion") {
+		wait = true
+	}
+
 	opts := &servers.CreateOpts{
 		ImageRef:   c.String("image-id"),
 		ImageName:  c.String("image-name"),
@@ -237,6 +247,7 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 	}
 
 	resource.Params = &paramsCreate{
+		wait: wait,
 		opts: opts,
 	}
 	return nil
@@ -306,6 +317,21 @@ handleErr:
 		resource.Err = err
 		return
 	}
+
+	if resource.Params.(*paramsCreate).wait {
+		err = osServers.WaitForStatus(command.Ctx.ServiceClient, server.ID, "ACTIVE", 600)
+		if err != nil {
+			resource.Err = err
+			return
+		}
+
+		server, err = servers.Get(command.Ctx.ServiceClient, server.ID).Extract()
+		if err != nil {
+			resource.Err = err
+			return
+		}
+	}
+
 	resource.Result = serverSingle(server)
 }
 

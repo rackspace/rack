@@ -45,12 +45,17 @@ func flagsReboot() []cli.Flag {
 			Name:  "stdin",
 			Usage: "[optional; required if `id` or `name` isn't provided] The field being piped into STDIN. Valid values are: id",
 		},
+		cli.BoolFlag{
+			Name:  "wait-for-completion",
+			Usage: "[optional] If provided, the command will wait to return until the instance has been rebooted.",
+		},
 	}
 }
 
 var keysReboot = []string{}
 
 type paramsReboot struct {
+	wait     bool
 	serverID string
 	how      osServers.RebootMethod
 }
@@ -80,6 +85,11 @@ func (command *commandReboot) ServiceClientType() string {
 
 func (command *commandReboot) HandleFlags(resource *handler.Resource) error {
 	c := command.Context().CLIContext
+	wait := false
+	if c.IsSet("wait-for-completion") {
+		wait = true
+	}
+
 	var how osServers.RebootMethod
 	if c.IsSet("soft") {
 		how = osServers.OSReboot
@@ -90,7 +100,10 @@ func (command *commandReboot) HandleFlags(resource *handler.Resource) error {
 	if how == "" {
 		return output.ErrMissingFlag{Msg: "One of either --soft or --hard must be provided."}
 	}
-	resource.Params = &paramsReboot{how: how}
+	resource.Params = &paramsReboot{
+		how:  how,
+		wait: wait,
+	}
 	return nil
 }
 
@@ -107,12 +120,24 @@ func (command *commandReboot) HandleSingle(resource *handler.Resource) error {
 
 func (command *commandReboot) Execute(resource *handler.Resource) {
 	params := resource.Params.(*paramsReboot)
-	err := servers.Reboot(command.Context().ServiceClient, params.serverID, params.how).ExtractErr()
+	serverID := params.serverID
+	err := servers.Reboot(command.Context().ServiceClient, serverID, params.how).ExtractErr()
 	if err != nil {
 		resource.Err = err
 		return
 	}
-	resource.Result = fmt.Sprintf("Successfully rebooted instance [%s]\n", params.serverID)
+
+	if params.wait {
+		err = osServers.WaitForStatus(command.Ctx.ServiceClient, serverID, "ACTIVE", 600)
+		if err != nil {
+			resource.Err = err
+			return
+		}
+
+		resource.Result = fmt.Sprintf("Rebooted instance [%s]\n", serverID)
+	} else {
+		resource.Result = fmt.Sprintf("Rebooting instance [%s]\n", serverID)
+	}
 }
 
 func (command *commandReboot) StdinField() string {

@@ -40,12 +40,17 @@ func flagsResize() []cli.Flag {
 			Name:  "stdin",
 			Usage: "[optional; required if `id` or `name` isn't provided] The field being piped into STDIN. Valid values are: id",
 		},
+		cli.BoolFlag{
+			Name:  "wait-for-completion",
+			Usage: "[optional] If provided, the command will wait to return until the instance has been resized.",
+		},
 	}
 }
 
 var keysResize = []string{}
 
 type paramsResize struct {
+	wait     bool
 	serverID string
 	opts     *osServers.ResizeOpts
 }
@@ -82,7 +87,14 @@ func (command *commandResize) HandleFlags(resource *handler.Resource) error {
 	opts := &osServers.ResizeOpts{
 		FlavorRef: flavorID,
 	}
+
+	wait := false
+	if command.Ctx.CLIContext.IsSet("wait-for-completion") {
+		wait = true
+	}
+
 	resource.Params = &paramsResize{
+		wait: wait,
 		opts: opts,
 	}
 	return nil
@@ -106,7 +118,18 @@ func (command *commandResize) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = fmt.Sprintf("Successfully resized instance [%s] to flavor [%s]\n", params.serverID, params.opts.FlavorRef)
+
+	if params.wait {
+		err = osServers.WaitForStatus(command.Ctx.ServiceClient, params.serverID, "VERIFY_RESIZE", 600)
+		if err != nil {
+			resource.Err = err
+			return
+		}
+
+		resource.Result = fmt.Sprintf("Instance [%s] awaiting confirmation of to be resized to flavor [%s]\n", params.serverID, params.opts.FlavorRef)
+	} else {
+		resource.Result = fmt.Sprintf("Transitioning instance [%s] to a status of VERIFY_RESIZE\n", params.serverID)
+	}
 }
 
 func (command *commandResize) StdinField() string {
