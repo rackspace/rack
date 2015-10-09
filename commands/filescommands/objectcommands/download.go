@@ -73,7 +73,7 @@ func (command *commandDownload) HandleFlags(resource *handler.Resource) error {
 
 	c := command.Ctx.CLIContext
 	containerName := c.String("container")
-	if err := checkContainerExists(command.Ctx.ServiceClient, containerName); err != nil {
+	if err := CheckContainerExists(command.Ctx.ServiceClient, containerName); err != nil {
 		return err
 	}
 

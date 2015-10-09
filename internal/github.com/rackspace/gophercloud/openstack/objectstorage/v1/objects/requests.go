@@ -5,15 +5,17 @@ import (
 	"crypto/hmac"
 	"crypto/md5"
 	"crypto/sha1"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
+	"runtime"
 	"strings"
 	"time"
 
-	"github.com/rackspace/gophercloud"
-	"github.com/rackspace/gophercloud/openstack/objectstorage/v1/accounts"
-	"github.com/rackspace/gophercloud/pagination"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/accounts"
+	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/pagination"
 )
 
 // ListOptsBuilder allows extensions to add additional parameters to the List
@@ -498,4 +500,207 @@ func CreateTempURL(c *gophercloud.ServiceClient, containerName, objectName strin
 	hash.Write([]byte(body))
 	hexsum := fmt.Sprintf("%x", hash.Sum(nil))
 	return fmt.Sprintf("%s%s?temp_url_sig=%s&temp_url_expires=%d", baseURL, objectPath, hexsum, expiry), nil
+}
+
+// CreateLargeOptsBuilder allows extensions to add additional parameters to the
+// CreateLarge request.
+type CreateLargeOptsBuilder interface {
+	ToObjectCreateLargeParams() (map[string]string, string, error)
+	SizeOfPieces() (int64, error)
+	LengthOfContent() (int64, error)
+}
+
+// CreateLargeOpts is a structure that holds parameters for creating a large object.
+type CreateLargeOpts struct {
+	CreateOpts
+	// [REQUIRED] The size of the pieces to break the large object into (in MB).
+	SizePieces int64
+}
+
+// ToObjectCreateLargeParams formats a CreateLargeOpts into a query string and map of
+// headers.
+func (opts CreateLargeOpts) ToObjectCreateLargeParams() (map[string]string, string, error) {
+	q, err := gophercloud.BuildQueryString(opts)
+	if err != nil {
+		return nil, "", err
+	}
+	h, err := gophercloud.BuildHeaders(opts)
+	if err != nil {
+		return nil, q.String(), err
+	}
+
+	for k, v := range opts.Metadata {
+		h["X-Object-Meta-"+k] = v
+	}
+
+	return h, q.String(), nil
+}
+
+// SizeOfPieces returns the size that each piece of the uploaded object should
+// have (except possibly the last one).
+func (opts CreateLargeOpts) SizeOfPieces() (int64, error) {
+	if opts.SizePieces == 0 {
+		return 0, errors.New("SizePieces must be provided.")
+	}
+	return opts.SizePieces * 1000000, nil
+}
+
+// LengthOfContent returns the total length of the content to upload.
+func (opts CreateLargeOpts) LengthOfContent() (int64, error) {
+	return opts.ContentLength, nil
+}
+
+// CreateLarge is a function that creates a new large object or replaces an existing object. If the returned response's ETag
+// header fails to match the local checksum, the request will fail.
+func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string, content io.Reader, opts CreateLargeOptsBuilder) CreateResult {
+	var res CreateResult
+
+	h := make(map[string]string)
+
+	sizePieces, err := opts.SizeOfPieces()
+	if err != nil {
+		res.Err = err
+		return res
+	}
+
+	if opts == nil {
+		res.Err = errors.New("SizePieces must be provided.")
+		return res
+	}
+
+	headers, query, err := opts.ToObjectCreateLargeParams()
+	if err != nil {
+		res.Err = err
+		return res
+	}
+
+	for k, v := range headers {
+		h[k] = v
+	}
+
+	errChan := make(chan (error))
+	multiErr := ErrCreateLarge{}
+
+	contentLength, err := opts.LengthOfContent()
+	if err != nil {
+		res.Err = err
+		return res
+	}
+
+	if contentLength != 0 {
+		numPieces := int(contentLength / sizePieces)
+		if contentLength%sizePieces != 0 {
+			numPieces++
+		}
+		runtime.GOMAXPROCS(runtime.NumCPU())
+		for i := 0; i < numPieces; i++ {
+			url := createURL(c, containerName, fmt.Sprintf("%s.%d", objectName, i))
+			url += query
+
+			limitReader := io.LimitReader(content, sizePieces)
+
+			go func(i int, limitReader io.Reader) {
+				hash := md5.New()
+
+				fmt.Printf("Reading content for file %d\n", i)
+
+				teeReader := io.TeeReader(limitReader, hash)
+
+				ropts := gophercloud.RequestOpts{
+					RawBody:     teeReader,
+					MoreHeaders: h,
+				}
+
+				resp, err := c.Request("PUT", url, ropts)
+				if err != nil {
+					errChan <- err
+					return
+				}
+
+				if resp != nil {
+					if resp.Header.Get("ETag") == fmt.Sprintf("%x", hash.Sum(nil)) {
+						errChan <- nil
+						return
+					}
+					errChan <- fmt.Errorf("Local checksum does not match API ETag header")
+					return
+				}
+			}(i, limitReader)
+
+			for i := 0; i < numPieces; i++ {
+				fmt.Printf("Getting response number %d from the error channel\n", i)
+				err := <-errChan
+				if err != nil {
+					fmt.Printf("Error for response %d: %s\n", i, err)
+					multiErr = append(multiErr, err)
+				}
+				fmt.Printf("No error for response %d\n", i)
+			}
+
+			if len(multiErr) > 0 {
+				res.Err = multiErr
+				return res
+			}
+		}
+	} else {
+		for i := 0; ; i++ {
+			url := createURL(c, containerName, fmt.Sprintf("%s.%d", objectName, i))
+			url += query
+
+			limitReader := io.LimitReader(content, sizePieces)
+
+			hash := md5.New()
+
+			fmt.Printf("Reading content for file %d\n", i)
+
+			teeReader := io.TeeReader(limitReader, hash)
+
+			ropts := gophercloud.RequestOpts{
+				RawBody:     teeReader,
+				MoreHeaders: h,
+			}
+
+			resp, err := c.Request("PUT", url, ropts)
+			if err != nil {
+				errChan <- err
+				break
+			}
+
+			if resp != nil {
+				if resp.Header.Get("ETag") == fmt.Sprintf("%x", hash.Sum(nil)) {
+					errChan <- nil
+				}
+				errChan <- fmt.Errorf("Local checksum does not match API ETag header")
+			}
+			i++
+		}
+	}
+
+	ropts := gophercloud.RequestOpts{
+		MoreHeaders: map[string]string{
+			"X-Object-Manifest": fmt.Sprintf("%s/%s", containerName, objectName),
+		},
+	}
+
+	fmt.Println("Uploading manifest file...")
+	resp, err := c.Request("PUT", createURL(c, containerName, objectName), ropts)
+	if err != nil {
+		res.Err = err
+		return res
+	}
+	if resp != nil {
+		res.Header = resp.Header
+	}
+	return res
+}
+
+// ErrCreateLarge represents the errors returned from a CreateLarge operation.
+type ErrCreateLarge []error
+
+func (e ErrCreateLarge) Error() string {
+	s := ""
+	for _, err := range e {
+		s += err.Error() + "\n"
+	}
+	return s
 }

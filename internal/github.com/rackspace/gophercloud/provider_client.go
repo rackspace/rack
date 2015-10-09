@@ -3,6 +3,7 @@ package gophercloud
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -86,7 +87,7 @@ type RequestOpts struct {
 	JSONBody interface{}
 	// RawBody contains an io.ReadSeeker that will be consumed by the request directly. No content-type
 	// will be set unless one is provided explicitly by MoreHeaders.
-	RawBody io.ReadSeeker
+	RawBody io.Reader
 	// JSONResponse, if provided, will be populated with the contents of the response body parsed as
 	// JSON.
 	JSONResponse interface{}
@@ -107,7 +108,7 @@ var applicationJSON = "application/json"
 // Request performs an HTTP request using the ProviderClient's current HTTPClient. An authentication
 // header will automatically be provided.
 func (client *ProviderClient) Request(method, url string, options RequestOpts) (*http.Response, error) {
-	var body io.ReadSeeker
+	var body io.Reader
 	var contentType *string
 
 	// Derive the content body by either encoding an arbitrary object as JSON, or by taking a provided
@@ -209,7 +210,15 @@ func (client *ProviderClient) Request(method, url string, options RequestOpts) (
 					}
 				}
 				if options.RawBody != nil {
-					options.RawBody.Seek(0, 0)
+					seeker, ok := options.RawBody.(io.ReadSeeker)
+					if !ok {
+						return nil, &ErrErrorSeekingAfterReauthentication{
+							BaseError: BaseError{
+								OriginalError: errors.New("Couldn't seek to beginning of content."),
+							},
+						}
+					}
+					seeker.Seek(0, 0)
 				}
 				resp, err = client.Request(method, url, options)
 				if err != nil {

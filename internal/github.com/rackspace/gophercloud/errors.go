@@ -160,3 +160,11 @@ type ErrErrorAfterReauthentication struct {
 func (e *ErrErrorAfterReauthentication) Error() string {
 	return fmt.Sprintf("Successfully re-authenticated, but got error executing request: %s", e.OriginalError)
 }
+
+type ErrErrorSeekingAfterReauthentication struct {
+	BaseError
+}
+
+func (e *ErrErrorSeekingAfterReauthentication) Error() string {
+	return fmt.Sprintf("Successfully re-authenticated, but got error: %s", e.OriginalError)
+}
