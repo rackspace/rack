@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"runtime"
 	"strings"
 	"time"
 
@@ -592,7 +591,6 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 		if contentLength%sizePieces != 0 {
 			numPieces++
 		}
-		runtime.GOMAXPROCS(runtime.NumCPU())
 		for i := 0; i < numPieces; i++ {
 			url := createURL(c, containerName, fmt.Sprintf("%s.%d", objectName, i))
 			url += query
