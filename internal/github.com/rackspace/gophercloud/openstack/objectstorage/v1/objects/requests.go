@@ -600,7 +600,7 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 			go func(i int, limitReader io.Reader) {
 				hash := md5.New()
 
-				fmt.Printf("Reading content for file %d\n", i)
+				//fmt.Printf("Reading content for file %d\n", i)
 
 				teeReader := io.TeeReader(limitReader, hash)
 
@@ -626,13 +626,13 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 			}(i, limitReader)
 
 			for i := 0; i < numPieces; i++ {
-				fmt.Printf("Getting response number %d from the error channel\n", i)
+				//fmt.Printf("Getting response number %d from the error channel\n", i)
 				err := <-errChan
 				if err != nil {
-					fmt.Printf("Error for response %d: %s\n", i, err)
+					//fmt.Printf("Error for response %d: %s\n", i, err)
 					multiErr = append(multiErr, err)
 				}
-				fmt.Printf("No error for response %d\n", i)
+				//fmt.Printf("No error for response %d\n", i)
 			}
 
 			if len(multiErr) > 0 {
@@ -680,7 +680,7 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 		},
 	}
 
-	fmt.Println("Uploading manifest file...")
+	//fmt.Println("Uploading manifest file...")
 	resp, err := c.Request("PUT", createURL(c, containerName, objectName), ropts)
 	if err != nil {
 		res.Err = err
