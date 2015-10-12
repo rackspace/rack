@@ -2,6 +2,7 @@ package objects
 
 import (
 	"bufio"
+	"bytes"
 	"crypto/hmac"
 	"crypto/md5"
 	"crypto/sha1"
@@ -592,7 +593,8 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 			numPieces++
 		}
 		for i := 0; i < numPieces; i++ {
-			url := createURL(c, containerName, fmt.Sprintf("%s.%d", objectName, i))
+			thisObject := fmt.Sprintf("%s.%d", objectName, i)
+			url := createURL(c, containerName, thisObject)
 			url += query
 
 			limitReader := io.LimitReader(content, sizePieces)
@@ -620,7 +622,7 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 						errChan <- nil
 						return
 					}
-					errChan <- fmt.Errorf("Local checksum does not match API ETag header")
+					errChan <- fmt.Errorf(fmt.Sprintf("Local checksum does not match API ETag header for file: %s", thisObject))
 					return
 				}
 			}(i, limitReader)
@@ -649,26 +651,30 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 
 			hash := md5.New()
 
-			fmt.Printf("Reading content for file %d\n", i)
-
-			teeReader := io.TeeReader(limitReader, hash)
-
-			ropts := gophercloud.RequestOpts{
-				RawBody:     teeReader,
-				MoreHeaders: h,
-			}
-
-			resp, err := c.Request("PUT", url, ropts)
+			buf := bytes.NewBuffer([]byte{})
+			_, err := io.Copy(io.MultiWriter(hash, buf), limitReader)
 			if err != nil {
 				errChan <- err
 				break
 			}
 
-			if resp != nil {
-				if resp.Header.Get("ETag") == fmt.Sprintf("%x", hash.Sum(nil)) {
-					errChan <- nil
-				}
-				errChan <- fmt.Errorf("Local checksum does not match API ETag header")
+			localChecksum := fmt.Sprintf("%x", hash.Sum(nil))
+			if localChecksum == "d41d8cd98f00b204e9800998ecf8427e" {
+				// hash of empty string ^
+				break
+			}
+
+			h["ETag"] = localChecksum
+
+			ropts := gophercloud.RequestOpts{
+				RawBody:     buf,
+				MoreHeaders: h,
+			}
+
+			_, err = c.Request("PUT", url, ropts)
+			if err != nil {
+				errChan <- err
+				break
 			}
 			i++
 		}
