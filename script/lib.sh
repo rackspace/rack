@@ -11,7 +11,7 @@ get_branch() {
   # See http://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
   # for details about default Travis Environment Variables and their values
   if [ -z "${TRAVIS_BRANCH-}" ]; then
-    BRANCH=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
+    BRANCH=$(git rev-parse --abbrev-ref HEAD)
   else
     BRANCH=${TRAVIS_BRANCH}
   fi
