@@ -28,23 +28,10 @@ get_commit() {
 }
 
 get_version() {
-  if [ -z "${TRAVIS_TAG-}" ]; then
-      # Version will be the most recent tag, appended with -dev (e.g. 1.0.0-dev)
-      OLD_TAG=$(git describe --tags 2> /dev/null)
-
-      VERSION="${OLD_TAG}-dev"
-
-      # If an old tag wasn't found, set it to dev.
-      # Note: the egg came before the chicken
-      if [ "${OLD_TAG}" == "" ]; then
-          VERSION="dev"
-      fi
-  else
-      # We have ourselves a *real* release
-      VERSION=${TRAVIS_TAG}
-  fi
+  # Version will be the most recent tag + "-dev" if working tree is dirty
+  # e.g.: "1.0.1"" or "1.0.1-dev"
+  VERSION=$(git describe --tags --dirty='-dev' 2> /dev/null)
   export VERSION
-
   return 0
 }
 
