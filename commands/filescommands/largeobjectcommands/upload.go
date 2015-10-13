@@ -41,7 +41,7 @@ func flagsUpload() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `file` isn't provided] The field being piped to STDIN, if any. Valid values are: file.",
+			Usage: "[optional; required if `file` isn't provided] The field being piped to STDIN, if any. Valid values are: file, content.",
 		},
 		cli.IntFlag{
 			Name:  "size-pieces",
@@ -137,6 +137,19 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 }
 
 func (command *commandUpload) HandlePipe(resource *handler.Resource, item string) error {
+	file, err := os.Open(item)
+	if err != nil {
+		return err
+	}
+
+	fileInfo, err := file.Stat()
+	if err != nil {
+		return err
+	}
+
+	resource.Params.(*paramsUpload).opts.ContentLength = fileInfo.Size()
+
+	resource.Params.(*paramsUpload).stream = file
 	return nil
 }
 
@@ -180,6 +193,10 @@ func (command *commandUpload) Execute(resource *handler.Resource) {
 
 func (command *commandUpload) StdinField() string {
 	return "file"
+}
+
+func (command *commandUpload) StreamField() string {
+	return "content"
 }
 
 func (command *commandUpload) HandleStreamPipe(resource *handler.Resource) error {

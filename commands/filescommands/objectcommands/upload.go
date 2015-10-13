@@ -45,7 +45,7 @@ func flagsUpload() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "stdin",
-			Usage: "[optional; required if `file` or `content` isn't provided] The field being piped to STDIN, if any. Valid values are: content.",
+			Usage: "[optional; required if `file` or `content` isn't provided] The field being piped to STDIN, if any. Valid values are: file, content.",
 		},
 		cli.StringFlag{
 			Name:  "content-type",
@@ -134,6 +134,11 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 }
 
 func (command *commandUpload) HandlePipe(resource *handler.Resource, item string) error {
+	readSeeker, err := os.Open(item)
+	if err != nil {
+		return err
+	}
+	resource.Params.(*paramsUpload).stream = readSeeker
 	return nil
 }
 
@@ -169,6 +174,10 @@ func (command *commandUpload) Execute(resource *handler.Resource) {
 }
 
 func (command *commandUpload) StdinField() string {
+	return "file"
+}
+
+func (command *commandUpload) StreamField() string {
 	return "content"
 }
 
