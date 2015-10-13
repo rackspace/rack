@@ -5,7 +5,9 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 	"testing"
 
@@ -65,8 +67,11 @@ func TestUploadHandlePipe(t *testing.T) {
 		Params: &paramsUpload{},
 	}
 
-	err := cmd.HandlePipe(actual, "bar")
+	f, err := ioutil.TempFile("", "bar")
+	th.AssertNoErr(t, err)
+	defer os.Remove(f.Name())
 
+	err = cmd.HandlePipe(actual, f.Name())
 	th.AssertNoErr(t, err)
 }
 
