@@ -23,7 +23,12 @@ func TestLargeObjectCommands(t *testing.T) {
 	fmt.Println("Creating container...")
 	createContainer(t, containerName)
 
-	defer emptyAndDeleteContainer(t, containerName)
+	defer func() {
+		fmt.Println("Deleting large object...")
+		deleteLargeObject(t, containerName, objectName)
+		fmt.Println("Deleting container...")
+		deleteContainer(t, containerName)
+	}()
 
 	fmt.Println("Creating and uploading large object...")
 	uploadLargeObject(t, containerName, objectName, sizeFile, sizePieces)
@@ -62,10 +67,13 @@ func uploadLargeObject(t *testing.T, containerName, objectName string, sizeFile 
 
 }
 
-func emptyAndDeleteContainer(t *testing.T, containerName string) {
-	_, err := exec.Command("rack", "files", "container", "empty", "--name", containerName).Output()
-	th.AssertNoErr(t, err)
-
+func deleteContainer(t *testing.T, containerName string) {
 	_, err := exec.Command("rack", "files", "container", "delete", "--name", containerName).Output()
+	th.AssertNoErr(t, err)
+}
+
+func deleteLargeObject(t *testing.T, containerName, objectName string) {
+	_, err := exec.Command("rack", "files", "large-object", "delete",
+		"--container", containerName, "--name", objectName).Output()
 	th.AssertNoErr(t, err)
 }
