@@ -93,14 +93,7 @@ For command completion on Windows, please see the [command completion](https://d
 
 ## Roadmap
 
-Our plan is to release a limited beta of `rack` the first week of August 2015 with full support for the following services:
-
-- Cloud Servers
-- Cloud Files
-- Cloud Networks
-- Cloud Block Storage
-
-We expect to exit beta in the coming weeks, while also focusing on adding new services. The current plan of record to add new services is based on the following priority:
+Below is a tentative list of services to be added. Though currently ordered by priority, the list can and will change:
 
 1. Cloud Load Balancers
 2. Cloud DNS \*
