@@ -177,13 +177,6 @@ func (command *commandUpload) HandleSingle(resource *handler.Resource) error {
 
 func (command *commandUpload) Execute(resource *handler.Resource) {
 	params := resource.Params.(*paramsUpload)
-
-	defer func() {
-		if closeable, ok := params.stream.(io.ReadCloser); ok {
-			closeable.Close()
-		}
-	}()
-
 	containerName := params.container
 	objectName := params.object
 	stream := params.stream
