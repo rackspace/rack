@@ -9,7 +9,7 @@ var serviceClientType = "object-store"
 func Get() []cli.Command {
 	return []cli.Command{
 		upload,
+		remove,
 		//uploadDir,
-		//download,
 	}
 }
