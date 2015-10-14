@@ -45,7 +45,7 @@ func uploadLargeObject(t *testing.T, containerName, objectName string, sizeFile 
 
 	sizeFile = int64(sizeFile * 1000000)
 
-	tempFile, err := ioutil.TempFile(".", "tmp")
+	tempFile, err := ioutil.TempFile("", "tmp")
 	th.AssertNoErr(t, err)
 
 	defer func() {
