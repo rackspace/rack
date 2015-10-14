@@ -49,17 +49,6 @@ func TestUploadErrWhenCtnrMissing(t *testing.T) {
 	th.AssertDeepEquals(t, expected, err)
 }
 
-func TestUploadErrWhenNameMissing(t *testing.T) {
-	fs := flag.NewFlagSet("flags", 1)
-	fs.String("container", "", "")
-	fs.Set("container", "foo")
-
-	err := newUpCmd(fs).HandleFlags(&handler.Resource{})
-
-	expected := output.ErrMissingFlag{Msg: "--name is required."}
-	th.AssertDeepEquals(t, expected, err)
-}
-
 func TestUploadHandlePipe(t *testing.T) {
 	cmd := &commandUpload{}
 
