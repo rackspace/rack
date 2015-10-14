@@ -5,12 +5,10 @@ import (
 	"io"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	"github.com/rackspace/rack/internal/github.com/dustin/go-humanize"
 	osObjects "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/objects"
 	"github.com/rackspace/rack/util"
@@ -176,14 +174,12 @@ func (command *commandUpload) Execute(resource *handler.Resource) {
 	stream := params.stream
 	opts := params.opts
 
-	start := time.Now()
-
 	rawResponse := objects.Create(command.Ctx.ServiceClient, containerName, objectName, stream, opts)
 	if rawResponse.Err != nil {
 		resource.Err = rawResponse.Err
 		return
 	}
-	resource.Result = fmt.Sprintf("Finished! Uploaded object [%s] to container [%s] in %s", objectName, containerName, humanize.RelTime(start, time.Now(), "", ""))
+	resource.Result = fmt.Sprintf("Successfully uploaded object [%s] to container [%s]\n", objectName, containerName)
 }
 
 func (command *commandUpload) StdinField() string {
