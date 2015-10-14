@@ -5,10 +5,12 @@ import (
 	"io"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	"github.com/rackspace/rack/internal/github.com/dustin/go-humanize"
 	osObjects "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/objects"
 	"github.com/rackspace/rack/util"
@@ -33,7 +35,7 @@ func flagsUpload() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "name",
-			Usage: "[required] The name the object should have in the Cloud Files container.",
+			Usage: "[optional; required if `stdin` isn't provided with value of 'file'] The name the object should have in the Cloud Files container.",
 		},
 		cli.StringFlag{
 			Name:  "content",
@@ -95,7 +97,7 @@ func (command *commandUpload) ServiceClientType() string {
 }
 
 func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"container", "name"})
+	err := command.Ctx.CheckFlagsSet([]string{"container"})
 	if err != nil {
 		return err
 	}
@@ -112,10 +114,6 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 		ContentType:   c.String("content-type"),
 	}
 
-	if c.IsSet("content-encoding") && c.String("content-encoding") != "gzip" {
-		opts.ContentEncoding = c.String("content-encoding")
-	}
-
 	if c.IsSet("metadata") {
 		metadata, err := command.Ctx.CheckKVFlag("metadata")
 		if err != nil {
@@ -126,7 +124,6 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 
 	resource.Params = &paramsUpload{
 		container: containerName,
-		object:    c.String("name"),
 		opts:      opts,
 	}
 
@@ -138,11 +135,18 @@ func (command *commandUpload) HandlePipe(resource *handler.Resource, item string
 	if err != nil {
 		return err
 	}
+	resource.Params.(*paramsUpload).object = readSeeker.Name()
 	resource.Params.(*paramsUpload).stream = readSeeker
 	return nil
 }
 
 func (command *commandUpload) HandleSingle(resource *handler.Resource) error {
+	err := command.Ctx.CheckFlagsSet([]string{"name"})
+	if err != nil {
+		return err
+	}
+	resource.Params.(*paramsUpload).object = command.Ctx.CLIContext.String("name")
+
 	if command.Ctx.CLIContext.IsSet("file") {
 		readSeeker, err := os.Open(command.Ctx.CLIContext.String("file"))
 		if err != nil {
@@ -160,17 +164,26 @@ func (command *commandUpload) HandleSingle(resource *handler.Resource) error {
 
 func (command *commandUpload) Execute(resource *handler.Resource) {
 	params := resource.Params.(*paramsUpload)
+
+	defer func() {
+		if closeable, ok := params.stream.(io.ReadCloser); ok {
+			closeable.Close()
+		}
+	}()
+
 	containerName := params.container
 	objectName := params.object
 	stream := params.stream
 	opts := params.opts
+
+	start := time.Now()
 
 	rawResponse := objects.Create(command.Ctx.ServiceClient, containerName, objectName, stream, opts)
 	if rawResponse.Err != nil {
 		resource.Err = rawResponse.Err
 		return
 	}
-	resource.Result = fmt.Sprintf("Successfully uploaded object [%s] to container [%s]\n", objectName, containerName)
+	resource.Result = fmt.Sprintf("Finished! Uploaded object [%s] to container [%s] in %s", objectName, containerName, humanize.RelTime(start, time.Now(), "", ""))
 }
 
 func (command *commandUpload) StdinField() string {
@@ -182,6 +195,11 @@ func (command *commandUpload) StreamField() string {
 }
 
 func (command *commandUpload) HandleStreamPipe(resource *handler.Resource) error {
+	err := command.Ctx.CheckFlagsSet([]string{"name"})
+	if err != nil {
+		return err
+	}
+	resource.Params.(*paramsUpload).object = command.Ctx.CLIContext.String("name")
 	resource.Params.(*paramsUpload).stream = os.Stdin
 	return nil
 }

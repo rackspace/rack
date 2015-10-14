@@ -33,7 +33,7 @@ func flagsUpload() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "name",
-			Usage: "[required] The name the object should have in the Cloud Files container.",
+			Usage: "[optional; required if `stdin` isn't provided with value of 'file'] The name the object should have in the Cloud Files container.",
 		},
 		cli.StringFlag{
 			Name:  "file",
@@ -115,10 +115,6 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 		SizePieces: int64(c.Int("size-pieces")),
 	}
 
-	if c.IsSet("content-encoding") && c.String("content-encoding") != "gzip" {
-		opts.ContentEncoding = c.String("content-encoding")
-	}
-
 	if c.IsSet("metadata") {
 		metadata, err := command.Ctx.CheckKVFlag("metadata")
 		if err != nil {
@@ -141,6 +137,7 @@ func (command *commandUpload) HandlePipe(resource *handler.Resource, item string
 	if err != nil {
 		return err
 	}
+	resource.Params.(*paramsUpload).object = file.Name()
 
 	fileInfo, err := file.Stat()
 	if err != nil {
@@ -154,10 +151,11 @@ func (command *commandUpload) HandlePipe(resource *handler.Resource, item string
 }
 
 func (command *commandUpload) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"file"})
+	err := command.Ctx.CheckFlagsSet([]string{"file", "name"})
 	if err != nil {
 		return err
 	}
+	resource.Params.(*paramsUpload).object = command.Ctx.CLIContext.String("name")
 
 	file, err := os.Open(command.Ctx.CLIContext.String("file"))
 	if err != nil {
@@ -177,6 +175,13 @@ func (command *commandUpload) HandleSingle(resource *handler.Resource) error {
 
 func (command *commandUpload) Execute(resource *handler.Resource) {
 	params := resource.Params.(*paramsUpload)
+
+	defer func() {
+		if closeable, ok := params.stream.(io.ReadCloser); ok {
+			closeable.Close()
+		}
+	}()
+
 	containerName := params.container
 	objectName := params.object
 	stream := params.stream
@@ -200,6 +205,11 @@ func (command *commandUpload) StreamField() string {
 }
 
 func (command *commandUpload) HandleStreamPipe(resource *handler.Resource) error {
+	err := command.Ctx.CheckFlagsSet([]string{"name"})
+	if err != nil {
+		return err
+	}
+	resource.Params.(*paramsUpload).object = command.Ctx.CLIContext.String("name")
 	resource.Params.(*paramsUpload).stream = os.Stdin
 	return nil
 }

@@ -587,24 +587,23 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 		return res
 	}
 
-	if contentLength != 0 {
+	if readerAt, ok := content.(io.ReaderAt); ok && contentLength != 0 {
 		numPieces := int(contentLength / sizePieces)
 		if contentLength%sizePieces != 0 {
 			numPieces++
 		}
 		for i := 0; i < numPieces; i++ {
+
+			sectionReader := io.NewSectionReader(readerAt, int64(i)*sizePieces, sizePieces)
+
 			thisObject := fmt.Sprintf("%s.%d", objectName, i)
 			url := createURL(c, containerName, thisObject)
 			url += query
 
-			limitReader := io.LimitReader(content, sizePieces)
-
-			go func(i int, limitReader io.Reader) {
+			go func(i int, sectionReader *io.SectionReader) {
 				hash := md5.New()
 
-				//fmt.Printf("Reading content for file %d\n", i)
-
-				teeReader := io.TeeReader(limitReader, hash)
+				teeReader := io.TeeReader(sectionReader, hash)
 
 				ropts := gophercloud.RequestOpts{
 					RawBody:     teeReader,
@@ -612,6 +611,11 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 				}
 
 				resp, err := c.Request("PUT", url, ropts)
+
+				if closeable, ok := teeReader.(io.ReadCloser); ok {
+					closeable.Close()
+				}
+
 				if err != nil {
 					errChan <- err
 					return
@@ -625,22 +629,19 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 					errChan <- fmt.Errorf(fmt.Sprintf("Local checksum does not match API ETag header for file: %s", thisObject))
 					return
 				}
-			}(i, limitReader)
+			}(i, sectionReader)
+		}
 
-			for i := 0; i < numPieces; i++ {
-				//fmt.Printf("Getting response number %d from the error channel\n", i)
-				err := <-errChan
-				if err != nil {
-					//fmt.Printf("Error for response %d: %s\n", i, err)
-					multiErr = append(multiErr, err)
-				}
-				//fmt.Printf("No error for response %d\n", i)
+		for i := 0; i < numPieces; i++ {
+			err := <-errChan
+			if err != nil {
+				multiErr = append(multiErr, err)
 			}
+		}
 
-			if len(multiErr) > 0 {
-				res.Err = multiErr
-				return res
-			}
+		if len(multiErr) > 0 {
+			res.Err = multiErr
+			return res
 		}
 	} else {
 		for i := 0; ; i++ {
@@ -686,7 +687,6 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 		},
 	}
 
-	//fmt.Println("Uploading manifest file...")
 	resp, err := c.Request("PUT", createURL(c, containerName, objectName), ropts)
 	if err != nil {
 		res.Err = err
