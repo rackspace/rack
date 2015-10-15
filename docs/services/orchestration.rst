@@ -74,11 +74,10 @@ In order for this command to work, you must select a template using either the
 .. code::
 
     $ rack orchestration stack create --name RackTest --template-file mytemplate.yaml
-    ID	f3e4294b-2134-4064-8876-04922b072368
-    Links	[{
-    	  "Href": "https://ord.orchestration.api.rackspacecloud.com/v1/897686/stacks/RackTest/f3e4294b-2134-4064-8876-04922b072368",
-    	  "Rel": "self"
-    	}]
+    rack orchestration stack create --name RackTest --template-file my_nova.yaml
+    ID		27e5cb19-200d-4fbe-83a5-4f24fc4a3e9d
+    Links0:Href	https://iad.orchestration.api.rackspacecloud.com/v1/TENANT_ID/stacks/RackTest/27e5cb19-200d-4fbe-83a5-4f24fc4a3e9d
+    Links0:Rel	self
 
 .. note::
 
@@ -98,30 +97,23 @@ Retrieves details of a specified stack::
 .. code::
 
     $ rack orchestration stack get --name RackTest
-    Capabilities		      []
-    CreationTime		      2015-09-11 22:01:07 +0000 UTC
-    Description		          No description
-    DisableRollback		      true
-    ID			              97c2e5a2-7d8c-4c7e-8fcc-eac122634f34
-    Links			          [{
-    			                "Href": "https://iad.orchestration.api.rackspacecloud.com/v1/897686/stacks/RackTest/97c2e5a2-7d8c-4c7e-8fcc-eac122634f34",
-    			                "Rel": "self"
-    			              }]
-    NotificiationTopics	      <nil>
-    Outputs			          []
-    Parameters		          {
-    			                "OS::project_id": "897686",
-    			                "OS::stack_id": "97c2e5a2-7d8c-4c7e-8fcc-eac122634f34",
-    			                "OS::stack_name": "RackTest",
-    			                "flavor": "******"
-    			              }
-    Name			          RackTest
-    Status			          CREATE_COMPLETE
-    StatusReason		      Stack CREATE completed successfully
-    TemplateDescription	      No description
-    Timeout			          None
-    Tags			          []
-    UpdatedTime		          None
+    CreationTime			2015-10-15 19:51:43 +0000 UTC
+    Description			No description
+    DisableRollback			true
+    ID				27e5cb19-200d-4fbe-83a5-4f24fc4a3e9d
+    Name				RackTest
+    Status				CREATE_COMPLETE
+    StatusReason			Stack CREATE completed successfully
+    Tags				[]
+    TemplateDescription		No description
+    Timeout				0
+    UpdatedTime
+    Parameters:OS::stack_name	RackTest
+    Parameters:OS::project_id	TENANT_ID
+    Parameters:flavor		******
+    Parameters:OS::stack_id		27e5cb19-200d-4fbe-83a5-4f24fc4a3e9d
+    Links0:Href			https://iad.orchestration.api.rackspacecloud.com/v1/TENANT_ID/stacks/RackTest/27e5cb19-200d-4fbe-83a5-4f24fc4a3e9d
+    Links0:Rel			self
 
 ``update``
 ^^^^^^^^^^
@@ -136,30 +128,23 @@ Updates the stack using a provided template::
 .. code::
 
     $ rack orchestration stack update --name RackTest --template-file myNewTemplate.yaml
-    Capabilities		[]
-    CreationTime		2015-09-30 16:02:05 +0000 UTC
-    Description		No description
-    DisableRollback		true
-    ID			f3e4294b-2134-4064-8876-04922b072368
-    Links			[{
-    			  "Href": "https://ord.orchestration.api.rackspacecloud.com/v1/897686/stacks/RackTest/f3e4294b-2134-4064-8876-04922b072368",
-    			  "Rel": "self"
-    			}]
-    NotificiationTopics	<nil>
-    Outputs			null
-    Parameters		{
-    			  "OS::project_id": "897686",
-    			  "OS::stack_id": "f3e4294b-2134-4064-8876-04922b072368",
-    			  "OS::stack_name": "RackTest",
-    			  "flavor": "******"
-    			}
-    Name			RackTest
-    Status			UPDATE_IN_PROGRESS
-    StatusReason		Stack UPDATE started
-    TemplateDescription	No description
-    Timeout			None
-    Tags			[]
-    UpdatedTime		None
+    CreationTime			2015-10-15 19:51:43 +0000 UTC
+    Description			No description
+    DisableRollback			true
+    ID				27e5cb19-200d-4fbe-83a5-4f24fc4a3e9d
+    Name				RackTest
+    Status				UPDATE_IN_PROGRESS
+    StatusReason			Stack UPDATE started
+    Tags				[]
+    TemplateDescription		No description
+    Timeout				0
+    UpdatedTime
+    Parameters:flavor		******
+    Parameters:OS::stack_id		27e5cb19-200d-4fbe-83a5-4f24fc4a3e9d
+    Parameters:OS::stack_name	RackTest
+    Parameters:OS::project_id	TENANT_ID
+    Links0:Href			https://iad.orchestration.api.rackspacecloud.com/v1/TENANT_ID/stacks/RackTest/27e5cb19-200d-4fbe-83a5-4f24fc4a3e9d
+    Links0:Rel			self
 
 ``delete``
 ^^^^^^^^^^
@@ -187,89 +172,71 @@ Preview shows the number and type of resources that will be created by a templat
 
 .. code::
 
-    $ rack orchestration stack preview --template-file my_nova.yaml --name RackTest
-    Capabilities		[]
-    CreationTime		2015-09-11 22:55:51.60336 +0000 UTC
-    Description		No description
-    DisableRollback		true
-    ID			None
-    Links			[{
-    			  "Href": "https://iad.orchestration.api.rackspacecloud.com/v1/897686/stacks/RackTest/None",
-    			  "Rel": "self"
-    			}]
-    NotificiationTopics	<nil>
-    Parameters		{
-    			  "OS::project_id": "897686",
-    			  "OS::stack_id": "None",
-    			  "OS::stack_name": "RackTest",
-    			  "flavor": "******"
-    			}
-    Resources		[
-    			  {
-    			    "attributes": {
-    			      "accessIPv4": "",
-    			      "accessIPv6": "",
-    			      "addresses": "",
-    			      "console_urls": "",
-    			      "first_address": "",
-    			      "instance_name": "",
-    			      "name": "test-server-2",
-    			      "networks": ""
-    			    },
-    			    "creation_time": null,
-    			    "description": "",
-    			    "metadata": {},
-    			    "physical_resource_id": "",
-    			    "properties": {
-    			      "admin_pass": null,
-    			      "admin_user": null,
-    			      "availability_zone": null,
-    			      "block_device_mapping": null,
-    			      "block_device_mapping_v2": null,
-    			      "config_drive": null,
-    			      "diskConfig": null,
-    			      "flavor": "2 GB General Purpose v1",
-    			      "flavor_update_policy": "RESIZE",
-    			      "image": "Debian 7 (Wheezy) (PVHVM)",
-    			      "image_update_policy": "REBUILD",
-    			      "key_name": null,
-    			      "metadata": null,
-    			      "name": "test-server-2",
-    			      "networks": null,
-    			      "personality": {},
-    			      "reservation_id": null,
-    			      "scheduler_hints": null,
-    			      "security_groups": [],
-    			      "software_config_transport": "POLL_TEMP_URL",
-    			      "user_data": "",
-    			      "user_data_format": "RAW"
-    			    },
-    			    "required_by": [],
-    			    "resource_action": "INIT",
-    			    "resource_identity": {
-    			      "path": "/resources/test_server",
-    			      "stack_id": "None",
-    			      "stack_name": "RackTest",
-    			      "tenant": "897686"
-    			    },
-    			    "resource_name": "test_server",
-    			    "resource_status": "COMPLETE",
-    			    "resource_status_reason": "",
-    			    "resource_type": "OS::Nova::Server",
-    			    "stack_identity": {
-    			      "path": "",
-    			      "stack_id": "None",
-    			      "stack_name": "RackTest",
-    			      "tenant": "897686"
-    			    },
-    			    "stack_name": "RackTest",
-    			    "updated_time": null
-    			  }
-    			]
-    Name			RackTest
-    TemplateDescription	No description
-    Timeout			None
-    UpdatedTime		None
+    $ rack orchestration stack preview --template-file my_template.yaml --name RackTest
+    CreationTime					2015-10-15 20:42:42.862279 +0000 UTC
+    Description					No description
+    DisableRollback					true
+    ID						None
+    Name						RackTest2
+    TemplateDescription				No description
+    Timeout						0
+    UpdatedTime
+    Links0:Href					https://iad.orchestration.api.rackspacecloud.com/v1/TENANT_ID/stacks/RackTest2/None
+    Links0:Rel					self
+    Parameters:OS::project_id			TENANT_ID
+    Parameters:flavor				******
+    Parameters:OS::stack_id				None
+    Parameters:OS::stack_name			RackTest2
+    Resources0:resource_identity:stack_name		RackTest2
+    Resources0:resource_identity:stack_id		None
+    Resources0:resource_identity:tenant		TENANT_ID
+    Resources0:resource_identity:path		/resources/test_server
+    Resources0:resource_action			INIT
+    Resources0:attributes:accessIPv4
+    Resources0:attributes:accessIPv6
+    Resources0:attributes:networks
+    Resources0:attributes:addresses
+    Resources0:attributes:console_urls
+    Resources0:attributes:name			test-server
+    Resources0:attributes:first_address
+    Resources0:attributes:instance_name
+    Resources0:resource_name			test_server
+    Resources0:stack_identity:stack_name		RackTest2
+    Resources0:stack_identity:stack_id		None
+    Resources0:stack_identity:tenant		TENANT_ID
+    Resources0:stack_identity:path
+    Resources0:stack_name				RackTest2
+    Resources0:resource_status			COMPLETE
+    Resources0:updated_time
+    Resources0:properties:key_name
+    Resources0:properties:config_drive
+    Resources0:properties:availability_zone
+    Resources0:properties:image			Debian 7 (Wheezy) (PVHVM)
+    Resources0:properties:reservation_id
+    Resources0:properties:flavor_update_policy	RESIZE
+    Resources0:properties:flavor			2 GB General Purpose v1
+    Resources0:properties:networks0:port
+    Resources0:properties:networks0:subnet
+    Resources0:properties:networks0:fixed_ip
+    Resources0:properties:networks0:uuid
+    Resources0:properties:networks0:network		11111111-1111-1111-1111-111111111111
+    Resources0:properties:user_data_format		RAW
+    Resources0:properties:admin_user
+    Resources0:properties:name			test-server
+    Resources0:properties:user_data
+    Resources0:properties:diskConfig
+    Resources0:properties:scheduler_hints
+    Resources0:properties:metadata
+    Resources0:properties:block_device_mapping_v2
+    Resources0:properties:admin_pass
+    Resources0:properties:block_device_mapping
+    Resources0:properties:software_config_transport	POLL_TEMP_URL
+    Resources0:properties:image_update_policy	REBUILD
+    Resources0:description
+    Resources0:creation_time
+    Resources0:resource_type			OS::Nova::Server
+    Resources0:resource_status_reason
+    Resources0:physical_resource_id
 
 ``abandon``
 ^^^^^^^^^^^
@@ -288,53 +255,27 @@ create a new stack with the resources of the abandoned stack.
 .. code::
 
     $ rack orchestration stack abandon --name RackTest
-    Status			COMPLETE
-    Name			RackTest
-    Template		{
-    			  "heat_template_version": "2014-10-16",
-    			  "parameters": {
-    			    "flavor": {
-    			      "default": 4353,
-    			      "description": "Flavor for the server to be created",
-    			      "hidden": true,
-    			      "type": "string"
-    			    }
-    			  },
-    			  "resources": {
-    			    "test_server": {
-    			      "properties": {
-    			        "flavor": "2 GB General Purpose v1",
-    			        "image": "Debian 7 (Wheezy) (PVHVM)",
-    			        "name": "test-server-2"
-    			      },
-    			      "type": "OS::Nova::Server"
-    			    }
-    			  }
-    			}
-    Action			CREATE
-    ID			2c4f91a6-228a-40f8-a842-d20bef420ad0
-    Resources		{
-    			  "test_server": {
-    			    "action": "CREATE",
-    			    "metadata": {},
-    			    "name": "test_server",
-    			    "resource_data": {},
-    			    "resource_id": "69c99fc6-a856-4e37-ac28-9e19de6cb674",
-    			    "status": "COMPLETE",
-    			    "type": "OS::Nova::Server"
-    			  }
-    			}
-    Files			{}
-    StackUserProjectID	897686
-    ProjectID		897686
-    Environment		{
-    			  "encrypted_param_names": [],
-    			  "parameter_defaults": {},
-    			  "parameters": {},
-    			  "resource_registry": {
-    			    "resources": {}
-    			  }
-    			}
+    Status							COMPLETE
+    Name							RackTest
+    Action							CREATE
+    ID							22e669f3-510f-4ef1-8782-96ad692d8b41
+    StackUserProjectID					TENANT_ID
+    ProjectID						TENANT_ID
+    Template:heat_template_version				2014-10-16
+    Template:resources:test_server:properties:flavor	2 GB General Purpose v1
+    Template:resources:test_server:properties:name		test-server
+    Template:resources:test_server:properties:image		Debian 7 (Wheezy) (PVHVM)
+    Template:resources:test_server:properties:networks0:uuid11111111-1111-1111-1111-111111111111
+    Template:resources:test_server:type			OS::Nova::Server
+    Template:parameters:flavor:type				string
+    Template:parameters:flavor:description			Flavor for the server to be created
+    Template:parameters:flavor:default			4353
+    Template:parameters:flavor:hidden			true
+    Resources:test_server:status				COMPLETE
+    Resources:test_server:name				test_server
+    Resources:test_server:resource_id			e3a5c760-25fc-4a96-915d-a3dcbf94019a
+    Resources:test_server:action				CREATE
+    Resources:test_server:type				OS::Nova::Server
 
 ``adopt``
 ^^^^^^^^^^
@@ -353,11 +294,10 @@ resources of the abandoned stack in the creation of the adopted stack.
 .. code::
 
     $ rack orchestration stack adopt --name RackTest --adopt-file abandon.yaml
-    ID	9eb78f92-f5fc-4718-b0e5-7080ca0b7bf0
-    Links	[{
-    	  "Href": "https://ord.orchestration.api.rackspacecloud.com/v1/897686/stacks/RackTest2/9eb78f92-f5fc-4718-b0e5-7080ca0b7bf0",
-    	  "Rel": "self"
-    	}]
+    ID		27e5cb19-200d-4fbe-83a5-4f24fc4a3e9d
+    Links0:Href	https://iad.orchestration.api.rackspacecloud.com/v1/TENANT_ID/stacks/RackTest/27e5cb19-200d-4fbe-83a5-4f24fc4a3e9d
+    Links0:Rel	self
+
 
 ``list-events``
 ^^^^^^^^
@@ -413,90 +353,50 @@ Retrieves details of a specified resource in a stack::
 .. code::
 
     $ rack orchestration resource get --stack-name RackTest --name test_server
-    Name		test_server
-    PhysicalID	f075a7c1-28ef-4699-9046-383098134902
-    Type		OS::Nova::Server
-    Status		ADOPT_COMPLETE
-    UpdatedTime	2015-09-13 04:20:24 +0000 UTC
-    Links		[{
-    		  "Href": "https://iad.orchestration.api.rackspacecloud.com/v1/897686/stacks/RackTest/52f8681a-4d5b-46ef-b643-6e945ae85d16/resources/test_server",
-    		  "Rel": "self"
-    		} {
-    		  "Href": "https://iad.orchestration.api.rackspacecloud.com/v1/897686/stacks/RackTest/52f8681a-4d5b-46ef-b643-6e945ae85d16",
-    		  "Rel": "stack"
-    		}]
-    Attributes	{
-    		  "OS-DCF:diskConfig": "MANUAL",
-    		  "OS-EXT-STS:power_state": 1,
-    		  "OS-EXT-STS:task_state": null,
-    		  "OS-EXT-STS:vm_state": "active",
-    		  "RAX-PUBLIC-IP-ZONE-ID:publicIPZoneId": "4eefdfdcc0c65b6459cb32da6041e307c8b3a7ba1f8f68aa2ed5a746",
-    		  "accessIPv4": "104.239.165.61",
-    		  "accessIPv6": "2001:4802:7805:101:be76:4eff:fe20:ded8",
-    		  "addresses": {
-    		    "private": [
-    		      {
-    		        "addr": "10.209.67.179",
-    		        "version": 4
-    		      }
-    		    ],
-    		    "public": [
-    		      {
-    		        "addr": "104.239.165.61",
-    		        "version": 4
-    		      },
-    		      {
-    		        "addr": "2001:4802:7805:101:be76:4eff:fe20:ded8",
-    		        "version": 6
-    		      }
-    		    ]
-    		  },
-    		  "config_drive": "",
-    		  "created": "2015-09-12T16:37:51Z",
-    		  "flavor": {
-    		    "id": "general1-2",
-    		    "links": [
-    		      {
-    		        "href": "https://iad.servers.api.rackspacecloud.com/897686/flavors/general1-2",
-    		        "rel": "bookmark"
-    		      }
-    		    ]
-    		  },
-    		  "hostId": "7a4a76cfba0997a0a60d4c57f4c1b8da08b65706a4eb7b66762136c6",
-    		  "id": "f075a7c1-28ef-4699-9046-383098134902",
-    		  "image": {
-    		    "id": "c934d497-7b45-4764-ac63-5b67e1458a20",
-    		    "links": [
-    		      {
-    		        "href": "https://iad.servers.api.rackspacecloud.com/897686/images/c934d497-7b45-4764-ac63-5b67e1458a20",
-    		        "rel": "bookmark"
-    		      }
-    		    ]
-    		  },
-    		  "key_name": null,
-    		  "links": [
-    		    {
-    		      "href": "https://iad.servers.api.rackspacecloud.com/v2/897686/servers/f075a7c1-28ef-4699-9046-383098134902",
-    		      "rel": "self"
-    		    },
-    		    {
-    		      "href": "https://iad.servers.api.rackspacecloud.com/897686/servers/f075a7c1-28ef-4699-9046-383098134902",
-    		      "rel": "bookmark"
-    		    }
-    		  ],
-    		  "metadata": {
-    		    "rax_service_level_automation": "Complete"
-    		  },
-    		  "name": "test-server-2",
-    		  "progress": 100,
-    		  "status": "ACTIVE",
-    		  "tenant_id": "897686",
-    		  "updated": "2015-09-12T16:38:18Z",
-    		  "user_id": "5c11b69d82cf4313b7a8b173b799a0ef"
-    		}
-    CreationTime	2015-09-13 04:20:24 +0000 UTC
+    CreationTime					2015-10-15 21:09:54 +0000 UTC
     Description
-    LogicalID	test_server
+    LogicalID					test_server
+    Name						test_server
+    PhysicalID					d4ffd1fd-ef29-4e31-8776-78414a5c0f67
+    Status						CREATE_COMPLETE
+    StatusReason					state changed
+    Type						OS::Nova::Server
+    UpdatedTime					2015-10-15 21:09:54 +0000 UTC
+    Attributes:OS-EXT-STS:power_state		1
+    Attributes:metadata:rax_service_level_automationIn Progress
+    Attributes:image:links0:href			https://iad.servers.api.rackspacecloud.com/TENANT_ID/images/eaaf94d8-55a6-4bfa-b0a8-473febb012dc
+    Attributes:image:links0:rel			bookmark
+    Attributes:image:id				eaaf94d8-55a6-4bfa-b0a8-473febb012dc
+    Attributes:OS-DCF:diskConfig			MANUAL
+    Attributes:id					d4ffd1fd-ef29-4e31-8776-78414a5c0f67
+    Attributes:OS-EXT-STS:vm_state			active
+    Attributes:user_id				5c11b69d82cf4313b7a8b173b799a0ef
+    Attributes:tenant_id				TENANT_ID
+    Attributes:accessIPv4
+    Attributes:created				2015-10-15T21:09:56Z
+    Attributes:addresses:private0:version		4
+    Attributes:addresses:private0:addr		10.208.234.120
+    Attributes:accessIPv6
+    Attributes:status				ACTIVE
+    Attributes:RAX-PUBLIC-IP-ZONE-ID:publicIPZoneId	025e96cf138a9036fffb45031c506ac7a7052a355b7f08bcbbc12da9
+    Attributes:flavor:id				general1-2
+    Attributes:flavor:links0:href			https://iad.servers.api.rackspacecloud.com/TENANT_ID/flavors/general1-2
+    Attributes:flavor:links0:rel			bookmark
+    Attributes:links0:rel				self
+    Attributes:links0:href				https://iad.servers.api.rackspacecloud.com/v2/TENANT_ID/servers/d4ffd1fd-ef29-4e31-8776-78414a5c0f67
+    Attributes:links1:href				https://iad.servers.api.rackspacecloud.com/TENANT_ID/servers/d4ffd1fd-ef29-4e31-8776-78414a5c0f67
+    Attributes:links1:rel				bookmark
+    Attributes:key_name
+    Attributes:OS-EXT-STS:task_state
+    Attributes:progress				100
+    Attributes:name					test-server
+    Attributes:hostId				c1529238ae34923ed243a257ffb72e92db13ab2552994f76b26f3ce7
+    Attributes:config_drive
+    Attributes:updated				2015-10-15T21:10:36Z
+    Links0:Href					https://iad.orchestration.api.rackspacecloud.com/v1/TENANT_ID/stacks/RackTest/deb6e034-2808-4db6-9807-fa00e9709925/resources/test_server
+    Links0:Rel					self
+    Links1:Href					https://iad.orchestration.api.rackspacecloud.com/v1/TENANT_ID/stacks/RackTest/deb6e034-2808-4db6-9807-fa00e9709925
+    Links1:Rel					stack
 
 ``get-schema``
 ^^^^^^^^^^
@@ -514,20 +414,13 @@ resource attributes and their descriptions are provided.
 .. code::
 
     $ rack orchestration resource get-schema --type OS::Heat::None
-    Attributes	{
-		  "show": {
-		    "description": "Detailed information about resource.",
-		    "type": "map"
-		  }
-		}
-    Properties	{}
-    ResourceType	OS::Heat::None
-    SupportStatus	{
-		  "message": null,
-		  "previous_status": null,
-		  "status": "SUPPORTED",
-		  "version": "5.0.0"
-		}
+    ResourceType			OS::Heat::None
+    Attributes:show:type		map
+    Attributes:show:description	Detailed information about resource.
+    SupportStatus:status		SUPPORTED
+    SupportStatus:message
+    SupportStatus:version		5.0.0
+    SupportStatus:previous_status
 
 ``get-template``
 ^^^^^^^^^^
@@ -658,37 +551,45 @@ Retrieves details for a specified event::
 
 .. code::
 
-    $ rack orchestration event get --stack-name RackTest --resource test_server --id dcfe8ad3-150f-4cbe-9993-2d82793753b7
-    ResourceName		test_server
-    Time			2015-09-13 04:20:24 +0000 UTC
-    ResourceStatusReason	state changed
-    ResourceStatus		ADOPT_COMPLETE
-    PhysicalResourceID	f075a7c1-28ef-4699-9046-383098134902
-    ID			dcfe8ad3-150f-4cbe-9993-2d82793753b7
-    ResourceProperties	{
-    			  "admin_pass": null,
-    			  "admin_user": null,
-    			  "availability_zone": null,
-    			  "block_device_mapping": null,
-    			  "block_device_mapping_v2": null,
-    			  "config_drive": null,
-    			  "diskConfig": null,
-    			  "flavor": "2 GB General Purpose v1",
-    			  "flavor_update_policy": "RESIZE",
-    			  "image": "Debian 7 (Wheezy) (PVHVM)",
-    			  "image_update_policy": "REBUILD",
-    			  "key_name": null,
-    			  "metadata": null,
-    			  "name": "test-server-2",
-    			  "networks": null,
-    			  "personality": {},
-    			  "reservation_id": null,
-    			  "scheduler_hints": null,
-    			  "security_groups": [],
-    			  "software_config_transport": "POLL_TEMP_URL",
-    			  "user_data": "",
-    			  "user_data_format": "RAW"
-    			}
+    $ rack orchestration event get --stack-name RackTest --resource test_server --id c4beb7be-8c8a-4e6a-ad52-b5c571564c77
+    ResourceName					test_server
+    Time						2015-10-15 21:10:20 +0000 UTC
+    ResourceStatusReason				state changed
+    LogicalResourceID				test_server
+    ResourceStatusReason				state changed
+    ResourceStatus					CREATE_COMPLETE
+    PhysicalResourceID				d4ffd1fd-ef29-4e31-8776-78414a5c0f67
+    ID						c4beb7be-8c8a-4e6a-ad52-b5c571564c77
+    Links0:Href					https://iad.orchestration.api.rackspacecloud.com/v1/TENANT_ID/stacks/RackTest/deb6e034-2808-4db6-9807-fa00e9709925/resources/test_server/events/c4beb7be-8c8a-4e6a-ad52-b5c571564c77
+    Links0:Rel					self
+    Links1:Href					https://iad.orchestration.api.rackspacecloud.com/v1/TENANT_ID/stacks/RackTest/deb6e034-2808-4db6-9807-fa00e9709925/resources/test_server
+    Links1:Rel					resource
+    Links2:Href					https://iad.orchestration.api.rackspacecloud.com/v1/TENANT_ID/stacks/RackTest/deb6e034-2808-4db6-9807-fa00e9709925
+    Links2:Rel					stack
+    ResourceProperties:networks0:fixed_ip
+    ResourceProperties:networks0:port
+    ResourceProperties:networks0:network		11111111-1111-1111-1111-111111111111
+    ResourceProperties:networks0:uuid
+    ResourceProperties:networks0:subnet
+    ResourceProperties:metadata
+    ResourceProperties:user_data_format		RAW
+    ResourceProperties:admin_pass
+    ResourceProperties:flavor_update_policy		RESIZE
+    ResourceProperties:diskConfig
+    ResourceProperties:flavor			2 GB General Purpose v1
+    ResourceProperties:config_drive
+    ResourceProperties:reservation_id
+    ResourceProperties:key_name
+    ResourceProperties:scheduler_hints
+    ResourceProperties:block_device_mapping
+    ResourceProperties:block_device_mapping_v2
+    ResourceProperties:name				test-server
+    ResourceProperties:software_config_transport	POLL_TEMP_URL
+    ResourceProperties:user_data
+    ResourceProperties:admin_user
+    ResourceProperties:image_update_policy		REBUILD
+    ResourceProperties:availability_zone
+    ResourceProperties:image			Debian 7 (Wheezy) (PVHVM)
 
 
 **Template**
@@ -710,17 +611,12 @@ Validates a specified template::
 .. code::
 
     $ rack orchestration template validate --template-file my_template.yaml
-    Description	No description
-    Parameters	{
-    		  "flavor": {
-    		    "Default": 4353,
-    		    "Description": "Flavor for the server to be created",
-    		    "Label": "flavor",
-    		    "NoEcho": "true",
-    		    "Type": "String"
-    		  }
-    		}
-    ParameterGroups	null
+    Description			No description
+    Parameters:flavor:Default	4353
+    Parameters:flavor:NoEcho	true
+    Parameters:flavor:Type		String
+    Parameters:flavor:Description	Flavor for the server to be created
+    Parameters:flavor:Label		flavor
 
 ``get``
 ^^^^^^^
