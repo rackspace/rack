@@ -404,3 +404,44 @@ Deletes one or more metadata keys from an account::
 
     $ rack files account delete-metadata --metadata-keys Temp-Url-Key
     Successfully deleted metadata with keys [Temp-Url-Key] from account.
+
+**Large Object**
+~~~~~~~~~~~~~~~~
+
+Large objects are files larger than 5 GB. Given the desired size of each piece,
+`rack` will chop the file up into the required number of pieces, appropriately
+name them, and upload them to the specified container. Downloading a large object
+is done with the regular `rack files object download` command. Note that though
+files larger than 5 GB must use the `large-object` subservice, files less than
+5 GB may use it as well.
+
+Large Object commands use this syntax::
+
+    rack files large-object <action> [optional flags]
+
+``upload``
+^^^^^^^^^^
+Upload a large object to a specified container::
+
+    rack files large-object upload --container <containerName> --size-pieces <sizePieces> [--name <objectName> | --stdin file] [optional flags]
+
+**Response**
+
+.. code::
+
+    $ rack files large-object upload --container RackCLI --name largeObject --file largeZipFile.zip --size-pieces 500
+    Finished! Uploaded object [largeObject] to container [RackCLI] in 5 minutes
+
+``delete``
+^^^^^^^^^^
+Deletes a large object from a specified container::
+
+    rack files large-object delete --container <containerName> --name <objectName>
+    (echo objectName1 && echo objectName2) | rack files large-object delete --container <containerName> --stdin name
+
+**Response**
+
+.. code::
+
+    $ rack files large-object delete --container RackCLI --object largeObject
+    Deleted object [largeObject] from container [RackCLI]

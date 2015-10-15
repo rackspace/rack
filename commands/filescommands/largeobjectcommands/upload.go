@@ -122,13 +122,15 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 		SizePieces: int64(c.Int("size-pieces")),
 	}
 
-	if c.IsSet("metadata") {
-		metadata, err := command.Ctx.CheckKVFlag("metadata")
-		if err != nil {
-			return err
+	/*
+		if c.IsSet("metadata") {
+			metadata, err := command.Ctx.CheckKVFlag("metadata")
+			if err != nil {
+				return err
+			}
+			opts.Metadata = metadata
 		}
-		opts.Metadata = metadata
-	}
+	*/
 
 	resource.Params = &paramsUpload{
 		container: containerName,
