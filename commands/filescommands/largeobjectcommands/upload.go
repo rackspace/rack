@@ -57,10 +57,12 @@ func flagsUpload() []cli.Flag {
 			Name:  "content-length",
 			Usage: "[optional] The Content-Length header.",
 		},
-		cli.StringFlag{
-			Name:  "metadata",
-			Usage: "[optional] A comma-separated string of key=value pairs.",
-		},
+		/*
+			cli.StringFlag{
+				Name:  "metadata",
+				Usage: "[optional] A comma-separated string of key=value pairs.",
+			},
+		*/
 	}
 }
 
