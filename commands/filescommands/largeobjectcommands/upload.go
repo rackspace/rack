@@ -20,7 +20,7 @@ import (
 var upload = cli.Command{
 	Name:        "upload",
 	Usage:       util.Usage(commandPrefix, "upload", "--container <containerName> --size-pieces <sizePieces> [--name <objectName> | --stdin file]"),
-	Description: "Uploads an object",
+	Description: "Uploads a large object",
 	Action:      actionUpload,
 	Flags:       commandoptions.CommandFlags(flagsUpload, keysUpload),
 	BashComplete: func(c *cli.Context) {
