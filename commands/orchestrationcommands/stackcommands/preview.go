@@ -62,7 +62,7 @@ type paramsPreview struct {
 	opts *osStacks.PreviewOpts
 }
 
-var keysPreview = []string{"Capabilities", "CreationTime", "Description", "DisableRollback", "ID", "Links", "NotificiationTopics", "Parameters", "Resources", "Name", "TemplateDescription", "Timeout", "UpdatedTime"}
+var keysPreview = []string{"Capabilities", "CreationTime", "Description", "DisableRollback", "ID", "Links", "Name", "NotificationTopics", "Parameters", "Resources", "TemplateDescription", "Timeout", "UpdatedTime"}
 
 type commandPreview handler.Command
 
@@ -152,7 +152,21 @@ func (command *commandPreview) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = stackSingle(stack)
+	resource.Result = stack
+}
+
+func (command *commandPreview) PreCSV(resource *handler.Resource) error {
+	resource.Result = stackSingle(resource.Result)
+	resource.FlattenMap("Capabilities")
+	resource.FlattenMap("Links")
+	resource.FlattenMap("NotificationTopics")
+	resource.FlattenMap("Parameters")
+	resource.FlattenMap("Resources")
+	return nil
+}
+
+func (command *commandPreview) PreTable(resource *handler.Resource) error {
+	return command.PreCSV(resource)
 }
 
 func (command *commandPreview) StdinField() string {

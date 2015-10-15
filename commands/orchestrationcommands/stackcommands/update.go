@@ -161,5 +161,19 @@ func (command *commandUpdate) Execute(resource *handler.Resource) {
 		return
 	}
 
-	resource.Result = stackSingle(stack)
+	resource.Result = stack
+}
+
+func (command *commandUpdate) PreCSV(resource *handler.Resource) error {
+	resource.Result = stackSingle(resource.Result)
+	resource.FlattenMap("Parameters")
+	resource.FlattenMap("Outputs")
+	resource.FlattenMap("Links")
+	resource.FlattenMap("NotificationTopics")
+	resource.FlattenMap("Capabilities")
+	return nil
+}
+
+func (command *commandUpdate) PreTable(resource *handler.Resource) error {
+	return command.PreCSV(resource)
 }

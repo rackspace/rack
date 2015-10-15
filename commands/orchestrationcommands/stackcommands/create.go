@@ -143,10 +143,20 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 
 func (command *commandCreate) Execute(resource *handler.Resource) {
 	opts := resource.Params.(*paramsCreate).opts
-	result, err := osStacks.Create(command.Ctx.ServiceClient, opts).Extract()
+	stack, err := osStacks.Create(command.Ctx.ServiceClient, opts).Extract()
 	if err != nil {
 		resource.Err = err
 		return
 	}
-	resource.Result = stackSingle(result)
+	resource.Result = stack
+}
+
+func (command *commandCreate) PreCSV(resource *handler.Resource) error {
+	resource.Result = stackSingle(resource.Result)
+	resource.FlattenMap("Links")
+	return nil
+}
+
+func (command *commandCreate) PreTable(resource *handler.Resource) error {
+	return command.PreCSV(resource)
 }

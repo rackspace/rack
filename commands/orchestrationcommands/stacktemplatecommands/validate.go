@@ -1,8 +1,9 @@
 package stacktemplatecommands
 
 import (
-	"encoding/json"
 	"errors"
+	"io/ioutil"
+	"path/filepath"
 
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
@@ -11,8 +12,6 @@ import (
 	osStackTemplates "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stacktemplates"
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/orchestration/v1/stacktemplates"
 	"github.com/rackspace/rack/util"
-	"io/ioutil"
-	"path/filepath"
 )
 
 var validate = cli.Command{
@@ -103,16 +102,15 @@ func (command *commandValidate) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	m := structs.Map(result)
-	if parameters, err := json.MarshalIndent(result.Parameters, "", "  "); err != nil {
-		m["Parameters"] = ""
-	} else {
-		m["Parameters"] = string(parameters)
-	}
-	if parameterGroups, err := json.MarshalIndent(result.ParameterGroups, "", "  "); err != nil {
-		m["ParameterGroups"] = ""
-	} else {
-		m["ParameterGroups"] = string(parameterGroups)
-	}
-	resource.Result = m
+	resource.Result = structs.Map(result)
+}
+
+func (command *commandValidate) PreCSV(resource *handler.Resource) error {
+	resource.FlattenMap("Parameters")
+	resource.FlattenMap("ParameterGroups")
+	return nil
+}
+
+func (command *commandValidate) PreTable(resource *handler.Resource) error {
+	return command.PreCSV(resource)
 }

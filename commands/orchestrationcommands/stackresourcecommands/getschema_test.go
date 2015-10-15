@@ -1,6 +1,7 @@
 package stackresourcecommands
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"net/http"
@@ -8,6 +9,7 @@ import (
 
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	osStackResources "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stackresources"
 	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
 )
@@ -93,4 +95,87 @@ func TestGetSchemaStdinField(t *testing.T) {
 	expected := "type"
 	actual := cmd.StdinField()
 	th.AssertEquals(t, expected, actual)
+}
+
+func TestGetSchemaPreCSV(t *testing.T) {
+	cmd := &commandGetSchema{
+		Ctx: &handler.Context{
+			ServiceClient: client.ServiceClient(),
+		},
+	}
+
+	resource := &handler.Resource{
+		Params: &paramsGetSchema{
+			resourceType: "type1",
+		},
+	}
+
+	expected := "{\"Attributes\":{\"an_attribute\":{\"description\":\"An attribute description .\"}},\"Properties\":{\"a_property\":{\"description\":\"A resource description.\",\"required\":true,\"type\":\"string\",\"update_allowed\":false}},\"ResourceType\":\"OS::Heat::AResourceName\",\"SupportStatus\":{\"message\":\"A status message\",\"status\":\"SUPPORTED\",\"version\":\"2014.1\"}}"
+	resource.Result = &osStackResources.TypeSchema{
+		Attributes: map[string]interface{}{
+			"an_attribute": map[string]interface{}{
+				"description": "An attribute description .",
+			},
+		},
+		Properties: map[string]interface{}{
+			"a_property": map[string]interface{}{
+				"update_allowed": false,
+				"required":       true,
+				"type":           "string",
+				"description":    "A resource description.",
+			},
+		},
+		ResourceType: "OS::Heat::AResourceName",
+		SupportStatus: map[string]interface{}{
+			"message": "A status message",
+			"status":  "SUPPORTED",
+			"version": "2014.1",
+		},
+	}
+	err := cmd.PreCSV(resource)
+	th.AssertNoErr(t, err)
+	actual, _ := json.Marshal(resource.Result)
+	th.AssertEquals(t, expected, string(actual))
+}
+
+func TestGetSchemaPreTable(t *testing.T) {
+	cmd := &commandGetSchema{
+		Ctx: &handler.Context{
+			ServiceClient: client.ServiceClient(),
+		},
+	}
+
+	resource := &handler.Resource{
+		Params: &paramsGetSchema{
+			resourceType: "type1",
+		},
+	}
+
+	expected := "{\"Attributes\":{\"an_attribute\":{\"description\":\"An attribute description .\"}},\"Properties\":{\"a_property\":{\"description\":\"A resource description.\",\"required\":true,\"type\":\"string\",\"update_allowed\":false}},\"ResourceType\":\"OS::Heat::AResourceName\",\"SupportStatus\":{\"message\":\"A status message\",\"status\":\"SUPPORTED\",\"version\":\"2014.1\"}}"
+	resource.Result = &osStackResources.TypeSchema{
+		Attributes: map[string]interface{}{
+			"an_attribute": map[string]interface{}{
+				"description": "An attribute description .",
+			},
+		},
+		Properties: map[string]interface{}{
+			"a_property": map[string]interface{}{
+				"update_allowed": false,
+				"required":       true,
+				"type":           "string",
+				"description":    "A resource description.",
+			},
+		},
+		ResourceType: "OS::Heat::AResourceName",
+		SupportStatus: map[string]interface{}{
+			"message": "A status message",
+			"status":  "SUPPORTED",
+			"version": "2014.1",
+		},
+	}
+
+	err := cmd.PreTable(resource)
+	th.AssertNoErr(t, err)
+	actual, _ := json.Marshal(resource.Result)
+	th.AssertEquals(t, expected, string(actual))
 }
