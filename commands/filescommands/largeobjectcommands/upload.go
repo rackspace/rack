@@ -1,23 +1,26 @@
-package objectcommands
+package largeobjectcommands
 
 import (
 	"fmt"
 	"io"
 	"os"
+	"runtime"
 	"strings"
+	"time"
 
 	"github.com/rackspace/rack/commandoptions"
+	"github.com/rackspace/rack/commands/filescommands/objectcommands"
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	"github.com/rackspace/rack/internal/github.com/dustin/go-humanize"
 	osObjects "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/objects"
 	"github.com/rackspace/rack/util"
 )
 
 var upload = cli.Command{
 	Name:        "upload",
-	Usage:       util.Usage(commandPrefix, "upload", "--container <containerName> --name <objectName>"),
-	Description: "Uploads an object",
+	Usage:       util.Usage(commandPrefix, "upload", "--container <containerName> --size-pieces <sizePieces> [--name <objectName> | --stdin file]"),
+	Description: "Uploads a large object",
 	Action:      actionUpload,
 	Flags:       commandoptions.CommandFlags(flagsUpload, keysUpload),
 	BashComplete: func(c *cli.Context) {
@@ -36,16 +39,18 @@ func flagsUpload() []cli.Flag {
 			Usage: "[optional; required if `stdin` isn't provided with value of 'file'] The name the object should have in the Cloud Files container.",
 		},
 		cli.StringFlag{
-			Name:  "content",
-			Usage: "[optional; required if `file` or `stdin` isn't provided] The string contents to upload.",
-		},
-		cli.StringFlag{
 			Name:  "file",
-			Usage: "[optional; required if `content` or `stdin` isn't provided] The file name containing the contents to upload.",
+			Usage: "[optional; required if `stdin` isn't provided] The file name containing the contents to upload.",
 		},
 		cli.StringFlag{
-			Name:  "stdin",
-			Usage: "[optional; required if `file` or `content` isn't provided] The field being piped to STDIN, if any. Valid values are: file, content.",
+			Name: "stdin",
+			Usage: strings.Join([]string{"[optional; required if `file` isn't provided] The field being piped to STDIN, if any.",
+				"Valid values are: file, content. If 'file' is given, the names of the objects in the container will match",
+				"the names on the user's file system."}, "\n\t"),
+		},
+		cli.IntFlag{
+			Name:  "size-pieces",
+			Usage: "[required] The size of the pieces (in MB) to divide the file into.",
 		},
 		cli.StringFlag{
 			Name:  "content-type",
@@ -55,10 +60,12 @@ func flagsUpload() []cli.Flag {
 			Name:  "content-length",
 			Usage: "[optional] The Content-Length header.",
 		},
-		cli.StringFlag{
-			Name:  "metadata",
-			Usage: "[optional] A comma-separated string of key=value pairs.",
-		},
+		/*
+			cli.StringFlag{
+				Name:  "metadata",
+				Usage: "[optional] A comma-separated string of key=value pairs.",
+			},
+		*/
 	}
 }
 
@@ -67,8 +74,8 @@ var keysUpload = []string{}
 type paramsUpload struct {
 	container string
 	object    string
-	stream    io.ReadSeeker
-	opts      osObjects.CreateOpts
+	stream    io.Reader
+	opts      osObjects.CreateLargeOpts
 }
 
 type commandUpload handler.Command
@@ -95,7 +102,7 @@ func (command *commandUpload) ServiceClientType() string {
 }
 
 func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"container"})
+	err := command.Ctx.CheckFlagsSet([]string{"container", "name", "size-pieces"})
 	if err != nil {
 		return err
 	}
@@ -103,25 +110,31 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 	c := command.Ctx.CLIContext
 	containerName := c.String("container")
 
-	if err := CheckContainerExists(command.Ctx.ServiceClient, containerName); err != nil {
+	if err := objectcommands.CheckContainerExists(command.Ctx.ServiceClient, containerName); err != nil {
 		return err
 	}
 
-	opts := osObjects.CreateOpts{
-		ContentLength: int64(c.Int("content-length")),
-		ContentType:   c.String("content-type"),
+	opts := osObjects.CreateLargeOpts{
+		CreateOpts: osObjects.CreateOpts{
+			ContentLength: int64(c.Int("content-length")),
+			ContentType:   c.String("content-type"),
+		},
+		SizePieces: int64(c.Int("size-pieces")),
 	}
 
-	if c.IsSet("metadata") {
-		metadata, err := command.Ctx.CheckKVFlag("metadata")
-		if err != nil {
-			return err
+	/*
+		if c.IsSet("metadata") {
+			metadata, err := command.Ctx.CheckKVFlag("metadata")
+			if err != nil {
+				return err
+			}
+			opts.Metadata = metadata
 		}
-		opts.Metadata = metadata
-	}
+	*/
 
 	resource.Params = &paramsUpload{
 		container: containerName,
+		object:    c.String("name"),
 		opts:      opts,
 	}
 
@@ -129,57 +142,62 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 }
 
 func (command *commandUpload) HandlePipe(resource *handler.Resource, item string) error {
-	readSeeker, err := os.Open(item)
+	file, err := os.Open(item)
 	if err != nil {
 		return err
 	}
-	resource.Params.(*paramsUpload).object = readSeeker.Name()
-	resource.Params.(*paramsUpload).stream = readSeeker
+	resource.Params.(*paramsUpload).object = file.Name()
+
+	fileInfo, err := file.Stat()
+	if err != nil {
+		return err
+	}
+
+	resource.Params.(*paramsUpload).opts.ContentLength = fileInfo.Size()
+
+	resource.Params.(*paramsUpload).stream = file
 	return nil
 }
 
 func (command *commandUpload) HandleSingle(resource *handler.Resource) error {
-	err := command.Ctx.CheckFlagsSet([]string{"name"})
+	err := command.Ctx.CheckFlagsSet([]string{"file", "name"})
 	if err != nil {
 		return err
 	}
 	resource.Params.(*paramsUpload).object = command.Ctx.CLIContext.String("name")
 
-	if command.Ctx.CLIContext.IsSet("file") {
-		readSeeker, err := os.Open(command.Ctx.CLIContext.String("file"))
-		if err != nil {
-			return err
-		}
-		resource.Params.(*paramsUpload).stream = readSeeker
-	} else if command.Ctx.CLIContext.IsSet("content") {
-		readSeeker := strings.NewReader(command.Ctx.CLIContext.String("content"))
-		resource.Params.(*paramsUpload).stream = readSeeker
-	} else {
-		return fmt.Errorf("One of `--file` and `--content` must be provided if not piping to STDIN.")
+	file, err := os.Open(command.Ctx.CLIContext.String("file"))
+	if err != nil {
+		return err
 	}
+
+	fileInfo, err := file.Stat()
+	if err != nil {
+		return err
+	}
+
+	resource.Params.(*paramsUpload).opts.ContentLength = fileInfo.Size()
+
+	resource.Params.(*paramsUpload).stream = file
 	return nil
 }
 
 func (command *commandUpload) Execute(resource *handler.Resource) {
 	params := resource.Params.(*paramsUpload)
-
-	defer func() {
-		if closeable, ok := params.stream.(io.ReadCloser); ok {
-			closeable.Close()
-		}
-	}()
-
 	containerName := params.container
 	objectName := params.object
 	stream := params.stream
 	opts := params.opts
 
-	rawResponse := objects.Create(command.Ctx.ServiceClient, containerName, objectName, stream, opts)
+	start := time.Now()
+
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	rawResponse := osObjects.CreateLarge(command.Ctx.ServiceClient, containerName, objectName, stream, opts)
 	if rawResponse.Err != nil {
 		resource.Err = rawResponse.Err
 		return
 	}
-	resource.Result = fmt.Sprintf("Successfully uploaded object [%s] to container [%s]\n", objectName, containerName)
+	resource.Result = fmt.Sprintf("Finished! Uploaded object [%s] to container [%s] in %s", objectName, containerName, humanize.RelTime(start, time.Now(), "", ""))
 }
 
 func (command *commandUpload) StdinField() string {

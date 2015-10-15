@@ -436,3 +436,8 @@ func (cr CopyResult) Extract() (CopyHeader, error) {
 
 	return ch, nil
 }
+
+// CreateLargeResult represents the result of a CreateLarge operation.
+type CreateLargeResult struct {
+	gophercloud.HeaderResult
+}

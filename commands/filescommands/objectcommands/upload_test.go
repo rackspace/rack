@@ -5,7 +5,9 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 	"testing"
 
@@ -47,17 +49,6 @@ func TestUploadErrWhenCtnrMissing(t *testing.T) {
 	th.AssertDeepEquals(t, expected, err)
 }
 
-func TestUploadErrWhenNameMissing(t *testing.T) {
-	fs := flag.NewFlagSet("flags", 1)
-	fs.String("container", "", "")
-	fs.Set("container", "foo")
-
-	err := newUpCmd(fs).HandleFlags(&handler.Resource{})
-
-	expected := output.ErrMissingFlag{Msg: "--name is required."}
-	th.AssertDeepEquals(t, expected, err)
-}
-
 func TestUploadHandlePipe(t *testing.T) {
 	cmd := &commandUpload{}
 
@@ -65,8 +56,11 @@ func TestUploadHandlePipe(t *testing.T) {
 		Params: &paramsUpload{},
 	}
 
-	err := cmd.HandlePipe(actual, "bar")
+	f, err := ioutil.TempFile("", "bar")
+	th.AssertNoErr(t, err)
+	defer os.Remove(f.Name())
 
+	err = cmd.HandlePipe(actual, f.Name())
 	th.AssertNoErr(t, err)
 }
 

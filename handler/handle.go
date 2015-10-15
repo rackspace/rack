@@ -19,7 +19,9 @@ type StreamPipeHandler interface {
 	// PipeHandler is an interface that commands implement if they can accept input
 	// from STDIN.
 	PipeHandler
-	// HandlePipe is a method that commands implement for processing piped input.
+	// StreamField is the field that the command accepts for streaming input on STDIN.
+	StreamField() string
+	// HandleStreamPipe is a method that commands implement for processing streaming, piped input.
 	HandleStreamPipe(*Resource) error
 }
 
@@ -124,65 +126,66 @@ func handleExecute(command Commander, resource *Resource) {
 			stdinField := ctx.CLIContext.String("stdin")
 			// if so, does the given field accept pipeable input?
 			if stdinField == pipeableCommand.StdinField() {
-				// if so, does the given command and field accept streaming input?
-				if streamPipeableCommand, ok := pipeableCommand.(StreamPipeHandler); ok {
-					go func() {
-						err := streamPipeableCommand.HandleStreamPipe(resource)
+				wg := sync.WaitGroup{}
+				scanner := bufio.NewScanner(os.Stdin)
+				for scanner.Scan() {
+					item := scanner.Text()
+					wg.Add(1)
+					go func(resource Resource) {
+						err := pipeableCommand.HandlePipe(&resource, item)
 						if err != nil {
-							resource.Err = fmt.Errorf("Error handling streamable, pipeable command: %s\n", err)
+							resource.Err = fmt.Errorf("Error handling pipeable command on %s: %s\n", item, err)
+							ctx.Results <- &resource
 						} else {
-							streamPipeableCommand.Execute(resource)
+							pipeableCommand.Execute(&resource)
+							ctx.Results <- &resource
 						}
-						ctx.Results <- resource
-						close(ctx.Results)
-					}()
-				} else {
-					wg := sync.WaitGroup{}
-					scanner := bufio.NewScanner(os.Stdin)
-					for scanner.Scan() {
-						item := scanner.Text()
-						wg.Add(1)
-						go func() {
-							err := pipeableCommand.HandlePipe(resource, item)
-							if err != nil {
-								resource.Err = fmt.Errorf("Error handling pipeable command on %s: %s\n", item, err)
-								ctx.Results <- resource
-							} else {
-								pipeableCommand.Execute(resource)
-								ctx.Results <- resource
-							}
-							wg.Done()
-						}()
-					}
-					if scanner.Err() != nil {
-						resource.Err = scanner.Err()
-						errExit1(command, resource)
-					}
-					wg.Wait()
-					close(ctx.Results)
+						wg.Done()
+					}(*resource)
 				}
+				if scanner.Err() != nil {
+					resource.Err = scanner.Err()
+					errExit1(command, resource)
+				}
+				wg.Wait()
+				close(ctx.Results)
+				// else, does the given command and field accept streaming input?
+			} else if streamPipeableCommand, ok := pipeableCommand.(StreamPipeHandler); ok && streamPipeableCommand.StreamField() == stdinField {
+				go func(resource Resource) {
+					err := streamPipeableCommand.HandleStreamPipe(&resource)
+					if err != nil {
+						resource.Err = fmt.Errorf("Error handling streamable, pipeable command: %s\n", err)
+					} else {
+						streamPipeableCommand.Execute(&resource)
+					}
+					ctx.Results <- &resource
+					close(ctx.Results)
+				}(*resource)
 			} else {
+				// the value provided to the `stdin` flag is not valid
 				resource.Err = fmt.Errorf("Unknown STDIN field: %s\n", stdinField)
 				errExit1(command, resource)
 			}
+			// since no `stdin` flag was provided, treat as a singular execution
 		} else {
-			go func() {
-				err := pipeableCommand.HandleSingle(resource)
+			go func(resource Resource) {
+				err := pipeableCommand.HandleSingle(&resource)
 				if err != nil {
 					resource.Err = err
-					errExit1(command, resource)
+					errExit1(command, &resource)
 				}
-				command.Execute(resource)
-				ctx.Results <- resource
+				command.Execute(&resource)
+				ctx.Results <- &resource
 				close(ctx.Results)
-			}()
+			}(*resource)
 		}
+		// the command is a single execution (as opposed to reading from a pipe)
 	} else {
-		go func() {
-			command.Execute(resource)
-			ctx.Results <- resource
+		go func(resource Resource) {
+			command.Execute(&resource)
+			ctx.Results <- &resource
 			close(ctx.Results)
-		}()
+		}(*resource)
 	}
 }
 
