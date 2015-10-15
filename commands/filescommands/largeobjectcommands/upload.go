@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"runtime"
+	"strings"
 	"time"
 
 	"github.com/rackspace/rack/commandoptions"
@@ -18,7 +19,7 @@ import (
 
 var upload = cli.Command{
 	Name:        "upload",
-	Usage:       util.Usage(commandPrefix, "upload", "--container <containerName> --name <objectName>"),
+	Usage:       util.Usage(commandPrefix, "upload", "--container <containerName> --size-pieces <sizePieces> [--name <objectName> | --stdin file]"),
 	Description: "Uploads an object",
 	Action:      actionUpload,
 	Flags:       commandoptions.CommandFlags(flagsUpload, keysUpload),
@@ -42,8 +43,10 @@ func flagsUpload() []cli.Flag {
 			Usage: "[optional; required if `stdin` isn't provided] The file name containing the contents to upload.",
 		},
 		cli.StringFlag{
-			Name:  "stdin",
-			Usage: "[optional; required if `file` isn't provided] The field being piped to STDIN, if any. Valid values are: file, content.",
+			Name: "stdin",
+			Usage: strings.Join([]string{"[optional; required if `file` isn't provided] The field being piped to STDIN, if any.",
+				"Valid values are: file, content. If 'file' is given, the names of the objects in the container will match",
+				"the names on the user's file system."}, "\n\t"),
 		},
 		cli.IntFlag{
 			Name:  "size-pieces",

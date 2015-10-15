@@ -13,7 +13,7 @@ import (
 
 var remove = cli.Command{
 	Name:        "delete",
-	Usage:       util.Usage(commandPrefix, "delete", "--container <containerName> --name <objectName>"),
+	Usage:       util.Usage(commandPrefix, "delete", "--container <containerName> [--name <objectName> | --stdin name]"),
 	Description: "Deletes a large object",
 	Action:      actionDelete,
 	Flags:       commandoptions.CommandFlags(flagsDelete, keysDelete),
