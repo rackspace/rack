@@ -41,7 +41,7 @@ type paramsGet struct {
 	stackID   string
 }
 
-var keysGet = []string{"Capabilities", "CreationTime", "Description", "DisableRollback", "ID", "Links", "NotificiationTopics", "Outputs", "Parameters", "Name", "Status", "StatusReason", "TemplateDescription", "Timeout", "Tags", "UpdatedTime"}
+var keysGet = []string{"Capabilities", "CreationTime", "Description", "DisableRollback", "ID", "Links", "NotificationTopics", "Outputs", "Parameters", "Name", "Status", "StatusReason", "Tags", "TemplateDescription", "Timeout", "UpdatedTime"}
 
 type commandGet handler.Command
 
@@ -107,7 +107,21 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = stackSingle(stack)
+	resource.Result = stack
+}
+
+func (command *commandGet) PreCSV(resource *handler.Resource) error {
+	resource.Result = stackSingle(resource.Result)
+	resource.FlattenMap("Parameters")
+	resource.FlattenMap("Outputs")
+	resource.FlattenMap("Links")
+	resource.FlattenMap("NotificationTopics")
+	resource.FlattenMap("Capabilities")
+	return nil
+}
+
+func (command *commandGet) PreTable(resource *handler.Resource) error {
+	return command.PreCSV(resource)
 }
 
 func (command *commandGet) StdinField() string {

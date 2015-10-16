@@ -1,7 +1,6 @@
 package stackeventcommands
 
 import (
-	"encoding/json"
 	"github.com/rackspace/rack/internal/github.com/fatih/structs"
 	osStackEvents "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stackevents"
 )
@@ -15,15 +14,13 @@ func eventSingle(rawEvent interface{}) map[string]interface{} {
 		} else {
 			m["Time"] = ""
 		}
-		if resourceProperties, err := json.MarshalIndent(event.ResourceProperties, "", "  "); err != nil {
-			m["ResourceProperties"] = ""
-		} else {
-			m["ResourceProperties"] = string(resourceProperties)
-		}
 		if event.Links != nil {
-			links := make([]string, len(event.Links))
+			links := make([]map[string]interface{}, len(event.Links))
 			for i, link := range event.Links {
-				links[i] = link.PrettyPrintJSON()
+				links[i] = map[string]interface{}{
+					"Href": link.Href,
+					"Rel":  link.Rel,
+				}
 			}
 			m["Links"] = links
 		}

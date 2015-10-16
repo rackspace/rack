@@ -48,7 +48,7 @@ type paramsGet struct {
 	eventID      string
 }
 
-var keysGet = []string{"ResourceName", "Time", "ResourceStatusReason", "ResourceStatus", "PhysicalResourceID", "ID", "ResourceProperties"}
+var keysGet = []string{"ResourceName", "Time", "ResourceStatusReason", "Links", "LogicalResourceID", "ResourceStatusReason", "ResourceStatus", "PhysicalResourceID", "ID", "ResourceProperties"}
 
 type commandGet handler.Command
 
@@ -101,10 +101,21 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 	resourceName := params.resourceName
 	eventID := params.eventID
 
-	result, err := stackevents.Get(command.Ctx.ServiceClient, stackName, stackID, resourceName, eventID).Extract()
+	event, err := stackevents.Get(command.Ctx.ServiceClient, stackName, stackID, resourceName, eventID).Extract()
 	if err != nil {
 		resource.Err = err
 		return
 	}
-	resource.Result = eventSingle(result)
+	resource.Result = event
+}
+
+func (command *commandGet) PreCSV(resource *handler.Resource) error {
+	resource.Result = eventSingle(resource.Result)
+	resource.FlattenMap("Links")
+	resource.FlattenMap("ResourceProperties")
+	return nil
+}
+
+func (command *commandGet) PreTable(resource *handler.Resource) error {
+	return command.PreCSV(resource)
 }

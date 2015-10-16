@@ -23,32 +23,60 @@ type Resource struct {
 
 // FlattenMap is used to flatten out a `map[string]map[string]*`
 func (resource *Resource) FlattenMap(key string) {
-	keys := resource.Keys
+
 	res := resource.Result.(map[string]interface{})
-	if m, ok := res[key]; ok && util.Contains(keys, key) {
+	if m, ok := res[key]; ok && util.Contains(resource.Keys, key) {
 		switch m.(type) {
 		case []map[string]interface{}:
 			for i, hashmap := range m.([]map[string]interface{}) {
 				for k, v := range hashmap {
 					newKey := fmt.Sprintf("%s%d:%s", key, i, k)
 					res[newKey] = v
-					keys = append(keys, newKey)
+					resource.Keys = append(resource.Keys, newKey)
+					resource.FlattenMap(newKey)
 				}
 			}
-		case map[string]interface{}:
-			for k, v := range m.(map[string]interface{}) {
+		case []interface{}:
+			for i, element := range m.([]interface{}) {
+				newKey := fmt.Sprintf("%s%d", key, i)
+				res[newKey] = element
+				resource.Keys = append(resource.Keys, newKey)
+				resource.FlattenMap(newKey)
+			}
+		case map[string]interface{}, map[interface{}]interface{}:
+			mMap := toStringKeys(m)
+			for k, v := range mMap {
 				newKey := fmt.Sprintf("%s:%s", key, k)
 				res[newKey] = v
-				keys = append(keys, newKey)
+				resource.Keys = append(resource.Keys, newKey)
+				resource.FlattenMap(newKey)
 			}
 		case map[string]string:
 			for k, v := range m.(map[string]string) {
 				newKey := fmt.Sprintf("%s:%s", key, k)
 				res[newKey] = v
-				keys = append(keys, newKey)
+				resource.Keys = append(resource.Keys, newKey)
 			}
+		default:
+			return
 		}
+		delete(res, key)
+		resource.Keys = util.RemoveFromList(resource.Keys, key)
 	}
-	delete(res, key)
-	resource.Keys = util.RemoveFromList(keys, key)
+}
+
+// convert map[interface{}]interface{} to map[string]interface{}
+func toStringKeys(m interface{}) map[string]interface{} {
+	switch m.(type) {
+	case map[interface{}]interface{}:
+		typedMap := make(map[string]interface{})
+		for k, v := range m.(map[interface{}]interface{}) {
+			typedMap[k.(string)] = v
+		}
+		return typedMap
+	case map[string]interface{}:
+		typedMap := m.(map[string]interface{})
+		return typedMap
+	}
+	return nil
 }

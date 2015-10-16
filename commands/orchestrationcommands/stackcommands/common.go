@@ -1,7 +1,6 @@
 package stackcommands
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/rackspace/rack/internal/github.com/fatih/structs"
@@ -36,21 +35,27 @@ func stackSingle(rawStack interface{}) map[string]interface{} {
 		if stack.UpdatedTime.Unix() != -62135596800 {
 			m["UpdatedTime"] = stack.UpdatedTime
 		} else {
-			m["UpdatedTime"] = "None"
+			m["UpdatedTime"] = ""
 		}
 		if stack.Links != nil {
-			links := make([]string, len(stack.Links))
+			links := make([]map[string]interface{}, len(stack.Links))
 			for i, link := range stack.Links {
-				links[i] = link.PrettyPrintJSON()
+				links[i] = map[string]interface{}{
+					"Href": link.Href,
+					"Rel":  link.Rel,
+				}
 			}
 			m["Links"] = links
 		}
 		return m
 	case *osStacks.CreatedStack:
 		if stack.Links != nil {
-			links := make([]string, len(stack.Links))
+			links := make([]map[string]interface{}, len(stack.Links))
 			for i, link := range stack.Links {
-				links[i] = link.PrettyPrintJSON()
+				links[i] = map[string]interface{}{
+					"Href": link.Href,
+					"Rel":  link.Rel,
+				}
 			}
 			m["Links"] = links
 		}
@@ -60,25 +65,15 @@ func stackSingle(rawStack interface{}) map[string]interface{} {
 		if stack.UpdatedTime.Unix() != -62135596800 {
 			m["UpdatedTime"] = stack.UpdatedTime
 		} else {
-			m["UpdatedTime"] = "None"
-		}
-		if parameters, err := json.MarshalIndent(stack.Parameters, "", "  "); err != nil {
-			m["Parameters"] = ""
-		} else {
-			m["Parameters"] = string(parameters)
-		}
-		if outputs, err := json.MarshalIndent(stack.Outputs, "", "  "); err != nil {
-			m["Outputs"] = ""
-		} else {
-			m["Outputs"] = string(outputs)
-		}
-		if stack.Timeout == 0 {
-			m["Timeout"] = "None"
+			m["UpdatedTime"] = ""
 		}
 		if stack.Links != nil {
-			links := make([]string, len(stack.Links))
+			links := make([]map[string]interface{}, len(stack.Links))
 			for i, link := range stack.Links {
-				links[i] = link.PrettyPrintJSON()
+				links[i] = map[string]interface{}{
+					"Href": link.Href,
+					"Rel":  link.Rel,
+				}
 			}
 			m["Links"] = links
 		}
@@ -88,49 +83,17 @@ func stackSingle(rawStack interface{}) map[string]interface{} {
 		if stack.UpdatedTime.Unix() != -62135596800 {
 			m["UpdatedTime"] = stack.UpdatedTime
 		} else {
-			m["UpdatedTime"] = "None"
-		}
-		if parameters, err := json.MarshalIndent(stack.Parameters, "", "  "); err != nil {
-			m["Parameters"] = ""
-		} else {
-			m["Parameters"] = string(parameters)
-		}
-		if resourceJSON, err := json.MarshalIndent(stack.Resources, "", "  "); err != nil {
-			m["Resources"] = "None"
-		} else {
-			m["Resources"] = string(resourceJSON)
-		}
-		if stack.Timeout == 0 {
-			m["Timeout"] = "None"
+			m["UpdatedTime"] = ""
 		}
 		if stack.Links != nil {
-			links := make([]string, len(stack.Links))
+			links := make([]map[string]interface{}, len(stack.Links))
 			for i, link := range stack.Links {
-				links[i] = link.PrettyPrintJSON()
+				links[i] = map[string]interface{}{
+					"Href": link.Href,
+					"Rel":  link.Rel,
+				}
 			}
 			m["Links"] = links
-		}
-		return m
-	case *osStacks.AbandonedStack:
-		if environment, err := json.MarshalIndent(stack.Environment, "", "  "); err != nil {
-			m["Environment"] = ""
-		} else {
-			m["Environment"] = string(environment)
-		}
-		if files, err := json.MarshalIndent(stack.Files, "", "  "); err != nil {
-			m["Files"] = ""
-		} else {
-			m["Files"] = string(files)
-		}
-		if resources, err := json.MarshalIndent(stack.Resources, "", "  "); err != nil {
-			m["Resources"] = ""
-		} else {
-			m["Resources"] = string(resources)
-		}
-		if template, err := json.MarshalIndent(stack.Template, "", "  "); err != nil {
-			m["Template"] = ""
-		} else {
-			m["Template"] = string(template)
 		}
 		return m
 	}

@@ -138,3 +138,12 @@ func (command *commandAdopt) Execute(resource *handler.Resource) {
 	}
 	resource.Result = stackSingle(result)
 }
+
+func (command *commandAdopt) PreCSV(resource *handler.Resource) error {
+	resource.FlattenMap("Links")
+	return nil
+}
+
+func (command *commandAdopt) PreTable(resource *handler.Resource) error {
+	return command.PreCSV(resource)
+}

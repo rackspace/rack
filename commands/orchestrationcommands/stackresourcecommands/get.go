@@ -43,7 +43,7 @@ type paramsGet struct {
 	resourceName string
 }
 
-var keysGet = []string{"Name", "PhysicalID", "Type", "Status", "UpdatedTime", "Links", "Attributes", "CreationTime", "Description", "LogicalID"}
+var keysGet = []string{"Attributes", "CreationTime", "Description", "Links", "LogicalID", "Name", "PhysicalID", "RequiredBy", "Status", "StatusReason", "Type", "UpdatedTime"}
 
 type commandGet handler.Command
 
@@ -97,5 +97,17 @@ func (command *commandGet) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = resourceSingle(stackresource)
+	resource.Result = stackresource
+}
+
+func (command *commandGet) PreCSV(resource *handler.Resource) error {
+	resource.Result = resourceSingle(resource.Result)
+	resource.FlattenMap("Attributes")
+	resource.FlattenMap("Links")
+	resource.FlattenMap("RequiredBy")
+	return nil
+}
+
+func (command *commandGet) PreTable(resource *handler.Resource) error {
+	return command.PreCSV(resource)
 }

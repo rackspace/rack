@@ -6,6 +6,7 @@ import (
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	"github.com/rackspace/rack/internal/github.com/fatih/structs"
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/orchestration/v1/stacks"
 	"github.com/rackspace/rack/util"
 )
@@ -119,8 +120,7 @@ func (command *commandAbandon) StdinField() string {
 }
 
 func (command *commandAbandon) PreTable(resource *handler.Resource) error {
-	resource.Result = stackSingle(resource.Result)
-	return nil
+	return command.PreCSV(resource)
 }
 
 func (command *commandAbandon) PreJSON(resource *handler.Resource) error {
@@ -139,6 +139,10 @@ func (command *commandAbandon) PreJSON(resource *handler.Resource) error {
 }
 
 func (command *commandAbandon) PreCSV(resource *handler.Resource) error {
-	command.PreTable(resource)
+	resource.Result = structs.Map(resource.Result)
+	resource.FlattenMap("Template")
+	resource.FlattenMap("Files")
+	resource.FlattenMap("Environment")
+	resource.FlattenMap("Resources")
 	return nil
 }

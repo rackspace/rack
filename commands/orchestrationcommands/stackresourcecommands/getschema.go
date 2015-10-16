@@ -4,6 +4,7 @@ import (
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	"github.com/rackspace/rack/internal/github.com/fatih/structs"
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/orchestration/v1/stackresources"
 	"github.com/rackspace/rack/util"
 )
@@ -90,9 +91,21 @@ func (command *commandGetSchema) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = resourceSingle(schema)
+	resource.Result = schema
 }
 
 func (command *commandGetSchema) StdinField() string {
 	return "type"
+}
+
+func (command *commandGetSchema) PreCSV(resource *handler.Resource) error {
+	resource.Result = structs.Map(resource.Result)
+	resource.FlattenMap("Attributes")
+	resource.FlattenMap("Properties")
+	resource.FlattenMap("SupportStatus")
+	return nil
+}
+
+func (command *commandGetSchema) PreTable(resource *handler.Resource) error {
+	return command.PreCSV(resource)
 }
