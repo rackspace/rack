@@ -596,7 +596,7 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 
 			sectionReader := io.NewSectionReader(readerAt, int64(i)*sizePieces, sizePieces)
 
-			thisObject := fmt.Sprintf("%s.%d", objectName, i)
+			thisObject := fmt.Sprintf("%s.%03d", objectName, i)
 			url := createURL(c, containerName, thisObject)
 			url += query
 
