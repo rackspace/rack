@@ -210,7 +210,7 @@ func (client *ProviderClient) Request(method, url string, options RequestOpts) (
 					}
 				}
 				if options.RawBody != nil {
-					seeker, ok := options.RawBody.(io.ReadSeeker)
+					seeker, ok := options.RawBody.(io.Seeker)
 					if !ok {
 						return nil, &ErrErrorSeekingAfterReauthentication{
 							BaseError: BaseError{

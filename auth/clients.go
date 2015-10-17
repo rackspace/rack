@@ -324,6 +324,12 @@ func newHTTPClient() http.Client {
 
 // RoundTrip performs a round-trip HTTP request and logs relevant information about it.
 func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, error) {
+	defer func() {
+		if request.Body != nil {
+			request.Body.Close()
+		}
+	}()
+
 	var err error
 
 	if lrt.Logger.Level == logrus.DebugLevel && request.Body != nil {
