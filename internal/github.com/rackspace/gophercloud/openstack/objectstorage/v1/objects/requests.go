@@ -11,6 +11,7 @@ import (
 	"io"
 	"io/ioutil"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud"
@@ -508,6 +509,7 @@ type CreateLargeOptsBuilder interface {
 	ToObjectCreateLargeParams() (map[string]string, string, error)
 	SizeOfPieces() (int64, error)
 	LengthOfContent() (int64, error)
+	NumConcurrent() (int, error)
 }
 
 // CreateLargeOpts is a structure that holds parameters for creating a large object.
@@ -515,6 +517,8 @@ type CreateLargeOpts struct {
 	CreateOpts
 	// [REQUIRED] The size of the pieces to break the large object into (in MB).
 	SizePieces int64
+	// [OPTIONAL] The number of concurrent goroutines. Default is runtime.NumCPU()
+	Concurrency int
 }
 
 // ToObjectCreateLargeParams formats a CreateLargeOpts into a query string and map of
@@ -550,92 +554,140 @@ func (opts CreateLargeOpts) LengthOfContent() (int64, error) {
 	return opts.ContentLength, nil
 }
 
+// NumConcurrent returns the number of concurrent goroutines allowed.
+func (opts CreateLargeOpts) NumConcurrent() (int, error) {
+	if opts.Concurrency == 0 {
+		opts.Concurrency = 1
+	}
+	return opts.Concurrency, nil
+}
+
 // CreateLarge is a function that creates a new large object or replaces an existing object. If the returned response's ETag
 // header fails to match the local checksum, the request will fail.
 func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string, content io.Reader, opts CreateLargeOptsBuilder) CreateResult {
 	var res CreateResult
 
-	h := make(map[string]string)
-
+	// Get the size of the pieces
 	sizePieces, err := opts.SizeOfPieces()
 	if err != nil {
 		res.Err = err
 		return res
 	}
 
-	if opts == nil {
-		res.Err = errors.New("SizePieces must be provided.")
-		return res
-	}
-
+	// Get the request headers and query string
 	headers, query, err := opts.ToObjectCreateLargeParams()
 	if err != nil {
 		res.Err = err
 		return res
 	}
 
+	h := make(map[string]string)
 	for k, v := range headers {
 		h[k] = v
 	}
 
-	errChan := make(chan (error))
+	resChan := make(chan job)
 	multiErr := ErrCreateLarge{}
 
+	// Get the length of the content
 	contentLength, err := opts.LengthOfContent()
 	if err != nil {
 		res.Err = err
 		return res
 	}
 
-	if readerAt, ok := content.(io.ReaderAt); ok && contentLength != 0 {
+	// Get the number of concurrent goroutines to launch
+	numConcurrent, err := opts.NumConcurrent()
+	if err != nil {
+		res.Err = err
+		return res
+	}
+
+	// If the content satisfies the `io.ReaderAt` interface, we can safely read
+	// it concurrently.
+	if readerAt, ok := content.(io.ReaderAt); ok && contentLength != 0 && numConcurrent != 1 {
+
+		// Calculate the number of pieces to upload.
 		numPieces := int(contentLength / sizePieces)
 		if contentLength%sizePieces != 0 {
 			numPieces++
 		}
-		for i := 0; i < numPieces; i++ {
 
-			sectionReader := io.NewSectionReader(readerAt, int64(i)*sizePieces, sizePieces)
+		availableGoroutines := numConcurrent
+		// i is the job number
+		i := 0
+		// j is the number of successful pieces uploaded so far
+		j := 0
+		jobChan := make(chan job, numPieces)
+		var once sync.Once
 
-			thisObject := fmt.Sprintf("%s.%03d", objectName, i)
-			url := createURL(c, containerName, thisObject)
-			url += query
-
-			go func(i int, sectionReader *io.SectionReader) {
-				hash := md5.New()
-
-				teeReader := io.TeeReader(sectionReader, hash)
-
-				ropts := gophercloud.RequestOpts{
-					RawBody:     teeReader,
-					MoreHeaders: h,
-				}
-
-				resp, err := c.Request("PUT", url, ropts)
-
-				if closeable, ok := teeReader.(io.ReadCloser); ok {
-					closeable.Close()
-				}
-
-				if err != nil {
-					errChan <- err
-					return
-				}
-
-				if resp != nil {
-					if resp.Header.Get("ETag") == fmt.Sprintf("%x", hash.Sum(nil)) {
-						errChan <- nil
-						return
-					}
-					errChan <- fmt.Errorf(fmt.Sprintf("Local checksum does not match API ETag header for file: %s", thisObject))
-					return
-				}
-			}(i, sectionReader)
+		// Fill the jobs queue with all the number of jobs equal to the
+		// number of pieces to upload.
+		loadJobs := func() {
+			//fmt.Printf("adding %d jobs to jobChan\n", numPieces)
+			for j := 0; j < numPieces; j++ {
+				jobChan <- job{i: j}
+			}
 		}
 
-		for i := 0; i < numPieces; i++ {
-			err := <-errChan
-			if err != nil {
-				multiErr = append(multiErr, err)
+		// spawnJob is a label we return to when there are available goroutines.
+	spawnJob:
+		for availableGoroutines != 0 {
+
+			po := &pieceOpts{
+				resChan:       resChan,
+				jobChan:       jobChan,
+				c:             c,
+				objectName:    objectName,
+				containerName: containerName,
+				readerAt:      readerAt,
+				sizePieces:    sizePieces,
+				query:         query,
+				headers:       h,
+			}
+
+			// Spawn a goroutine to process a job from the jobs queue.
+			go uploadPiece(po)
+
+			// increase the job number by 1
+			i++
+			// decrease the number of available goroutines by 1
+			availableGoroutines--
+		}
+
+		// Only load the jobs queue fully once.
+		once.Do(loadJobs)
+
+		// Run this loop while the number of successfully uploaded pieces is less
+		// than the total number of pieces we need to upload.
+		for j < numPieces {
+			// read a result from the result channel
+			res := <-resChan
+			// a result on the result channel means we have an available goroutine
+			availableGoroutines++
+
+			// run this block if there was an error while processing the job
+			if res.err != nil {
+				fmt.Printf("Error for job (%d): %+v\n", res.i, res.err)
+				// if we haven't exceded our allowed number of retries for
+				// the job, requeue it in the jobs channel.
+				if res.numRetries < 10 {
+					res.numRetries++
+					jobChan <- res
+					// otherwise, add it to the list of errors to return.
+				} else {
+					multiErr = append(multiErr, res.err)
+					j++
+				}
+			} else {
+				fmt.Printf("No error for job (%d)\n", res.i)
+				j++
+			}
+
+			// if there are jobs to process, spawn another goroutine to
+			// process a job.
+			if len(jobChan) > 0 {
+				goto spawnJob
 			}
 		}
 
@@ -645,7 +697,10 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 		}
 	} else {
 		for i := 0; ; i++ {
-			url := createURL(c, containerName, fmt.Sprintf("%s.%d", objectName, i))
+
+			thisJob := job{i: i}
+
+			url := createURL(c, containerName, fmt.Sprintf("%s.%03d", objectName, i))
 			url += query
 
 			limitReader := io.LimitReader(content, sizePieces)
@@ -655,7 +710,8 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 			buf := bytes.NewBuffer([]byte{})
 			_, err := io.Copy(io.MultiWriter(hash, buf), limitReader)
 			if err != nil {
-				errChan <- err
+				thisJob.err = err
+				resChan <- thisJob
 				break
 			}
 
@@ -674,7 +730,8 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 
 			_, err = c.Request("PUT", url, ropts)
 			if err != nil {
-				errChan <- err
+				thisJob.err = err
+				resChan <- thisJob
 				break
 			}
 			i++
@@ -696,6 +753,69 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 		res.Header = resp.Header
 	}
 	return res
+}
+
+func uploadPiece(po *pieceOpts) {
+
+	thisJob := <-po.jobChan
+
+	fmt.Printf("starting job %d\n", thisJob.i)
+
+	sectionReader := io.NewSectionReader(po.readerAt, int64(thisJob.i)*po.sizePieces, po.sizePieces)
+
+	thisObject := fmt.Sprintf("%s.%03d", po.objectName, thisJob.i)
+	url := createURL(po.c, po.containerName, thisObject)
+	url += po.query
+
+	hash := md5.New()
+
+	teeReader := io.TeeReader(sectionReader, hash)
+
+	ropts := gophercloud.RequestOpts{
+		RawBody:     teeReader,
+		MoreHeaders: po.headers,
+	}
+
+	resp, err := po.c.Request("PUT", url, ropts)
+
+	if closeable, ok := teeReader.(io.ReadCloser); ok {
+		closeable.Close()
+	}
+
+	if err != nil {
+		thisJob.err = err
+		po.resChan <- thisJob
+		return
+	}
+
+	if resp != nil {
+		if resp.Header.Get("ETag") == fmt.Sprintf("%x", hash.Sum(nil)) {
+			thisJob.err = err
+			po.resChan <- thisJob
+			return
+		}
+		thisJob.err = fmt.Errorf(fmt.Sprintf("Local checksum does not match API ETag header for file: %s", thisObject))
+		po.resChan <- thisJob
+		return
+	}
+}
+
+type pieceOpts struct {
+	resChan       chan job
+	jobChan       chan job
+	c             *gophercloud.ServiceClient
+	objectName    string
+	containerName string
+	readerAt      io.ReaderAt
+	sizePieces    int64
+	query         string
+	headers       map[string]string
+}
+
+type job struct {
+	i          int
+	numRetries int
+	err        error
 }
 
 // ErrCreateLarge represents the errors returned from a CreateLarge operation.

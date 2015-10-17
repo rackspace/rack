@@ -66,6 +66,10 @@ func flagsUpload() []cli.Flag {
 				Usage: "[optional] A comma-separated string of key=value pairs.",
 			},
 		*/
+		cli.IntFlag{
+			Name:  "concurrency",
+			Usage: "[optional] The number of workers that will be uploading pieces at the same time.",
+		},
 	}
 }
 
@@ -119,7 +123,8 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 			ContentLength: int64(c.Int("content-length")),
 			ContentType:   c.String("content-type"),
 		},
-		SizePieces: int64(c.Int("size-pieces")),
+		SizePieces:  int64(c.Int("size-pieces")),
+		Concurrency: c.Int("concurrency"),
 	}
 
 	/*
