@@ -80,6 +80,12 @@ func (ctx *Context) storeCredentials() {
 		}
 		// get auth credentials
 		credsResult, err := auth.Credentials(ctx.CLIContext, nil)
+		if err != nil {
+			if ctx.logger != nil {
+				ctx.logger.Infof("Error storing credentials in cache: %s\n", err)
+			}
+			return
+		}
 		ao := credsResult.AuthOpts
 		region := credsResult.Region
 		if err == nil {
