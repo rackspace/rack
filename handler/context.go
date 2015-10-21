@@ -88,18 +88,16 @@ func (ctx *Context) storeCredentials() {
 		}
 		ao := credsResult.AuthOpts
 		region := credsResult.Region
-		if err == nil {
-			urlType := gophercloud.AvailabilityPublic
-			if ctx.GlobalOptions.useServiceNet {
-				urlType = gophercloud.AvailabilityInternal
-			}
-			// form the cache key
-			cacheKey := auth.CacheKey(*ao, region, ctx.ServiceClientType, urlType)
-			// initialize the cache
-			cache := &auth.Cache{}
-			// set the cache value to the current values
-			_ = cache.SetValue(cacheKey, newCacheValue)
+		urlType := gophercloud.AvailabilityPublic
+		if ctx.GlobalOptions.useServiceNet {
+			urlType = gophercloud.AvailabilityInternal
 		}
+		// form the cache key
+		cacheKey := auth.CacheKey(*ao, region, ctx.ServiceClientType, urlType)
+		// initialize the cache
+		cache := &auth.Cache{}
+		// set the cache value to the current values
+		_ = cache.SetValue(cacheKey, newCacheValue)
 	}
 }
 
