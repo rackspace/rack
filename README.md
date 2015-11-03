@@ -16,11 +16,6 @@ AdminPass	4vLb2PiqUGdP
 
 For complete documentation, see [the docs](https://developer.rackspace.com/docs/rack-cli/).
 
-## Warning
-
-This repo is under active development and is not ready for anything but testing
-and development.
-
 ## Download
 
 `rack` binaries are available for OSX, Linux, and Windows. [Download `rack` now](https://developer.rackspace.com/docs/rack-cli/configuration#installation).
