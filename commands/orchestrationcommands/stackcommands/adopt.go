@@ -136,10 +136,11 @@ func (command *commandAdopt) Execute(resource *handler.Resource) {
 		resource.Err = err
 		return
 	}
-	resource.Result = stackSingle(result)
+	resource.Result = result
 }
 
 func (command *commandAdopt) PreCSV(resource *handler.Resource) error {
+	resource.Result = stackSingle(resource.Result)
 	resource.FlattenMap("Links")
 	return nil
 }
