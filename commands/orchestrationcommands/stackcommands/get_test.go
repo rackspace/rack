@@ -97,7 +97,7 @@ func TestGetExecute(t *testing.T) {
 	th.AssertNoErr(t, actual.Err)
 }
 
-func TestGetTemplateStdinField(t *testing.T) {
+func TestGetStdinField(t *testing.T) {
 	cmd := &commandGet{}
 	expected := "name"
 	actual := cmd.StdinField()
