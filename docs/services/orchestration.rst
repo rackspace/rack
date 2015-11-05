@@ -317,6 +317,42 @@ Retrieves events for a specified stack::
     test_server	2015-09-13 04:20:24 +0000 UTC	state changed		ADOPT_IN_PROGRESS						e78533e1-c8e0-4eca-8734-b193b6d32e06
 
 
+``get-template``
+^^^^^^^
+Retrieves template for a specified stack::
+
+    rack orchestration stack get-template --id <stackID> [optional flags]
+    rack orchestration stack get-template --name <stackName> [optional flags]
+    (echo stackName1 && echo stackName2) | rack orchestration stack get-template --stdin name
+
+**Response**
+
+.. code::
+
+    $ rack orchestration stack get-template --name RackTest
+    {
+      "heat_template_version": "2014-10-16",
+      "parameters": {
+        "flavor": {
+          "default": 4353,
+          "description": "Flavor for the server to be created",
+          "hidden": true,
+          "type": "string"
+        }
+      },
+      "resources": {
+        "test_server": {
+          "properties": {
+            "flavor": "2 GB General Purpose v1",
+            "image": "Debian 7 (Wheezy) (PVHVM)",
+            "name": "test-server-2"
+          },
+          "type": "OS::Nova::Server"
+        }
+      }
+    }
+
+
 **Resource**
 ~~~~~~~~~~~~
 
@@ -617,38 +653,3 @@ Validates a specified template::
     Parameters:flavor:Type		String
     Parameters:flavor:Description	Flavor for the server to be created
     Parameters:flavor:Label		flavor
-
-``get``
-^^^^^^^
-Retrieves template for a specified stack::
-
-    rack orchestration template get --stack-id <stackID> [optional flags]
-    rack orchestration template get --stack-name <stackName> [optional flags]
-    (echo stackName1 && echo stackName2) | rack orchestration template get --stdin stack-name
-
-**Response**
-
-.. code::
-
-    $ rack orchestration template get --stack-name RackTest
-    {
-      "heat_template_version": "2014-10-16",
-      "parameters": {
-        "flavor": {
-          "default": 4353,
-          "description": "Flavor for the server to be created",
-          "hidden": true,
-          "type": "string"
-        }
-      },
-      "resources": {
-        "test_server": {
-          "properties": {
-            "flavor": "2 GB General Purpose v1",
-            "image": "Debian 7 (Wheezy) (PVHVM)",
-            "name": "test-server-2"
-          },
-          "type": "OS::Nova::Server"
-        }
-      }
-    }

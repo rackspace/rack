@@ -1,4 +1,4 @@
-package stacktemplatecommands
+package stackcommands
 
 import (
 	"flag"
@@ -12,11 +12,11 @@ import (
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
 )
 
-func TestGetContext(t *testing.T) {
+func TestGetTemplateContext(t *testing.T) {
 	app := cli.NewApp()
 	flagset := flag.NewFlagSet("flags", 1)
 	c := cli.NewContext(app, flagset, nil)
-	cmd := &commandGet{
+	cmd := &commandGetTemplate{
 		Ctx: &handler.Context{
 			CLIContext: c,
 		},
@@ -26,50 +26,50 @@ func TestGetContext(t *testing.T) {
 	th.AssertDeepEquals(t, expected, actual)
 }
 
-func TestGetKeys(t *testing.T) {
-	cmd := &commandGet{}
-	expected := keysGet
+func TestGetTemplateKeys(t *testing.T) {
+	cmd := &commandGetTemplate{}
+	expected := keysGetTemplate
 	actual := cmd.Keys()
 	th.AssertDeepEquals(t, expected, actual)
 }
 
-func TestGetServiceClientType(t *testing.T) {
-	cmd := &commandGet{}
+func TestGetTemplateServiceClientType(t *testing.T) {
+	cmd := &commandGetTemplate{}
 	expected := serviceClientType
 	actual := cmd.ServiceClientType()
 	th.AssertEquals(t, expected, actual)
 }
 
-func TestGetHandleSingle(t *testing.T) {
+func TestGetTemplateHandleSingle(t *testing.T) {
 	app := cli.NewApp()
 	flagset := flag.NewFlagSet("flags", 1)
-	flagset.String("stack-name", "", "")
-	flagset.String("stack-id", "", "")
-	flagset.Set("stack-name", "stack1")
-	flagset.Set("stack-id", "id1")
+	flagset.String("name", "", "")
+	flagset.String("id", "", "")
+	flagset.Set("name", "stack1")
+	flagset.Set("id", "id1")
 	c := cli.NewContext(app, flagset, nil)
-	cmd := &commandGet{
+	cmd := &commandGetTemplate{
 		Ctx: &handler.Context{
 			CLIContext: c,
 		},
 	}
 
 	expected := &handler.Resource{
-		Params: &paramsGet{
+		Params: &paramsGetTemplate{
 			stackName: "stack1",
 			stackID:   "id1",
 		},
 	}
 	actual := &handler.Resource{
-		Params: &paramsGet{},
+		Params: &paramsGetTemplate{},
 	}
 	err := cmd.HandleSingle(actual)
 	th.AssertNoErr(t, err)
-	th.AssertEquals(t, expected.Params.(*paramsGet).stackName, actual.Params.(*paramsGet).stackName)
-	th.AssertEquals(t, expected.Params.(*paramsGet).stackID, actual.Params.(*paramsGet).stackID)
+	th.AssertEquals(t, expected.Params.(*paramsGetTemplate).stackName, actual.Params.(*paramsGetTemplate).stackName)
+	th.AssertEquals(t, expected.Params.(*paramsGetTemplate).stackID, actual.Params.(*paramsGetTemplate).stackID)
 }
 
-func TestGetExecute(t *testing.T) {
+func TestGetTemplateExecute(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 	th.Mux.HandleFunc("/stacks/stack1/id1/template", func(w http.ResponseWriter, r *http.Request) {
@@ -78,13 +78,13 @@ func TestGetExecute(t *testing.T) {
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprint(w, `{"stack": {"updated_time": "2014-06-03T20:59:46"}}`)
 	})
-	cmd := &commandGet{
+	cmd := &commandGetTemplate{
 		Ctx: &handler.Context{
 			ServiceClient: client.ServiceClient(),
 		},
 	}
 	actual := &handler.Resource{
-		Params: &paramsGet{
+		Params: &paramsGetTemplate{
 			stackName: "stack1",
 			stackID:   "id1",
 		},
@@ -93,9 +93,9 @@ func TestGetExecute(t *testing.T) {
 	th.AssertNoErr(t, actual.Err)
 }
 
-func TestGetStdinField(t *testing.T) {
-	cmd := &commandGet{}
-	expected := "stack-name"
+func TestGetTemplateStdinField(t *testing.T) {
+	cmd := &commandGetTemplate{}
+	expected := "name"
 	actual := cmd.StdinField()
 	th.AssertEquals(t, expected, actual)
 }

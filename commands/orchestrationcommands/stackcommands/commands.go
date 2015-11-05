@@ -12,6 +12,7 @@ func Get() []cli.Command {
 		adopt,
 		create,
 		get,
+		getTemplate,
 		list,
 		listEvents,
 		preview,
