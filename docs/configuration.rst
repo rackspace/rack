@@ -187,7 +187,7 @@ Darwin OS (like Mac), it will look for ``$HOME/.bash_profile``.
 
 If you'd like to set up command completion yourself (or if you're on a Windows OS and using a Bash shell),
 you can copy file in the location below to the appropriate directory and source it:
-github.com/rackspace/rack/setup/commandcompletion_bash.sh
+`https://github.com/rackspace/rack/blob/master/setup/commandcompletion_bash.sh`
 
 If you are using PowerShell and want command-completion, you can run the ``commandcompletion_posh.ps1`` script in the
 ``setup`` directory. That script will perform normal command-completion for non-rack commands, and rack-specific
