@@ -11,6 +11,7 @@ Services
    files.rst
    blockstorage.rst
    networks.rst
+   orchestration.rst
    examples/index.rst
 
 
@@ -29,6 +30,7 @@ This section lists the commands you can use with Rackspace CLI.
    files.rst
    blockstorage.rst
    networks.rst
+   orchestration.rst
 
 .. _services-examples:
 
@@ -44,3 +46,4 @@ This section shows service-specific use cases for Rackspace CLI.
    examples/files
    examples/block
    examples/networks
+   examples/orchestration
