@@ -83,6 +83,7 @@ Services
 * :ref:`files` - Commands for Rackspace Cloud Files.
 * :ref:`networks` - Commands for Rackspace Cloud Networks.
 * :ref:`block_storage` - Commands for Rackspace Block Storage.
+* :ref:`orchestration` - Commands for Rackspace Cloud Orchestration
 
 
 .. toctree::
@@ -92,7 +93,6 @@ Services
 
    configuration.rst
    globaloptions.rst
-   userguide.rst
    services/index.rst
    troubleshooting.rst
 

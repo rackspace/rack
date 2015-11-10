@@ -9,6 +9,7 @@ Examples
    files.rst
    block.rst
    networks.rst
+   orchestration.rst
 
 Examples for services
 ---------------------
@@ -22,3 +23,4 @@ This section shows service-specific use cases for Rackspace CLI.
   files.rst
   block.rst
   networks.rst
+  orchestration.rst
