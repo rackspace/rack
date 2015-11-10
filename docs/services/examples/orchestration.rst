@@ -13,20 +13,19 @@ Create a stack
 ~~~~~~~~~~~~~~
 
 Let's start out by creating a stack. Create a new file named ``teststack.yaml``
-and add the following to it:
-``
-heat_template_version: 2013-05-23
+and add the following to it::
 
-description: |
-  Template for the Heat Smoke Test
-
-resources:
-
-  random_key_name:
-    type: OS::Heat::RandomString
-    properties:
-      length: 8
-``
+    heat_template_version: 2013-05-23
+    
+    description: |
+      Template for the Heat Smoke Test
+    
+    resources:
+    
+      random_key_name:
+        type: OS::Heat::RandomString
+        properties:
+          length: 8
 
 Then, use ``rack`` to create a stack from it::
 
