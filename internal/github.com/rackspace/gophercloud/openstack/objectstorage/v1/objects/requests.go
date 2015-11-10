@@ -668,7 +668,7 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 
 			// run this block if there was an error while processing the job
 			if res.err != nil {
-				fmt.Printf("Error for job (%d): %+v\n", res.i, res.err)
+				//fmt.Printf("Error for job (%d): %+v\n", res.i, res.err)
 				// if we haven't exceded our allowed number of retries for
 				// the job, requeue it in the jobs channel.
 				if res.numRetries < 10 {
@@ -680,7 +680,7 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 					j++
 				}
 			} else {
-				fmt.Printf("No error for job (%d)\n", res.i)
+				//fmt.Printf("No error for job (%d)\n", res.i)
 				j++
 			}
 
@@ -759,7 +759,7 @@ func uploadPiece(po *pieceOpts) {
 
 	thisJob := <-po.jobChan
 
-	fmt.Printf("starting job %d\n", thisJob.i)
+	//fmt.Printf("starting job %d\n", thisJob.i)
 
 	sectionReader := io.NewSectionReader(po.readerAt, int64(thisJob.i)*po.sizePieces, po.sizePieces)
 
