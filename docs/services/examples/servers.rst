@@ -178,29 +178,36 @@ enable simpler migration when a server fails, or a storage volume that remains
 intact even after a server is shutdown or deleted.
 
 To create a bootable volume from an image and launch an instance from
-this volume, use the ``--block-device`` parameter::
+this volume, use the ``--block-device`` parameter. Here is a command to list
+your bootable volumes::
 
-  --block-device "source-type=SOURCE,source-id=ID,destination-type=DEST,volume-size=SIZE,shutdown=PRESERVE,bootindex=INDEX"
+    $ rack block-storage volume list
+    ID					Name		Bootable	Size	Status		VolumeType	SnapshotID
+18d361d1-2875-458b-9917-65010e37982a	BFV-test-SSD	true		100	in-use		SSD		
+88f2a1b0-b5f7-4634-ac4c-5e7ef0d9b2ac	BFB-test-SSD	true		100	available	SSD		
+6efa7008-ada7-4438-9033-efba4aa5cb06	Volume-1	false		100	available	SATA		
+
+Here are the parameters for ``--block-device``:
+
+-  ``--block-device``
+    source-type=SOURCE,source-id=ID,destination-type=DEST,
+    volume-size=SIZE,delete-on-termination=true|false
 
 - ``source-type=SOURCE``
-  The type of object used to create the block device. Valid values
-  are ``volume``, ``snapshot``, ``image``, and ``blank``.
-
-- ``source-id=ID``
-  The ID of the source. Use a volume ID if the ``source-type`` is
-  a volume and an image ID if the ``source-type`` is image.
+    The type of object used to create the block device. Valid values
+    are ``volume``, ``snapshot``, and ``image``.
 
 - ``destination-type=DEST``
-  The type of the target virtual device. Valid values are ``volume``
-  and ``local``.
+    The type of the target virtual device. Valid values are ``volume``
+    and ``local``.
 
 - ``volume-size=SIZE``
-  The size of the volume that is created in GB.
+    The size of the volume that is created in GB.
 
 - ``delete-on-termination={true\|false}``
-  What to do with the volume when the instance is deleted. Use
-  ``false`` to delete the volume and ``true`` to delete the
-  volume when the instance is deleted.
+    What to do with the volume when the instance is deleted. Use
+    ``false`` to delete the volume and ``true`` to delete the
+    volume when the instance is deleted.
 
 Use this command to boot from a volume::
 
