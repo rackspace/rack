@@ -10,7 +10,7 @@
     <summary>Distributes rack.exe</summary>
     <description>The Rackspace Command Line Interface is a unified tool to manage your Rackspace services. It provides streamlined and secure configuration as well as a single point of entry for all Rackspace Cloud services.</description>
     <projectUrl>https://developer.rackspace.com/docs/rack-cli/</projectUrl>
-    <packageSourceUrl>https://github.com/rackspace/rack/script/chocolatey</packageSourceUrl>
+    <packageSourceUrl>https://github.com/rackspace/rack/tree/master/script/chocolatey</packageSourceUrl>
     <projectSourceUrl>https://github.com/rackspace/rack</projectSourceUrl>
     <docsUrl>https://developer.rackspace.com/docs/rack-cli/</docsUrl>
     <bugTrackerUrl>https://github.com/rackspace/rack/issues</bugTrackerUrl>
