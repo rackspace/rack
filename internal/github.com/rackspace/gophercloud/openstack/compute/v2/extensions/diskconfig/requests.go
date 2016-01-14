@@ -29,7 +29,7 @@ var ErrInvalidDiskConfig = errors.New("DiskConfig must be either diskconfig.Auto
 // Validate ensures that a DiskConfig contains an appropriate value.
 func (config DiskConfig) validate() error {
 	switch config {
-	case Auto, Manual:
+	case Auto, Manual, "":
 		return nil
 	default:
 		return ErrInvalidDiskConfig
@@ -66,7 +66,7 @@ type RebuildOptsExt struct {
 	servers.RebuildOptsBuilder
 
 	// DiskConfig [optional] controls how the rebuilt server's disk is partitioned.
-	DiskConfig DiskConfig
+	DiskConfig DiskConfig `json:"OS-DCF:diskConfig,omitempty"`
 }
 
 // ToServerRebuildMap adds the diskconfig option to the base server rebuild options.
@@ -82,7 +82,9 @@ func (opts RebuildOptsExt) ToServerRebuildMap() (map[string]interface{}, error) 
 	}
 
 	serverMap := base["rebuild"].(map[string]interface{})
-	serverMap["OS-DCF:diskConfig"] = string(opts.DiskConfig)
+	if opts.DiskConfig != "" {
+		serverMap["OS-DCF:diskConfig"] = string(opts.DiskConfig)
+	}
 
 	return base, nil
 }
@@ -92,7 +94,7 @@ type ResizeOptsExt struct {
 	servers.ResizeOptsBuilder
 
 	// DiskConfig [optional] controls how the resized server's disk is partitioned.
-	DiskConfig DiskConfig
+	DiskConfig DiskConfig `json:"OS-DCF:diskConfig,omitempty"`
 }
 
 // ToServerResizeMap adds the diskconfig option to the base server creation options.
@@ -108,7 +110,9 @@ func (opts ResizeOptsExt) ToServerResizeMap() (map[string]interface{}, error) {
 	}
 
 	serverMap := base["resize"].(map[string]interface{})
-	serverMap["OS-DCF:diskConfig"] = string(opts.DiskConfig)
+	if opts.DiskConfig != "" {
+		serverMap["OS-DCF:diskConfig"] = string(opts.DiskConfig)
+	}
 
 	return base, nil
 }
