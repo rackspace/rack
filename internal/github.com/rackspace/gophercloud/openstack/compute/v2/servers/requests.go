@@ -531,9 +531,12 @@ func (opts RebuildOpts) ToServerRebuildMap() (map[string]interface{}, error) {
 		return server, err
 	}
 
-	server["name"] = opts.Name
 	server["adminPass"] = opts.AdminPass
 	server["imageRef"] = opts.ImageID
+
+	if opts.Name != "" {
+		server["name"] = opts.Name
+	}
 
 	if opts.AccessIPv4 != "" {
 		server["accessIPv4"] = opts.AccessIPv4
