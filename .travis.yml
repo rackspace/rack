@@ -1,7 +1,10 @@
 language: go
+
 go:
-- 1.4
-sudo: false
+  - 1.5
+
+#sudo: false
+
 env:
   matrix:
   - GIMME_OS=linux GIMME_ARCH=amd64
@@ -9,6 +12,7 @@ env:
   - GIMME_OS=windows GIMME_ARCH=amd64
   - GIMME_OS=linux GIMME_ARCH=arm GOARM=6
   - GIMME_OS=linux GIMME_ARCH=arm GOARM=7
+
 # workaround for travis-ci/gimme#25 to pick up latest version of gimme and run again
 before_install:
   - curl -o gimme -sL https://raw.githubusercontent.com/travis-ci/gimme/master/gimme
@@ -17,13 +21,17 @@ before_install:
   - eval "$(./gimme 1.4)"
   - go version
   - go env
+
 install:
 - go get -d -v ./...
+
 script:
   - if [[ $GIMME_OS == "linux" && $GIMME_ARCH == "amd64" ]]; then GOARCH=$GIMME_ARCH GOOS=$GIMME_OS go test github.com/rackspace/rack/commands/... -v; fi
+
 before_deploy:
 - "./script/prep-travis-release.sh"
 - cd build
+
 deploy:
   provider: cloudfiles
   username: rackcli.drgsites
@@ -34,6 +42,7 @@ deploy:
   skip_cleanup: true
   on:
     all_branches: true
+
 notifications:
   slack:
     secure: GGxapXtJ6ijPWdFdIypPwuz9nDvKbj1cmLf0edmRBDNTLbg2a1RPyFugxJbd2hEqak62m5Ue3ppY+J+boJXP2n1Eb/FOQelZd3V3lxNPpvoYgJzzq+g/TlSLakposn30PG3ySOAvtvIwGbUrbVsVS3ASBzt9s39N3HoE1CufUDA=
