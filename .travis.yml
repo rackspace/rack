@@ -1,6 +1,6 @@
 language: go
 go:
-- 1.6
+- 1.5
 sudo: false
 env:
   matrix:
