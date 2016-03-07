@@ -1,6 +1,6 @@
 language: go
 go:
-- 1.6
+- 1.4
 sudo: false
 env:
   matrix:
@@ -9,6 +9,14 @@ env:
   - GIMME_OS=windows GIMME_ARCH=amd64
   - GIMME_OS=linux GIMME_ARCH=arm GOARM=6
   - GIMME_OS=linux GIMME_ARCH=arm GOARM=7
+# workaround for travis-ci/gimme#25 to pick up latest version of gimme and run again
+before_install:
+  - curl -o gimme -sL https://raw.githubusercontent.com/travis-ci/gimme/master/gimme
+  - chmod u+x gimme
+  - unset GOROOT GOTOOLDIR
+  - eval "$(./gimme 1.4)"
+  - go version
+  - go env
 install:
 - go get -d -v ./...
 script:
