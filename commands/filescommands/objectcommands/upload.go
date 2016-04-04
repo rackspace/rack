@@ -55,6 +55,14 @@ func flagsUpload() []cli.Flag {
 			Name:  "content-length",
 			Usage: "[optional] The Content-Length header.",
 		},
+		cli.IntFlag{
+			Name:  "delete-after",
+			Usage: "[optional] Delete the object after this many seconds.",
+		},
+		cli.IntFlag{
+			Name:  "delete-at",
+			Usage: "[optional] Delete the object at this (Unix Epoch) timestamp.",
+		},
 		cli.StringFlag{
 			Name:  "metadata",
 			Usage: "[optional] A comma-separated string of key=value pairs.",
@@ -110,6 +118,8 @@ func (command *commandUpload) HandleFlags(resource *handler.Resource) error {
 	opts := osObjects.CreateOpts{
 		ContentLength: int64(c.Int("content-length")),
 		ContentType:   c.String("content-type"),
+		DeleteAt:      c.Int("delete-at"),
+		DeleteAfter:   c.Int("delete-after"),
 	}
 
 	if c.IsSet("metadata") {
