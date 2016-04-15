@@ -59,7 +59,7 @@ After you download the binary on Windows, you can immediately run it.
 We recommend that you copy the binary to a location outside of your **Downloads** folder and add that location to your PATH environment variable, as follows:
 
 1. If you don’t already have one, create a new directory for command-line tools. For example, ``C:\tools``.
-2. Copy **rack.exe** to that directory
+2. Copy **rack.exe** to that directory.
 3. Add the directory to your user's PATH environment variable. You can do this by opening a command prompt window and run the following command::
     
     setx path "%path%;C:\tools"
@@ -73,28 +73,27 @@ This option requires PowerShell version 3 or later.
 
 Perform the following steps to set up the ``rack`` CLI. Alternatively, you can save the script as a PowerShell file (for example, **rackspace-cli.ps1**) and execute it.
 
-1.	Open PowerShell_Ise and paste the following script in the scripting pane::
+Open PowerShell_Ise, paste the following script in the scripting pane, and then click the green play button to start the execution.
 
-        #requires -Version 3
-        $DownloadPath = 'C:\Tools'
-        
-        Write-Output -InputObject "[$(Get-Date)] Status  :: Set the Tools Directory $DownloadPath"
-        New-Item -Path $DownloadPath -ItemType Directory -ErrorAction SilentlyContinue > $null
-        Set-Location -Path $DownloadPath -ErrorAction SilentlyContinue
-        
-        Write-Output -InputObject "[$(Get-Date)] Status  :: Download Rackspace CLI in C:\Tools"
-        Invoke-WebRequest -Uri 'https://goo.gl/NMvmcx/Windows/amd64/rack.exe' -Method Get -OutFile rack.exe
-        
-        Write-Output -InputObject "[$(Get-Date)] Status  :: Unblock the executable file rack.exe"
-        Unblock-File -Path $("$DownloadPath\rack.exe")
-        
-        Write-Output -InputObject "[$(Get-Date)] Status  :: Permanently set the path $DownloadPath to the Environment variable (Reboot required)."
-        [System.Environment]::SetEnvironmentVariable('Path', $env:Path + 'C:\Tools', [System.EnvironmentVariableTarget]::Machine)
-        Write-Output -InputObject "[$(Get-Date)] Status  :: Temporarily set the path $DownloadPath to the Environment variable for immediate use in the current powershell session"
-        $env:Path += ';C:\Tools'
+::
 
-2. Click the green play button to start the execution.
-
+    #requires -Version 3
+    $DownloadPath = 'C:\Tools'
+    
+    Write-Output -InputObject "[$(Get-Date)] Status  :: Set the Tools Directory $DownloadPath"
+    New-Item -Path $DownloadPath -ItemType Directory -ErrorAction SilentlyContinue > $null
+    Set-Location -Path $DownloadPath -ErrorAction SilentlyContinue
+    
+    Write-Output -InputObject "[$(Get-Date)] Status  :: Download Rackspace CLI in C:\Tools"
+    Invoke-WebRequest -Uri 'https://goo.gl/NMvmcx/Windows/amd64/rack.exe' -Method Get -OutFile rack.exe
+     
+    Write-Output -InputObject "[$(Get-Date)] Status  :: Unblock the executable file rack.exe"
+    Unblock-File -Path $("$DownloadPath\rack.exe")
+    
+    Write-Output -InputObject "[$(Get-Date)] Status  :: Permanently set the path $DownloadPath to the Environment variable (Reboot required)."
+    [System.Environment]::SetEnvironmentVariable('Path', $env:Path + 'C:\Tools', [System.EnvironmentVariableTarget]::Machine)
+    Write-Output -InputObject "[$(Get-Date)] Status  :: Temporarily set the path $DownloadPath to the Environment variable for immediate use in the current powershell session"
+     $env:Path += ';C:\Tools'
 
 Configuration
 -------------
@@ -106,7 +105,7 @@ To authenticate against the Rackspace API, the following parameters are required
 * Region: a Rackspace region
 * Authentication Endpoint (URL): (Optional/Advanced) A URL to send the authentication request to
 
-You can specify these parameters quickly by using the interactive ``configure`` command (recommended), or you can use other methods such as specifying command-line flags, manually creating or editing a configuration file, or setting environment variables.
+You can specify these parameters quickly by using the interactive ``configure`` command (recommended), or you can use other methods such as specifying command-line flags, manually creating or editing a configuration file, or setting environment variables. All of these methods are explained in this section.
 
 Interactive configure command
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -129,7 +128,7 @@ The ``configure`` command automatically creates a configuration file for you if 
     Rackspace Region: <theRackspaceRegion>
     Profile Name (leave blank to create a default profile):
     
-Username is the username for your Rackspace Cloud account. You can get your API key by logging in to the Cloud Control Panel and clicking on your account name then Account Settings. The region is the region where your Rackspace infrastructure is deployed. If you want to create a profile other than the default profile, enter a name for the profile.
+Username is the username for your Rackspace Cloud account. You can get your API key by logging in to the Cloud Control Panel, clicking on your account name in the upper-right corner, and then selecting **Account Settings**. The region is the region where your Rackspace infrastructure is deployed. If you want to create a profile other than the default profile, enter a name for the profile.
 
 After the profile is created, you can immediately start working. For example, you could issue the following command to get a list of the servers on your Rackspace account::
 
@@ -149,7 +148,7 @@ environment variables).
 Configuration file
 ^^^^^^^^^^^^^^^^^^
 
-Any authentication parameters not set on the command-line are looked for in a configuration file. The configuration file should be located in ``$HOME/.rack/config``. When you use the interactive ``configure`` command, a configuration file is automatically created. 
+Any authentication parameters not set on the command line are looked for in a configuration file. The configuration file should be located in ``$HOME/.rack/config``. When you use the interactive ``configure`` command, a configuration file is automatically created. 
 
 The configuration file format is similar to the following format::
 
@@ -161,7 +160,7 @@ The configuration file format is similar to the following format::
     username=<anotherRackspaceUsername>
     api-key=<anotherRackspaceApiKey>
 
-The preceding example shows a default profile that doesn't have a named section. ``another-profile`` is a different profile in the configuration file. When you use the default profile, you don't need to supply a flag when executing ``rack``. You can specify a profile on the command-line with the ``profile`` flag.
+The preceding example shows a default profile that doesn't have a named section. ``another-profile`` is a different profile in the configuration file. When you use the default profile, you don't need to supply a flag when executing ``rack``. You can specify a profile on the command line with the ``profile`` flag.
 
 ::
 
@@ -181,14 +180,14 @@ Finally, ``rack`` looks for any remaining unset authentication parameters in env
 For example, on OS X and Linux, you would type::
 
     export RS_REGION_NAME=IAD
-    export RS_USERNAME=<yourRackspaceUsername>
-    export RS_API_KEY=<yourRackspaceApiKey>
+    export RS_USERNAME=yourRackspaceUsername
+    export RS_API_KEY=yourRackspaceApiKey
 
 On Windows, you would type::
 
     set RS_REGION_NAME=IAD
-    set RS_USERNAME=<yourRackspaceUsername>
-    set RS_API_KEY=<yourRackspaceApiKey>
+    set RS_USERNAME=yourRackspaceUsername
+    set RS_API_KEY=yourRackspaceApiKey
 
 Command completion
 ------------------
