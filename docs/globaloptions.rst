@@ -7,9 +7,9 @@ Global options are command-line flags that are valid for any command and enable 
 
 For example, you can get JSON_ formatted output from any series of commands by appending the ``--output json`` flag::
 
-    rack <command> <subcommand> <action> --output json [flags]
+    rack <command> <subcommand> <action> --output json
     
-You can display any available command-line flags by appending `--help` to the command::
+You can display any available command-line flags by appending ``--help`` to the command::
 
     rack <command> <subcommand> <action> --help
 
@@ -94,7 +94,7 @@ String. The Rackspace API key to use for authentication.
 ``--auth-tenant-id``
 ~~~~~~~~~~~~~~~~~~~~
 
-String. The tenant ID to use for authentication. This option can be provided only as a command-line flag. It is prefixed with ``auth-`` so that it does not collide with the ``tenant-id``` command flags.
+String. The tenant ID to use for authentication. This option can be provided only as a command-line flag. It is prefixed with ``auth-`` so that it does not collide with the ``tenant-id`` command flags.
 
 ``--auth-token``
 ~~~~~~~~~~~~~~~~
