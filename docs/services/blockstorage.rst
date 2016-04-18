@@ -10,7 +10,7 @@ All ``block-storage`` commands are based on the following syntax::
 
    rack block-storage <subcommand> <action> [command flags]
 
-*Command flags* enable you to customize certain attributes of the command, such as using ``--name`` to name a volume. To display a list of command flags specific to the command, type ``rack block-storage <subservice> <action> --help``.
+*Command flags* enable you to customize certain attributes of the command, such as using ``--name`` to name a volume. To display a list of command flags specific to the command, type ``rack block-storage <subcommand> <action> --help``.
 
 The following sections describe the ``block-storage`` subcommands and the actions associated with them.
 
@@ -65,7 +65,7 @@ Creates a volume of the specified size.
 
 ``get``
 ~~~~~~~
-Retrieves details abuot a volume, which you can specify by ID or name. 
+Retrieves details about a volume, which you can specify by ID or name. 
 
 ::
 
