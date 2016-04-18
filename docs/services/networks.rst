@@ -313,7 +313,7 @@ Retrieves details about a port, which you can specify by ID or name.
 
 ``update``
 ~~~~~~~~~~
-Updates the information about a port, , which you can specify by ID or name. 
+Updates the information about a port, which you can specify by ID or name. 
 
 ::
 
