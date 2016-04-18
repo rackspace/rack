@@ -10,7 +10,7 @@ All ``servers`` commands are based on the following syntax::
 
    rack servers <subcommand> <action> [command flags]
 
-*Command flags* enable you to customize certain attributes of the command, such as using ``--name`` to name an instance. To display a list command flags specific to the command, type ``rack servers <subcommand> <action> --help``.
+*Command flags* enable you to customize certain attributes of the command, such as using ``--name`` to name an instance. To display a list command of flags specific to the command, type ``rack servers <subcommand> <action> --help``.
 
 The following sections describe the ``servers`` subcommands and the actions associated with them.
 
@@ -48,7 +48,7 @@ Retrieves a list of virtual and bare-metal servers.
 
 ``create``
 ~~~~~~~~~~
-Creates a server instancewith the specified name. You must select an image by using either the ``--image-id`` or ``--image-name`` flag with the ID or name of the image that you want to use. Alternatively, you can provide the ``--block-device`` flag to boot an instance from a volume. In either case, you need to select a flavor by using the ``--flavor-id`` or ``--flavor-name`` flag with the ID or name of the flavor that you want to use.
+Creates a server instance with the specified name. You must select an image by using either the ``--image-id`` or ``--image-name`` flag with the ID or name of the image that you want to use. Alternatively, you can provide the ``--block-device`` flag to boot an instance from a volume. In either case, you need to select a flavor by using the ``--flavor-id`` or ``--flavor-name`` flag with the ID or name of the flavor that you want to use.
 
 ::
 
@@ -65,7 +65,7 @@ Creates a server instancewith the specified name. You must select an image by us
 
 .. note::
 
-    The admin password for your server is provided only once. Copy the password if you want to make changes to your server in the future.
+    The admin password for your server is provided only once. Copy the password if you want to be able to make changes to your server in the future.
 
 ``get``
 ~~~~~~~
