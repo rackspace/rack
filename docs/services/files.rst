@@ -185,7 +185,9 @@ Updates metadata items for a specified container, or adds the specified metadata
 
 ``delete-metadata``
 ~~~~~~~~~~~~~~~~~~~
-Deletes one or more metadata keys for a container::
+Deletes one or more metadata keys for a container.
+
+::
 
     rack files container delete-metadata --name <containerName> --metadata-keys <key1,key2,...> [optional flags]
 
