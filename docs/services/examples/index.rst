@@ -11,10 +11,7 @@ Examples
    networks.rst
    orchestration.rst
 
-Examples for services
----------------------
-
-This section shows service-specific use cases for Rackspace CLI.
+This section shows service-specific use-case examples for Rackspace CLI.
 
 .. toctree::
   :maxdepth: 2
