@@ -21,9 +21,9 @@ First, list the available containers in your account.
 
     $ rack files container list
     Name						Count	Bytes
-    Presentations				14	125902668
-    Public						47	179289516
-    allphotos					493	295697436
+    Presentations				 14	    125902668
+    Public						 47	    179289516
+    allphotos					 493	295697436
 
 Then specify a container and search for a specific term. The following example searches through a container named ``Presentations`` for a file with the name ``workshop`` in it. Use the appropriate search command for your operating system. 
 
