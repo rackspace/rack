@@ -70,7 +70,7 @@ Global Options
 --------------
 
 The ``rack`` CLI uses global options to alter output, authenticate, or
-pass in other global information into the tool. These options are
+pass other global information into the tool. These options are
 called *global* because they are valid for any command. To see a list of these options, go to :ref:`global_options`.
 
 Services
