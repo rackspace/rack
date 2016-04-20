@@ -4,11 +4,7 @@
 Servers examples
 ================
 
-Before you start using examples, be sure to enter your username and API key and store them locally.
-
-::
-
-    $ rack configure
+Before you start using examples, be sure to enter your username and API key and store them locally by running the ``rack configure`` command. For more information, see :ref:`installation_and_configuration`.
 
 You can get help for any command and its options by appending ``--help`` to the series of commands.
 
@@ -87,7 +83,7 @@ You can also search through metadata on each server. The following example shows
 Get required information before creating a server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You usually want to list or create a few things before you launch  a server instance. For example, you might want to choose a flavor and image, and add a key pair that you can use to log in to the server after it is launched. This series of commands show you what to expect in return.
+You usually want to list or create a few things before you launch  a server instance. For example, you might want to choose a flavor and image, and add a key pair that you can use to log in to the server after it is launched. This series of commands shows you what to expect in return.
 
 If you want to upload your public key, you can either point to the file or copy and paste it into the command itself.
 
@@ -151,7 +147,7 @@ Next, choose the size and power of the server by looking at the available flavor
 Start a server with a key pair and metadata
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In this example, you choose the image and flavor to launch a Rackspace Cloud Servers server, such as a 4 GB General Purpose server on Ubuntu 14.04 LTS (Trusty Tahr) (PVHVM), and then put those values into the command along with the key pair and any metadata key-value pairs that you want to include. 
+In this example, you choose the image and flavor to launch a Rackspace Cloud Servers instance, such as a 4 GB General Purpose server on Ubuntu 14.04 LTS (Trusty Tahr) (PVHVM), and then put those values into the command along with the key pair and any metadata key-value pairs that you want to include. 
 
 ::
 
@@ -211,7 +207,7 @@ Following are the parameters for ``--block-device``:
 - ``volume-size=SIZE``
     The size of the volume that is created in GB.
 
-- ``delete-on-termination={true\|false}``
+- ``delete-on-termination={true|false}``
     What to do with the volume when the instance is deleted. Use ``false`` to delete the volume and use ``true`` to delete the
     volume when the instance is deleted. 
 
