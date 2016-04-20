@@ -1,12 +1,15 @@
 .. _troubleshooting:
 
-=========================
-Troubleshooting a request
-=========================
+===============
+Troubleshooting
+===============
 
-If you want to see the request URL, response status or headers including
-the X-Compute-Request-Id or X-Trans-Id, use the :code:`--log debug` option
-on any `rack` command::
+This section provides suggestions for troubleshooting issues when you use the Rackspace CLI.
+
+Troubleshooting a request
+-------------------------
+
+If you want to see a request URL, response status, or headers, including the ``X-Compute-Request-Id`` or ``X-Trans-Id`` header, use the ``--log debug`` option on any ``rack`` command::
 
     $ rack servers instance list --fields publicipv4 --log debug
 
@@ -62,29 +65,21 @@ on any `rack` command::
 Authenticating as another user
 ------------------------------
 
-If you have an administrative account, you can authenticate as another user
-with `--tenant-id` and `--auth-token` so that you can run commands with their
-account information. This scenario is useful when you are troubleshooting for
-someone.
+If you have an administrative account, you can authenticate as another user with the ``--tenant-id`` and ``--auth-token`` flags to run commands with that user's account information. This scenario is useful when you are troubleshooting for someone else.
 
 Error when piping results to another command
 --------------------------------------------
 
-When you want to use the results of one command to drive input for another
-`rack` command, make sure you remove the header from the table listing output
-with the :code:`--no-header` command. Otherwise you may see a series of errors
-because the header is considered a request. Here's an example:
+When you want to use the results of one ``rack`` command to drive input for another ``rack`` command, be sure to remove the header from the table listing output by using the ``--no-header`` option. Otherwise you might see a series of errors because the header is considered a request. 
 
-Don't do::
+Following is an example of what *not* to do::
 
     $ rack files object list --container temp --fields name | rack files object delete --container temp --stdin name
 
-
-Because it results in these types of errors::
+The result is the following error::
 
     error    I couldn't find object [Name] in container [temp]
 
-
-Instead, do this with the :code:`--no-header` parameter::
+Instead, run the command with the ``--no-header`` option::
 
     $ rack files object list --container temp --fields name --no-header | rack files object delete --container temp --stdin name
