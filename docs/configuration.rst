@@ -1,42 +1,41 @@
 .. _installation_and_configuration:
 
-Installation and Configuration
+Installation and configuration
 ==============================
 
-Installation
-------------
+This section provides complete and detailed information for installing and configuring the Rackspace Command Line Interface (``rack`` CLI). 
 
-The Rackspace CLI ``rack`` is a self-contained binary written in go_. This means
-that installation is as simple as downloading the relevant binary for your
-operating system and ensuring it is on your path.
+Install the CLI
+---------------
 
-Binary Downloads:
+The ``rack`` CLI is a self-contained binary written in go_. To install the CLI, you simply download the relevant binary for your OS and ensure that the directory in which it resides is in your system’s PATH environment variable.
 
-* `Mac OSX (64 bit)`_
-* `Linux (64 bit)`_
-* `Windows (64 bit)`_
+Download the binary for your OS from one of the following links, and then follow the specific instructions for your OS:
 
-OSX and Linux with Homebrew
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* `Mac OS X (64-bit)`_
+* `Linux (64-bit)`_
+* `Windows (64-bit)`_
+
+Mac OS X and Linux with Homebrew
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you are using `Homebrew`_, run the following command::
 
     brew install rack
 
-OSX and Linux (without Homebrew)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mac OS X and Linux without Homebrew
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-After downloading the binary on OSX and Linux you will need to make the binary
-executable by typing::
+1. After downloading the binary for Mac OS X or Linux, make the binary executable by running the following command::
 
     chmod a+x /path/to/rack
 
-We also recommend you move or symbolically link it on these platforms to `/usr/local/bin`::
+2. Move it to or symbolically link it to ``/usr/local/bin``, as follows::
 
     mkdir -p /usr/local/bin/
     ln -s /path/to/rack /usr/local/bin/rack
 
-You can now add it to your path with::
+3. Add it to your PATH environment variable as follows::
 
     export PATH=$PATH:/usr/local/bin
 
@@ -47,71 +46,76 @@ If you are using `Chocolatey`_, run the following command::
 
     choco install rack
 
-Windows (without Chocolatey)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Windows without Chocolatey
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Option 1 : Manual
-~~~~~~~~~~~~~~~~~
+You can install the binary manually or by using a script.
 
-After downloading the binary on Windows, you can immediately run it.
+Install the binary manually
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We recommend that you copy it to a location outside of your Downloads folder (e.g. C:\\tools) and add that location to your PATH. You must open a new command prompt after modifying the PATH variable.
+After you download the binary on Windows, you can immediately run it.
 
-1. Create a new directory for command line tools, if you don't already have one, e.g. C:\\tools.
-2. Copy rack.exe to that directory
-3. Add the directory to your user's PATH environment variable, e.g. ``setx path "%path%;C:\tools"`` or press the Windows key, type "set env", select "Edit environment variables for your account", select the PATH user variable and append ";C:\\tools" to the value and save your changes.
-4. Open a new command prompt after modifying the PATH variable.
+We recommend that you copy the binary to a location outside of your **Downloads** folder and add that location to your PATH environment variable, as follows:
 
-Option 2 : Script
-~~~~~~~~~~~~~~~~~
+1. If you don’t already have one, create a new directory for command-line tools. For example, ``C:\tools``.
+2. Copy **rack.exe** to that directory.
+3. Add the directory to your user's PATH environment variable. You can do this by opening a command prompt window and run the following command::
+    
+    setx path "%path%;C:\tools"
+    
+4. After modifying the PATH variable, open a new command prompt window.
 
-Requires Powershell version 3 or above.
+Install the binary with a script
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The following commands will set up Rackspace CLI. First, open Powershell_ise and paste the following script in the scripting pane, then click on the green play button to start the execution. Saving the script as a powershell file eg: rackspace-cli.ps1 and executing it will also set up Rackspace CLI on your windows computer.
+This option requires PowerShell version 3 or later.
+
+Perform the following steps to set up the ``rack`` CLI. Alternatively, you can save the script as a PowerShell file (for example, **rackspace-cli.ps1**) and execute it.
+
+Open PowerShell_Ise, paste the following script in the scripting pane, and then click the green play button to start the execution.
 
 ::
 
-  #requires -Version 3
-  $DownloadPath = 'C:\Tools'
-
-  Write-Output -InputObject "[$(Get-Date)] Status  :: Set the Tools Directory $DownloadPath"
-  New-Item -Path $DownloadPath -ItemType Directory -ErrorAction SilentlyContinue > $null
-  Set-Location -Path $DownloadPath -ErrorAction SilentlyContinue
-
-  Write-Output -InputObject "[$(Get-Date)] Status  :: Download Rackspace CLI in C:\Tools"
-  Invoke-WebRequest -Uri 'https://goo.gl/NMvmcx/Windows/amd64/rack.exe' -Method Get -OutFile rack.exe
-
-  Write-Output -InputObject "[$(Get-Date)] Status  :: Unblock the executable file rack.exe"
-  Unblock-File -Path $("$DownloadPath\rack.exe")
-
-  Write-Output -InputObject "[$(Get-Date)] Status  :: Permanently set the path $DownloadPath to the Environment variable (Reboot required)."
-  [System.Environment]::SetEnvironmentVariable('Path', $env:Path + 'C:\Tools', [System.EnvironmentVariableTarget]::Machine)
-  Write-Output -InputObject "[$(Get-Date)] Status  :: Temporarily set the path $DownloadPath to the Environment variable for immediate use in the current powershell session"
-  $env:Path += ';C:\Tools'
-
-
-
+    #requires -Version 3
+    $DownloadPath = 'C:\Tools'
+    
+    Write-Output -InputObject "[$(Get-Date)] Status  :: Set the Tools Directory $DownloadPath"
+    New-Item -Path $DownloadPath -ItemType Directory -ErrorAction SilentlyContinue > $null
+    Set-Location -Path $DownloadPath -ErrorAction SilentlyContinue
+    
+    Write-Output -InputObject "[$(Get-Date)] Status  :: Download Rackspace CLI in C:\Tools"
+    Invoke-WebRequest -Uri 'https://goo.gl/NMvmcx/Windows/amd64/rack.exe' -Method Get -OutFile rack.exe
+     
+    Write-Output -InputObject "[$(Get-Date)] Status  :: Unblock the executable file rack.exe"
+    Unblock-File -Path $("$DownloadPath\rack.exe")
+    
+    Write-Output -InputObject "[$(Get-Date)] Status  :: Permanently set the path $DownloadPath to the Environment variable (Reboot required)."
+    [System.Environment]::SetEnvironmentVariable('Path', $env:Path + 'C:\Tools', [System.EnvironmentVariableTarget]::Machine)
+    Write-Output -InputObject "[$(Get-Date)] Status  :: Temporarily set the path $DownloadPath to the Environment variable for immediate use in the current powershell session"
+     $env:Path += ';C:\Tools'
 
 Configuration
 -------------
 
-To authenticate against the Rackspace API, there are 4 required paramaters:
+To authenticate against the Rackspace API, the following parameters are required:
 
-* Username: a Rackspace username
-* API key: a Rackspace API key
+* Username: your Rackspace username
+* API key: your Rackspace API key
 * Region: a Rackspace region
-* Authentication Endpoint (URL): (Optional/Advanced) A URL to send the authentication request.
+* Authentication Endpoint (URL): (Optional/Advanced) A URL to send the authentication request to
 
+You can specify these parameters quickly by using the interactive ``configure`` command (recommended), or you can use other methods such as specifying command-line flags, manually creating or editing a configuration file, or setting environment variables. All of these methods are explained in this section.
 
-If this is your first time using the ``rack`` CLI, we recommend you
-run the interactive ``configure`` command.
+Interactive configure command
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If this is your first time using the ``rack`` CLI, we recommend that you run the interactive ``configure`` command.
 
 .. note::
-   Windows users should use PowerShell, not PowerShell ISE to run this
-   command.
+   Windows users should use PowerShell, not PowerShell ISE to run this command.
 
-``configure`` will automatically create a configuration file for you if it
-doesn't exist and walk you through creating a profile for it::
+The ``configure`` command automatically creates a configuration file for you if one doesn't already exist and walks you through creating a profile for it::
 
     rack configure
 
@@ -119,133 +123,117 @@ doesn't exist and walk you through creating a profile for it::
     a profile in your configuration file. You may fill in all or none of the
     values.
 
-    Rackspace Username: iamacat
-    Rackspace API key: secrets
-    Rackspace Region: IAD
+    Rackspace Username: <yourRackspaceUsername>
+    Rackspace API key: <yourRackspaceApiKey>
+    Rackspace Region: <theRackspaceRegion>
     Profile Name (leave blank to create a default profile):
+    
+Username is the username for your Rackspace Cloud account. You can get your API key by logging in to the Cloud Control Panel, clicking on your account name in the upper-right corner, and then selecting **Account Settings**. The region is the region where your Rackspace infrastructure is deployed. If you want to create a profile other than the default profile, enter a name for the profile.
 
-This allows you to immediately get working::
+After the profile is created, you can immediately start working. For example, you could issue the following command to get a list of the servers on your Rackspace account::
 
     rack servers instance list
 
-
-Otherwise, ``rack`` lets you provide these parameters in a few different ways:
-
-Command-line Options
+Command-line options
 ^^^^^^^^^^^^^^^^^^^^
 
-If provided, command-line authentication flags will take precedence over any
-other parameters located in any other forms of authentication (config file and
+If used, the following command-line authentication flags take precedence over any
+other parameters located in any other forms of authentication (configuration file and
 environment variables).
 
 * ``--username``
 * ``--api-key``
 * ``--region``
 
-Config File
-^^^^^^^^^^^
+Configuration file
+^^^^^^^^^^^^^^^^^^
 
-If provided, any authentication parameters not set on the command-line will be
-looked for in a config file. The config file should be located in ``$HOME/.rack/config``.
-The config file format is like the following::
+Any authentication parameters not set on the command line are looked for in a configuration file. The configuration file should be located in ``$HOME/.rack/config``. When you use the interactive ``configure`` command, a configuration file is automatically created. 
 
-    username=<your rackspace username>
-    api-key=<your rackspace api key>
-    region=<the rackspace region>
+The configuration file format is similar to the following format::
+
+    username=<yourRackspaceUsername>
+    api-key=<yourRackspaceApiKey>
+    region=<theRackspaceRegion>
 
     [another-profile]
-    username=<another rackspace username>
-    api-key=<another rackspace api key>
+    username=<anotherRackspaceUsername>
+    api-key=<anotherRackspaceApiKey>
 
-In the example above there is a default profile that doesn't have a named section. "another-profile" is a different profile in the config file. When using the default profile, you don't need to supply a flag when executing ``rack``. A specific profile can be specified on the command-line with the ``profile`` flag.
+The preceding example shows a default profile that doesn't have a named section. ``another-profile`` is a different profile in the configuration file. When you use the default profile, you don't need to supply a flag when executing ``rack``. You can specify a profile on the command line with the ``profile`` flag.
 
 ::
 
     rack servers instance list --profile another-profile
 
-Note that none of the authentication parameters
-have to be set in the config file. Parameters not set there will be looked for elsewhere.
+Note that none of the authentication parameters have to be set in the configuration file. Parameters not set there are looked for elsewhere.
 
-
-Environment Variables
+Environment variables
 ^^^^^^^^^^^^^^^^^^^^^
 
-Finally, ``rack`` will look for any remaining unset authentication parameters
-in environment variables. The following are values are permitted (case matters):
+Finally, ``rack`` looks for any remaining unset authentication parameters in environment variables. The following are values are permitted (case matters):
 
-* ``RS_REGION_NAME`` (DFW, IAD, ORD, LON, SYD, HKG)
-* ``RS_USERNAME`` (Your Rackspace username)
-* ``RS_API_KEY`` (Your Rackspace API key)
+* ``RS_REGION_NAME``: DFW, IAD, ORD, LON, SYD, HKG
+* ``RS_USERNAME``: your Rackspace username
+* ``RS_API_KEY``: your Rackspace API key
 
-So, for example on OSX and Linux; you would type::
+For example, on OS X and Linux, you would type::
 
     export RS_REGION_NAME=IAD
-    export RS_USERNAME=<your rackspace username>
-    export RS_API_KEY=<secrets>
+    export RS_USERNAME=yourRackspaceUsername
+    export RS_API_KEY=yourRackspaceApiKey
 
-On Windows you would type::
+On Windows, you would type::
 
     set RS_REGION_NAME=IAD
-    set RS_USERNAME=<your rackspace username>
-    set RS_API_KEY=<secrets>
+    set RS_USERNAME=yourRackspaceUsername
+    set RS_API_KEY=yourRackspaceApiKey
 
-You can get your API key by logging into the `Cloud Control panel`_ and clicking
-on *account -> account settings* and clicking "show" next to "API Key". Be careful;
-this key is special. Don't share it!
-
-Command Completion
+Command completion
 ------------------
-Run ``rack init`` to set up Bash command completion. Currently, this is only
-available for the Bash shell. If you're using a Linux OS, ``rack init`` will look for,
-and, if found, amend ``$HOME/.bashrc`` to enable Bash completion. If you're on a
-Darwin OS (like Mac), it will look for ``$HOME/.bash_profile``.
+To set up command completion for the Bash shell, run ``rack init``.
 
-If you'd like to set up command completion yourself (or if you're on a Windows OS and using a Bash shell),
-you can copy file in the location below to the appropriate directory and source it:
+Currently, this command is available only for the Bash shell. If you're using a Linux OS, ``rack init`` will look for and, if found, amend ``$HOME/.bashrc`` to enable command completion. If you're on a Darwin OS (like Mac), it will look for ``$HOME/.bash_profile``.
+
+If you want to set up command completion yourself (or if you're on a Windows OS and using a Bash shell), you can copy the following file to the appropriate directory and source it:
 `https://github.com/rackspace/rack/blob/master/setup/commandcompletion_bash.sh`
 
-If you are using PowerShell and want command-completion, you can run the ``commandcompletion_posh.ps1`` script in the
-``setup`` directory. That script will perform normal command-completion for non-rack commands, and rack-specific
-completions for ``rack`` commands. A few caveats for PowerShell users:
+If you are using PowerShell and want command completion, you can run the ``commandcompletion_posh.ps1`` script, also located in the ``setup`` directory. That script performs normal command completion for non-``rack`` commands, and completions for ``rack`` commands. A few caveats for PowerShell users:
+
 * The script overrides the ``global:TabExpansion2`` function.
-* This should work for PowerShell versions greater than or equal to 3, but it was tested with PowerShell_ISE v4.
-* You will get the normal Windows command-completion (with a circular buffer).
+* The script should work for PowerShell versions later than or equal to 3, but it was tested with PowerShell_ISE v4.
+* You get the normal Windows command completion (with a circular buffer).
 
 Check the version
 -----------------
 
-To see the current version, run::
+To see the current version of the CLI, run the following command::
 
     rack version
 
     rack version 0.0.0-dev
     commit: d69f4d2030b307076ad0a10f4b5addf440493aec
 
-Advanced Configuration Values
+Advanced configuration values
 -----------------------------
 
-Identity Endpoint
-^^^^^^^^^^^^^^^^^
+If you need to point to a custom Cloud Identity endpoint, you can set the following environment variable::
 
-If you require pointing to a custom Cloud Identity endpoint; you can set the
-following environment variable:
-
-* ``RS_AUTH_URL`` (https://identity.api.rackspacecloud.com/v2.0)
+    RS_AUTH_URL=https://identity.api.rackspacecloud.com/v2.0
 
 For example::
 
     export RS_AUTH_URL=https://identity.api.rackspacecloud.com/v2.0
 
-In addition, you may provide it as a flag on the command-line or as a value in a
-config file profile. In either case, the parameter name will be ``auth-url``.
+In addition, you can provide it as a flag on the command-line or as a value in the configuration file profile. In either case, the parameter name is ``auth-url``.
 
 
 
 
 .. _go: https://golang.org/
-.. _Mac OSX (64 bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/1.1.1/Darwin/amd64/rack
-.. _Linux (64 bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/1.1.1/Linux/amd64/rack
-.. _Windows (64 bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/1.1.1/Windows/amd64/rack.exe
+.. _Mac OS X (64-bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/1.1.1/Darwin/amd64/rack
+.. _Linux (64-bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/1.1.1/Linux/amd64/rack
+.. _Windows (64-bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/1.1.1/Windows/amd64/rack.exe
 .. _Homebrew: http://brew.sh
 .. _Chocolatey: http://chocolatey.org
 .. _Cloud Control panel: https://mycloud.rackspace.com/
