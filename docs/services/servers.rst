@@ -1,33 +1,33 @@
 .. _servers:
 
-=======
-Servers
-=======
+================
+Servers commands
+================
 
-This section lists the commands for interacting with Cloud Servers.
+This section lists the commands for interacting with Rackspace Cloud Servers.
 
-Commands
+All ``servers`` commands are based on the following syntax::
+
+   rack servers <subcommand> <action> [command flags]
+
+*Command flags* enable you to customize certain attributes of the command, such as using ``--name`` to name an instance. To display a list command of flags specific to the command, type ``rack servers <subcommand> <action> --help``.
+
+The following sections describe the ``servers`` subcommands and the actions associated with them.
+
+Instance
 --------
 
-All ``servers`` commands are based on this syntax::
-
-   rack servers <subservice> <action> [command flags]
-
-*Command flags* allow you to customize certain attributes of the command,
-such as ``--name`` to name an instance. Type ``rack servers <subservice> <action> --help``
-to bring up a list *command flags* specific to the command.
-
-
-**Instance**
-~~~~~~~~~~~~
-
-Instance commands use this syntax::
+The ``instance`` subcommand provides information about and performs actions on the server instances. The ``instance`` subcommand uses the following syntax::
 
     rack servers instance <action> [command flags]
 
+The following sections describe the actions that you can perform on the ``instance`` subcommand and provide example responses.
+
 ``list``
-^^^^^^^^
-Retrieves a list of virtual and bare metal servers::
+~~~~~~~~
+Retrieves a list of virtual and bare-metal servers.
+
+::
 
     rack servers instance list [optional flags]
 
@@ -47,17 +47,13 @@ Retrieves a list of virtual and bare metal servers::
     33521191-cffe-435d-92f1-8bbd6d9f225a	Cloud-Server-06	ACTIVE	162.209.73.92 	10.182.1.155	 042395fc-728c-4763-86f9-9b0cacb00701	 2
 
 ``create``
-^^^^^^^^^^
-Creates a server instance::
+~~~~~~~~~~
+Creates a server instance with the specified name. You must select an image by using either the ``--image-id`` or ``--image-name`` flag with the ID or name of the image that you want to use. Alternatively, you can provide the ``--block-device`` flag to boot an instance from a volume. In either case, you need to select a flavor by using the ``--flavor-id`` or ``--flavor-name`` flag with the ID or name of the flavor that you want to use.
 
-    rack servers instance create --name <serverName> [optional flags]
-    (echo serverName1 && echo serverName2) | rack servers instance create --stdin name [optional flags]
+::
 
-In order for this command to work, you must select an image using either the
-``--image-id`` or ``--image-name`` flags with the ID or name of the image you wish to use.
-Alternatively, you may provide the ``--block-device`` flag to boot an instance from a volume.
-In either case, you need to select a flavor by using the ``--flavor-id`` or ``--flavor-name`` with
-the ID or name of the flavor you wish to use.
+    rack servers instance create --name <instanceName> [optional flags]
+    (echo instanceName1 && echo instanceName2) | rack servers instance create --stdin name [optional flags]
 
 **Response**
 
@@ -69,16 +65,17 @@ the ID or name of the flavor you wish to use.
 
 .. note::
 
-    The admin password for your server is only given once. Please copy
-    the password if you wish to make changes to your server in the future.
+    The admin password for your server is provided only once. Copy the password if you want to be able to make changes to your server in the future.
 
 ``get``
-^^^^^^^
-Retrieves details of a specified server::
+~~~~~~~
+Retrieves the details of the server instance, which you can specify by name or ID.
 
-    rack servers instance get --id <serverID> [optional flags]
-    rack servers instance get --name <serverName> [optional flags]
-    (echo serverID1 && echo serverID2) | rack servers instance get --stdin id [optional flags]
+::
+
+    rack servers instance get --id <instanceID> [optional flags]
+    rack servers instance get --name <instanceName> [optional flags]
+    (echo instanceID1 && echo instanceID2) | rack servers instance get --stdin id [optional flags]
 
 **Response**
 
@@ -102,15 +99,15 @@ Retrieves details of a specified server::
     Metadata:rax_service_level_automation	Complete
 
 ``update``
-^^^^^^^^^^
-Updates one or more editable attributes of a specified server
-instance::
+~~~~~~~~~~
+Updates one or more editable attributes of the server instance, which you can specify by name or ID.
 
-    rack servers instance update --id <serverID> [optional flags]
-    rack servers instance update --name <serverName> [optional flags]
+::
 
-The response will reflect the updated attribute, depending on which attribute
-you chose to update.
+    rack servers instance update --id <instanceID> [optional flags]
+    rack servers instance update --name <instanceName> [optional flags]
+
+The response shows the updated attribute, depending on which attribute you chose to update.
 
 **Response**
 
@@ -124,12 +121,14 @@ you chose to update.
 
 
 ``delete``
-^^^^^^^^^^
-Deletes a server instance::
+~~~~~~~~~~
+Deletes a server instance, which you can specify by name or ID.
 
-    rack servers instance delete --id <serverID> [optional flags]
-    rack servers instance delete --name <serverName> [optional flags]
-    (echo serverID1 && echo serverID2) | rack servers instance delete --stdin id [optional flags]
+::
+
+    rack servers instance delete --id <instanceID> [optional flags]
+    rack servers instance delete --name <instanceName> [optional flags]
+    (echo instanceID1 && echo instanceID2) | rack servers instance delete --stdin id [optional flags]
 
 **Response**
 
@@ -139,14 +138,14 @@ Deletes a server instance::
     Deleting instance [8a254ea3-77b5-4f74-a893-8d2d51ae2cca]
 
 ``reboot``
-^^^^^^^^^^
-Performs a soft or hard reboot of a specified server. A soft reboot
-will slowly shutdown and restart your server's operating system. A hard reboot
-will perform an immediate shutdown and restart::
+~~~~~~~~~~
+Performs a soft or hard reboot of the server instance, which you can specify by name or ID. A soft reboot gracefully shuts down and restarts your server's operating system. A hard reboot performs an immediate shutdown and restart.
 
-    rack servers instance reboot --id <serverID> [--soft | --hard] [optional flags]
-    rack servers instance reboot --name <serverName> [--soft | --hard] [optional flags]
-    (echo serverID1 && echo serverID2) | rack servers instance reboot --stdin id [--soft | --hard] [optional flags]
+::
+
+    rack servers instance reboot --id <instanceID> [--soft | --hard] [optional flags]
+    rack servers instance reboot --name <instanceName> [--soft | --hard] [optional flags]
+    (echo instanceID1 && echo instanceID2) | rack servers instance reboot --stdin id [--soft | --hard] [optional flags]
 
 **Response**
 
@@ -156,11 +155,13 @@ will perform an immediate shutdown and restart::
     Successfully rebooted instance [0807eefe-b36a-415c-bd59-8b4cef63c563]
 
 ``rebuild``
-^^^^^^^^^^^
-Removes all data on the server and replaces it with the specified image::
+~~~~~~~~~~~
+Removes all of the data on the server instance, which you can specify by name or ID, and replaces it with the specified image.
 
-    rack servers instance rebuild --id <serverID> --image-id <imageID> --admin-pass <adminPass> [optional flags]
-    rack servers instance rebuild --name <serverName> --image-id <imageID> --admin-pass <adminPass> [optional flags]
+::
+
+    rack servers instance rebuild --id <instanceID> --image-id <imageID> --admin-pass <adminPass> [optional flags]
+    rack servers instance rebuild --name <instanceName> --image-id <imageID> --admin-pass <adminPass> [optional flags]
 
 **Response**
 
@@ -170,14 +171,14 @@ Removes all data on the server and replaces it with the specified image::
     Successfully rebuilt instance [0807eefe-b36a-415c-bd59-8b4cef63c563]
 
 ``resize``
-^^^^^^^^^^
-Converts an existing server to a different flavor, which scales the
-server up or down. The original server is saved for a period of time to allow roll
-back if a problem occurs::
+~~~~~~~~~~
+Converts an existing server instance to a different flavor, which scales the server up or down. The original instance is saved for a period of time to allow rollback if a problem occurs. You can specify the instance by ID or name. 
 
-    rack servers instance resize --id <serverID> --flavor-id <flavorID> [optional flags]
-    rack servers instance resize --name <serverName> --flavor-id <flavorID> [optional flags]
-    (echo serverID1 && echo serverID2) | rack servers instance resize --stdin id --flavor-id <flavorID> [optional flags]
+::
+
+    rack servers instance resize --id <instanceID> --flavor-id <flavorID> [optional flags]
+    rack servers instance resize --name <instanceName> --flavor-id <flavorID> [optional flags]
+    (echo instanceID1 && echo instanceID2) | rack servers instance resize --stdin id --flavor-id <flavorID> [optional flags]
 
 **Response**
 
@@ -190,11 +191,13 @@ back if a problem occurs::
     This command is not available for OnMetal servers.
 
 ``set-metadata``
-^^^^^^^^^^^^^^^^
-Sets metadata for the specified server or image::
+~~~~~~~~~~~~~~~~
+Sets metadata for the server instance or image, which you can specify by name or ID.
 
-    rack servers instance set-metadata --id <serverID> --metadata <key1=val1,key2=val2,...> [optional flags]
-    rack servers instance set-metadata --name <serverName> --metadata <key1=val1,key2=val2,...> [optional flags]
+::
+
+    rack servers instance set-metadata --id <instanceID> --metadata <key1=val1,key2=val2,...> [optional flags]
+    rack servers instance set-metadata --name <instanceName> --metadata <key1=val1,key2=val2,...> [optional flags]
 
 **Response**
 
@@ -204,11 +207,13 @@ Sets metadata for the specified server or image::
     Metadata:heat	true
 
 ``get-metadata``
-^^^^^^^^^^^^^^^^
-Retrieves the metadata for a given server::
+~~~~~~~~~~~~~~~~
+Retrieves the metadata for the server instance, which you can specify by name or ID.
 
-    rack servers instance get-metadata --id <serverID> [optional flags]
-    rack servers instance get-metadata --name <serverName> [optional flags]
+::
+
+    rack servers instance get-metadata --id <instanceID> [optional flags]
+    rack servers instance get-metadata --name <instanceName> [optional flags]
 
 **Response**
 
@@ -218,12 +223,13 @@ Retrieves the metadata for a given server::
     Metadata:heat	true
 
 ``update-metadata``
-^^^^^^^^^^^^^^^^^^^
-Updates metadata items for a specified server or image, or adds the specified
-metadata if there is no current metadata associated with the server or image::
+~~~~~~~~~~~~~~~~~~~
+Updates metadata items for a specified server or image, or adds the specified metadata if no metadata is currently associated with the server or image. You can specify the server instance by name or ID.
 
-    rack servers instance update-metadata --id <serverID> --metadata <key1=val1,key2=val2,...> [optional flags]
-    rack servers instance update-metadata --name <serverName> --metadata <key1=val1,key2=val2,...> [optional flags]
+::
+
+    rack servers instance update-metadata --id <instanceID> --metadata <key1=val1,key2=val2,...> [optional flags]
+    rack servers instance update-metadata --name <instanceName> --metadata <key1=val1,key2=val2,...> [optional flags]
 
 **Response**
 
@@ -234,11 +240,13 @@ metadata if there is no current metadata associated with the server or image::
 
 
 ``delete-metadata``
-^^^^^^^^^^^^^^^^^^^
-Deletes one or more metadata keys from a server::
+~~~~~~~~~~~~~~~~~~~
+Deletes one or more metadata keys from the server instance, which you can specify by name or ID.
 
-    rack servers instance delete-metadata --id <serverID> --metadata-keys <key1,key2,...> [optional flags]
-    rack servers instance delete-metadata --name <serverName> --metadata-keys <key1,key2,...> [optional flags]
+::
+
+    rack servers instance delete-metadata --id <instanceID> --metadata-keys <key1,key2,...> [optional flags]
+    rack servers instance delete-metadata --name <instanceName> --metadata-keys <key1,key2,...> [optional flags]
 
 **Response**
 
@@ -247,16 +255,20 @@ Deletes one or more metadata keys from a server::
     $ rack servers instance delete-metadata --name Rack4 --metadata-keys heat
     Successfully deleted metadata
 
-**Image**
-~~~~~~~~~
+Image
+-----
 
-Image commands use this syntax::
+The ``image`` subcommand provides information about server images. The ``image`` subcommand uses the following syntax::
 
     rack server image <action> [optional flags]
 
+The following sections describe the actions that you can perform on the ``image`` subcommand and provide example responses.
+
 ``list``
-^^^^^^^^
-Lists all images visible by your account::
+~~~~~~~~
+Lists all images that are visible to your account.
+
+::
 
     rack servers image list [optional flags]
 
@@ -282,8 +294,10 @@ Lists all images visible by your account::
     ade87903-9d82-4584-9cc1-204870011de0	Arch 2015.7 (PVHVM)						              ACTIVE	20	    512
 
 ``get``
-^^^^^^^
-Retrieves details of the specified image::
+~~~~~~~
+Retrieves the details of an image, which you can specify by ID or name. 
+
+::
 
     rack servers image get --id <imageID> [optional flags]
     rack servers image get --name <imageName>] [optional flags]
@@ -305,21 +319,22 @@ Retrieves details of the specified image::
 
 .. note::
 
-   To guarantee usage of the same image every time, use the ``--id`` flag. Images often
-   are updated with security patches, and the updated images will have a different ID but
-   the same name.
+   To guarantee use of the same image every time, use the ``--id`` flag. Images are often updated with security patches, and the updated images have a different ID but the same name.
 
+Flavor
+------
 
-**Flavor**
-~~~~~~~~~~
-
-Flavor commands use this syntax::
+The ``flavor`` subcommand provides information about server flavors. The ``flavor`` subcommand uses following syntax::
 
     rack servers flavor <action> [optional flags]
 
+The following sections describe the actions that you can perform on the ``flavor`` subcommand and provide example responses.
+
 ``list``
-^^^^^^^^
-Lists information for all available flavors::
+~~~~~~~~
+Lists information for all available flavors.
+
+::
 
     rack servers flavor list [optional flags]
 
@@ -338,8 +353,10 @@ Lists information for all available flavors::
     8			  30GB Standard Instance	30720	1200	2048	8	    1200
 
 ``get``
-^^^^^^^
-Retrieves details of the specified flavor::
+~~~~~~~
+Retrieves details of a flavor, which you can specify by ID or name. 
+
+::
 
     rack servers flavor get --id <flavorID> [optional flags]
     rack servers flavor get --name <flavorName>] [optional flags]
@@ -362,16 +379,20 @@ Retrieves details of the specified flavor::
     ExtraSpecs:Class	       standard1
     ExtraSpecs:DiskIOIndex	 0
 
-**Keypair**
-~~~~~~~~~~~
+Keypair
+-------
 
-Keypair commands use this syntax::
+The ``keypair`` subcommand provides information about and performs actions on the key pairs associated with your account. The ``keypair`` subcommand uses the following syntax::
 
     rack servers keypair <action> [optional flags]
 
+The following sections describe the actions that you can perform on the ``keypair`` subcommand and provide example responses.
+
 ``list``
-^^^^^^^^
-Retrieves a list of all key pairs associated with your account::
+~~~~~~~~
+Retrieves a list of all key pairs associated with your account.
+
+::
 
     rack servers keypair list [flags]
 
@@ -379,13 +400,16 @@ Retrieves a list of all key pairs associated with your account::
 
 .. code::
 
+    $ rack servers keypair list
     Name					                        Fingerprint
     770fb26f-2c43-4196-95d1-ad9ec1008365	1d:86:3b:a4:19:d9:01:f8:16:83:d3:43:6a:10:98:87
     public key				                    7e:e6:8e:af:64:5b:d7:aa:4c:9c:ea:c8:05:0a:29:2e
 
 ``generate``
-^^^^^^^^^^^^
-Generates a newly created key pair with the specified name::
+~~~~~~~~~~~~
+Generates a newly created key pair with the specified name.
+
+::
 
     rack servers keypair generate --name <keypairName> [optional flags]
     (echo keypairName1 && echo keypairName2) | rack servers keypair generate --stdin name [optional flags]
@@ -427,8 +451,10 @@ Generates a newly created key pair with the specified name::
                 -----END RSA PRIVATE KEY-----
 
 ``upload``
-^^^^^^^^^^
-Uploads an existing key pair with the specified name::
+~~~~~~~~~~
+Uploads an existing key pair with the specified name.
+
+::
 
     rack servers keypair upload --name <keypairName> --public-key <publicKeyData> [optional flags]
     rack servers keypair upload --name <keypairName> --file <publicKeyfile> [optional flags]
@@ -444,24 +470,29 @@ Uploads an existing key pair with the specified name::
     PrivateKey
 
 ``get``
-^^^^^^^
-Retrieves details on a specified key pair::
+~~~~~~~
+Retrieves details about a specified key pair.
+
+::
 
     rack servers keypair get --name <keypairName> [optional flags]
     (echo keypairName1 && echo keypairName2) | rack servers keypair get --stdin name [optional flags]
 
-**Response*
+**Response**
 
 .. code::
 
+    $ rack servers keypair get --name "rack key"
     Name		    rack key
     Fingerprint	73:5d:f5:1d:2d:00:29:59:4c:82:66:f4:10:58:c3:7e
     PublicKey	  ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCdhmClpS/NF8RGf9Lhj9ffmOm7iUeZd0Mr7CmS+tHwfLLrFfb5VWIQm8E5vnkGbA4iCE1XDC6BjTqcdhsfJtRoyw0HRGcdbHNM2r5muXSdl0r1aRz5jzPUH1e0Ot88UW3YRO8rWAqzUVbRIm2T/K24g8HSs8qDQCMrS4m/tJH4sKKRVhr/CYGs7mYflCh0Y7bHOuJCkMpCWSV4e+2xHciIqgpDS7aduQAo8pFdza6lV9n1QiJ2sSJnoH9IKVzw9RfJNsVS9hsqMB/GFKIrDtmABYcbuDQ0OXrZQusF/hbzXXJc89uRdG2/aP7NUJfSvcLCJXxxoixMddcZOFOjEz8H Generated-by-Nova
     UserID		  172157
 
 ``delete``
-^^^^^^^^^^
-Deletes the specified key paid::
+~~~~~~~~~~
+Deletes the specified key pair.
+
+::
 
     rack servers keypair delete --name <keypairName> [optional flags]
     (echo keypairName1 && echo keypairName2) | rack servers keypair delete --stdin name [optional flags]
@@ -474,18 +505,22 @@ Deletes the specified key paid::
     Successfully deleted keypair [rack key]
 
 
-**Volume-attachment**
-~~~~~~~~~~~~~~~~~~~~~
+Volume-attachment
+-----------------
 
-Volume attachment commands use this syntax::
+The ``volume-attachment`` subcommand provides information about and performs actions on the volumes attached to your servers. This subcommand is often used with :ref:`Cloud Block Storage <blockexamples>`.
+
+The ``volume-attachment`` subcommand uses the following syntax::
 
     rack server volume-attachment <action> [optional flag]
 
-These commands are often used with :ref:`Cloud Block Storage <blockexamples>`.
+The following sections describe the actions that you can perform on the ``volume-attachment`` subcommand and provide example responses.
 
 ``list``
-^^^^^^^^
-Lists the volume attachments for the specified server::
+~~~~~~~~
+Lists the volume attachments for a server, which you can specify by ID or name. 
+
+::
 
     rack servers volume-attachment list --server-id <serverID> [optional flags]
     rack servers volume-attachment list --server-name <serverName> [optional flags]
@@ -501,8 +536,10 @@ Lists the volume attachments for the specified server::
     8349b7c7-acf0-4c5f-9bae-38fc87d0142d	/dev/xvdd	8349b7c7-acf0-4c5f-9bae-38fc87d0142d	e6a7263b-85ab-4640-b886-70eaaaf37e8c
 
 ``create``
-^^^^^^^^^^
-Attaches one or more volumes to the specified sever::
+~~~~~~~~~~
+Attaches one or more volumes to a server. You can specify the server and the volume by ID or name.
+
+::
 
     rack servers volume-attachment create --server-id <serverID> --volume-id <volumeID> [optional flags]
     rack servers volume-attachment create --server-name <serverName> --volume-id <volumeID> [optional flags]
@@ -514,6 +551,7 @@ Attaches one or more volumes to the specified sever::
 **Response**
 
 .. code::
+
     $ rack servers volume-attachment create --server-name Rack4 --volume-id 8349b7c7-acf0-4c5f-9bae-38fc87d0142d
     ID	8349b7c7-acf0-4c5f-9bae-38fc87d0142d
     Device	/dev/xvdd
@@ -521,8 +559,10 @@ Attaches one or more volumes to the specified sever::
     ServerIDe6a7263b-85ab-4640-b886-70eaaaf37e8c
 
 ``get``
-^^^^^^^
-Retrieves details of a specified volume attachment ID for a specified server::
+~~~~~~~
+Retrieves the details of the specified volume attachment ID for a server. You can specify the server by ID or name.
+
+::
 
     rack servers volume-attachment get --server-id <serverID> --id <attachmentID> [optional flags]
     rack servers volume-attachment get --server-name <serverName> --id <attachmentID> [optional flags]
@@ -538,8 +578,10 @@ Retrieves details of a specified volume attachment ID for a specified server::
     ServerIDe6a7263b-85ab-4640-b886-70eaaaf37e8c
 
 ``delete``
-^^^^^^^^^^
-Removes a specified volume attachment from a specified server instance::
+~~~~~~~~~~
+Removes the specified volume attachment from the specified server instance.
+
+::
 
     rack servers volume-attachment delete --server-id <serverID> --id <attachmentID> [optional flags]
     rack servers volume-attachment delete --server-name <serverName> --id <attachmentID> [optional flags]
