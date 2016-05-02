@@ -15,13 +15,12 @@ Services
    examples/index.rst
 
 
-Here you can find the services currently supported by Rackspace CLI, and those
-services' supported commands.
+This section describes the supported commands for the services that are currently supported by the Rackspace CLI (``rack``). It also provides service-specific examples. 
 
-Commands Reference
+Commands reference
 ------------------
 
-This section lists the commands you can use with Rackspace CLI.
+This section lists the commands that you can use with the ``rack`` CLI.
 
 .. toctree::
    :maxdepth: 3
@@ -37,7 +36,7 @@ This section lists the commands you can use with Rackspace CLI.
 Examples for services
 ---------------------
 
-This section shows service-specific use cases for Rackspace CLI.
+This section shows service-specific use cases for the ``rack`` CLI.
 
 .. toctree::
    :maxdepth: 2
