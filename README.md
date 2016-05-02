@@ -1,4 +1,7 @@
 # rack
+
+Code: [![Build Status](https://travis-ci.org/rackspace/rack.svg?branch=master)](https://travis-ci.org/rackspace/rack) | Documentation: [![Doc Build Status](https://build.developer.rackspace.com/rackspace/rack/badge?branch=master)](https://build.developer.rackspace.com/rackspace/rack/)
+
 The official command line interface for the Rackspace Cloud.
 
 `rack` provides a consistent interface for interacting with the Rackspace Cloud. For example, creating a new server:
