@@ -1,32 +1,33 @@
 .. _files:
 
-=====
-Files
-=====
+==============
+Files commands
+==============
 
-This section lists the commands for interacting with Cloud Files.
+This section lists the commands for interacting with Rackspace Cloud Files.
 
-Commands
---------
+All ``files`` commands are based on the following syntax::
 
-All ``files`` commands are based on this syntax::
+    rack files <subcommand> <action> [command flags]
 
-    rack files <subservice> <action> [command flags]
+*Command flags* enable you to customize certain attributes of the command, such as using ``--name`` to name a Cloud Files container. To display a list of command flags specific to the command, type ``rack files <subcommand> <action> --help``.
 
-*Command flags* allow you to customize certain attributes of the command,
-such as ``--name`` to name a container. Type ``rack files <subservice> <action> --help``
-to bring up a list of *command flags* specific to the command.
+The following sections describe the ``files`` subcommands and the actions associated with them.
 
-**Container**
-~~~~~~~~~~~~~
+Container
+---------
 
-Container commands use this syntax::
+The ``container`` subcommand provides information about and performs actions on the containers in Cloud Files. The ``container`` subcommand uses the following syntax::
 
     rack files container <action> [optional flags]
 
+The following sections describe the actions that you can perform on the ``container`` subcommand and provide example responses.
+
 ``list``
-^^^^^^^^
-Retrieves a list of containers::
+~~~~~~~~
+Retrieves a list of containers.
+
+::
 
     rack files container list [optional flags]
 
@@ -42,10 +43,11 @@ Retrieves a list of containers::
     cloudservers			                  	45	  2296934481
     my test container			                0	    0
 
-
 ``create``
-^^^^^^^^^^
-Creates a container::
+~~~~~~~~~~
+Creates a container.
+
+::
 
     rack files container create --name <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files container create --stdin name
@@ -58,8 +60,10 @@ Creates a container::
     Successfully created container [RackCLI]
 
 ``get``
-^^^^^^^
-Retrieves details on a specified container::
+~~~~~~~
+Retrieves the details for a specified container.
+
+::
 
     rack files container get --name <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files container get --stdin name [optional flags]
@@ -80,10 +84,11 @@ Retrieves details on a specified container::
     TransID		txc108b4d4ad9040898a210-0055c8d7dfdfw1
     VersionsLocation
 
-
 ``update``
-^^^^^^^^^^
-Create or update read and write permissions for a specified container::
+~~~~~~~~~~
+Creates or updates read and write permissions for a specified container.
+
+::
 
     rack files container update --name <containerName> [optional flags]
 
@@ -94,13 +99,16 @@ Create or update read and write permissions for a specified container::
     $ rack files container update --name RackCLI --container-read user1
     Successfully updated container [RackCLI]
 
-
 ``delete``
-^^^^^^^^^^
-Permanently deletes the specified container::
+~~~~~~~~~~
+Permanently deletes the specified container.
+
+::
 
     rack files container delete --name <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files container delete --stdin name [optional flags
+    
+**Response**
 
 .. code::
 
@@ -109,8 +117,10 @@ Permanently deletes the specified container::
     Successfully deleted container [RackCLI]
 
 ``empty``
-^^^^^^^^^
-Empties a container of all its objects::
+~~~~~~~~~
+Empties a container of all its objects.
+
+::
 
     rack files container empty --name <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files container empty --stdin name [optional flags]
@@ -128,12 +138,13 @@ Empties a container of all its objects::
 
     Finished! Deleted 3 objects in 1 second
 
-
 ``set-metadata``
-^^^^^^^^^^^^^^^^
-Sets metadata for the specified container::
+~~~~~~~~~~~~~~~~
+Sets metadata for the specified container.
 
-    rack files container set-metadata --name <conatinerName> --metadata <key1=val1,key2=val2,...> [optional flags]
+::
+
+    rack files container set-metadata --name <containerName> --metadata <key1=val1,key2=val2,...> [optional flags]
 
 **Response**
 
@@ -142,12 +153,13 @@ Sets metadata for the specified container::
     $ rack files container set-metadata --name RackCLI --metadata heat=true
     Metadata:Heat	true
 
-
 ``get-metadata``
-^^^^^^^^^^^^^^^^
-Retrieves the metadata for a given container::
+~~~~~~~~~~~~~~~~
+Retrieves the metadata for a specified container.
 
-    rack files container get-metadata --name <conatinerName> [optional flags]
+::
+
+    rack files container get-metadata --name <containerName> [optional flags]
 
 **Response**
 
@@ -156,13 +168,13 @@ Retrieves the metadata for a given container::
     $ rack files container get-metadata --name RackCLI
     Metadata:Heat	true
 
-
 ``update-metadata``
-^^^^^^^^^^^^^^^^^^^
-Updates metadata items for a specified container, or adds the specified
-metadata if there is no current metadata associated with the container::
+~~~~~~~~~~~~~~~~~~~
+Updates metadata items for a specified container, or adds the specified metadata if no metadata is currently associated with the container.
 
-    rack files container update-metadata --name <conatinerName> --metadata <key1=val1,key2=val2,...> [optional flags]
+::
+
+    rack files container update-metadata --name <containerName> --metadata <key1=val1,key2=val2,...> [optional flags]
 
 **Response**
 
@@ -171,12 +183,13 @@ metadata if there is no current metadata associated with the container::
     $ rack files container update-metadata --name RackCLI --metadata heat=false
     Metadata:Heat	false
 
-
 ``delete-metadata``
-^^^^^^^^^^^^^^^^^^^
-Deletes one or more metadata keys for a container::
+~~~~~~~~~~~~~~~~~~~
+Deletes one or more metadata keys for a container.
 
-    rack files container delete-metadata --name <conatinerName> --metadata-keys <key1,key2,...> [optional flags]
+::
+
+    rack files container delete-metadata --name <containerName> --metadata-keys <key1,key2,...> [optional flags]
 
 **Response**
 
@@ -185,17 +198,20 @@ Deletes one or more metadata keys for a container::
     $ rack files container delete-metadata --name RackCLI --metadata-keys heat
     Successfully deleted metadata with keys [Heat] from container [RackCLI].
 
+Object
+------
 
-**Object**
-~~~~~~~~~~
-
-Object commands use this syntax::
+The ``object`` subcommand provides information about and performs actions on the objects in Cloud Files. The ``object`` subcommand uses the following syntax::
 
     rack files object <action> [optional flags]
 
+The following sections describe the actions that you can perform on the ``object`` subcommand and provide example responses.
+
 ``list``
-^^^^^^^^
-Lists all objects contained in a specified container::
+~~~~~~~~
+Lists all of the objects contained in a specified container.
+
+::
 
     rack files object list --container <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files object list --stdin container [optional flags]
@@ -211,8 +227,10 @@ Lists all objects contained in a specified container::
     dashed-lines.png	    54014	image/png	  2015-08-10T17:22:04.165600
 
 ``upload``
-^^^^^^^^^^
-Uploads an object into a specified container::
+~~~~~~~~~~
+Uploads an object into a specified container.
+
+::
 
     rack files object upload --container <containerName> --name <objectName> --content <contentToUpload> [optional flags]
     rack files object upload --container <containerName> --name <objectName> --file <fileToUpload> [optional flags]
@@ -226,9 +244,10 @@ Uploads an object into a specified container::
     Successfully uploaded object [Image] to container [RackCLI]
 
 ``upload-dir``
-^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~
+Uploads an object directory into a specified container.
 
-Uploads an object directory into a specified container::
+::
 
     rack files object upload-dir --container <containerName> --dir <dirPath> [optional flags]
     find . -type d -name "something*" | rack files object upload-dir --container <containerName> --stdin dir [optional flags]
@@ -251,14 +270,18 @@ Uploads an object directory into a specified container::
     Finished! Uploaded 152 objects totaling 4.4MB in 1 minute
 
 ``download``
-^^^^^^^^^^^^
-Downloads an object from the specified container to your local system::
+~~~~~~~~~~~~
+Downloads an object from the specified container to your local system.
+
+::
 
     rack files object download --container <containerName> --name <objectName> [optional flags]
 
 ``get``
-^^^^^^^^
-Retrieves information about an object::
+~~~~~~~
+Retrieves information about an object.
+
+::
 
     rack files object get --container <containerName> --name <objectName> [optional flags]
 
@@ -276,10 +299,11 @@ Retrieves information about an object::
     ObjectManifest
     TransID			         tx607965cf09ce42c0b6c13-0055c8e2d6dfw1
 
-
 ``delete``
-^^^^^^^^^^
-Permanently deletes an object::
+~~~~~~~~~~
+Permanently deletes an object.
+
+::
 
     rack files object delete --container <containerName> --name <objectName> [optional flags]
     (echo objectName1 && echo objectName2) | rack files object delete --container <containerName> --stdin name [optional flags]
@@ -292,8 +316,10 @@ Permanently deletes an object::
     Successfully deleted object [Image] from container [RackCLI]
 
 ``set-metadata``
-^^^^^^^^^^^^^^^^
-Sets metadata for the specified object::
+~~~~~~~~~~~~~~~~
+Sets metadata for the specified object.
+
+::
 
     rack files object set-metadata --container <containerName> --name <objectName> --metadata <key1=val1,key2=val2,...> [optional flags]
 
@@ -305,8 +331,10 @@ Sets metadata for the specified object::
     Metadata:Heat	true
 
 ``get-metadata``
-^^^^^^^^^^^^^^^^
-Retrieves the metadata for a given object::
+~~~~~~~~~~~~~~~~
+Retrieves the metadata for a specified object.
+
+::
 
     rack files object get-metadata --container <containerName> --name <objectName> [optional flags]
 
@@ -317,11 +345,11 @@ Retrieves the metadata for a given object::
     $ rack files object get-metadata --container RackCLI --name Image
     Metadata:Heat	true
 
-
 ``update-metadata``
-^^^^^^^^^^^^^^^^^^^
-Updates metadata items for a specified object, or adds the specified
-metadata if there is no current metadata associated with the object::
+~~~~~~~~~~~~~~~~~~~
+Updates metadata items for a specified object, or adds the specified metadata if no metadata is currently associated with the object.
+
+::
 
     rack files object update-metadata --container <containerName> --name <objectName> --metadata <key1=val1,key2=val2,...> [optional flags]
 
@@ -333,8 +361,10 @@ metadata if there is no current metadata associated with the object::
     Metadata:Heat	false
 
 ``delete-metadata``
-^^^^^^^^^^^^^^^^^^^
-Deletes one or more metadata keys from an object::
+~~~~~~~~~~~~~~~~~~~
+Deletes one or more metadata keys from an object.
+
+::
 
     rack files object delete-metadata --container <containerName> --name <objectName> --metadata-keys <key1,key2,...> [optional flags]
 
@@ -345,16 +375,20 @@ Deletes one or more metadata keys from an object::
     $ rack files object delete-metadata --container RackCLI --name Image --metadata-keys heat
     Successfully deleted metadata with keys [Heat] from object [Image].
 
-**Account**
-~~~~~~~~~~
+Account
+-------
 
-Cloud Files account commands use this syntax::
+The ``account`` subcommand provides information about and performs actions on the metadata for your Cloud Files account. The ``account`` subcommand uses the following syntax::
 
     rack files account <action> [optional flags]
 
+The following sections describe the actions that you can perform on the ``account`` subcommand and provide example responses.
+
 ``set-metadata``
-^^^^^^^^^^^^^^^^
-Sets metadata for the specified account::
+~~~~~~~~~~~~~~~~
+Sets metadata for the account.
+
+::
 
     rack files account set-metadata --metadata <key1=val1,key2=val2,...> [optional flags]
 
@@ -366,8 +400,10 @@ Sets metadata for the specified account::
     Metadata:Temp-Url-Key	asdf1234
 
 ``get-metadata``
-^^^^^^^^^^^^^^^^
-Retrieves the metadata for a given account::
+~~~~~~~~~~~~~~~~
+Retrieves the metadata for the account.
+
+::
 
     rack files account get-metadata [optional flags]
 
@@ -379,9 +415,10 @@ Retrieves the metadata for a given account::
     Metadata:Temp-Url-Key	asdf1234
 
 ``update-metadata``
-^^^^^^^^^^^^^^^^^^^
-Updates metadata items for a specified account, or adds the specified
-metadata if there is no current metadata associated with the account::
+~~~~~~~~~~~~~~~~~~~
+Updates metadata items for the account, or adds the specified metadata if no metadata is currently associated with the account.
+
+::
 
     rack files account update-metadata --metadata <key1=val1,key2=val2,...> [optional flags]
 
@@ -393,8 +430,10 @@ metadata if there is no current metadata associated with the account::
     Metadata:Temp-Url-Key	asdf12345
 
 ``delete-metadata``
-^^^^^^^^^^^^^^^^^^^
-Deletes one or more metadata keys from an account::
+~~~~~~~~~~~~~~~~~~~
+Deletes one or more metadata keys from the account.
+
+::
 
     rack files account delete-metadata  --metadata-keys <key1,key2,...> [optional flags]
 
@@ -405,23 +444,26 @@ Deletes one or more metadata keys from an account::
     $ rack files account delete-metadata --metadata-keys Temp-Url-Key
     Successfully deleted metadata with keys [Temp-Url-Key] from account.
 
-**Large Object**
-~~~~~~~~~~~~~~~~
+Large-object
+------------
 
-Large objects are files larger than 5 GB. Given the desired size of each piece,
-`rack` will chop the file up into the required number of pieces, appropriately
-name them, and upload them to the specified container. Downloading a large object
-is done with the regular `rack files object download` command. Note that though
-files larger than 5 GB must use the `large-object` subservice, files less than
-5 GB may use it as well.
+Large objects are files larger than 5 GB. Given the designated size of each piece, ``rack`` divides the file into the required number of pieces, appropriately names them, and uploads them to the specified container. Downloading a large object is done with the regular ``rack files object download`` command. 
 
-Large Object commands use this syntax::
+.. note::
+
+    Although files larger than 5 GB must use the ``large-object`` subcommand, files smaller than 5 GB can also use it.
+
+The ``large-object`` subcommand uses the following syntax::
 
     rack files large-object <action> [optional flags]
+    
+The following sections describe the actions that you can perform on the ``large-object`` subcommand and provide example responses.
 
 ``upload``
-^^^^^^^^^^
-Upload a large object to a specified container::
+~~~~~~~~~~
+Upload a large object to a specified container. Use the ``--size-pieces`` flag to specify the size of the pieces (in MB) to divide the file into. 
+
+::
 
     rack files large-object upload --container <containerName> --size-pieces <sizePieces> [--name <objectName> | --stdin file] [optional flags]
 
@@ -433,8 +475,10 @@ Upload a large object to a specified container::
     Finished! Uploaded object [largeObject] to container [RackCLI] in 5 minutes
 
 ``delete``
-^^^^^^^^^^
-Deletes a large object from a specified container::
+~~~~~~~~~~
+Deletes a large object from a specified container.
+
+::
 
     rack files large-object delete --container <containerName> --name <objectName>
     (echo objectName1 && echo objectName2) | rack files large-object delete --container <containerName> --stdin name
@@ -445,3 +489,4 @@ Deletes a large object from a specified container::
 
     $ rack files large-object delete --container RackCLI --object largeObject
     Deleted object [largeObject] from container [RackCLI]
+    
