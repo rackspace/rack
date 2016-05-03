@@ -190,8 +190,6 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 				return err
 			}
 
-			fmt.Printf("localPath: %s\nlocalAbsFilePath: %s\nfileData: %s\n", localPath, localAbsFilePath, string(fileData))
-
 			filesToInject = append(filesToInject, &osServers.File{
 				Path:     destinationPath,
 				Contents: fileData,
@@ -326,6 +324,7 @@ handleErr:
 		case *gophercloud.UnexpectedResponseCodeError:
 			switch err.(*gophercloud.UnexpectedResponseCodeError).Actual {
 			case 403:
+				fmt.Printf("error from Rackspace: %s\n", err)
 				imageID := opts.ImageRef
 				if imageID == "" {
 					id, err := osImages.IDFromName(command.Ctx.ServiceClient, opts.ImageName)
