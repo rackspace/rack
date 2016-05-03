@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/jrperritt/rack/output"
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
@@ -60,6 +61,12 @@ func flagsCreate() []cli.Flag {
 		cli.StringFlag{
 			Name:  "security-groups",
 			Usage: "[optional] A comma-separated string of names of the security groups to which this server should belong.",
+		},
+		cli.StringSliceFlag{
+			Name: "personality",
+			Usage: "[optional] A file to inject into the created server. Multiple\n" +
+				"\tflags may be provided. Format: <destinationFilePath>=<localFilePath>\n" +
+				"\tExample: --personality \"C:\\cloud-automation\\bootstrap.cmd=open_hatch.cmd\"",
 		},
 		cli.StringFlag{
 			Name:  "user-data",
@@ -163,6 +170,32 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 		}
 		opts.UserData = userData
 		opts.ConfigDrive = true
+	}
+
+	if c.IsSet("personality") {
+		filesToInjectFlags := c.StringSlice("personality")
+		filesToInject := make(osServers.Personality, len(filesToInjectFlags))
+		for i, fileToInjectRaw := range filesToInjectFlags {
+			fileToInjectSlice := strings.Split(fileToInjectRaw, "=")
+			if len(fileToInjectSlice) != 2 {
+				return output.ErrFlagFormatting{Msg: fmt.Sprintf("Expected key=value format for --personality but got %s.\n", fileToInjectRaw)}
+			}
+
+			localAbsFilePath, err := filepath.Abs(fileToInjectSlice[1])
+			if err != nil {
+				return err
+			}
+
+			fileData, err := ioutil.ReadFile(localAbsFilePath)
+			if err != nil {
+				return err
+			}
+			filesToInject[i] = &osServers.File{
+				Path:     fileToInjectSlice[0],
+				Contents: fileData,
+			}
+		}
+		opts.Personality = filesToInject
 	}
 
 	if c.IsSet("networks") {
