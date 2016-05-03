@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/jrperritt/rack/output"
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
@@ -62,10 +61,10 @@ func flagsCreate() []cli.Flag {
 			Name:  "security-groups",
 			Usage: "[optional] A comma-separated string of names of the security groups to which this server should belong.",
 		},
-		cli.StringSliceFlag{
+		cli.StringFlag{
 			Name: "personality",
-			Usage: "[optional] A file to inject into the created server. Multiple\n" +
-				"\tflags may be provided. Format: <destinationFilePath>=<localFilePath>\n" +
+			Usage: "[optional] A comma-separated list of key=value pairs. The key is the\n" +
+				"\tdestination to inject the file on the created server; the value is the its local location.\n" +
 				"\tExample: --personality \"C:\\cloud-automation\\bootstrap.cmd=open_hatch.cmd\"",
 		},
 		cli.StringFlag{
@@ -173,15 +172,15 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 	}
 
 	if c.IsSet("personality") {
-		filesToInjectFlags := c.StringSlice("personality")
-		filesToInject := make(osServers.Personality, len(filesToInjectFlags))
-		for i, fileToInjectRaw := range filesToInjectFlags {
-			fileToInjectSlice := strings.Split(fileToInjectRaw, "=")
-			if len(fileToInjectSlice) != 2 {
-				return output.ErrFlagFormatting{Msg: fmt.Sprintf("Expected key=value format for --personality but got %s.\n", fileToInjectRaw)}
-			}
 
-			localAbsFilePath, err := filepath.Abs(fileToInjectSlice[1])
+		filesToInjectMap, err := command.Ctx.CheckKVFlag("personality")
+		if err != nil {
+			return err
+		}
+
+		filesToInject := make(osServers.Personality, 0)
+		for destinationPath, localPath := range filesToInjectMap {
+			localAbsFilePath, err := filepath.Abs(localPath)
 			if err != nil {
 				return err
 			}
@@ -190,10 +189,13 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 			if err != nil {
 				return err
 			}
-			filesToInject[i] = &osServers.File{
-				Path:     fileToInjectSlice[0],
+
+			fmt.Printf("localPath: %s\nlocalAbsFilePath: %s\nfileData: %s\n", localPath, localAbsFilePath, string(fileData))
+
+			filesToInject = append(filesToInject, &osServers.File{
+				Path:     destinationPath,
 				Contents: fileData,
-			}
+			})
 		}
 		opts.Personality = filesToInject
 	}
@@ -352,17 +354,19 @@ handleErr:
 	}
 
 	if resource.Params.(*paramsCreate).wait {
-		err = osServers.WaitForStatus(command.Ctx.ServiceClient, server.ID, "ACTIVE", 600)
+		err = osServers.WaitForStatus(command.Ctx.ServiceClient, server.ID, "ACTIVE", 1200)
 		if err != nil {
 			resource.Err = err
 			return
 		}
 
+		adminPass := server.AdminPass
 		server, err = servers.Get(command.Ctx.ServiceClient, server.ID).Extract()
 		if err != nil {
 			resource.Err = err
 			return
 		}
+		server.AdminPass = adminPass
 	}
 
 	resource.Result = serverSingle(server)
