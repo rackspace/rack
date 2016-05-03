@@ -1,32 +1,33 @@
 .. _block_storage:
 
-=============
-Block Storage
-=============
+======================
+Block Storage commands
+======================
 
-This section lists the commands for interacting with Cloud Block Storage.
+This section lists the commands for interacting with Rackspace Cloud Block Storage.
 
-Commands
---------
+All ``block-storage`` commands are based on the following syntax::
 
-All ``block-storage`` commands are based on this syntax::
+   rack block-storage <subcommand> <action> [command flags]
 
-   rack block-storage <subservice> <action> [command flags]
+*Command flags* enable you to customize certain attributes of the command, such as using ``--name`` to name a volume. To display a list of command flags specific to the command, type ``rack block-storage <subcommand> <action> --help``.
 
-*Command flags* allow you to customize certain attributes of the command,
-such as ``--name`` to name a volume. Type ``rack block-storage <subservice> <action> --help``
-to bring up a list of *command flags* specific to the command.
+The following sections describe the ``block-storage`` subcommands and the actions associated with them.
 
-**Volume**
-~~~~~~~~~~
+Volume
+------
 
-Volume commands use this syntax::
+The ``volume`` subcommand provides information about and performs actions on the volumes in Cloud Block Storage. The ``volume`` subcommand uses the following syntax::
 
     rack block-storage volume <action> [optional flags]
 
+The following sections describe the actions that you can perform on the ``volume`` subcommand and provide example responses.
+
 ``list``
-^^^^^^^^
-Retrieves a list of volumes::
+~~~~~~~~
+Retrieves a list of volumes.
+
+::
 
     rack block-storage volume list [optional flags]
 
@@ -41,8 +42,10 @@ Retrieves a list of volumes::
     ca50fdfd-21f2-47e9-8ede-1518cb7467af	Store2  150	 in-use				            SSD
 
 ``create``
-^^^^^^^^^^
-Creates a volume::
+~~~~~~~~~~
+Creates a volume of the specified size.
+
+::
 
     rack block-storage volume create --size <volumeSize> [optional flags]
 
@@ -61,8 +64,10 @@ Creates a volume::
     CreatedAt	2015-08-05T19:48:28.000000
 
 ``get``
-^^^^^^^
-Retrieves details on a specified volume::
+~~~~~~~
+Retrieves details about a volume, which you can specify by ID or name. 
+
+::
 
     rack block-storage volume get --id <volumeID> [optional flags]
     rack block-storage volume get --name <volumeName> [optional flags]
@@ -84,16 +89,20 @@ Retrieves details on a specified volume::
 
 
 ``update``
-^^^^^^^^^^
-Updates the name and description of a volume::
+~~~~~~~~~~
+Updates the name and description of a volume, which you can specify by ID or name. 
+
+::
 
     rack block-storage volume update --id <volumeID> [optional flags]
     rack block-storage volume update --name <volumeName> [optional flags]
 
 
 ``delete``
-^^^^^^^^^^
-Permanently deletes a volume::
+~~~~~~~~~~
+Permanently deletes a volume, which you can specify by ID or name. 
+
+::
 
     rack block-storage volume delete --id <volumeID> [optional flags]
     rack block-storage volume delete --name <volumeName> [optional flags]
@@ -106,16 +115,20 @@ Permanently deletes a volume::
     $ rack block-storage volume delete --name Response
     Deleting volume [66dcbe53-1b62-4a15-adc2-e46e78b95f8b]
 
-**Snapshot**
-~~~~~~~~~~~~
+Snapshot
+--------
 
-Snapshot commands use this syntax::
+The ``snapshot`` subcommand provides information about and performs actions on the snapshots in Cloud Block Storage. The ``snapshot`` subcommand uses the following syntax::
 
     rack block-storage snapshot <actions> [optional flags]
 
+The following sections describe the actions that you can perform on the ``snapshot`` subcommand and provide example responses.
+
 ``list``
-^^^^^^^^
-Retrieves a list of snapshots::
+~~~~~~~~
+Retrieves a list of snapshots.
+
+::
 
     rack block-storage snapshot list [optional flags]
 
@@ -128,8 +141,10 @@ Retrieves a list of snapshots::
     180a6c5c-ad6d-4cb6-846f-d500d67e59a5		    75	  available	81c7a7e5-01a5-44bb-9b43-0cc9f7c4e423
 
 ``create``
-^^^^^^^^^^
-Creates a snapshot based on a specified volume id::
+~~~~~~~~~~
+Creates a snapshot based on the specified volume ID.
+
+::
 
     rack block-storage snapshot create --volume-id <volumeID> [optional flags]
 
@@ -148,8 +163,10 @@ Creates a snapshot based on a specified volume id::
     CreatedAt	2015-08-05T20:57:56.604914
 
 ``get``
-^^^^^^^
-Retrieves details on a specified snapshot::
+~~~~~~~
+Retrieves details about a snapshot, which you can specify by ID or name. 
+
+::
 
     rack block-storage snapshot get --id <snapshotID> [optional flags]
     rack block-storage snapshot get --name <snapshotName>] [optional flags]
@@ -170,10 +187,11 @@ Retrieves details on a specified snapshot::
     Bootable
     Attachments
 
-
 ``delete``
-^^^^^^^^^^
-Permanently deletes a snapshot::
+~~~~~~~~~~
+Permanently deletes a snapshot, which you can specify by ID or name. 
+
+::
 
     rack block-storage snapshot delete --id <snapshotID> [optional flags]
     rack block-storage snapshot delete --name <snapshotName> [optional flags]
