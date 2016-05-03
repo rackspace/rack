@@ -62,6 +62,12 @@ func flagsCreate() []cli.Flag {
 			Usage: "[optional] A comma-separated string of names of the security groups to which this server should belong.",
 		},
 		cli.StringFlag{
+			Name: "personality",
+			Usage: "[optional] A comma-separated list of key=value pairs. The key is the\n" +
+				"\tdestination to inject the file on the created server; the value is the its local location.\n" +
+				"\tExample: --personality \"C:\\cloud-automation\\bootstrap.cmd=open_hatch.cmd\"",
+		},
+		cli.StringFlag{
 			Name:  "user-data",
 			Usage: "[optional] Configuration information or scripts to use after the server boots.",
 		},
@@ -163,6 +169,35 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 		}
 		opts.UserData = userData
 		opts.ConfigDrive = true
+	}
+
+	if c.IsSet("personality") {
+
+		filesToInjectMap, err := command.Ctx.CheckKVFlag("personality")
+		if err != nil {
+			return err
+		}
+
+		filesToInject := make(osServers.Personality, 0)
+		for destinationPath, localPath := range filesToInjectMap {
+			localAbsFilePath, err := filepath.Abs(localPath)
+			if err != nil {
+				return err
+			}
+
+			fileData, err := ioutil.ReadFile(localAbsFilePath)
+			if err != nil {
+				return err
+			}
+
+			fmt.Printf("localPath: %s\nlocalAbsFilePath: %s\nfileData: %s\n", localPath, localAbsFilePath, string(fileData))
+
+			filesToInject = append(filesToInject, &osServers.File{
+				Path:     destinationPath,
+				Contents: fileData,
+			})
+		}
+		opts.Personality = filesToInject
 	}
 
 	if c.IsSet("networks") {
@@ -319,17 +354,19 @@ handleErr:
 	}
 
 	if resource.Params.(*paramsCreate).wait {
-		err = osServers.WaitForStatus(command.Ctx.ServiceClient, server.ID, "ACTIVE", 600)
+		err = osServers.WaitForStatus(command.Ctx.ServiceClient, server.ID, "ACTIVE", 1200)
 		if err != nil {
 			resource.Err = err
 			return
 		}
 
+		adminPass := server.AdminPass
 		server, err = servers.Get(command.Ctx.ServiceClient, server.ID).Extract()
 		if err != nil {
 			resource.Err = err
 			return
 		}
+		server.AdminPass = adminPass
 	}
 
 	resource.Result = serverSingle(server)
