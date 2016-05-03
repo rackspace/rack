@@ -1,33 +1,33 @@
 .. _networks:
 
-========
-Networks
-========
+=================
+Networks commands
+=================
 
-This section lists the commands for interacting with Cloud Networks.
+This section lists the commands for interacting with Rackspace Cloud Networks.
 
-Commands
---------
+All ``networks`` commands are based on the following syntax::
 
-All ``networks`` commands are based on this syntax::
+   rack networks <subcommand> <action> [command flags]
 
-   rack networks <subservice> <action> [command flags]
+*Command flags* enable you to customize certain attributes of the command, such as using ``--name`` to name a network. To display a list of command flags specific to the command, type ``rack networks <subcommand> <action> --help``.
 
-*Command flags* allow you to customize certain attributes of the command,
-such as ``--name`` to name a network. Type ``rack networks <subservice> <action> --help``
-to bring up a list of *command flags* specific to the command.
+The following sections describe the ``networks`` subcommands and the actions associated with them.
 
-**Network**
-~~~~~~~~~~~
+Network
+-------
 
-Network commands use this syntax::
+The ``network`` subcommand provides information about and performs actions on the networks in Cloud Networks. The ``network`` subcommand uses the following syntax::
 
     rack networks network <action> [optional flag]
 
+The following sections describe the actions that you can perform on the ``network`` subcommand and provide example responses.
+
 ``list``
-^^^^^^^^
-Retrieves a list of networks. Optional flags can be used to refine
-your search::
+~~~~~~~~
+Retrieves a list of networks.
+
+::
 
     rack networks network list [optional flags]
 
@@ -43,8 +43,10 @@ your search::
     ec962e06-b566-4911-9b9f-f9a45796921c	My Private Network for Vy Class	true	ACTIVE	false	  661145
 
 ``create``
-^^^^^^^^^^
-Creates a network::
+~~~~~~~~~~
+Creates a network with the specified name.
+
+::
 
     rack networks network create --name <networkName> [optional flags]
     (echo networkName1 && echo networkName2) | rack networks network create --stdin name [optional flags]
@@ -61,10 +63,11 @@ Creates a network::
     Shared		false
     TenantID	661145
 
-
 ``get``
-^^^^^^^
-Retrieves details on a specified network::
+~~~~~~~
+Retrieves details about a network, which you can specify by ID or name. 
+
+::
 
     rack networks network get --id <networkID> [optional flags]
     rack networks network get --name <networkName> [optional flags]
@@ -83,10 +86,11 @@ Retrieves details on a specified network::
     Shared		false
     TenantID	661145
 
-
 ``update``
-^^^^^^^^^^
-Updates a network::
+~~~~~~~~~~
+Updates a network, which you can specify by ID or name. 
+
+::
 
     rack networks network update --id <networkID> [optional flags]
     rack networks network update --name <networkName> [optional flags]
@@ -104,10 +108,11 @@ Updates a network::
     Shared		false
     TenantID	661145
 
-
 ``delete``
-^^^^^^^^^^
-Permanently deletes a network::
+~~~~~~~~~~
+Permanently deletes a network, which you can specify by ID or name. 
+
+::
 
     rack networks network delete --id <networkID> [optional flags]
     rack networks network delete --name <networkName> [optional flags]
@@ -120,22 +125,28 @@ Permanently deletes a network::
     $ rack networks network delete --name RackCLItest
     Successfully deleted network [4d83cf66-26be-44cc-b344-034e8e58c769]
 
-**Subnet**
-~~~~~~~~~~
+Subnet
+------
 
-Cloud networks subnet commands use this syntax::
+The ``subnet`` subcommand provides information about and performs actions on the subnets in Cloud Networks. The ``subnet`` subcommand uses the following syntax::
 
     rack networks subnet <action> [optional flags]
 
+The following sections describe the actions that you can perform on the ``subnet`` subcommand and provide example responses.
+
 ``list``
-^^^^^^^^
-Retrieves a list of subnets. Optional flags can be used to refine your search::
+~~~~~~~~
+Retrieves a list of subnets. 
+
+::
 
     rack networks subnet list [optional flags]
 
 ``create``
-^^^^^^^^^^
-Creates a subnet::
+~~~~~~~~~~
+Creates a subnet with the specified details.
+
+::
 
     rack networks subnet create --network-id <networkID> --cidr <CIDR> --ip-version <4|6> [optional flags]
 
@@ -154,10 +165,11 @@ Creates a subnet::
     AllocationPools0Start   192.0.2.1
     AllocationPools0End   192.0.2.254
 
-
 ``get``
-^^^^^^^
-Retrieves details on a specified subnet::
+~~~~~~~
+Retrieves details about a subnet, which you can specify by ID or name. 
+
+::
 
     rack networks subnet get --id <subnetID> [optional flags]
     rack networks subnet get --name <subnetName>] [optional flags]
@@ -179,10 +191,11 @@ Retrieves details on a specified subnet::
     AllocationPools0End   192.0.2.254
     HostRoutes	[]
 
-
 ``update``
-^^^^^^^^^^
-Updates a subnet::
+~~~~~~~~~~
+Updates a subnet, which you can specify by ID or name. 
+
+::
 
     rack networks subnet update --id <subnetID> [optional flags]
     rack networks subnet update --name <subnetName>] [optional flags]
@@ -203,8 +216,10 @@ Updates a subnet::
     AllocationPools0End   192.0.2.254
 
 ``delete``
-^^^^^^^^^^
-Permanently deletes a subnet::
+~~~~~~~~~~
+Permanently deletes a subnet, which you can specify by ID or name. 
+
+::
 
     rack networks subnet delete --id <subnetID> [optional flags]
     rack networks subnet delete --name <subnetName>] [optional flags]
@@ -217,16 +232,20 @@ Permanently deletes a subnet::
     $ rack networks subnet delete --name CLIsub
     Successfully deleted subnet [ed3161fa-f1d2-45e5-bd4d-4c5340ad0027]
 
-**Port**
-~~~~~~~~
+Port
+----
 
-Port commands use this syntax::
+The ``port`` subcommand provides information about and performs actions on the ports in Cloud Networks. The ``port`` subcommand uses the following syntax::
 
     rack networks port <action> [optional flags]
 
+The following sections describe the actions that you can perform on the ``port`` subcommand and provide example responses.
+
 ``list``
-^^^^^^^^
-Retrieves a list of ports. Optional flags can be used to refine your search::
+~~~~~~~~
+Retrieves a list of ports.
+
+::
 
     rack networks port list [optional flags]
 
@@ -239,8 +258,10 @@ Retrieves a list of ports. Optional flags can be used to refine your search::
     3456c2b0-7bee-40b4-ad0b-b4f3385fb36c		  e6fba9eb-5211-4637-bf1a-cdb4c04a2845	ACTIVE	BC:76:4E:05:FF:1B
 
 ``create``
-^^^^^^^^^^
-Creates a port::
+~~~~~~~~~~
+Creates a port that is associated with the specified network ID. 
+
+::
 
     rack networks port create --network-id <networkID> [optional flags]
 
@@ -262,10 +283,11 @@ Creates a port::
     SecurityGroups
     TenantID	661145
 
-
 ``get``
-^^^^^^^
-Retrieves details on a specified port::
+~~~~~~~
+Retrieves details about a port, which you can specify by ID or name. 
+
+::
 
     rack networks port get --id <portID> [optional flags]
     rack networks port get --name <portName>] [optional flags]
@@ -289,10 +311,11 @@ Retrieves details on a specified port::
     SecurityGroups
     TenantID	661145
 
-
 ``update``
-^^^^^^^^^^
-Updates the information on a port::
+~~~~~~~~~~
+Updates the information about a port, which you can specify by ID or name. 
+
+::
 
     rack networks port update --id <portID> [optional flags]
     rack networks port update --name <portName>] [optional flags]
@@ -316,8 +339,10 @@ Updates the information on a port::
     TenantID	661145
 
 ``delete``
-^^^^^^^^^^
-Permanently deletes a port::
+~~~~~~~~~~
+Permanently deletes a port, which you can specify by ID or name. 
+
+::
 
     rack networks port delete --id <portID> [optional flags]
     rack networks port delete --name <portName>] [optional flags]
@@ -330,23 +355,24 @@ Permanently deletes a port::
     $ rack networks port delete --name CLIport
     Successfully deleted port [3456c2b0-7bee-40b4-ad0b-b4f3385fb36c]
 
+Security-group
+--------------
 
-**Security-group**
-~~~~~~~~~~~~~~~~~~
-
-Security group commands use this syntax::
+The ``security-group`` subcommand provides information about and performs actions on the security groups in Cloud Networks. The ``security-group`` subcommand uses the following syntax::
 
     rack networks security-group <action> [optional flags]
 
+The following sections describe the actions that you can perform on the ``security-group`` subcommand and provide example responses.
+
 .. note::
 
-    The security groups feature is currently in limited availability. It is available
-    only to Managed Infrastructure customers. To use this feature, contact Rackspace
-    Support.
+    The security groups feature is currently in limited availability. It is available only to Managed Infrastructure customers. To use this feature, contact Rackspace Support.
 
 ``list``
-^^^^^^^^
-Retrieves a list of security groups::
+~~~~~~~~
+Retrieves a list of security groups.
+
+::
 
     rack networks security-group list [optional flags]
 
@@ -359,8 +385,10 @@ Retrieves a list of security groups::
     928fb119-9c69-4f9f-8da5-8387fd923863	CLIsec	661145
 
 ``create``
-^^^^^^^^^^
-Creates a security group::
+~~~~~~~~~~
+Creates a security group with the specified name.
+
+::
 
     rack networks security-group create --name <securityGroupName> [optional flags]
 
@@ -372,10 +400,11 @@ Creates a security group::
     ID	928fb119-9c69-4f9f-8da5-8387fd923863
     Name	CLIsec
 
-
 ``get``
-^^^^^^^
-Retrieves details on a specified security group, including any security group rules::
+~~~~~~~
+Retrieves details about a security group, including any security group rules. You can specify the security group by ID or name.
+
+::
 
     rack networks security-group get --id <securityGroupID> [optional flags]
     rack networks security-group get --name <securityGroupName> [optional flags]
@@ -396,8 +425,10 @@ Retrieves details on a specified security group, including any security group ru
 
 
 ``delete``
-^^^^^^^^^^
-Permanently deletes a security group and all rules within that security group::
+~~~~~~~~~~
+Permanently deletes a security group and all rules within that security group. You can specify the security group by ID or name.
+
+::
 
     rack networks security-group delete --id <securityGroupID> [optional flags]
     rack networks security-group delete --name <securityGroupName> [optional flags]
@@ -411,16 +442,20 @@ Permanently deletes a security group and all rules within that security group::
     Successfully deleted security group [928fb119-9c69-4f9f-8da5-8387fd923863]
 
 
-**Security-group-rule**
-~~~~~~~~~~~~~~~~~~~~~~~
+Security-group-rule
+-------------------
 
-Security group rule commands use this syntax::
+The ``security-group-rule`` subcommand provides information about and performs actions on the security group rules in Cloud Networks. The ``security-group-rule`` subcommand uses the following syntax::
 
     rack networks security-group-rule <action> [optional flags]
 
+The following sections describe the actions that you can perform on the ``security-group-rule`` subcommand and provide example responses.
+
 ``list``
-^^^^^^^^
-Retrieves a list of security group rules::
+~~~~~~~~
+Retrieves a list of security group rules.
+
+::
 
     rack networks security-group-rule list [optional flags]
 
@@ -433,10 +468,12 @@ Retrieves a list of security group rules::
     a84602ac-8f79-4fe5-9329-2ceebaa958da	ingress		IPv4		  80		        80		        TCP		    928fb119-9c69-4f9f-8da5-8387fd923863
 
 ``create``
-^^^^^^^^^^
-Creates a security group rule within a specified security group::
+~~~~~~~~~~
+Creates a security group rule within a specified security group.
 
-    rack security-group-rule create --security-group-id <securityGroupID> --direction <ingress|egress> --ether-type <ipv4|ipv6> [optional flags]
+::
+
+    rack networks security-group-rule create --security-group-id <securityGroupID> --direction <ingress|egress> --ether-type <ipv4|ipv6> [optional flags]
 
 **Response**
 
@@ -452,8 +489,10 @@ Creates a security group rule within a specified security group::
     SecurityGroupID	928fb119-9c69-4f9f-8da5-8387fd923863
 
 ``get``
-^^^^^^^
-Retrieves details on a specified security group rule::
+~~~~~~~
+Retrieves details about the specified security group rule.
+
+::
 
     rack networks security-group-rule get --id <securityGroupRuleID> [optional flags]
     (echo securityGroupRuleID1 && echo securityGroupRuleID2) | rack networks security-group-rule get --stdin id [optional flags]
@@ -475,8 +514,10 @@ Retrieves details on a specified security group rule::
     TenantID	661145
 
 ``delete``
-^^^^^^^^^^
-Permanently deletes a security group rule::
+~~~~~~~~~~
+Permanently deletes a security group rule.
+
+::
 
     rack networks security-group-rule delete --id <securityGroupRuleID> [optional flags]
     (echo securityGroupRuleID1 && echo securityGroupRuleID2) | rack networks security-group-rule delete --stdin id [optional flags]
