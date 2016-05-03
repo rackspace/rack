@@ -1,28 +1,37 @@
 .. _orchestration:
 
-=======
-Orchestration
-=======
+======================
+Orchestration commands
+======================
 
-This section lists the commands for interacting with Cloud Orchestration.
+This section lists the commands for interacting with Rackspace Cloud Orchestration.
 
-Commands
---------
+All ``orchestration`` commands are based on the following syntax::
 
-All ``orchestration`` commands are based on this syntax::
+   rack orchestration <subcommand> <action> [command flags]
 
-   rack orchestration <subservice> <action> [command flags]
+*Command flags* enable you to customize certain attributes of the command, such as using ``--name`` to name a stack. To display a list of command flags specific to the command, type ``rack orchestration <subcommand> <action> --help``.
 
-*Command flags* allow you to customize certain attributes of the command,
-such as ``--name`` to name a stack. Type ``rack orchestration <subservice> <action> --help``
-to bring up a list *command flags* specific to the command.
+The following sections describe the ``orchestration`` subcommands and the actions associated with them.
 
-**BuildInfo**
-~~~~~~~~~~~~
+Build-info
+----------
 
-Retrieves the build information of the orchestration service::
+The ``build-info`` subcommand provides build information about the Cloud Orchestration service. The ``build-info`` subcommand uses the following syntax::
+
+   rack orchestration build-info <action> [command flags]
+   
+The following section describes the action that you can perform on the ``build-info`` subcommand and provides an example response.
+
+``get``
+~~~~~~~
+
+Retrieves the build information of the Orchestration service.
+
+::
 
     rack orchestration build-info get [optional flags]
+
 **Response**
 
 .. code::
@@ -32,16 +41,20 @@ Retrieves the build information of the orchestration service::
     Engine		2015.l3-20150903-1517
     FusionAPI	l1-20150622-17c7bae-141
 
-**Stack**
-~~~~~~~~~~~~
+Stack
+-----
 
-Stack commands use this syntax::
+The ``stack`` subcommand provides information about and performs actions on the stacks in Cloud Orchestration. The ``stack`` subcommand uses the following syntax::
 
     rack orchestration stack <action> [command flags]
 
+The following sections describe the actions that you can perform on the ``stack`` subcommand and provide example responses.
+
 ``list``
-^^^^^^^^
-Retrieves a list of stacks::
+~~~~~~~~
+Retrieves a list of stacks.
+
+::
 
     rack orchestration stack list [optional flags]
 
@@ -60,14 +73,13 @@ Retrieves a list of stacks::
     5b56395a-4e8b-4389-bd44-a123030c7c9c	pm_test_bug_DO_NOT_DELETE		    DELETE_FAILED	    2015-07-24 14:38:00 +0000 UTC
 
 ``create``
-^^^^^^^^^^
-Creates a stack::
+~~~~~~~~~~
+Creates a stack with the specified name. You must select a template by using either the ``--template-file``  or ``--template-url`` flag to specify the file name or URL of the template that you want to use. 
+
+::
 
     rack orchestration stack create --name <stackName> [optional flags]
     (echo stackName1 && echo stackName2) | rack orchestration stack create --stdin name [optional flags]
-
-In order for this command to work, you must select a template using either the
-``--template-file`` or ``--template-url`` flags with the file or URL of the template you wish to use.
 
 **Response**
 
@@ -81,12 +93,13 @@ In order for this command to work, you must select a template using either the
 
 .. note::
 
-    The details of the stack you created can be found by using the ``get``
-    command described below.
+    You can retrieve the details of the stack that you created by using the ``get`` command described in the following section.
 
 ``get``
-^^^^^^^
-Retrieves details of a specified stack::
+~~~~~~~
+Retrieves the details about a stack, which you can specify by ID or name.
+
+::
 
     rack orchestration stack get --id <stackID> [optional flags]
     rack orchestration stack get --name <stackName> [optional flags]
@@ -116,12 +129,13 @@ Retrieves details of a specified stack::
     Links0:Rel			self
 
 ``update``
-^^^^^^^^^^
-Updates the stack using a provided template::
+~~~~~~~~~~
+Updates a stack by using a provided template. You can specify the stack by ID or name, and you can specify the template by file name or URL.
+
+::
 
     rack orchestration stack update --id <stackID> [optional flags]
     rack orchestration stack update --name <stackName> [optional flags]
-
 
 **Response**
 
@@ -147,8 +161,10 @@ Updates the stack using a provided template::
     Links0:Rel			self
 
 ``delete``
-^^^^^^^^^^
-Deletes a stack::
+~~~~~~~~~~
+Deletes a stack, which you can specify by ID or name. 
+
+::
 
     rack orchestration stack delete --id <stackID> [optional flags]
     rack orchestration stack delete --name <stackName> [optional flags]
@@ -162,8 +178,10 @@ Deletes a stack::
     Stack RackTest is being deleted.
 
 ``preview``
-^^^^^^^^^^
-Preview shows the number and type of resources that will be created by a template::
+~~~~~~~~~~~
+Shows the number and type of resources that will be created in a stack by the specified template.
+
+::
 
     rack  orchestration stack preview --name <stackName> [--template-file <templateFile> | --template-url <templateURL>] [optional flags]
     (echo stackName1 && echo stackName2) | rack  orchestration stack preview --stdin name [--template-file <templateFile> | --template-url <templateURL>] [optional flags]
@@ -239,16 +257,15 @@ Preview shows the number and type of resources that will be created by a templat
     Resources0:physical_resource_id
 
 ``abandon``
-^^^^^^^^^^^
-Abandons the stack. This will delete the record of the stack from orchestration, but
-will not delete any of the underlying resources::
+~~~~~~~~~~~
+Abandons a stack, which deletes the record of the stack from Orchestration but does not delete any of the underlying resources. You can specify the stack by ID or name.
+
+::
 
     rack orchestration stack abandon --id <stackID> [optional flags]
     rack orchestration stack abandon --name <stackName> [optional flags]
 
-To obtain a JSON representation of the abandoned stack, use the ``--output json``
-flag. When stored in a file, this can be used in the ``adopt`` command to
-create a new stack with the resources of the abandoned stack.
+To obtain a JSON representation of the abandoned stack, use the ``--output json`` flag. When this JSON is stored in a file, you can use it in the ``adopt`` command to create a new stack with the resources of the abandoned stack.
 
 **Response**
 
@@ -278,16 +295,12 @@ create a new stack with the resources of the abandoned stack.
     Resources:test_server:type				OS::Nova::Server
 
 ``adopt``
-^^^^^^^^^^
-Creates a stack without creating any resources; existing resources are used
-instead::
+~~~~~~~~~
+Creates a stack without creating any resources; existing resources are used instead. This command is usually used to create a stack by using the resources of an abandoned stack. You can use the JSON output representation of the abandoned stack as the contents for ``adopt-file`` to direct Orchestration to use the resources of the abandoned stack in the creation of the adopted stack.
+
+::
 
     rack orchestration stack adopt --name stackName --adopt-file adoptFile [optional flags]
-
-This command is usually used to create a stack using the resources of an
-abandoned stack. The JSON output representation of the abandoned stack can be
-used as the contents of the ``adoptFile`` to direct orchestration to use the
-resources of the abandoned stack in the creation of the adopted stack.
 
 **Response**
 
@@ -298,10 +311,11 @@ resources of the abandoned stack in the creation of the adopted stack.
     Links0:Href	https://iad.orchestration.api.rackspacecloud.com/v1/TENANT_ID/stacks/RackTest/27e5cb19-200d-4fbe-83a5-4f24fc4a3e9d
     Links0:Rel	self
 
-
 ``list-events``
-^^^^^^^^
-Retrieves events for a specified stack::
+~~~~~~~~~~~~~~~
+Retrieves events for a specified stack, which you can specify by ID or name. 
+
+::
 
     rack orchestration stack list-events --name <stackName> [optional flags]
     rack orchestration stack list-events --id <stackID> [optional flags]
@@ -311,15 +325,16 @@ Retrieves events for a specified stack::
 
 .. code::
 
-    $ rack orchestration stack list-events --stack-name RackTest --resource test_server
+    $ rack orchestration stack list-events --name RackTest --resource-names test_server
     ResourceName	Time				ResourceStatusReason	ResourceStatus		PhysicalResourceID			ID
     test_server	2015-09-13 04:20:24 +0000 UTC	state changed		ADOPT_COMPLETE		f075a7c1-28ef-4699-9046-383098134902	dcfe8ad3-150f-4cbe-9993-2d82793753b7
     test_server	2015-09-13 04:20:24 +0000 UTC	state changed		ADOPT_IN_PROGRESS						e78533e1-c8e0-4eca-8734-b193b6d32e06
 
-
 ``get-template``
-^^^^^^^
-Retrieves template for a specified stack::
+~~~~~~~~~~~~~~~~
+Retrieves the template for a stack, which you can specify by ID or name.
+
+::
 
     rack orchestration stack get-template --id <stackID> [optional flags]
     rack orchestration stack get-template --name <stackName> [optional flags]
@@ -353,16 +368,20 @@ Retrieves template for a specified stack::
     }
 
 
-**Resource**
-~~~~~~~~~~~~
+Resource
+--------
 
-Resource commands use this syntax::
+The ``resource`` subcommand provides information about and performs actions on the resources in Cloud Orchestration. The ``resource`` subcommand uses the following syntax::
 
     rack orchestration resource <action> [command flags]
 
+The following sections describe the actions that you can perform on the ``resource`` subcommand and provide example responses.
+
 ``list``
-^^^^^^^^
-Retrieves a list of resources for a given stack::
+~~~~~~~~
+Retrieves a list of resources for a given stack, which you can specify by ID or name. 
+
+::
 
     rack orchestration resource list --stack-name <stackName> [optional flags]
     rack orchestration resource list --stack-id <stackID> [optional flags]
@@ -376,10 +395,11 @@ Retrieves a list of resources for a given stack::
     Name		PhysicalID				                Type			    Status		               UpdatedTime
     test_server	f075a7c1-28ef-4699-9046-383098134902	OS::Nova::Server	CREATE_COMPLETE	2015-09-12 16:37:49 +0000 UTC
 
-
 ``get``
-^^^^^^^
-Retrieves details of a specified resource in a stack::
+~~~~~~~
+Retrieves the details about a specified resource in a stack, which you can specify by ID or name. 
+
+::
 
     rack orchestration resource get --stack-id <stackID> --name <resourceName> [optional flags]
     rack orchestration resource get --stack-name <stackName> --name <resourceName> [optional flags]
@@ -435,15 +455,15 @@ Retrieves details of a specified resource in a stack::
     Links1:Rel					stack
 
 ``get-schema``
-^^^^^^^^^^
-Shows the interface schema for a specified resource type::
+~~~~~~~~~~~~~~
+Shows the interface schema for a specified resource type.
+
+::
 
     rack orchestration resource get-schema --type <resourceType> [optional flags]
     (echo resourceType1 && echo resourceType2) | rack orchestration resource get-schema --stdin type [optional flags]
 
-This schema describes the properties that can be set on the resource, their
-types, constraints, descriptions, and default values. Additionally, the
-resource attributes and their descriptions are provided.
+This schema describes the properties that can be set on the resource, their types, constraints, descriptions, and default values. Additionally, the resource attributes and their descriptions are provided.
 
 **Response**
 
@@ -459,8 +479,10 @@ resource attributes and their descriptions are provided.
     SupportStatus:previous_status
 
 ``get-template``
-^^^^^^^^^^
-Shows a template representation for specified resource type::
+~~~~~~~~~~~~~~~~
+Shows a template representation for the specified resource type.
+
+::
 
     rack orchestration resource get-template --type <resourceType> [optional flags]
     (echo resourceType1 && echo resourceType2) | rack orchestration resource get-template --stdin type [optional flags]
@@ -489,8 +511,10 @@ Shows a template representation for specified resource type::
     }
 
 ``list-types``
-^^^^^^^^
-Lists the supported template resource types::
+~~~~~~~~~~~~~~
+Lists the supported template resource types.
+
+::
 
     rack orchestration resource list-types [optional flags]
 
@@ -553,8 +577,10 @@ Lists the supported template resource types::
     Rackspace::RackConnect::PublicIP
 
 ``list-events``
-^^^^^^^^
-Retrieves events for a specified stack resource::
+~~~~~~~~~~~~~~~
+Retrieves events for a specified stack resource.
+
+::
 
     rack orchestration resource list-events --stack-name <stackName> --name <resourceName> [optional flags]
     rack orchestration resource list-events --stack-id <stackID> --name <resourceName> [optional flags]
@@ -568,17 +594,20 @@ Retrieves events for a specified stack resource::
     test_server	2015-09-13 04:20:24 +0000 UTC	state changed		ADOPT_COMPLETE		f075a7c1-28ef-4699-9046-383098134902	dcfe8ad3-150f-4cbe-9993-2d82793753b7
     test_server	2015-09-13 04:20:24 +0000 UTC	state changed		ADOPT_IN_PROGRESS						e78533e1-c8e0-4eca-8734-b193b6d32e06
 
+Event
+-----
 
-**Event**
-~~~~~~~~~~~~
-
-Event commands use this syntax::
+The ``event`` subcommand provides information about events in Cloud Orchestration. The ``event`` subcommand uses the following syntax::
 
     rack orchestration event <action> [command flags]
 
+The following section describes the action that you can perform on the ``event`` subcommand and provides an example response.
+
 ``get``
-^^^^^^^^
-Retrieves details for a specified event::
+~~~~~~~
+Retrieves details for a specified event.
+
+::
 
     rack orchestration event get --stack-name <stackName> --resource <resourceName> --id <eventID> [optional flags]
     rack orchestration event get --stack-id <stackID> --resource <resourceName> --id <eventID> [optional flags]
@@ -627,17 +656,20 @@ Retrieves details for a specified event::
     ResourceProperties:availability_zone
     ResourceProperties:image			Debian 7 (Wheezy) (PVHVM)
 
+Template
+--------
 
-**Template**
-~~~~~~~~~~~~
-
-Template commands use this syntax::
+The ``template`` subcommand provides information about and performs actions on the templates in Cloud Orchestration. The ``template`` subcommand uses the following syntax::
 
     rack orchestration template <action> [command flags]
 
+The following section describes the action that you can perform on the ``template`` subcommand and provides an example response.
+
 ``validate``
-^^^^^^^^
-Validates a specified template::
+~~~~~~~~~~~~
+Validates a specified template.
+
+::
 
     rack orchestration template validate --template <templateFile> [optional flags]
     rack orchestration template validate --template-url <templateURL> [optional flags]
