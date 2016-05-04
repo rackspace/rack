@@ -47,6 +47,9 @@ type defaultError400 struct {
 type defaultError401 struct {
 	*UnexpectedResponseCodeError
 }
+type defaultError403 struct {
+	*UnexpectedResponseCodeError
+}
 type defaultError404 struct {
 	*UnexpectedResponseCodeError
 }
@@ -71,6 +74,9 @@ func (e defaultError400) Error() string {
 }
 func (e defaultError401) Error() string {
 	return "Authentication failed"
+}
+func (e defaultError403) Error() string {
+	return "Forbidden"
 }
 func (e defaultError404) Error() string {
 	return "Resource not found"
@@ -101,6 +107,12 @@ type Error400er interface {
 // from a 401 error.
 type Error401er interface {
 	Error401(*UnexpectedResponseCodeError) error
+}
+
+// Error403er is the interface resource error types implement to override the error message
+// from a 403 error.
+type Error403er interface {
+	Error403(*UnexpectedResponseCodeError) error
 }
 
 // Error404er is the interface resource error types implement to override the error message
