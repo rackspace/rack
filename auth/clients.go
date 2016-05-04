@@ -360,13 +360,20 @@ func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, er
 		lrt.numReauthAttempts++
 	}
 
-	lrt.Logger.Debugf("Response Status: %s\n", response.Status)
-
 	info, err = json.MarshalIndent(response.Header, "", "  ")
 	if err != nil {
 		lrt.Logger.Debugf(fmt.Sprintf("Error logging response headers: %s\n", err))
+	} else {
+		lrt.Logger.Debugf("Response Headers: %+v\n", string(info))
 	}
-	lrt.Logger.Debugf("Response Headers: %+v\n", string(info))
+
+	if response.StatusCode >= 400 {
+		buf := bytes.NewBuffer([]byte{})
+		body, _ := ioutil.ReadAll(io.TeeReader(response.Body, buf))
+		lrt.Logger.Infof("Response Error: %+v\n", string(body))
+		bufWithClose := ioutil.NopCloser(buf)
+		response.Body = bufWithClose
+	}
 
 	return response, err
 }

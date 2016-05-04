@@ -178,6 +178,10 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 			return err
 		}
 
+		if len(filesToInjectMap) > 5 {
+			return fmt.Errorf("A maximum of 5 files may be provided for the `personality` flag")
+		}
+
 		filesToInject := make(osServers.Personality, 0)
 		for destinationPath, localPath := range filesToInjectMap {
 			localAbsFilePath, err := filepath.Abs(localPath)
@@ -188,6 +192,11 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 			fileData, err := ioutil.ReadFile(localAbsFilePath)
 			if err != nil {
 				return err
+			}
+
+			if len(fileData)+len(destinationPath) > 1000 {
+				return fmt.Errorf("The maximum length of a file-path-and-content pair for `personality` is 1000 bytes."+
+					" Current pair size: path (%s): %d, content: %d", len(destinationPath), len(fileData))
 			}
 
 			filesToInject = append(filesToInject, &osServers.File{
@@ -313,7 +322,7 @@ func (command *commandCreate) Execute(resource *handler.Resource) {
 
 handleErr:
 	if err != nil {
-		switch err.(type) {
+		switch e := err.(type) {
 		case *osServers.ErrNeitherImageIDNorImageNameProvided:
 			err = errors.New("One and only one of the --image-id and the --image-name flags must be provided.")
 		case *osServers.ErrNeitherFlavorIDNorFlavorNameProvided:
@@ -321,32 +330,30 @@ handleErr:
 		case *gophercloud.ErrErrorAfterReauthentication:
 			err = err.(*gophercloud.ErrErrorAfterReauthentication).UnexpectedResponseCodeError
 			goto handleErr
-		case *gophercloud.UnexpectedResponseCodeError:
-			switch err.(*gophercloud.UnexpectedResponseCodeError).Actual {
-			case 403:
-				fmt.Printf("error from Rackspace: %s\n", err)
-				imageID := opts.ImageRef
-				if imageID == "" {
-					id, err := osImages.IDFromName(command.Ctx.ServiceClient, opts.ImageName)
-					if err != nil {
-						resource.Err = err
-						return
-					}
-					imageID = id
+		case osServers.ErrFlavorHasNoDisk:
+			imageID := opts.ImageRef
+			if imageID == "" {
+				id, err := osImages.IDFromName(command.Ctx.ServiceClient, opts.ImageName)
+				if err != nil {
+					resource.Err = err
+					return
 				}
-				flavorLabel := "id"
-				flavorID := opts.FlavorRef
-				if flavorID == "" {
-					flavorLabel = "name"
-					flavorID = opts.FlavorName
-				}
-				err = fmt.Errorf(strings.Join([]string{"The flavor you've chosen has a disk size of 0, so an image can't be created on it directly.\n",
-					"To boot with this flavor, creating a 100 GB volume and not deleting that volume when the server is deleted, run this command:\n",
-					fmt.Sprintf("rack servers instance create --name %s --flavor-%s %s \\", opts.Name, flavorLabel, flavorID),
-					fmt.Sprintf("--block-device \"source-type=image,source-id=%s,volume-size=100,destination-type=volume,delete-on-termination=false\"\n", imageID),
-					"For more information please run: rack servers instance create --help",
-				}, "\n"))
+				imageID = id
 			}
+			flavorLabel := "id"
+			flavorID := opts.FlavorRef
+			if flavorID == "" {
+				flavorLabel = "name"
+				flavorID = opts.FlavorName
+			}
+			err = fmt.Errorf(strings.Join([]string{"The flavor you've chosen has a disk size of 0, so an image can't be created on it directly.\n",
+				"To boot with this flavor, creating a 100 GB volume and not deleting that volume when the server is deleted, run this command:\n",
+				fmt.Sprintf("rack servers instance create --name %s --flavor-%s %s \\", opts.Name, flavorLabel, flavorID),
+				fmt.Sprintf("--block-device \"source-type=image,source-id=%s,volume-size=100,destination-type=volume,delete-on-termination=false\"\n", imageID),
+				"For more information please run: rack servers instance create --help",
+			}, "\n"))
+		default:
+			fmt.Printf("error type: %+v\n", e)
 		}
 		resource.Err = err
 		return

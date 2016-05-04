@@ -2,6 +2,7 @@ package servers
 
 import (
 	"fmt"
+	"regexp"
 
 	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud"
 )
@@ -48,12 +49,57 @@ type ServerError struct {
 	id string
 }
 
-func (se *ServerError) Error() string {
+func (se ServerError) Error() string {
 	return fmt.Sprintf("Error while executing HTTP request for server [%s]", se.id)
 }
 
+type ErrInvalidImageIDProvided struct{ ServerError }
+
+func (e ErrInvalidImageIDProvided) Error() string {
+	return "Invalid imageRef provided"
+}
+
+// Error400 overrides the generic 400 error message.
+func (se ServerError) Error400(e *gophercloud.UnexpectedResponseCodeError) error {
+	se.UnexpectedResponseCodeError = e
+	stringBody := string(e.Body)
+	rxInvalidImageID := regexp.MustCompile(`Invalid imageRef provided`)
+	switch {
+	case rxInvalidImageID.MatchString(stringBody):
+		return ErrInvalidImageIDProvided{se}
+	}
+	return se
+}
+
+type ErrPersonalityContentTooLong struct{ ServerError }
+
+func (e ErrPersonalityContentTooLong) Error() string {
+	return "Length of personality file content plus path exceeds 1000 bytes"
+}
+
+type ErrFlavorHasNoDisk struct{ ServerError }
+
+func (e ErrFlavorHasNoDisk) Error() string {
+	return "The flavor you selected doesn't have a disk on which to directly install an image"
+}
+
+// Error403 overrides the generic 403 error message.
+func (se ServerError) Error403(e *gophercloud.UnexpectedResponseCodeError) error {
+	se.UnexpectedResponseCodeError = e
+	stringBody := string(e.Body)
+	rxPersonalityContentTooLong := regexp.MustCompile(`Personality file content too long`)
+	rxFlavorHasNoDisk := regexp.MustCompile(`compute_flavor:create:image_backed`)
+	switch {
+	case rxPersonalityContentTooLong.MatchString(stringBody):
+		return ErrInvalidImageIDProvided{se}
+	case rxFlavorHasNoDisk.MatchString(stringBody):
+		return ErrFlavorHasNoDisk{se}
+	}
+	return se
+}
+
 // Error404 overrides the generic 404 error message.
-func (se *ServerError) Error404(e *gophercloud.UnexpectedResponseCodeError) error {
+func (se ServerError) Error404(e *gophercloud.UnexpectedResponseCodeError) error {
 	se.UnexpectedResponseCodeError = e
 	return &ServerNotFoundError{
 		se,
@@ -63,9 +109,9 @@ func (se *ServerError) Error404(e *gophercloud.UnexpectedResponseCodeError) erro
 // ServerNotFoundError is an error type returned when a 404 is received during
 // server HTTP operations.
 type ServerNotFoundError struct {
-	*ServerError
+	ServerError
 }
 
-func (e *ServerNotFoundError) Error() string {
+func (e ServerNotFoundError) Error() string {
 	return fmt.Sprintf("I couldn't find server [%s]", e.id)
 }
