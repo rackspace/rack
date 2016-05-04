@@ -322,7 +322,7 @@ func (command *commandCreate) Execute(resource *handler.Resource) {
 
 handleErr:
 	if err != nil {
-		switch e := err.(type) {
+		switch err.(type) {
 		case *osServers.ErrNeitherImageIDNorImageNameProvided:
 			err = errors.New("One and only one of the --image-id and the --image-name flags must be provided.")
 		case *osServers.ErrNeitherFlavorIDNorFlavorNameProvided:
@@ -352,8 +352,6 @@ handleErr:
 				fmt.Sprintf("--block-device \"source-type=image,source-id=%s,volume-size=100,destination-type=volume,delete-on-termination=false\"\n", imageID),
 				"For more information please run: rack servers instance create --help",
 			}, "\n"))
-		default:
-			fmt.Printf("error type: %+v\n", e)
 		}
 		resource.Err = err
 		return
