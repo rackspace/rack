@@ -172,7 +172,7 @@ Removes all of the data on the server instance, which you can specify by name or
 
 ``resize``
 ~~~~~~~~~~
-Converts an existing server instance to a different flavor, which scales the server up or down. The original instance is saved for a period of time to allow rollback if a problem occurs. You can specify the instance by ID or name. 
+Converts an existing server instance to a different flavor, which scales the server up or down. The original instance is saved for a period of time to allow rollback if a problem occurs. You can specify the instance by ID or name.
 
 ::
 
@@ -295,7 +295,7 @@ Lists all images that are visible to your account.
 
 ``get``
 ~~~~~~~
-Retrieves the details of an image, which you can specify by ID or name. 
+Retrieves the details of an image, which you can specify by ID or name.
 
 ::
 
@@ -354,7 +354,7 @@ Lists information for all available flavors.
 
 ``get``
 ~~~~~~~
-Retrieves details of a flavor, which you can specify by ID or name. 
+Retrieves details of a flavor, which you can specify by ID or name.
 
 ::
 
@@ -518,7 +518,7 @@ The following sections describe the actions that you can perform on the ``volume
 
 ``list``
 ~~~~~~~~
-Lists the volume attachments for a server, which you can specify by ID or name. 
+Lists the volume attachments for a server, which you can specify by ID or name.
 
 ::
 

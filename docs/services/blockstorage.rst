@@ -65,7 +65,7 @@ Creates a volume of the specified size.
 
 ``get``
 ~~~~~~~
-Retrieves details about a volume, which you can specify by ID or name. 
+Retrieves details about a volume, which you can specify by ID or name.
 
 ::
 
@@ -90,17 +90,29 @@ Retrieves details about a volume, which you can specify by ID or name.
 
 ``update``
 ~~~~~~~~~~
-Updates the name and description of a volume, which you can specify by ID or name. 
+Updates the name and description of a volume, which you can specify by ID or name.
 
 ::
 
     rack block-storage volume update --id <volumeID> [optional flags]
     rack block-storage volume update --name <volumeName> [optional flags]
 
+**Response**
+
+.. code::
+
+    $ ./rack block-storage volume update --name perfkit-1 --rename perfkit-0
+    ID              7ba4e908-8a01-462d-b4a4-2f86ba8c2432
+    Name            perf-0
+    Description
+    Size            500
+    VolumeType      SATA
+    SnapshotID
+
 
 ``delete``
 ~~~~~~~~~~
-Permanently deletes a volume, which you can specify by ID or name. 
+Permanently deletes a volume, which you can specify by ID or name.
 
 ::
 
@@ -164,7 +176,7 @@ Creates a snapshot based on the specified volume ID.
 
 ``get``
 ~~~~~~~
-Retrieves details about a snapshot, which you can specify by ID or name. 
+Retrieves details about a snapshot, which you can specify by ID or name.
 
 ::
 
@@ -189,7 +201,7 @@ Retrieves details about a snapshot, which you can specify by ID or name.
 
 ``delete``
 ~~~~~~~~~~
-Permanently deletes a snapshot, which you can specify by ID or name. 
+Permanently deletes a snapshot, which you can specify by ID or name.
 
 ::
 
