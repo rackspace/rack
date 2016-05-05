@@ -48,7 +48,7 @@ Create a snapshot by detaching the volume from its server. You use the volume's 
     ID					                          Device		VolumeID				                      ServerID
     81c7a7e5-01a5-44bb-9b43-0cc9f7c4e423	/dev/xvdc	81c7a7e5-01a5-44bb-9b43-0cc9f7c4e423	8a254ea3-77b5-4f74-a893-8d2d51ae2cca
 
-Use the following command, followed by the server name and the attachment ID, to detach the volume from the server. 
+Use the following command, followed by the server name and the attachment ID, to detach the volume from the server.
 
 ::
 
