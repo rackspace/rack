@@ -280,6 +280,7 @@ Downloads an object from the specified container to your local system.
 **Response**
 
 .. code::
+
     $ rack files object list --container gotest
     Name            Bytes   ContentType     LastModified
     test.txt        4       text/plain      2015-03-16T17:13:49.043720
