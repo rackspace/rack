@@ -65,7 +65,7 @@ Creates a network with the specified name.
 
 ``get``
 ~~~~~~~
-Retrieves details about a network, which you can specify by ID or name. 
+Retrieves details about a network, which you can specify by ID or name.
 
 ::
 
@@ -88,7 +88,7 @@ Retrieves details about a network, which you can specify by ID or name.
 
 ``update``
 ~~~~~~~~~~
-Updates a network, which you can specify by ID or name. 
+Updates a network, which you can specify by ID or name.
 
 ::
 
@@ -110,7 +110,7 @@ Updates a network, which you can specify by ID or name.
 
 ``delete``
 ~~~~~~~~~~
-Permanently deletes a network, which you can specify by ID or name. 
+Permanently deletes a network, which you can specify by ID or name.
 
 ::
 
@@ -136,11 +136,21 @@ The following sections describe the actions that you can perform on the ``subnet
 
 ``list``
 ~~~~~~~~
-Retrieves a list of subnets. 
+Retrieves a list of subnets.
 
 ::
 
     rack networks subnet list [optional flags]
+
+  **Response**
+
+  .. code::
+
+    $ rack networks subnet list
+    ID                                      Name                    Network ID      CIDR            EnableDHCP      GatewayIP
+    5559473e-9d68-4edb-8fa1-4643f3876190                                            192.0.2.0/24    false
+    9d04e0ea-68a7-4edf-b49a-1a062b4dc910    c1-swift                                172.20.0.0/24   false
+    a099323e-e57b-4931-bb36-86911d3bf6c0    rackTestNetUpdated                      192.0.2.0/24    false
 
 ``create``
 ~~~~~~~~~~
@@ -167,7 +177,7 @@ Creates a subnet with the specified details.
 
 ``get``
 ~~~~~~~
-Retrieves details about a subnet, which you can specify by ID or name. 
+Retrieves details about a subnet, which you can specify by ID or name.
 
 ::
 
@@ -193,7 +203,7 @@ Retrieves details about a subnet, which you can specify by ID or name.
 
 ``update``
 ~~~~~~~~~~
-Updates a subnet, which you can specify by ID or name. 
+Updates a subnet, which you can specify by ID or name.
 
 ::
 
@@ -217,7 +227,7 @@ Updates a subnet, which you can specify by ID or name.
 
 ``delete``
 ~~~~~~~~~~
-Permanently deletes a subnet, which you can specify by ID or name. 
+Permanently deletes a subnet, which you can specify by ID or name.
 
 ::
 
@@ -259,7 +269,7 @@ Retrieves a list of ports.
 
 ``create``
 ~~~~~~~~~~
-Creates a port that is associated with the specified network ID. 
+Creates a port that is associated with the specified network ID.
 
 ::
 
@@ -285,7 +295,7 @@ Creates a port that is associated with the specified network ID.
 
 ``get``
 ~~~~~~~
-Retrieves details about a port, which you can specify by ID or name. 
+Retrieves details about a port, which you can specify by ID or name.
 
 ::
 
@@ -313,7 +323,7 @@ Retrieves details about a port, which you can specify by ID or name.
 
 ``update``
 ~~~~~~~~~~
-Updates the information about a port, which you can specify by ID or name. 
+Updates the information about a port, which you can specify by ID or name.
 
 ::
 
@@ -340,7 +350,7 @@ Updates the information about a port, which you can specify by ID or name.
 
 ``delete``
 ~~~~~~~~~~
-Permanently deletes a port, which you can specify by ID or name. 
+Permanently deletes a port, which you can specify by ID or name.
 
 ::
 
