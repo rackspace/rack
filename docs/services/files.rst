@@ -107,7 +107,7 @@ Permanently deletes the specified container.
 
     rack files container delete --name <containerName> [optional flags]
     (echo containerName1 && echo containerName2) | rack files container delete --stdin name [optional flags
-    
+
 **Response**
 
 .. code::
@@ -276,6 +276,17 @@ Downloads an object from the specified container to your local system.
 ::
 
     rack files object download --container <containerName> --name <objectName> [optional flags]
+
+**Response**
+
+.. code::
+
+    $ rack files object list --container gotest
+    Name            Bytes   ContentType     LastModified
+    test.txt        4       text/plain      2015-03-16T17:13:49.043720
+    $ rack files object download --container gotest --name test.txt
+    wat
+
 
 ``get``
 ~~~~~~~
@@ -447,7 +458,7 @@ Deletes one or more metadata keys from the account.
 Large-object
 ------------
 
-Large objects are files larger than 5 GB. Given the designated size of each piece, ``rack`` divides the file into the required number of pieces, appropriately names them, and uploads them to the specified container. Downloading a large object is done with the regular ``rack files object download`` command. 
+Large objects are files larger than 5 GB. Given the designated size of each piece, ``rack`` divides the file into the required number of pieces, appropriately names them, and uploads them to the specified container. Downloading a large object is done with the regular ``rack files object download`` command.
 
 .. note::
 
@@ -456,12 +467,12 @@ Large objects are files larger than 5 GB. Given the designated size of each piec
 The ``large-object`` subcommand uses the following syntax::
 
     rack files large-object <action> [optional flags]
-    
+
 The following sections describe the actions that you can perform on the ``large-object`` subcommand and provide example responses.
 
 ``upload``
 ~~~~~~~~~~
-Upload a large object to a specified container. Use the ``--size-pieces`` flag to specify the size of the pieces (in MB) to divide the file into. 
+Upload a large object to a specified container. Use the ``--size-pieces`` flag to specify the size of the pieces (in MB) to divide the file into.
 
 ::
 
@@ -489,4 +500,3 @@ Deletes a large object from a specified container.
 
     $ rack files large-object delete --container RackCLI --object largeObject
     Deleted object [largeObject] from container [RackCLI]
-    
