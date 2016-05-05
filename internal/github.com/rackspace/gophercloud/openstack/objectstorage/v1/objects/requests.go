@@ -556,7 +556,7 @@ func (opts CreateLargeOpts) LengthOfContent() (int64, error) {
 
 // NumConcurrent returns the number of concurrent goroutines allowed.
 func (opts CreateLargeOpts) NumConcurrent() (int, error) {
-	if opts.Concurrency == 0 {
+	if opts.Concurrency <= 0 {
 		opts.Concurrency = 1
 	}
 	return opts.Concurrency, nil
@@ -605,7 +605,7 @@ func CreateLarge(c *gophercloud.ServiceClient, containerName, objectName string,
 
 	// If the content satisfies the `io.ReaderAt` interface, we can safely read
 	// it concurrently.
-	if readerAt, ok := content.(io.ReaderAt); ok && contentLength != 0 && numConcurrent != 1 {
+	if readerAt, ok := content.(io.ReaderAt); ok && contentLength != 0 {
 
 		// Calculate the number of pieces to upload.
 		numPieces := int(contentLength / sizePieces)
