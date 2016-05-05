@@ -1,4 +1,4 @@
-.. _blockexamples
+.. _blockexamples:
 
 ======================
 Block Storage examples
