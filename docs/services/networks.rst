@@ -142,9 +142,9 @@ Retrieves a list of subnets.
 
     rack networks subnet list [optional flags]
 
-  **Response**
+**Response**
 
-  .. code::
+.. code::
 
     $ rack networks subnet list
     ID                                      Name                    Network ID      CIDR            EnableDHCP      GatewayIP
