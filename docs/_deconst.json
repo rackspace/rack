@@ -1,3 +1,7 @@
 {
   "contentIDBase": "https://github.com/rackspace/rack"
+   "githubUrl": "https://github.com/rackspace/rack",
+  "meta": {
+    "preferGithubIssues": true
+  }
 }
