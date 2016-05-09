@@ -97,10 +97,12 @@ func (command *commandGet) StdinField() string {
 	return "id"
 }
 
-func (command *commandGet) PreCSV(resource *handler.Resource) {
+func (command *commandGet) PreCSV(resource *handler.Resource) error {
 	resource.FlattenMap("Metadata")
+	return nil
 }
 
-func (command *commandGet) PreTable(resource *handler.Resource) {
+func (command *commandGet) PreTable(resource *handler.Resource) error {
 	command.PreCSV(resource)
+	return nil
 }
