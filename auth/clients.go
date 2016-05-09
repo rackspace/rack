@@ -333,7 +333,6 @@ func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, er
 	var err error
 
 	if lrt.Logger.Level == logrus.DebugLevel && request.Body != nil {
-		fmt.Println("Logging request body...")
 		request.Body, err = lrt.logRequestBody(request.Body, request.Header)
 		if err != nil {
 			return nil, err
@@ -367,6 +366,9 @@ func (lrt *LogRoundTripper) RoundTrip(request *http.Request) (*http.Response, er
 		lrt.Logger.Debugf("Response Headers: %+v\n", string(info))
 	}
 
+	responseBody, err := lrt.logResponseBody(response.Body, response.Header)
+	response.Body = responseBody
+
 	if response.StatusCode >= 400 {
 		buf := bytes.NewBuffer([]byte{})
 		body, _ := ioutil.ReadAll(io.TeeReader(response.Body, buf))
@@ -393,6 +395,26 @@ func (lrt *LogRoundTripper) logRequestBody(original io.ReadCloser, headers http.
 		lrt.Logger.Debugf("Request Options: %s\n", debugInfo)
 	} else {
 		lrt.Logger.Debugf("Request Options: %s\n", bs.String())
+	}
+
+	return ioutil.NopCloser(strings.NewReader(bs.String())), nil
+}
+
+func (lrt *LogRoundTripper) logResponseBody(original io.ReadCloser, headers http.Header) (io.ReadCloser, error) {
+	defer original.Close()
+
+	var bs bytes.Buffer
+	_, err := io.Copy(&bs, original)
+	if err != nil {
+		return nil, err
+	}
+
+	contentType := headers.Get("Content-Type")
+	if strings.HasPrefix(contentType, "application/json") {
+		debugInfo := lrt.formatJSON(bs.Bytes())
+		lrt.Logger.Debugf("Response Body: %s\n", debugInfo)
+	} else {
+		lrt.Logger.Debugf("Not logging because response body isn't JSON")
 	}
 
 	return ioutil.NopCloser(strings.NewReader(bs.String())), nil
