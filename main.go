@@ -47,8 +47,8 @@ func Desc() string {
 }
 
 // Cmds returns a list of commands supported by the tool
-func Cmds(app cli.App) []cli.Command {
-	//isAdmin := util.IsAdmin()
+func Cmds() []cli.Command {
+	isAdmin := util.IsAdmin()
 
 	return []cli.Command{
 		{
