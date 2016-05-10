@@ -6,27 +6,53 @@ import (
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
 	"github.com/rackspace/rack/internal/gopkg.in/ini.v1"
+	"github.com/rackspace/rack/util"
 )
 
-func profileCommandsGet() []cli.Command {
-	return []cli.Command{
-		{
-			Name:        "activate",
-			Description: "Activate a profile",
-			Usage:       "rack profile activate --name <profile-name>",
-			Action:      profileActivate,
-			Flags:       profileFlagsActivate,
-			BashComplete: func(c *cli.Context) {
-				commandoptions.CompleteFlags(profileFlagsActivate)
-			},
-		},
-		{
-			Name:        "list",
-			Description: "List profile information",
-			Usage:       "rack profile list",
-			Action:      profileList,
-		},
+var commandActivate = cli.Command{
+	Name: "activate",
+	Description: "Activate a profile. Activating a profile will have the following\n" +
+		"\torder for the way that `rack` looks for command configuration values:\n" +
+		"\t1. command-line options\n" +
+		"\t2. the active profile\n" +
+		"\t3. the default profile\n" +
+		"\t4. environment variables\n" +
+		"\n" +
+		"\tNOTE: The safest way to use `rack` is by always explicitly providing\n" +
+		"\tconfiguration values (like `--profile`) as command-line options. Running\n" +
+		"\ta command without knowing which profile is active can result in unintended\n" +
+		"\tconsequences.\n" +
+		"\n" +
+		"\tIf you have activated a profile and would like to deactivate it (without\n" +
+		"\tactivating another one), see the `deactivate` command",
+	Usage:  "rack profile activate --name <profile-name>",
+	Action: profileActivate,
+	Flags:  profileFlagsActivate,
+	BashComplete: func(c *cli.Context) {
+		commandoptions.CompleteFlags(profileFlagsActivate)
+	},
+}
+
+var commandList = cli.Command{
+	Name:        "list",
+	Description: "List profile information",
+	Usage:       "rack profile list",
+	Action:      profileList,
+}
+
+var commandsProfile = []cli.Command{
+	commandList,
+}
+
+var commandsProfileAdmin = []cli.Command{
+	commandActivate,
+}
+
+func profileCommandsGet(isAdmin bool) []cli.Command {
+	if isAdmin {
+		return append(commandsProfile, commandsProfileAdmin...)
 	}
+	return commandsProfile
 }
 
 var profileFlagsActivate = []cli.Flag{
@@ -44,7 +70,7 @@ func profileActivate(c *cli.Context) {
 
 	profileName := c.String("name")
 
-	configFileLoc, err := configFileLocation()
+	configFileLoc, err := util.ConfigFileLocation()
 	if err != nil {
 		fmt.Fprintf(c.App.Writer, "Error to determining config file location: %s\n", err)
 		return
@@ -79,7 +105,7 @@ func profileActivate(c *cli.Context) {
 }
 
 func profileList(c *cli.Context) {
-	configFileLoc, err := configFileLocation()
+	configFileLoc, err := util.ConfigFileLocation()
 	if err != nil {
 		fmt.Fprintf(c.App.Writer, "Error to determining config file location: %s\n", err)
 		return

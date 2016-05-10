@@ -6,6 +6,8 @@ import (
 	"os"
 	"path"
 	"runtime"
+
+	"gopkg.in/ini.v1"
 )
 
 // Name is the name of the CLI
@@ -67,6 +69,48 @@ func HomeDir() (string, error) {
 		return "", errors.New("User home directory not found.")
 	}
 	return homeDir, nil
+}
+
+func ConfigFileLocation() (string, error) {
+	dir, err := RackDir()
+	if err != nil {
+		return "", fmt.Errorf("Error fetching config directory: %s", err)
+	}
+	filepath := path.Join(dir, "config")
+	// check if the config file exists
+	if _, err := os.Stat(filepath); err == nil {
+		return filepath, nil
+	}
+	// create the config file if it doesn't already exist
+	f, err := os.Create(filepath)
+	defer f.Close()
+	return filepath, err
+}
+
+func IsAdmin() bool {
+	configFileLoc, err := ConfigFileLocation()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error to determining config file location: %s\n", err)
+		return false
+	}
+
+	cfg, err := ini.Load(configFileLoc)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error loading config file: %s\n", err)
+		return false
+	}
+
+	chosenSection, err := cfg.GetSection("DEFAULT")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Section [%s] doesn't exist in config file\n", "DEFAULT")
+		return false
+	}
+
+	if admin, ok := chosenSection.KeysHash()["admin"]; ok && admin == "true" {
+		return true
+	}
+
+	return false
 }
 
 // Pluralize will plurarize a given noun according to its number. For example,

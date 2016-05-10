@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"path"
 	"strings"
 
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
@@ -39,7 +38,7 @@ func configure(c *cli.Context) {
 	profile, _ := reader.ReadString('\n')
 	profile = strings.TrimSpace(profile)
 
-	configFileLoc, err := configFileLocation()
+	configFileLoc, err := util.ConfigFileLocation()
 	var cfg *ini.File
 	cfg, err = ini.Load(configFileLoc)
 	if err != nil {
@@ -94,20 +93,4 @@ func configure(c *cli.Context) {
 		fmt.Printf("\nCreated profile %s with username %s", profile, username)
 	}
 
-}
-
-func configFileLocation() (string, error) {
-	dir, err := util.RackDir()
-	if err != nil {
-		return "", fmt.Errorf("Error fetching config directory: %s", err)
-	}
-	filepath := path.Join(dir, "config")
-	// check if the config file exists
-	if _, err := os.Stat(filepath); err == nil {
-		return filepath, nil
-	}
-	// create the config file if it doesn't already exist
-	f, err := os.Create(filepath)
-	defer f.Close()
-	return filepath, err
 }
