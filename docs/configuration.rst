@@ -3,7 +3,7 @@
 Installation and configuration
 ==============================
 
-This section provides complete and detailed information for installing and configuring the Rackspace Command Line Interface (``rack`` CLI). 
+This section provides complete and detailed information for installing and configuring the Rackspace Command Line Interface (``rack`` CLI).
 
 Install the CLI
 ---------------
@@ -61,9 +61,9 @@ We recommend that you copy the binary to a location outside of your **Downloads*
 1. If you don’t already have one, create a new directory for command-line tools. For example, ``C:\tools``.
 2. Copy **rack.exe** to that directory.
 3. Add the directory to your user's PATH environment variable. You can do this by opening a command prompt window and run the following command::
-    
+
     setx path "%path%;C:\tools"
-    
+
 4. After modifying the PATH variable, open a new command prompt window.
 
 Install the binary with a script
@@ -79,17 +79,17 @@ Open PowerShell_Ise, paste the following script in the scripting pane, and then 
 
     #requires -Version 3
     $DownloadPath = 'C:\Tools'
-    
+
     Write-Output -InputObject "[$(Get-Date)] Status  :: Set the Tools Directory $DownloadPath"
     New-Item -Path $DownloadPath -ItemType Directory -ErrorAction SilentlyContinue > $null
     Set-Location -Path $DownloadPath -ErrorAction SilentlyContinue
-    
+
     Write-Output -InputObject "[$(Get-Date)] Status  :: Download Rackspace CLI in C:\Tools"
     Invoke-WebRequest -Uri 'https://goo.gl/NMvmcx/Windows/amd64/rack.exe' -Method Get -OutFile rack.exe
-     
+
     Write-Output -InputObject "[$(Get-Date)] Status  :: Unblock the executable file rack.exe"
     Unblock-File -Path $("$DownloadPath\rack.exe")
-    
+
     Write-Output -InputObject "[$(Get-Date)] Status  :: Permanently set the path $DownloadPath to the Environment variable (Reboot required)."
     [System.Environment]::SetEnvironmentVariable('Path', $env:Path + 'C:\Tools', [System.EnvironmentVariableTarget]::Machine)
     Write-Output -InputObject "[$(Get-Date)] Status  :: Temporarily set the path $DownloadPath to the Environment variable for immediate use in the current powershell session"
@@ -127,7 +127,7 @@ The ``configure`` command automatically creates a configuration file for you if 
     Rackspace API key: <yourRackspaceApiKey>
     Rackspace Region: <theRackspaceRegion>
     Profile Name (leave blank to create a default profile):
-    
+
 Username is the username for your Rackspace Cloud account. You can get your API key by logging in to the Cloud Control Panel, clicking on your account name in the upper-right corner, and then selecting **Account Settings**. The region is the region where your Rackspace infrastructure is deployed. If you want to create a profile other than the default profile, enter a name for the profile.
 
 After the profile is created, you can immediately start working. For example, you could issue the following command to get a list of the servers on your Rackspace account::
@@ -148,7 +148,7 @@ environment variables).
 Configuration file
 ^^^^^^^^^^^^^^^^^^
 
-Any authentication parameters not set on the command line are looked for in a configuration file. The configuration file should be located in ``$HOME/.rack/config``. When you use the interactive ``configure`` command, a configuration file is automatically created. 
+Any authentication parameters not set on the command line are looked for in a configuration file. The configuration file should be located in ``$HOME/.rack/config``. When you use the interactive ``configure`` command, a configuration file is automatically created.
 
 The configuration file format is similar to the following format::
 
@@ -167,6 +167,11 @@ The preceding example shows a default profile that doesn't have a named section.
     rack servers instance list --profile another-profile
 
 Note that none of the authentication parameters have to be set in the configuration file. Parameters not set there are looked for elsewhere.
+
+To list all the profiles in the config file::
+
+    rack profile list
+
 
 Environment variables
 ^^^^^^^^^^^^^^^^^^^^^
@@ -227,8 +232,20 @@ For example::
 
 In addition, you can provide it as a flag on the command-line or as a value in the configuration file profile. In either case, the parameter name is ``auth-url``.
 
+Activating a profile
+^^^^^^^^^^^^^^^^^^^^
 
+If you find yourself running several commands in a profile other than the one designated as the default, you can set a flag in your default profile to enable
+a command to activate a profile from the command-line.
+Adding::
 
+    enable-profile-activate = true
+
+to your default profile will allow you to use the `profile activate` command. For example, if you have a profile named ``ord``::
+
+    rack profile activate --name ord
+
+would run all future commands with the configuration values under that profile until `profile activate` is called again with a different profile.
 
 .. _go: https://golang.org/
 .. _Mac OS X (64-bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/1.1.1/Darwin/amd64/rack

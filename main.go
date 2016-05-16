@@ -43,26 +43,28 @@ func Usage() string {
 
 // Desc returns, you guessed it, the description
 func Desc() string {
-	return `The rack CLI manages authentication, configures a local setup, and provides workflows for operations on Rackspace Cloud resources.`
+	return `The rack CLI manages authentication, configures a local setup, and provides workflows for operations on Rackspace Cloud resources`
 }
 
 // Cmds returns a list of commands supported by the tool
 func Cmds() []cli.Command {
+	canActivateProfile := util.CanActivateProfile()
+
 	return []cli.Command{
 		{
 			Name:   "configure",
-			Usage:  "Interactively create a config file for Rackspace authentication.",
+			Usage:  "Interactively create a config file for Rackspace authentication",
 			Action: configure,
 		},
 		{
 			Name: "init",
-			Usage: strings.Join([]string{"Enable tab for command completion.",
-				"\tFor Linux and OS X, creates the `rack` man page and sets up",
-				"\tcommand completion for the Bash shell. Run `man ./rack.1` to",
-				"\tview the generated man page.",
-				"\tFor Windows, creates a `posh_autocomplete.ps1` file in the",
-				"\t`$HOME/.rack` directory. You must run the file to set up",
-				"\tcommand completion."}, "\n"),
+			Usage: "Enable tab for command completion.\n" +
+				"\tFor Linux and OS X, creates the `rack` man page and sets up\n" +
+				"\tcommand completion for the Bash shell. Run `man ./rack.1` to\n" +
+				"\tview the generated man page.\n" +
+				"\tFor Windows, creates a `posh_autocomplete.ps1` file in the\n" +
+				"\t`$HOME/.rack` directory. You must run the file to set up\n" +
+				"\tcommand completion\n",
 			Action: func(c *cli.Context) {
 				setup.Init(c)
 				man()
@@ -70,35 +72,40 @@ func Cmds() []cli.Command {
 		},
 		{
 			Name:  "version",
-			Usage: "Print the version of this binary.",
+			Usage: "Print the version of this binary",
 			Action: func(c *cli.Context) {
 				fmt.Fprintf(c.App.Writer, "%v version %v\ncommit: %v\n", c.App.Name, util.Version, util.Commit)
 			},
 		},
 		{
+			Name:        "profile",
+			Usage:       "Used to perform operations on user profiles",
+			Subcommands: profileCommandsGet(canActivateProfile),
+		},
+		{
 			Name:        "servers",
-			Usage:       "Operations on cloud servers, both virtual and bare metal.",
+			Usage:       "Operations on cloud servers, both virtual and bare metal",
 			Subcommands: serverscommands.Get(),
 		},
 		{
 			Name:        "files",
-			Usage:       "Object storage for files and media.",
+			Usage:       "Object storage for files and media",
 			Subcommands: filescommands.Get(),
 		},
 		{
 			Name:        "networks",
-			Usage:       "Software-defined networking.",
+			Usage:       "Software-defined networking",
 			Subcommands: networkscommands.Get(),
 		},
 		{
 			Name: "block-storage",
 			Usage: strings.Join([]string{"Block-level storage, exposed as volumes to mount to",
-				"\thost servers. Work with volumes and their associated snapshots."}, "\n"),
+				"\thost servers. Work with volumes and their associated snapshots"}, "\n"),
 			Subcommands: blockstoragecommands.Get(),
 		},
 		{
 			Name:        "orchestration",
-			Usage:       "Use a template language to orchestrate Rackspace cloud services.",
+			Usage:       "Use a template language to orchestrate Rackspace cloud services",
 			Subcommands: orchestrationcommands.Get(),
 		},
 	}

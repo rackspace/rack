@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"path"
 	"strings"
 
 	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
@@ -39,9 +38,9 @@ func configure(c *cli.Context) {
 	profile, _ := reader.ReadString('\n')
 	profile = strings.TrimSpace(profile)
 
-	configFile, err := configFile()
+	configFileLoc, err := util.ConfigFileLocation()
 	var cfg *ini.File
-	cfg, err = ini.Load(configFile)
+	cfg, err = ini.Load(configFileLoc)
 	if err != nil {
 		// fmt.Printf("Error loading config file: %s\n", err)
 		cfg = ini.Empty()
@@ -82,7 +81,7 @@ func configure(c *cli.Context) {
 		section.NewKey(key, val)
 	}
 
-	err = cfg.SaveTo(configFile)
+	err = cfg.SaveTo(configFileLoc)
 	if err != nil {
 		//fmt.Printf("Error saving config file: %s\n", err)
 		return
@@ -94,20 +93,4 @@ func configure(c *cli.Context) {
 		fmt.Printf("\nCreated profile %s with username %s", profile, username)
 	}
 
-}
-
-func configFile() (string, error) {
-	dir, err := util.RackDir()
-	if err != nil {
-		return "", fmt.Errorf("Error reading from cache: %s", err)
-	}
-	filepath := path.Join(dir, "config")
-	// check if the cache file exists
-	if _, err := os.Stat(filepath); err == nil {
-		return filepath, nil
-	}
-	// create the cache file if it doesn't already exist
-	f, err := os.Create(filepath)
-	defer f.Close()
-	return filepath, err
 }

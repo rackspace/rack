@@ -13,6 +13,17 @@ func ConfigFile(c *cli.Context, have map[string]Cred, need map[string]string) er
 	var profile string
 	if c.IsSet("profile") {
 		profile = c.String("profile")
+	} else {
+		sections, err := ProfileSections()
+		if err != nil {
+			return err
+		}
+
+		for _, section := range sections {
+			if section.KeysHash()["enabled"] == "true" {
+				profile = section.Name()
+			}
+		}
 	}
 
 	section, err := ProfileSection(profile)
@@ -46,6 +57,20 @@ func ConfigFile(c *cli.Context, have map[string]Cred, need map[string]string) er
 	}
 
 	return nil
+}
+
+func ProfileSections() ([]*ini.Section, error) {
+	dir, err := util.RackDir()
+	if err != nil {
+		return nil, fmt.Errorf("Error retrieving rack directory: %s\n", err)
+	}
+	f := path.Join(dir, "config")
+	cfg, err := ini.Load(f)
+	if err != nil {
+		return nil, fmt.Errorf("Error loading config file: %s\n", err)
+	}
+	cfg.BlockMode = false
+	return cfg.Sections(), nil
 }
 
 func ProfileSection(profile string) (*ini.Section, error) {
