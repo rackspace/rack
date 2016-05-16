@@ -232,6 +232,9 @@ For example::
 
 In addition, you can provide it as a flag on the command-line or as a value in the configuration file profile. In either case, the parameter name is ``auth-url``.
 
+Activating a profile
+^^^^^^^^^^^^^^^^^^^^
+
 If you find yourself running several commands in a profile other than the one designated as the default, you can set a flag in your default profile to enable
 a command to activate a profile from the command-line.
 Adding::
