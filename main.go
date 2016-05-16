@@ -48,7 +48,7 @@ func Desc() string {
 
 // Cmds returns a list of commands supported by the tool
 func Cmds() []cli.Command {
-	isAdmin := util.IsAdmin()
+	canActivateProfile := util.CanActivateProfile()
 
 	return []cli.Command{
 		{
@@ -80,7 +80,7 @@ func Cmds() []cli.Command {
 		{
 			Name:        "profile",
 			Usage:       "Used to perform operations on user profiles",
-			Subcommands: profileCommandsGet(isAdmin),
+			Subcommands: profileCommandsGet(canActivateProfile),
 		},
 		{
 			Name:        "servers",

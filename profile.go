@@ -21,10 +21,7 @@ var commandActivate = cli.Command{
 		"\tNOTE: The safest way to use `rack` is by always explicitly providing\n" +
 		"\tconfiguration values (like `--profile`) as command-line options. Running\n" +
 		"\ta command without knowing which profile is active can result in unintended\n" +
-		"\tconsequences.\n" +
-		"\n" +
-		"\tIf you have activated a profile and would like to deactivate it (without\n" +
-		"\tactivating another one), see the `deactivate` command",
+		"\tconsequences.",
 	Usage:  "rack profile activate --name <profile-name>",
 	Action: profileActivate,
 	Flags:  profileFlagsActivate,
@@ -48,8 +45,8 @@ var commandsProfileAdmin = []cli.Command{
 	commandActivate,
 }
 
-func profileCommandsGet(isAdmin bool) []cli.Command {
-	if isAdmin {
+func profileCommandsGet(canActivateProfile bool) []cli.Command {
+	if canActivateProfile {
 		return append(commandsProfile, commandsProfileAdmin...)
 	}
 	return commandsProfile

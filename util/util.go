@@ -87,7 +87,7 @@ func ConfigFileLocation() (string, error) {
 	return filepath, err
 }
 
-func IsAdmin() bool {
+func CanActivateProfile() bool {
 	configFileLoc, err := ConfigFileLocation()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error to determining config file location: %s\n", err)
@@ -106,7 +106,7 @@ func IsAdmin() bool {
 		return false
 	}
 
-	if admin, ok := chosenSection.KeysHash()["admin"]; ok && admin == "true" {
+	if admin, ok := chosenSection.KeysHash()["enable-profile-activate"]; ok && admin == "true" {
 		return true
 	}
 
