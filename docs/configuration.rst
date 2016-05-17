@@ -248,9 +248,9 @@ to your default profile will allow you to use the `profile activate` command. Fo
 would run all future commands with the configuration values under that profile until `profile activate` is called again with a different profile.
 
 .. _go: https://golang.org/
-.. _Mac OS X (64-bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/1.1.1/Darwin/amd64/rack
-.. _Linux (64-bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/1.1.1/Linux/amd64/rack
-.. _Windows (64-bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/1.1.1/Windows/amd64/rack.exe
+.. _Mac OS X (64-bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/1.2/Darwin/amd64/rack
+.. _Linux (64-bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/1.2/Linux/amd64/rack
+.. _Windows (64-bit): https://ec4a542dbf90c03b9f75-b342aba65414ad802720b41e8159cf45.ssl.cf5.rackcdn.com/1.2/Windows/amd64/rack.exe
 .. _Homebrew: http://brew.sh
 .. _Chocolatey: http://chocolatey.org
 .. _Cloud Control panel: https://mycloud.rackspace.com/
