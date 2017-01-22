@@ -401,23 +401,21 @@ func (lrt *LogRoundTripper) logRequestBody(original io.ReadCloser, headers http.
 }
 
 func (lrt *LogRoundTripper) logResponseBody(original io.ReadCloser, headers http.Header) (io.ReadCloser, error) {
-	defer original.Close()
-
-	var bs bytes.Buffer
-	_, err := io.Copy(&bs, original)
-	if err != nil {
-		return nil, err
-	}
-
 	contentType := headers.Get("Content-Type")
 	if strings.HasPrefix(contentType, "application/json") {
+		var bs bytes.Buffer
+		defer original.Close()
+		_, err := io.Copy(&bs, original)
+		if err != nil {
+			return nil, err
+		}
 		debugInfo := lrt.formatJSON(bs.Bytes())
 		lrt.Logger.Debugf("Response Body: %s\n", debugInfo)
-	} else {
-		lrt.Logger.Debugf("Not logging because response body isn't JSON")
+		return ioutil.NopCloser(strings.NewReader(bs.String())), nil
 	}
 
-	return ioutil.NopCloser(strings.NewReader(bs.String())), nil
+	lrt.Logger.Debugf("Not logging because response body isn't JSON")
+	return original, nil
 }
 
 func (lrt *LogRoundTripper) formatJSON(raw []byte) string {
