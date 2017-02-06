@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/rackspace/rack/handler"
 	"github.com/codegangsta/cli"
 	"github.com/rackspace/gophercloud/rackspace/blockstorage/v1/snapshots"
 	th "github.com/rackspace/gophercloud/testhelper"
 	"github.com/rackspace/gophercloud/testhelper/client"
+	"github.com/rackspace/rack/handler"
 )
 
 func newCreateApp(flags map[string]string) *cli.Context {
@@ -19,6 +19,7 @@ func newCreateApp(flags map[string]string) *cli.Context {
 	flagset.String("volume-id", "", "")
 	flagset.String("name", "", "")
 	flagset.String("description", "", "")
+	flagset.Bool("force", false, "")
 	for k, v := range flags {
 		flagset.Set(k, v)
 	}
@@ -43,6 +44,7 @@ func TestCreateHandleFlags(t *testing.T) {
 	c := newCreateApp(map[string]string{
 		"volume-id":   "13ba-75c0-4483-acf9",
 		"description": "a description",
+		"force":       "true",
 	})
 	cmd := &commandCreate{
 		Ctx: &handler.Context{
@@ -54,6 +56,7 @@ func TestCreateHandleFlags(t *testing.T) {
 			opts: &snapshots.CreateOpts{
 				VolumeID:    "13ba-75c0-4483-acf9",
 				Description: "a description",
+				Force:       true,
 			},
 		},
 	}

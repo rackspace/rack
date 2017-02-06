@@ -1,11 +1,11 @@
 package snapshotcommands
 
 import (
-	"github.com/rackspace/rack/commandoptions"
-	"github.com/rackspace/rack/handler"
 	"github.com/codegangsta/cli"
 	osSnapshots "github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots"
 	"github.com/rackspace/gophercloud/rackspace/blockstorage/v1/snapshots"
+	"github.com/rackspace/rack/commandoptions"
+	"github.com/rackspace/rack/handler"
 	"github.com/rackspace/rack/util"
 )
 
@@ -33,6 +33,10 @@ func flagsCreate() []cli.Flag {
 		cli.StringFlag{
 			Name:  "description",
 			Usage: "[optional] A description for this snapshot.",
+		},
+		cli.BoolFlag{
+			Name:  "force",
+			Usage: "[optional] If provided, will force a snapshot to be created even if volume is attached.",
 		},
 		cli.BoolFlag{
 			Name:  "wait-for-completion",
@@ -87,6 +91,7 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 		VolumeID:    c.String("volume-id"),
 		Name:        c.String("name"),
 		Description: c.String("description"),
+		Force:       c.IsSet("force"),
 	}
 
 	resource.Params = &paramsCreate{
