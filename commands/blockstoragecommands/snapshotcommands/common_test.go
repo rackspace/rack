@@ -3,8 +3,8 @@ package snapshotcommands
 import (
 	"testing"
 
-	osSnapshots "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots"
-	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
+	osSnapshots "github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots"
+	th "github.com/rackspace/gophercloud/testhelper"
 )
 
 func TestSnapshotSingle(t *testing.T) {

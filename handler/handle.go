@@ -9,7 +9,7 @@ import (
 	"sync"
 
 	"github.com/rackspace/rack/auth"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud"
+	"github.com/rackspace/gophercloud"
 	"github.com/rackspace/rack/output"
 )
 

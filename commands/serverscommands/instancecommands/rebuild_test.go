@@ -7,11 +7,11 @@ import (
 	"testing"
 
 	"github.com/rackspace/rack/handler"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/diskconfig"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
-	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
+	"github.com/codegangsta/cli"
+	"github.com/rackspace/gophercloud/openstack/compute/v2/extensions/diskconfig"
+	"github.com/rackspace/gophercloud/rackspace/compute/v2/servers"
+	th "github.com/rackspace/gophercloud/testhelper"
+	"github.com/rackspace/gophercloud/testhelper/client"
 )
 
 func TestRebuildContext(t *testing.T) {

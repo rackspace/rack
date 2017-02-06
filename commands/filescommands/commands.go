@@ -5,7 +5,7 @@ import (
 	"github.com/rackspace/rack/commands/filescommands/containercommands"
 	"github.com/rackspace/rack/commands/filescommands/largeobjectcommands"
 	"github.com/rackspace/rack/commands/filescommands/objectcommands"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	"github.com/codegangsta/cli"
 )
 
 // Get returns all the commands allowed for a `files` request.

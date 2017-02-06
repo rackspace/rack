@@ -5,10 +5,10 @@ import (
 
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	"github.com/rackspace/rack/internal/github.com/fatih/structs"
-	osStackEvents "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stackevents"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/orchestration/v1/stackevents"
+	"github.com/codegangsta/cli"
+	"github.com/fatih/structs"
+	osStackEvents "github.com/rackspace/gophercloud/openstack/orchestration/v1/stackevents"
+	"github.com/rackspace/gophercloud/rackspace/orchestration/v1/stackevents"
 	"github.com/rackspace/rack/util"
 )
 

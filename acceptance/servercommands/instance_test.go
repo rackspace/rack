@@ -8,8 +8,8 @@ import (
 	"os/exec"
 	"testing"
 
-	osServers "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
-	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
+	osServers "github.com/rackspace/gophercloud/openstack/compute/v2/servers"
+	th "github.com/rackspace/gophercloud/testhelper"
 )
 
 func TestServerCommands(t *testing.T) {

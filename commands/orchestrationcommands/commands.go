@@ -6,7 +6,7 @@ import (
 	"github.com/rackspace/rack/commands/orchestrationcommands/stackeventcommands"
 	"github.com/rackspace/rack/commands/orchestrationcommands/stackresourcecommands"
 	"github.com/rackspace/rack/commands/orchestrationcommands/stacktemplatecommands"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	"github.com/codegangsta/cli"
 )
 
 var serviceClientType = "orchestration"

@@ -3,8 +3,8 @@ package snapshotcommands
 import (
 	"strings"
 
-	"github.com/rackspace/rack/internal/github.com/fatih/structs"
-	osSnapshots "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots"
+	"github.com/fatih/structs"
+	osSnapshots "github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots"
 )
 
 func snapshotSingle(snapshot *osSnapshots.Snapshot) map[string]interface{} {

@@ -1,6 +1,6 @@
 package flavorcommands
 
-import "github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+import "github.com/codegangsta/cli"
 
 var commandPrefix = "servers flavor"
 var serviceClientType = "compute"

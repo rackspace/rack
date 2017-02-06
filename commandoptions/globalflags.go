@@ -1,6 +1,6 @@
 package commandoptions
 
-import "github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+import "github.com/codegangsta/cli"
 
 // GlobalFlags returns the flags that can be used after `rack` in a command, such as
 // output flags and authentication flags.

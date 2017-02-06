@@ -6,8 +6,8 @@ import (
 
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	osVolumes "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes"
+	"github.com/codegangsta/cli"
+	osVolumes "github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes"
 	"github.com/rackspace/rack/util"
 )
 

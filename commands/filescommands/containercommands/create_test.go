@@ -6,10 +6,10 @@ import (
 	"testing"
 
 	"github.com/rackspace/rack/handler"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers"
-	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
+	"github.com/codegangsta/cli"
+	"github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers"
+	th "github.com/rackspace/gophercloud/testhelper"
+	"github.com/rackspace/gophercloud/testhelper/client"
 )
 
 func TestCreateContext(t *testing.T) {

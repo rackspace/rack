@@ -10,8 +10,8 @@ import (
 	"os/exec"
 	"testing"
 
-	osStacks "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stacks"
-	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
+	osStacks "github.com/rackspace/gophercloud/openstack/orchestration/v1/stacks"
+	th "github.com/rackspace/gophercloud/testhelper"
 )
 
 const createTemplateURL = "https://raw.githubusercontent.com/rackerlabs/heat-ci/master/dev/smoke.yaml"

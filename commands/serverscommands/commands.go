@@ -6,7 +6,7 @@ import (
 	"github.com/rackspace/rack/commands/serverscommands/instancecommands"
 	"github.com/rackspace/rack/commands/serverscommands/keypaircommands"
 	"github.com/rackspace/rack/commands/serverscommands/volumeattachmentcommands"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	"github.com/codegangsta/cli"
 )
 
 // Get returns all the commands allowed for a `servers` request.

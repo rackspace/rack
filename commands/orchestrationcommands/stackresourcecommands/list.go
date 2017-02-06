@@ -4,10 +4,10 @@ import (
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/commands/orchestrationcommands/stackcommands"
 	"github.com/rackspace/rack/handler"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	"github.com/rackspace/rack/internal/github.com/fatih/structs"
-	osStackResources "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stackresources"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/orchestration/v1/stackresources"
+	"github.com/codegangsta/cli"
+	"github.com/fatih/structs"
+	osStackResources "github.com/rackspace/gophercloud/openstack/orchestration/v1/stackresources"
+	"github.com/rackspace/gophercloud/rackspace/orchestration/v1/stackresources"
 	"github.com/rackspace/rack/util"
 )
 

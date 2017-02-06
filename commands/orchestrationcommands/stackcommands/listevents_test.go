@@ -7,10 +7,10 @@ import (
 	"testing"
 
 	"github.com/rackspace/rack/handler"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	osStackEvents "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stackevents"
-	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper/client"
+	"github.com/codegangsta/cli"
+	osStackEvents "github.com/rackspace/gophercloud/openstack/orchestration/v1/stackevents"
+	th "github.com/rackspace/gophercloud/testhelper"
+	"github.com/rackspace/gophercloud/testhelper/client"
 )
 
 func TestListEventsContext(t *testing.T) {

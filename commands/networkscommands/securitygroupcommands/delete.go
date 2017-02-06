@@ -5,9 +5,9 @@ import (
 
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	osSecurityGroups "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/groups"
-	securityGroups "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/security/groups"
+	"github.com/codegangsta/cli"
+	osSecurityGroups "github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/groups"
+	securityGroups "github.com/rackspace/gophercloud/rackspace/networking/v2/security/groups"
 	"github.com/rackspace/rack/util"
 )
 

@@ -6,10 +6,10 @@ import (
 
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	"github.com/rackspace/rack/internal/github.com/fatih/structs"
-	osKeypairs "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs"
+	"github.com/codegangsta/cli"
+	"github.com/fatih/structs"
+	osKeypairs "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs"
+	"github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs"
 	"github.com/rackspace/rack/util"
 )
 

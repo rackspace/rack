@@ -3,9 +3,9 @@ package portcommands
 import (
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	osPorts "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/ports"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/ports"
+	"github.com/codegangsta/cli"
+	osPorts "github.com/rackspace/gophercloud/openstack/networking/v2/ports"
+	"github.com/rackspace/gophercloud/rackspace/networking/v2/ports"
 	"github.com/rackspace/rack/util"
 )
 

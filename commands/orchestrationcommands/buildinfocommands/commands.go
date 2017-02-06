@@ -1,6 +1,6 @@
 package buildinfocommands
 
-import "github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+import "github.com/codegangsta/cli"
 
 var commandPrefix = "orchestration build-info"
 var serviceClientType = "orchestration"
