@@ -1,6 +1,6 @@
 package stackresourcecommands
 
-import "github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+import "github.com/codegangsta/cli"
 
 var commandPrefix = "orchestration resource"
 var serviceClientType = "orchestration"

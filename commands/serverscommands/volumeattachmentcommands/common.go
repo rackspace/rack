@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/rackspace/rack/handler"
-	osServers "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers"
+	osServers "github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/rackspace/rack/output"
 )
 

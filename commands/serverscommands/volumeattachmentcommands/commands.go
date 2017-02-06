@@ -1,6 +1,6 @@
 package volumeattachmentcommands
 
-import "github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+import "github.com/codegangsta/cli"
 
 var commandPrefix = "servers volume-attachment"
 var serviceClientType = "compute"

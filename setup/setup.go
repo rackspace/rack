@@ -9,7 +9,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	"github.com/codegangsta/cli"
 	"github.com/rackspace/rack/util"
 )
 

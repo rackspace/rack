@@ -1,6 +1,6 @@
 package keypaircommands
 
-import "github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+import "github.com/codegangsta/cli"
 
 var commandPrefix = "servers keypair"
 var serviceClientType = "compute"

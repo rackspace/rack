@@ -8,7 +8,7 @@ import (
 	"text/template"
 
 	"github.com/rackspace/rack/commandoptions"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	"github.com/codegangsta/cli"
 )
 
 var appHelpTemplate = `NAME:

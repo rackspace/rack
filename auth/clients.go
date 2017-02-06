@@ -10,12 +10,12 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/Sirupsen/logrus"
+	"github.com/codegangsta/cli"
+	"github.com/mvalkon/gophercloud/openstack"
+	"github.com/rackspace/gophercloud"
+	"github.com/rackspace/gophercloud/rackspace"
 	"github.com/rackspace/rack/commandoptions"
-	"github.com/rackspace/rack/internal/github.com/Sirupsen/logrus"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud"
-	tokens2 "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/identity/v2/tokens"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace"
 	"github.com/rackspace/rack/util"
 )
 
@@ -159,7 +159,7 @@ func authFromScratch(credsResult *CredentialsResult, serviceType string, urlType
 	pc, err := rackspace.AuthenticatedClient(*ao)
 	if err != nil {
 		switch err.(type) {
-		case *tokens2.ErrNoPassword:
+		case openstack.ErrNoPassword:
 			return nil, errors.New("Please supply an API key.")
 		}
 		return nil, err

@@ -1,6 +1,6 @@
 package largeobjectcommands
 
-import "github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+import "github.com/codegangsta/cli"
 
 var commandPrefix = "files large-object"
 var serviceClientType = "object-store"

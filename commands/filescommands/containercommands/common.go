@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/rackspace/rack/handler"
-	"github.com/rackspace/rack/internal/github.com/cenkalti/backoff"
-	"github.com/rackspace/rack/internal/github.com/dustin/go-humanize"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
+	"github.com/cenkalti/backoff"
+	"github.com/dustin/go-humanize"
+	"github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
 	"github.com/rackspace/rack/util"
 )
 

@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/rackspace/rack/handler"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	th "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper"
+	"github.com/codegangsta/cli"
+	th "github.com/rackspace/gophercloud/testhelper"
 	"github.com/rackspace/rack/output"
 )
 

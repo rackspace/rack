@@ -1,6 +1,6 @@
 package securitygroupcommands
 
-import "github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+import "github.com/codegangsta/cli"
 
 var commandPrefix = "networks security-group"
 var serviceClientType = "network"

@@ -3,8 +3,8 @@ package subnetcommands
 import (
 	"strings"
 
-	"github.com/rackspace/rack/internal/github.com/fatih/structs"
-	osSubnets "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/subnets"
+	"github.com/fatih/structs"
+	osSubnets "github.com/rackspace/gophercloud/openstack/networking/v2/subnets"
 )
 
 func subnetSingle(subnet *osSubnets.Subnet) map[string]interface{} {

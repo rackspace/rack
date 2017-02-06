@@ -5,8 +5,8 @@ import (
 
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	securityGroupRules "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/security/rules"
+	"github.com/codegangsta/cli"
+	securityGroupRules "github.com/rackspace/gophercloud/rackspace/networking/v2/security/rules"
 	"github.com/rackspace/rack/util"
 )
 

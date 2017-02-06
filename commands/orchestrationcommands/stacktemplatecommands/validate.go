@@ -7,10 +7,10 @@ import (
 
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	"github.com/rackspace/rack/internal/github.com/fatih/structs"
-	osStackTemplates "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stacktemplates"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/orchestration/v1/stacktemplates"
+	"github.com/codegangsta/cli"
+	"github.com/fatih/structs"
+	osStackTemplates "github.com/rackspace/gophercloud/openstack/orchestration/v1/stacktemplates"
+	"github.com/rackspace/gophercloud/rackspace/orchestration/v1/stacktemplates"
 	"github.com/rackspace/rack/util"
 )
 

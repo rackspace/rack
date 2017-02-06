@@ -8,9 +8,9 @@ import (
 
 	"github.com/rackspace/rack/commandoptions"
 	"github.com/rackspace/rack/handler"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	osObjects "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
-	"github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/objects"
+	"github.com/codegangsta/cli"
+	osObjects "github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects"
+	"github.com/rackspace/gophercloud/rackspace/objectstorage/v1/objects"
 	"github.com/rackspace/rack/util"
 )
 

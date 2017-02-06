@@ -6,7 +6,7 @@ import (
 	"github.com/rackspace/rack/commands/networkscommands/securitygroupcommands"
 	"github.com/rackspace/rack/commands/networkscommands/securitygrouprulecommands"
 	"github.com/rackspace/rack/commands/networkscommands/subnetcommands"
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
+	"github.com/codegangsta/cli"
 )
 
 // Get returns all the commands allowed for a `networks` request.

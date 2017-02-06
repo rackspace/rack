@@ -1,8 +1,8 @@
 package stackresourcecommands
 
 import (
-	"github.com/rackspace/rack/internal/github.com/fatih/structs"
-	osStackResources "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stackresources"
+	"github.com/fatih/structs"
+	osStackResources "github.com/rackspace/gophercloud/openstack/orchestration/v1/stackresources"
 )
 
 func resourceSingle(rawResource interface{}) map[string]interface{} {

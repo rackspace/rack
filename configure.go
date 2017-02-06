@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/rackspace/rack/internal/github.com/codegangsta/cli"
-	"github.com/rackspace/rack/internal/gopkg.in/ini.v1"
+	"github.com/codegangsta/cli"
+	"gopkg.in/ini.v1"
 	"github.com/rackspace/rack/util"
 )
 
