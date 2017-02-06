@@ -3,7 +3,7 @@
 # prep-travis-release is used to layout a build directory for Travis to use for
 # uploading to cloudfiles
 #
-# Assumes a gimme environment with GIMME_OS, GIMME_ARCH, and GOROOT, and PATH
+# Assumes an environment with RACK_OS, RACK_ARCH, and GOROOT, and PATH
 #
 # The script does not have to run on Travis though, as it will detect your
 # current branch instead of using $TRAVIS_BRANCH
@@ -19,13 +19,13 @@ SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 source "${SCRIPT_DIR}/lib.sh"
 
 initialize() {
-  if [[ -z "${GIMME_OS-}" && -z "${GIMME_ARCH-}" ]]; then
-    >&2 echo "GIMME_OS and GIMME_ARCH must be defined"
+  if [[ -z "${RACK_OS-}" && -z "${RACK_ARCH-}" ]]; then
+    >&2 echo "RACK_OS and RACK_ARCH must be defined"
     exit 2
   fi
 
-  os=$GIMME_OS
-  arch=$GIMME_ARCH
+  os=$RACK_OS
+  arch=$RACK_ARCH
 
   get_branch
   get_version
@@ -50,7 +50,7 @@ initialize() {
       os="FreeBSD"
       ;;
     *)
-      >&2 echo "Unknown OS ${os}. Assuming it's a valid OS for gimme/go and charging ahead."
+      >&2 echo "Unknown OS ${os}. Assuming it's a valid OS for Go and charging ahead."
   esac
 
   case $arch in
