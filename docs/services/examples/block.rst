@@ -67,3 +67,9 @@ After the volume is detached, you can create a snapshot by using the following c
     SnapshotID
     Attachments
     CreatedAt	2015-07-31T18:57:34.652136
+
+To create a snapshot while a volume is still attached to a server, use the ``force`` flag:
+
+::
+
+  $ rack block-storage snapshot create --volume-id 81c7a7e5-01a5-44bb-9b43-0cc9f7c4e423 --force
