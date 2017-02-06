@@ -39,778 +39,778 @@
 			"revisionTime": "2017-01-25T05:19:37Z"
 		},
 		{
-			"checksumSHA1": "CFVKhS9lP+3g768OZGIWkW4RQso=",
+			"checksumSHA1": "eGS+Tm6MB57HXvU/vBKntsM14jE=",
 			"path": "github.com/rackspace/gophercloud",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "ODy+uzju6qxaKRwyvAWBwnWkUrE=",
+			"checksumSHA1": "3nhonI16/JExWY61CdqOI96RHaQ=",
 			"path": "github.com/rackspace/gophercloud/openstack",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "0GNynt8PafEGmbqVnqBGT8AOZcQ=",
+			"checksumSHA1": "yPiPNiROHpsWgVRpNoM5TImUij8=",
 			"path": "github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "RJauzk5vlw07+1y0duwAx9TLsK0=",
+			"checksumSHA1": "hQ4mGQQMmkJSJzWMVWcqGRpnWAQ=",
 			"path": "github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "LGhORA2Ma2keilzEwXbVhvt7SqQ=",
+			"checksumSHA1": "TypkYOX+UX9pRTOhdXwZZIWjRhs=",
 			"path": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/bootfromvolume",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "OY8+hDumbKGOVzV+g6V7bFEWqFk=",
+			"checksumSHA1": "UsLFTx8e1BPyzsKj8x16s4ge9B4=",
 			"path": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/diskconfig",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "i8Ipor7rkKPz+bjqXoSJKkNP0VU=",
+			"checksumSHA1": "A8CBSjxtNeXBtM3M51qqs5FMVNE=",
 			"path": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "2xr9FbjlS0BaZ5MLEJ4PPn503nk=",
+			"checksumSHA1": "hHREWI5bxjI3JsH+Urdi7+yn3IA=",
 			"path": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/volumeattach",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "FPd0ons1d9e2envvl3ASWxr5Ngk=",
+			"checksumSHA1": "C2K3kYQgwa65cVRvWrNZACQFX7Q=",
 			"path": "github.com/rackspace/gophercloud/openstack/compute/v2/flavors",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "upPxQ/ihvJUwDlthEzfknzdeiD8=",
+			"checksumSHA1": "R3AKzxN5UnLAHFi5w/AEsRaEGA0=",
 			"path": "github.com/rackspace/gophercloud/openstack/compute/v2/images",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "3VAArC1JaKDwOiNa5D+jFuO2Hu8=",
+			"checksumSHA1": "HDabPMurOIF4TrTNsoafnQWuChk=",
 			"path": "github.com/rackspace/gophercloud/openstack/compute/v2/servers",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "A9vU3GJ8+wOfiUNTLXN6bApYnM4=",
+			"checksumSHA1": "kBNUmTmGZgMc7RA8b/MfF8mNLrw=",
 			"path": "github.com/rackspace/gophercloud/openstack/identity/v2/tenants",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "DYzpKESmGQ0sGF1QtYuH49CBmJM=",
+			"checksumSHA1": "AL/B55nDSu8EPDPS7ek81Sj6M/k=",
 			"path": "github.com/rackspace/gophercloud/openstack/identity/v2/tokens",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "x6y50dHHBnv6HlHbBTG+eWw91Jw=",
+			"checksumSHA1": "eR8ZuyY6HiAGtu75bQwDGNg9uQE=",
 			"path": "github.com/rackspace/gophercloud/openstack/identity/v3/tokens",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "j1L9DHFhGQqyM1tF47K9gnYT7+g=",
+			"checksumSHA1": "ggP9Ey3Fau1+4SZ4xolSv4ywt1A=",
 			"path": "github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/groups",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "OGo9MOBGpeU4aLlEMDo8NlDjVG4=",
+			"checksumSHA1": "WMv0abMVm6mx6qhi0b28yqfu2rY=",
 			"path": "github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/rules",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "9KnQfPzzZPkOFvTkg0cx0WlwrzM=",
+			"checksumSHA1": "LuEBbhG7jYZ6P7yUASISjs6tboE=",
 			"path": "github.com/rackspace/gophercloud/openstack/networking/v2/networks",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "WbHlqzabGpVA2tpfezeSP4vjunA=",
+			"checksumSHA1": "qw9W8p2BsR30p9n+Qi87gaeq0zs=",
 			"path": "github.com/rackspace/gophercloud/openstack/networking/v2/ports",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "8KoJzhD+YIhSym/4Ks95SrKBY7I=",
+			"checksumSHA1": "JsU23CaOIYsJN1fAflAhGgZh6Jw=",
 			"path": "github.com/rackspace/gophercloud/openstack/networking/v2/subnets",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "Db5cQFPHglF3QclNWWbtyKwoPQw=",
+			"checksumSHA1": "UwKRfRbAaR71WYb/Adtgb8aa7ak=",
 			"path": "github.com/rackspace/gophercloud/openstack/objectstorage/v1/accounts",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "JojXKZTWYiQnyjBuWZSnfnudKyg=",
+			"checksumSHA1": "vYU3+yL9RCPgG9YWUfrSj4ov1kY=",
 			"path": "github.com/rackspace/gophercloud/openstack/objectstorage/v1/containers",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "gQ9OLCSGy2cafqA6wXXjwRVLp+I=",
+			"checksumSHA1": "jbl9ebIa8qQ9nNCv3irYRNaZYo8=",
 			"path": "github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "B4Up3KiMju+15eXeTQlXzh2uiQk=",
+			"checksumSHA1": "/nIZJN4fIke77nCpus7aXfcWWK0=",
 			"path": "github.com/rackspace/gophercloud/openstack/orchestration/v1/buildinfo",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "kXW8dJnM9+jBSXV/tykYWCuIfTU=",
+			"checksumSHA1": "UshpBEGyQKOs4jN+oastLfUuhBM=",
 			"path": "github.com/rackspace/gophercloud/openstack/orchestration/v1/stackevents",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "Mdgtd0HK1q76llTdlH6oEXnzWAc=",
+			"checksumSHA1": "hVBvxm3yx1qAn1+OpVAxkZkJUPY=",
 			"path": "github.com/rackspace/gophercloud/openstack/orchestration/v1/stackresources",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "HF8l8ACAPtUjqn/y3QaiDdLT3dI=",
+			"checksumSHA1": "/v/aybjeMu/vEIPQQ1I03oZy5Vk=",
 			"path": "github.com/rackspace/gophercloud/openstack/orchestration/v1/stacks",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "hdkBjSL2reWVdPtOHUzJuPIsKI0=",
+			"checksumSHA1": "g7nMGTml/Ozf/wxoH9RKmHsD35M=",
 			"path": "github.com/rackspace/gophercloud/openstack/orchestration/v1/stacktemplates",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "u4b4gqDqArKMXIfF1+siY+/PyXM=",
+			"checksumSHA1": "e4ussrqujJHizWbdBaLjIpWYmgY=",
 			"path": "github.com/rackspace/gophercloud/openstack/utils",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "pAoU48bLuTOcAGRa5zda7wHF1Do=",
+			"checksumSHA1": "zNrhzobVrzrPD3NF8K0D8U/J4UM=",
 			"path": "github.com/rackspace/gophercloud/pagination",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "Mgsj7uN+enUI9E2VqBuHDPDweMk=",
+			"checksumSHA1": "lfk/j4kLKOxZnomSS19g3gCN69k=",
 			"path": "github.com/rackspace/gophercloud/rackspace",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "YJj+Qevfzl5zz4nn2XLU183ruhk=",
+			"checksumSHA1": "8kg0wInY1az0iTqd+GCKpG3XUQg=",
 			"path": "github.com/rackspace/gophercloud/rackspace/blockstorage/v1/snapshots",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "/JvB+GejMahZocgyX6AJzs82i58=",
+			"checksumSHA1": "tKW3B2DFGfTuIqdWcfVVX0IDs+w=",
 			"path": "github.com/rackspace/gophercloud/rackspace/compute/v2/bootfromvolume",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "YfN1WsP+4QvDEcCZbSUzAmZcgp0=",
+			"checksumSHA1": "jMNY0dIsHQHrjVS7gs0WKw1BSHs=",
 			"path": "github.com/rackspace/gophercloud/rackspace/compute/v2/flavors",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "ncsU9CW2Og9z/IFTcmY+GEmb7pU=",
+			"checksumSHA1": "VwcD5e290LAf9+roItDAkloAgig=",
 			"path": "github.com/rackspace/gophercloud/rackspace/compute/v2/images",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "lLHsZP5cx5VSQd3oNxV622V7LVI=",
+			"checksumSHA1": "KEPu1LkH6vw9TczhdvoPOajxxEk=",
 			"path": "github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "bCv3GdFEBiIgw4AdxpL9/+1eGK4=",
+			"checksumSHA1": "9nr0+n6ymhLZ5Bb9KY3LC9osBQg=",
 			"path": "github.com/rackspace/gophercloud/rackspace/compute/v2/servers",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "cGkmoCSqV+/mN3UC2zCK75y7hE4=",
+			"checksumSHA1": "nZvGpVUe3zTfT5nhKkJloOud2/I=",
 			"path": "github.com/rackspace/gophercloud/rackspace/identity/v2/tokens",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "paI/X0fMz1/GYMIEQ76/OX2Zruc=",
+			"checksumSHA1": "Fibuly4yKJgwAg01gKWe3iqLcwk=",
 			"path": "github.com/rackspace/gophercloud/rackspace/networking/v2/networks",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "tt8sSlDeZ1wlGowbxTH83PnoIyw=",
+			"checksumSHA1": "OL842meIDskaTAvQf1GoLZjI/RY=",
 			"path": "github.com/rackspace/gophercloud/rackspace/networking/v2/ports",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "Jgletmhnj8YWSqCTlBxNldx0GHY=",
+			"checksumSHA1": "Jj8zDLQMh64YuZAXHseU81MA3tM=",
 			"path": "github.com/rackspace/gophercloud/rackspace/networking/v2/security/groups",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "b10XJi5jV6Tw8M5Zh6RPWVCixhE=",
+			"checksumSHA1": "onHzb+VbVftO/SGCuvdYzuaC0kI=",
 			"path": "github.com/rackspace/gophercloud/rackspace/networking/v2/security/rules",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "GjgliZAWRG0cRez/RKuWXkjqgqQ=",
+			"checksumSHA1": "1WyhTU1Frtjl3uaWJABPf875X9k=",
 			"path": "github.com/rackspace/gophercloud/rackspace/networking/v2/subnets",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "1g5qiG0DPiWOpO7goElKHzFJdJM=",
+			"checksumSHA1": "D9rXsD+ZoSK8Lu/Zh7HvzfYEgwA=",
 			"path": "github.com/rackspace/gophercloud/rackspace/objectstorage/v1/accounts",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "rO2fm7esZmgFTpwviLVHL0IXFx0=",
+			"checksumSHA1": "11RhzLqcE2a+mNMoSbowe+g2czs=",
 			"path": "github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "egpVVwFwdzQlMswCwsdK3Kskm6c=",
+			"checksumSHA1": "vXxfMIKgYnp/v17CYEcnA/E/va8=",
 			"path": "github.com/rackspace/gophercloud/rackspace/objectstorage/v1/objects",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "wr9IoWQz6z2ao1TcCc9dur9MLs4=",
+			"checksumSHA1": "HqiamT2E7RmWgxFRl/S9MSmuqT0=",
 			"path": "github.com/rackspace/gophercloud/rackspace/orchestration/v1/buildinfo",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "GhB90syqCXbNsAbgSS3m2WK53rc=",
+			"checksumSHA1": "1Qdoi8tHKgjGSbGPqolHk+H4LCA=",
 			"path": "github.com/rackspace/gophercloud/rackspace/orchestration/v1/stackevents",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "XpKgiLgGHxPs0FUvw24+HXGOIiQ=",
+			"checksumSHA1": "iX55pidwAVQ5HU8gVxWjAmIlHig=",
 			"path": "github.com/rackspace/gophercloud/rackspace/orchestration/v1/stackresources",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "1brfycUlVv3cMuCN5xLnCnZcLEk=",
+			"checksumSHA1": "3bG8qh01F0nRXL5Ve+o3wL9oZEQ=",
 			"path": "github.com/rackspace/gophercloud/rackspace/orchestration/v1/stacks",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "ntGNINCs3/eR2mg0am76laNAqNI=",
+			"checksumSHA1": "4nZbwlSQlpsAzfUwJxkfYysK6vc=",
 			"path": "github.com/rackspace/gophercloud/rackspace/orchestration/v1/stacktemplates",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
 			"checksumSHA1": "U2yzK8GFNeHZqcoeotcHmK57lAI=",
 			"path": "github.com/rackspace/gophercloud/testhelper",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
-			"checksumSHA1": "k8M9wJ5uzkgKm8yP9Lt1zYLogdU=",
+			"checksumSHA1": "fXtvTbQBML8QLu/qpD9sAt53J00=",
 			"path": "github.com/rackspace/gophercloud/testhelper/client",
-			"revision": "401ccb24a8c1ffe68e7b33343409dada5fb4e625",
-			"revisionTime": "2017-02-06T00:05:55Z",
+			"revision": "ae302b76984ed6bf5312a4dcc63568c113fef53c",
+			"revisionTime": "2017-02-06T01:59:18Z",
 			"version": "=rackcli",
 			"versionExact": "rackcli"
 		},
 		{
 			"checksumSHA1": "ypYrA7EagCXABrx7jNefjuwKcgM=",
-			"path": "github.com/rackspace/rack/internal/github.com/Sirupsen/logrus",
+			"path": "github.com/Sirupsen/logrus",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "kJkV/FVL9y/psrUsAFXCTOZahxI=",
-			"path": "github.com/rackspace/rack/internal/github.com/cenkalti/backoff",
+			"path": "github.com/cenkalti/backoff",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "OTfB5VPNCeSXY3WbfW2NIjPbDoE=",
-			"path": "github.com/rackspace/rack/internal/github.com/codegangsta/cli",
+			"path": "github.com/codegangsta/cli",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "ZelIb9QqN2bbkWUtULp5vuame/c=",
-			"path": "github.com/rackspace/rack/internal/github.com/dustin/go-humanize",
+			"path": "github.com/dustin/go-humanize",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "ZET0uDzofizidHmNzi1GdD8X1vk=",
-			"path": "github.com/rackspace/rack/internal/github.com/fatih/structs",
+			"path": "github.com/fatih/structs",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "3WadOpEUe7eizyEknj5uV7Xroug=",
-			"path": "github.com/rackspace/rack/internal/github.com/mitchellh/mapstructure",
+			"path": "github.com/mitchellh/mapstructure",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "lcqKdehWVRbisTZNbQbrA/0Cm5U=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud",
+			"path": "github.com/rackspace/gophercloud",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "7O6R8GOiOmVyKJIC2IjhzAR4xpA=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack",
+			"path": "github.com/rackspace/gophercloud/openstack",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "f0PZvmiC/qyl659NSQREdZ/e19g=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots",
+			"path": "github.com/rackspace/gophercloud/openstack/blockstorage/v1/snapshots",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "ZCza7gpaaBIKAZGaiBjsZuBXfrs=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes",
+			"path": "github.com/rackspace/gophercloud/openstack/blockstorage/v1/volumes",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "cyaX+mMisF+2B40zWsR7LjE7KiA=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/bootfromvolume",
+			"path": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/bootfromvolume",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "J0nWA4sQy1Cj5YGcpUnUisyjTCg=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/diskconfig",
+			"path": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/diskconfig",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "6phDn+c+mfXVs7nkkSuQKuaRTUs=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs",
+			"path": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/keypairs",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "0i5IjKAWsHWgFEcPhyozYyRrFbc=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/extensions/volumeattach",
+			"path": "github.com/rackspace/gophercloud/openstack/compute/v2/extensions/volumeattach",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "CxPgPAfEHce8F6Rc7P8aMbryx9o=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/flavors",
+			"path": "github.com/rackspace/gophercloud/openstack/compute/v2/flavors",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "PHN9XRyeFr2bFjfp0vU2ip96GMg=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/images",
+			"path": "github.com/rackspace/gophercloud/openstack/compute/v2/images",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "uQFntW6v4h58KY0XLYMQ9xnCARk=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/compute/v2/servers",
+			"path": "github.com/rackspace/gophercloud/openstack/compute/v2/servers",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "Vp53J8ubrXGvNj9ATPpDY+Z7rdc=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/identity/v2/tenants",
+			"path": "github.com/rackspace/gophercloud/openstack/identity/v2/tenants",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "/FpLLNqbNGe01W96V5CA00kEpOo=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/identity/v2/tokens",
+			"path": "github.com/rackspace/gophercloud/openstack/identity/v2/tokens",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "U5+Pch9rQeuDdTT/kI4WmIb6/u0=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/identity/v3/tokens",
+			"path": "github.com/rackspace/gophercloud/openstack/identity/v3/tokens",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "3gcISRMUdpmOPDYJxWPhfGAHE14=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/groups",
+			"path": "github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/groups",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "WpkTcucWpidanhjz6h+5315uHQ8=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/rules",
+			"path": "github.com/rackspace/gophercloud/openstack/networking/v2/extensions/security/rules",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "hmp1rJjds24ISHholudK0DBFXsE=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/networks",
+			"path": "github.com/rackspace/gophercloud/openstack/networking/v2/networks",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "ToJa0PiCBe6qPVUTxNNc6xj6Sh4=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/ports",
+			"path": "github.com/rackspace/gophercloud/openstack/networking/v2/ports",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "FZjBkMfd5JBznTaLMfNj4mZzMaE=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/networking/v2/subnets",
+			"path": "github.com/rackspace/gophercloud/openstack/networking/v2/subnets",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "VDFDNfzVqfc0sr+Q05lTYpJ8Ewc=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/accounts",
+			"path": "github.com/rackspace/gophercloud/openstack/objectstorage/v1/accounts",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "HPItXte/8wus9FF1LvSFws05nqY=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/containers",
+			"path": "github.com/rackspace/gophercloud/openstack/objectstorage/v1/containers",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "PsfUBB+MuNw1GctTFI0fGtrWV5w=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects",
+			"path": "github.com/rackspace/gophercloud/openstack/objectstorage/v1/objects",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "VDBfOqzZc4EzGSojqXzeV352JIs=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/buildinfo",
+			"path": "github.com/rackspace/gophercloud/openstack/orchestration/v1/buildinfo",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "M2do30ZCgts4iZsk6ceIi332Ung=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stackevents",
+			"path": "github.com/rackspace/gophercloud/openstack/orchestration/v1/stackevents",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "JxG7m/efgT+lFYFo/S67Alze1+o=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stackresources",
+			"path": "github.com/rackspace/gophercloud/openstack/orchestration/v1/stackresources",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "uMCPGwOzCFjqqAxPzUmGWnI2xf0=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stacks",
+			"path": "github.com/rackspace/gophercloud/openstack/orchestration/v1/stacks",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "uP8tYJW3SIRc+FzcZD2HE/Qw5+w=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/orchestration/v1/stacktemplates",
+			"path": "github.com/rackspace/gophercloud/openstack/orchestration/v1/stacktemplates",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "eEawO3rEN8ZXlxM1Q8K97x0b2Sc=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/openstack/utils",
+			"path": "github.com/rackspace/gophercloud/openstack/utils",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "jaSLELNFZgpXxExLiaeLyMOkW8M=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/pagination",
+			"path": "github.com/rackspace/gophercloud/pagination",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "St2+w92mQWt1OF06gLJrBbCUg1g=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace",
+			"path": "github.com/rackspace/gophercloud/rackspace",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "1gLQRVQalFrBt0qEi54B0PXf2IM=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/blockstorage/v1/snapshots",
+			"path": "github.com/rackspace/gophercloud/rackspace/blockstorage/v1/snapshots",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "XuZUVyWs1XrcsWj7NWCnbOz8ZVk=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/bootfromvolume",
+			"path": "github.com/rackspace/gophercloud/rackspace/compute/v2/bootfromvolume",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "HJ8KRgIN/C0TnbROKXjHltq/e5Y=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/flavors",
+			"path": "github.com/rackspace/gophercloud/rackspace/compute/v2/flavors",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "4/I6jbwmT/nV0XZk3wG7ZvxPXjA=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/images",
+			"path": "github.com/rackspace/gophercloud/rackspace/compute/v2/images",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "QAXRygQBhC2uZ7gbAOYYp2WA0r0=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs",
+			"path": "github.com/rackspace/gophercloud/rackspace/compute/v2/keypairs",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "XiwWSYCVbD6mZlpgCHGtP/jqfYs=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/compute/v2/servers",
+			"path": "github.com/rackspace/gophercloud/rackspace/compute/v2/servers",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "qJGPmE1FsWSkaNIiVoYH1GvGLmU=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/identity/v2/tokens",
+			"path": "github.com/rackspace/gophercloud/rackspace/identity/v2/tokens",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "u+VfQn3Wq9pXYCk/Ok/bF/0u/v0=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/networks",
+			"path": "github.com/rackspace/gophercloud/rackspace/networking/v2/networks",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "rYQ5FSOJW+GYmHKLQqu6mMkNbo0=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/ports",
+			"path": "github.com/rackspace/gophercloud/rackspace/networking/v2/ports",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "KdV7Dowy5dUj726xDPaGDWzO320=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/security/groups",
+			"path": "github.com/rackspace/gophercloud/rackspace/networking/v2/security/groups",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "JNv/pks9F/i+RU5ER3UpBYeI6x0=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/security/rules",
+			"path": "github.com/rackspace/gophercloud/rackspace/networking/v2/security/rules",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "Tzvohw5kXfIjOSDqPjNN+EOZiqQ=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/networking/v2/subnets",
+			"path": "github.com/rackspace/gophercloud/rackspace/networking/v2/subnets",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "0/yb0Uq+LhnymthSxjyH5+albhA=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/accounts",
+			"path": "github.com/rackspace/gophercloud/rackspace/objectstorage/v1/accounts",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "B+8kvV2aI1VVlnQZnQldt+bQFcw=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers",
+			"path": "github.com/rackspace/gophercloud/rackspace/objectstorage/v1/containers",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "ubXfZawV6XVJr2h1akaWxZi8QHQ=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/objectstorage/v1/objects",
+			"path": "github.com/rackspace/gophercloud/rackspace/objectstorage/v1/objects",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "XLkSRbWmRXpKRZig6GH/W8+GxNg=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/orchestration/v1/buildinfo",
+			"path": "github.com/rackspace/gophercloud/rackspace/orchestration/v1/buildinfo",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "I+PjZRqLM76FOP96vL7bkX1uU1U=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/orchestration/v1/stackevents",
+			"path": "github.com/rackspace/gophercloud/rackspace/orchestration/v1/stackevents",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "AU8pemDXJP42xE0+R7dukuXerVM=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/orchestration/v1/stackresources",
+			"path": "github.com/rackspace/gophercloud/rackspace/orchestration/v1/stackresources",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "HvLtGILAq+pizMbeJGbrb0poUko=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/orchestration/v1/stacks",
+			"path": "github.com/rackspace/gophercloud/rackspace/orchestration/v1/stacks",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "nEUCgBK4yokVHq+61ESSzgTlIz0=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/rackspace/orchestration/v1/stacktemplates",
+			"path": "github.com/rackspace/gophercloud/rackspace/orchestration/v1/stacktemplates",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "T03QnvKWj1qqeUBjRCTOFP6n7ZA=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper",
+			"path": "github.com/rackspace/gophercloud/testhelper",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "P4T0AtnJ68c0Wz0vxgh2vGMKo9A=",
-			"path": "github.com/rackspace/rack/internal/github.com/rackspace/gophercloud/testhelper/client",
+			"path": "github.com/rackspace/gophercloud/testhelper/client",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "z+yR4DuG1wXVml6sHXpLfAMpoEI=",
-			"path": "github.com/rackspace/rack/internal/gopkg.in/ini.v1",
+			"path": "gopkg.in/ini.v1",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
 		{
 			"checksumSHA1": "FBohOTcSDFQ0c58m0+/Yx9qt5Zs=",
-			"path": "github.com/rackspace/rack/internal/gopkg.in/yaml.v2",
+			"path": "gopkg.in/yaml.v2",
 			"revision": "279d83c4bc2bfd351648eb97cf2d00082f541672",
 			"revisionTime": "2017-02-05T21:15:47Z"
 		},
