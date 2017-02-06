@@ -8,12 +8,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rackspace/rack/handler"
 	"github.com/codegangsta/cli"
 	"github.com/rackspace/gophercloud"
 	osStacks "github.com/rackspace/gophercloud/openstack/orchestration/v1/stacks"
 	th "github.com/rackspace/gophercloud/testhelper"
 	"github.com/rackspace/gophercloud/testhelper/client"
+	"github.com/rackspace/rack/handler"
 )
 
 func TestPreviewContext(t *testing.T) {
@@ -121,7 +121,7 @@ func TestPreviewPreCSV(t *testing.T) {
 		Params: &paramsPreview{},
 	}
 
-	expected := "{\"Capabilities\":[],\"CreationTime\":{},\"Description\":\"Simple template to test heat commands\",\"DisableRollback\":true,\"ID\":\"16ef0584-4458-41eb-87c8-0dc8d5f66c87\",\"Links\":[{\"Href\":\"http://166.76.160.117:8004/v1/98606384f58d4ad0b3db7d0d779549ac/stacks/postman_stack/16ef0584-4458-41eb-87c8-0dc8d5f66c87\",\"Rel\":\"self\"}],\"Name\":\"postman_stack\",\"NotificationTopics\":[],\"Parameters\":{\"OS::stack_id\":\"16ef0584-4458-41eb-87c8-0dc8d5f66c87\",\"OS::stack_name\":\"postman_stack\",\"flavor\":\"m1.tiny\"},\"Resources\":null,\"TemplateDescription\":\"Simple template to test heat commands\",\"Timeout\":0,\"UpdatedTime\":{}}"
+	expected := "{\"Capabilities\":[],\"CreationTime\":\"2015-02-03T20:07:39Z\",\"Description\":\"Simple template to test heat commands\",\"DisableRollback\":true,\"ID\":\"16ef0584-4458-41eb-87c8-0dc8d5f66c87\",\"Links\":[{\"Href\":\"http://166.76.160.117:8004/v1/98606384f58d4ad0b3db7d0d779549ac/stacks/postman_stack/16ef0584-4458-41eb-87c8-0dc8d5f66c87\",\"Rel\":\"self\"}],\"Name\":\"postman_stack\",\"NotificationTopics\":[],\"Parameters\":{\"OS::stack_id\":\"16ef0584-4458-41eb-87c8-0dc8d5f66c87\",\"OS::stack_name\":\"postman_stack\",\"flavor\":\"m1.tiny\"},\"Resources\":null,\"TemplateDescription\":\"Simple template to test heat commands\",\"Timeout\":0,\"UpdatedTime\":\"0001-01-01T00:00:00Z\"}"
 	resource.Result = &osStacks.PreviewedStack{
 		DisableRollback: true,
 		Description:     "Simple template to test heat commands",
@@ -160,7 +160,7 @@ func TestPreviewPreTable(t *testing.T) {
 		Params: &paramsPreview{},
 	}
 
-	expected := "{\"Capabilities\":[],\"CreationTime\":{},\"Description\":\"Simple template to test heat commands\",\"DisableRollback\":true,\"ID\":\"16ef0584-4458-41eb-87c8-0dc8d5f66c87\",\"Links\":[{\"Href\":\"http://166.76.160.117:8004/v1/98606384f58d4ad0b3db7d0d779549ac/stacks/postman_stack/16ef0584-4458-41eb-87c8-0dc8d5f66c87\",\"Rel\":\"self\"}],\"Name\":\"postman_stack\",\"NotificationTopics\":[],\"Parameters\":{\"OS::stack_id\":\"16ef0584-4458-41eb-87c8-0dc8d5f66c87\",\"OS::stack_name\":\"postman_stack\",\"flavor\":\"m1.tiny\"},\"Resources\":null,\"TemplateDescription\":\"Simple template to test heat commands\",\"Timeout\":0,\"UpdatedTime\":{}}"
+	expected := "{\"Capabilities\":[],\"CreationTime\":\"2015-02-03T20:07:39Z\",\"Description\":\"Simple template to test heat commands\",\"DisableRollback\":true,\"ID\":\"16ef0584-4458-41eb-87c8-0dc8d5f66c87\",\"Links\":[{\"Href\":\"http://166.76.160.117:8004/v1/98606384f58d4ad0b3db7d0d779549ac/stacks/postman_stack/16ef0584-4458-41eb-87c8-0dc8d5f66c87\",\"Rel\":\"self\"}],\"Name\":\"postman_stack\",\"NotificationTopics\":[],\"Parameters\":{\"OS::stack_id\":\"16ef0584-4458-41eb-87c8-0dc8d5f66c87\",\"OS::stack_name\":\"postman_stack\",\"flavor\":\"m1.tiny\"},\"Resources\":null,\"TemplateDescription\":\"Simple template to test heat commands\",\"Timeout\":0,\"UpdatedTime\":\"0001-01-01T00:00:00Z\"}"
 	resource.Result = &osStacks.PreviewedStack{
 		DisableRollback: true,
 		Description:     "Simple template to test heat commands",
