@@ -7,8 +7,8 @@
   </Target>
 
   <Target Name="Publish" DependsOnTargets="Package">
-    <!-- The environment variable BAMBOO_CHOCOLATEY_PASSWORD comes from the chocolatey.password variable defined on the rack plan in Bamboo -->
-    <Exec Command="choco push rack.$(NuGetVersion).nupkg --api-key %25BAMBOO_CHOCOLATEY_PASSWORD%25" />
+    <!-- The environment variable APPVEYOR_CHOCOLATEY_PASSWORD comes from the chocolatey.password variable defined on the rack plan in AppVeyor -->
+    <Exec Command="choco push rack.$(NuGetVersion).nupkg --api-key %25APPVEYOR_CHOCOLATEY_PASSWORD%25" />
   </Target>
 
   <Target Name="Package">
