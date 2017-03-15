@@ -1,0 +1,10 @@
+version: '{build}'
+skip_non_tags: true
+environment:
+  APPVEYOR_CHOCOLATEY_PASSWORD:
+    secure: TPt2VhWIlCR2q5P61E/VJTO3OSLb+t1JAj9lq2qNNoUjiRFRYRrJfxOAFcHqLaZc
+before_build:
+- ps: sleep 300
+build:
+  project: script/chocolatey/build.proj
+  verbosity: normal
