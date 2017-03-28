@@ -13,7 +13,6 @@ import (
 
 func man() {
 	content := fmt.Sprintln(`.\" Manpage for rack`)
-	content += fmt.Sprintln(`.\" Contact sdk-support@rackspace.com to correct errors or typos`)
 	content += fmt.Sprintf(`.TH man 1 "%s" "%s" "rack man page"`+"\n", time.Now().Format("06 May 2010"), util.Version)
 	content += fmt.Sprintln(`.SH NAME`)
 	content += fmt.Sprintf(`rack \- %s`+"\n", Usage())
