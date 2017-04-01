@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/rackspace/rack/commands/blockstoragecommands"
+	"github.com/rackspace/rack/commands/databasescommands"
 	"github.com/rackspace/rack/commands/filescommands"
 	"github.com/rackspace/rack/commands/networkscommands"
 	"github.com/rackspace/rack/commands/orchestrationcommands"
@@ -107,6 +108,11 @@ func Cmds() []cli.Command {
 			Name:        "orchestration",
 			Usage:       "Use a template language to orchestrate Rackspace cloud services",
 			Subcommands: orchestrationcommands.Get(),
+		},
+		{
+			Name:        "databases",
+			Usage:       "Cloud Databases",
+			Subcommands: databasescommands.Get(),
 		},
 	}
 }

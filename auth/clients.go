@@ -197,6 +197,12 @@ func authFromScratch(credsResult *CredentialsResult, serviceType string, urlType
 			Availability: urlType,
 		})
 		break
+	case "databases":
+		sc, err = rackspace.NewDBV1(pc, gophercloud.EndpointOpts{
+			Region:       region,
+			Availability: urlType,
+		})
+		break
 	}
 	if err != nil {
 		return nil, err

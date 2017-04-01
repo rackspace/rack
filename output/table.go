@@ -30,7 +30,7 @@ func MetadataTable(writer io.Writer, m map[string]interface{}, keys []string) {
 	w := tabwriter.NewWriter(writer, 0, 8, 0, '\t', 0)
 	for _, key := range keys {
 		val := fmt.Sprint(m[key])
-		fmt.Fprintf(w, "%s\t%s\n", key, strings.Replace(val, "\n", "\n\t", -1))
+		fmt.Fprintf(w, "%s\t %s\n", key, strings.Replace(val, "\n", "\n\t", -1))
 	}
 	w.Flush()
 }
