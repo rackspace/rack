@@ -260,7 +260,7 @@ Image
 
 The ``image`` subcommand provides information about server images. The ``image`` subcommand uses the following syntax::
 
-    rack server image <action> [optional flags]
+    rack servers image <action> [optional flags]
 
 The following sections describe the actions that you can perform on the ``image`` subcommand and provide example responses.
 
@@ -512,7 +512,7 @@ The ``volume-attachment`` subcommand provides information about and performs act
 
 The ``volume-attachment`` subcommand uses the following syntax::
 
-    rack server volume-attachment <action> [optional flag]
+    rack servers volume-attachment <action> [optional flag]
 
 The following sections describe the actions that you can perform on the ``volume-attachment`` subcommand and provide example responses.
 
