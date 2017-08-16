@@ -56,7 +56,7 @@ func flagsCreate() []cli.Flag {
 			Name: "allocation-pool",
 			Usage: strings.Join([]string{"[optional] An allocation pool for this subnet. This flag may be provided several times.\n",
 				"\tEach one of these flags takes 2 values: start and end.\n",
-				"\tExamle: --allocation-pool start=192.0.2.1,end=192.0.2.254 --allocation-pool start:172.20.0.1,end=172.20.0.254"}, ""),
+				"\tExample: --allocation-pool start=192.0.2.1,end=192.0.2.254 --allocation-pool start:172.20.0.1,end=172.20.0.254"}, ""),
 		},
 		cli.StringFlag{
 			Name:  "dns-nameservers",
@@ -67,7 +67,7 @@ func flagsCreate() []cli.Flag {
 				Name: "host-route",
 				Usage: strings.Join([]string{"[optional] A host route for this subnet. This flag may be provided several times.\n",
 					"\tEach one of these flags takes 2 values: dest (the destination CIDR) and next (the next hop).\n",
-					"\tExamle: --host-route dest=40.0.1.0/24,next=40.0.0.2"}, ""),
+					"\tExample: --host-route dest=40.0.1.0/24,next=40.0.0.2"}, ""),
 			},
 		*/
 	}
