@@ -98,7 +98,7 @@ func flagsCreate() []cli.Flag {
 				"\t\tdelete-on-termination\t[optional] Whether or not to delete the attached volume when the server is delete. Default is false. Options: true, false.",
 				"\t\tdestination-type\t[optional] The type that gets created. Options: volume, local.",
 				"\t\tvolume-size\t[optional] The size of the volume to create (in gigabytes).",
-				"\tExamle: --block-device source-type=image,source-id=bb02b1a3-bc77-4d17-ab5b-421d89850fca,volume-size=100,destination-type=volume,delete-on-termination=false",
+				"\tExample: --block-device source-type=image,source-id=bb02b1a3-bc77-4d17-ab5b-421d89850fca,volume-size=100,destination-type=volume,delete-on-termination=false",
 			}, "\n"),
 		},
 		cli.BoolFlag{
