@@ -40,15 +40,15 @@ func flagsListEvents() []cli.Flag {
 		},
 		cli.StringFlag{
 			Name:  "resource-actions",
-			Usage: "[optional] A comma seperated list of actions used for filtering events. Valid values are: CREATE, DELETE, UPDATE, ROLLBACK, SUSPEND, RESUME, ADOPT",
+			Usage: "[optional] A comma separated list of actions used for filtering events. Valid values are: CREATE, DELETE, UPDATE, ROLLBACK, SUSPEND, RESUME, ADOPT",
 		},
 		cli.StringFlag{
 			Name:  "resource-statuses",
-			Usage: "[optional] A comma seperated list of statuses used for filtering events. Valid values are: IN_PROGRESS, COMPLETE, FAILED",
+			Usage: "[optional] A comma separated list of statuses used for filtering events. Valid values are: IN_PROGRESS, COMPLETE, FAILED",
 		},
 		cli.StringFlag{
 			Name:  "resource-types",
-			Usage: "[optional] A comma seperated list of resource types used for filtering events. e.g. OS::Nova::Server",
+			Usage: "[optional] A comma separated list of resource types used for filtering events. e.g. OS::Nova::Server",
 		},
 		cli.StringFlag{
 			Name:  "sort-key",
