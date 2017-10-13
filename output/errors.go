@@ -14,7 +14,7 @@ func (e ErrMissingFlag) Error() string {
 	return fmt.Sprintf("%s %s\n", ErrMissingFlagPrefix, e.Msg)
 }
 
-// ErrFlagFormatting is the prefix for when a flag's format is invalid.
+// ErrFlagFormattingPrefix is the prefix for when a flag's format is invalid.
 var ErrFlagFormattingPrefix = "Invalid flag formatting:"
 
 // ErrFlagFormatting is used when a flag's format is invalid.
