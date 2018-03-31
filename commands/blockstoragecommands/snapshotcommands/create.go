@@ -35,6 +35,10 @@ func flagsCreate() []cli.Flag {
 			Usage: "[optional] A description for this snapshot.",
 		},
 		cli.BoolFlag{
+			Name:  "force",
+			Usage: "[optional] If provided, the command will force the request for volumes in-use. Not recommended, risk of data inconsistency.",
+		},
+		cli.BoolFlag{
 			Name:  "wait-for-completion",
 			Usage: "[optional] If provided, the command will wait to return until the snapshot is available.",
 		},
@@ -45,6 +49,7 @@ var keysCreate = []string{"ID", "Name", "Description", "Size", "VolumeID", "Volu
 
 type paramsCreate struct {
 	wait bool
+	force bool
 	opts *snapshots.CreateOpts
 }
 
@@ -83,10 +88,16 @@ func (command *commandCreate) HandleFlags(resource *handler.Resource) error {
 		wait = true
 	}
 
+	force := false
+	if c.IsSet("force") {
+		force = true
+	}
+
 	opts := &snapshots.CreateOpts{
 		VolumeID:    c.String("volume-id"),
 		Name:        c.String("name"),
 		Description: c.String("description"),
+		Force:       force,
 	}
 
 	resource.Params = &paramsCreate{
