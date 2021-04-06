@@ -1,8 +1,6 @@
-# rack
+# rack (unmaintained)
 
-Code: [![Build Status](https://travis-ci.org/rackspace/rack.svg?branch=master)](https://travis-ci.org/rackspace/rack) | Documentation: [![Doc Build Status](https://build.developer.rackspace.com/rackspace/rack/badge?branch=master)](https://build.developer.rackspace.com/rackspace/rack/)
-
-The official command line interface for the Rackspace Cloud.
+Command-line interface for the Rackspace Cloud.
 
 `rack` provides a consistent interface for interacting with the Rackspace Cloud. For example, creating a new server:
 
@@ -17,11 +15,10 @@ ID		9818861f-2f14-437f-89b0-a36dfa1831b7
 AdminPass	4vLb2PiqUGdP
 ```
 
-For complete documentation, see [the docs](https://developer.rackspace.com/docs/rack-cli/).
-
+<!--
 ## Download
-
 `rack` binaries are available for OSX, Linux, and Windows. [Download `rack` now](https://developer.rackspace.com/docs/rack-cli/configuration#installation).
+-->
 
 ## Build From Source
 
@@ -89,6 +86,7 @@ At any time, you can run `rack init` which will create the auto-completion file 
 
 For command completion on Windows, please see the [command completion](https://developer.rackspace.com/docs/rack-cli/configuration#command-completion) section on the configuration page of our documentation.
 
+<!--
 ## Roadmap
 
 Below is a tentative list of services to be added. Though currently ordered by priority, the list can and will change:
@@ -109,3 +107,4 @@ Below is a tentative list of services to be added. Though currently ordered by p
 14. Cloud Metrics \*
 
 \* Services not supported in [Gophercloud](https://github.com/rackspace/gophercloud) at present.
+-->
