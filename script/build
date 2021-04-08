@@ -15,7 +15,8 @@ build() {
 
     # Check the go version
     EQ="="
-    regex="(go[0-1].[0-4])"
+    # If we are golang <= 1.4, ' ' for EQ ... else '='
+    regex="(go[0-1].[0-4](?![0-9]))"
     if [[ `go version` =~ $regex ]]; then
         EQ=" "
     fi
