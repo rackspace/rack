@@ -77,8 +77,10 @@ func (command *commandDelete) HandlePipe(resource *handler.Resource, item string
 	if err != nil {
 		return err
 	}
-	resource.Params.(*paramsDelete).stackName = name
-	resource.Params.(*paramsDelete).stackID = id
+	resource.Params = &paramsDelete{
+		stackName: name,
+		stackID:   id,
+	}
 	return nil
 }
 

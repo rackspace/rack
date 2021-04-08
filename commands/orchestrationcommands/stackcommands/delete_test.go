@@ -68,6 +68,35 @@ func TestDeleteHandleSingle(t *testing.T) {
 	th.AssertEquals(t, expected.Params.(*paramsDelete).stackID, actual.Params.(*paramsDelete).stackID)
 }
 
+func TestDeleteHandlePipe(t *testing.T) {
+	app := cli.NewApp()
+	flagset := flag.NewFlagSet("flags", 1)
+	flagset.String("name", "", "")
+	flagset.String("id", "", "")
+	flagset.Set("name", "stack1")
+	flagset.Set("id", "id1")
+	c := cli.NewContext(app, flagset, nil)
+	cmd := &commandDelete{
+		Ctx: &handler.Context{
+			CLIContext: c,
+		},
+	}
+
+	expected := &handler.Resource{
+		Params: &paramsDelete{
+			stackName: "stack1",
+			stackID:   "id1",
+		},
+	}
+	actual := &handler.Resource{
+		Params: &paramsDelete{},
+	}
+	err := cmd.HandlePipe(actual, "stack1")
+	th.AssertNoErr(t, err)
+	th.AssertEquals(t, expected.Params.(*paramsDelete).stackName, actual.Params.(*paramsDelete).stackName)
+	th.AssertEquals(t, expected.Params.(*paramsDelete).stackID, actual.Params.(*paramsDelete).stackID)
+}
+
 func TestDeleteExecute(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
